@@ -354,7 +354,11 @@ public class CommandProcessor {
     }
 
     private static boolean versionInfo(CommandSender sender) {
-        sender.sendMessage(Storage.LOGO + ChatColor.AQUA + "Using Enchantments_plus " + Storage.version + ". Download it here:" + ChatColor.DARK_GREEN + " https://github.com/Geolykt/NMSless-Enchantments_plus");
+        sender.sendMessage(Storage.LOGO + " Using " + Storage.MINILOGO + ChatColor.AQUA + " with version " + ChatColor.RED
+                + Storage.version +  ChatColor.AQUA + ".");
+        sender.sendMessage(Storage.LOGO + " Brand: " + ChatColor.RED + Storage.BRAND);
+        sender.sendMessage(Storage.LOGO + " Distribution: " + ChatColor.RED + Storage.DISTRIBUTION);
+        sender.sendMessage(Storage.LOGO + " Download it here:" + ChatColor.DARK_GREEN + " https://github.com/Geolykt/EnchantmentsPlus");
         return true;
     }
 
