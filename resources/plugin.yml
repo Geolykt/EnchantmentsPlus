@@ -1,0 +1,44 @@
+name: Enchantments_plus
+main: de.geolykt.enchantments_plus.Enchantments_plus
+api-version: 1.16
+version: ${project.version}
+commands:
+  ench:
+    description: Gives basic access; /ench help.
+    usage: /ench
+    default: true
+permissions:
+  enchplus.enchant.get:
+    description: Allows for obtaining custom enchantments
+    default: true
+  enchplus.enchant.use:
+    description: Allows for use of custom enchantments
+    default: true
+  enchplus.command.enchant:
+    description: Enchants the item in hand
+    default: false
+  enchplus.command.give:
+    description: Allows for giving new, enchanted items to selected players
+    default: false
+  enchplus.command.info:
+    description: Returns descriptions of the enchantments in hand
+    default: true
+  enchplus.command.list:
+    description: Returns a list of enchantments
+    default: true
+  enchplus.command.onoff:
+    description: Enables or disables certain custom enchantments for the user
+    default: true
+  enchplus.command.reload:
+    description: Reloads the plugin config file
+    default: false
+  enchplus.*:
+    children:
+      enchplus.enchant.get: true
+      enchplus.enchant.use: true
+      enchplus.command.enchant: true
+      enchplus.command.give: true
+      enchplus.command.info: true
+      enchplus.command.list: true
+      enchplus.command.onoff: true
+      enchplus.command.reload: true

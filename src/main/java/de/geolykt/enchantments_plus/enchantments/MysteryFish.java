@@ -1,0 +1,74 @@
+package de.geolykt.enchantments_plus.enchantments;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Guardian;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerFishEvent;
+
+import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.annotations.EffectTask;
+import de.geolykt.enchantments_plus.enums.Frequency;
+import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.enums.Tool;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import static de.geolykt.enchantments_plus.enums.Tool.ROD;
+import static org.bukkit.entity.EntityType.SQUID;
+
+public class MysteryFish extends CustomEnchantment {
+
+    // Guardians from the Mystery Fish enchantment and the player they should move towards
+    public static final Map<Entity, Player> guardianMove = new HashMap<>();
+    public static final int                 ID           = 38;
+
+    @Override
+    public Builder<MysteryFish> defaults() {
+        return new Builder<>(MysteryFish::new, ID)
+            .maxLevel(3)
+            .loreName("Mystery Fish")
+            .probability(0)
+            .enchantable(new Tool[]{ROD})
+            .conflicting()
+            .description("Catches water mobs like Squid and Guardians")
+            .cooldown(0)
+            .power(1.0)
+            .handUse(Hand.RIGHT);
+    }
+
+    @Override
+    public boolean onPlayerFish(final PlayerFishEvent evt, int level, boolean usedHand) {
+        if (Storage.rnd.nextInt(10) < level * power) {
+            //TODO also spawn fish
+            if (evt.getCaught() != null) {
+                Location location = evt.getCaught().getLocation();
+                if (Storage.rnd.nextBoolean()) {
+                    evt.getPlayer().getWorld().spawnEntity(location, SQUID);
+                } else {
+                    final Entity g = Storage.COMPATIBILITY_ADAPTER.spawnGuardian(location, Storage.rnd.nextBoolean());
+                    guardianMove.put(g, evt.getPlayer());
+                }
+            }
+        }
+        return true;
+    }
+
+    // Move Guardians from MysteryFish towards the player
+    @EffectTask(Frequency.HIGH)
+    public static void guardian() {
+        Iterator<Entity> it = guardianMove.keySet().iterator();
+        while (it.hasNext()) {
+            Guardian g = (Guardian) it.next();
+            if (g.getLocation().distance(guardianMove.get(g).getLocation()) > 2 && g.getTicksLived() < 160) {
+                g.setVelocity(
+                    guardianMove.get(g).getLocation().toVector().subtract(g.getLocation().toVector()));
+            } else {
+                it.remove();
+            }
+        }
+    }
+}

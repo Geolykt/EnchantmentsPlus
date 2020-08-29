@@ -1,1 +1,4 @@
 /bin/
+*.class*
+/target/
+*.prefs

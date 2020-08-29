@@ -1,0 +1,18 @@
+piston:
+  enable: true
+explosion:
+  enable: true
+  removeBlocksInsteadOfCancel: false
+patch_ench_protect:
+  netherstep_removeBlocksInsteadOfCancel: false
+  frozenstep_removeBlocksInsteadOfCancel: false
+worldProtection:
+  spectral: true
+recipe:
+  misc:
+    arborist-doGoldenAppleDrop: true
+nerfs:
+  siphonRatio: 0.5
+  siphonsubstractAmour: true
+enchantmentGatherer: "NBT" # `NBT` uses our cozy NBT-based storage format, `PR47-lore` is another implementation for lore based conversion, `upstream` is upstream's provisional lore based implementation. There is not much difference between the last two implementations
+compatibility: false # only has an effect if NBT is used above, if set to true, it will use PR47-lore to read non-converted enchantments and convert them, it is only done once per item, but is relatively slow nonetheless
