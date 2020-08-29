@@ -42,8 +42,8 @@ public class Shred extends CustomEnchantment {
 
     @Override
     public boolean onBlockBreak(BlockBreakEvent evt, int level, boolean usedHand) {
-        if (!Storage.COMPATIBILITY_ADAPTER.ShredPicks().contains(evt.getBlock().getType())
-                && !Storage.COMPATIBILITY_ADAPTER.ShredShovels().contains(evt.getBlock().getType())) {
+        if (!Storage.COMPATIBILITY_ADAPTER.shredPicks().contains(evt.getBlock().getType())
+                && !Storage.COMPATIBILITY_ADAPTER.shredShovels().contains(evt.getBlock().getType())) {
             return false;
         }
         ItemStack hand = Utilities.usedStack(evt.getPlayer(), usedHand);
@@ -57,10 +57,10 @@ public class Shred extends CustomEnchantment {
             Set<Block> used,
             final Player player, final Config config, final Material itemType, boolean usedHand) {
 
-        if (!Storage.COMPATIBILITY_ADAPTER.Airs().contains(relativeBlock.getType()) && !used.contains(relativeBlock)) {
+        if (!Storage.COMPATIBILITY_ADAPTER.airs().contains(relativeBlock.getType()) && !used.contains(relativeBlock)) {
             final Material originalType = relativeBlock.getType();
-            if ((Tool.PICKAXE.contains(itemType) && !Storage.COMPATIBILITY_ADAPTER.ShredPicks().contains(relativeBlock.getType()))
-                    || (Tool.SHOVEL.contains(itemType) && !Storage.COMPATIBILITY_ADAPTER.ShredShovels().contains(relativeBlock.getType()))) {
+            if ((Tool.PICKAXE.contains(itemType) && !Storage.COMPATIBILITY_ADAPTER.shredPicks().contains(relativeBlock.getType()))
+                    || (Tool.SHOVEL.contains(itemType) && !Storage.COMPATIBILITY_ADAPTER.shredShovels().contains(relativeBlock.getType()))) {
                 return;
             }
             if (config.getShredDrops() == 0) {
@@ -74,7 +74,7 @@ public class Shred extends CustomEnchantment {
                 if (config.getShredDrops() == 1) {
                     if (relativeBlock.getType().equals(NETHER_QUARTZ_ORE)) {
                         relativeBlock.setType(NETHERRACK);
-                    } else if (Storage.COMPATIBILITY_ADAPTER.Ores().contains(relativeBlock.getType())) {
+                    } else if (Storage.COMPATIBILITY_ADAPTER.ores().contains(relativeBlock.getType())) {
                         relativeBlock.setType(STONE);
                     }
                     //TODO Why run this twice?

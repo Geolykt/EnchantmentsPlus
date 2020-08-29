@@ -52,8 +52,8 @@ public class Harvest extends CustomEnchantment {
                     final Block block = loc.getBlock().getRelative(x, y, z);
                     if (block.getLocation().distanceSquared(loc) < radiusXZ * radiusXZ) {
 
-                        if (!Storage.COMPATIBILITY_ADAPTER.GrownCrops().contains(block.getType())
-                                && !Storage.COMPATIBILITY_ADAPTER.GrownMelon().contains(block.getType())) {
+                        if (!Storage.COMPATIBILITY_ADAPTER.grownCrops().contains(block.getType())
+                                && !Storage.COMPATIBILITY_ADAPTER.grownMelon().contains(block.getType())) {
                             continue;
                         }
 

@@ -47,7 +47,7 @@ public class Plough extends CustomEnchantment {
                             if (((block.getRelative(x, y, z).getType() == DIRT
                                 || block.getRelative(x, y, z).getType() == GRASS_BLOCK
                                 || block.getRelative(x, y, z).getType() == MYCELIUM))
-                                && Storage.COMPATIBILITY_ADAPTER.Airs().contains(block.getRelative(x, y + 1, z).getType())) {
+                                && Storage.COMPATIBILITY_ADAPTER.airs().contains(block.getRelative(x, y + 1, z).getType())) {
                                 ADAPTER.placeBlock(block.getRelative(x, y, z), evt.getPlayer(), Material.FARMLAND,
                                     null);
                                 if (Storage.rnd.nextBoolean()) {

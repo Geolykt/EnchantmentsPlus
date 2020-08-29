@@ -52,7 +52,7 @@ public class Switch extends CustomEnchantment {
                 if (switchItem != null
                         && switchItem.getType() != AIR
                         && switchItem.getType().isSolid()
-                        && !Storage.COMPATIBILITY_ADAPTER.UnbreakableBlocks().contains(switchItem.getType())
+                        && !Storage.COMPATIBILITY_ADAPTER.unbreakableBlocks().contains(switchItem.getType())
                         && !switchItem.getType().isInteractable()) {
                     c = i;
                     break;

@@ -49,7 +49,7 @@ public class Transformation extends CustomEnchantment {
         if (evt.getEntity() instanceof LivingEntity
                 && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
             if (Storage.rnd.nextInt(100) > (100 - (level * power * 8))) {
-                LivingEntity newEnt = Storage.COMPATIBILITY_ADAPTER.TransformationCycle((LivingEntity) evt.getEntity(),
+                LivingEntity newEnt = Storage.COMPATIBILITY_ADAPTER.transformationCycle((LivingEntity) evt.getEntity(),
                         Storage.rnd);
 
                 if (newEnt != null) {

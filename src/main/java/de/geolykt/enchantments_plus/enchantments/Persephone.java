@@ -40,7 +40,7 @@ public class Persephone extends CustomEnchantment {
             Location loc = evt.getClickedBlock().getLocation();
             int radiusXZ = (int) Math.round(power * level + 2);
 
-            if (Storage.COMPATIBILITY_ADAPTER.PersephoneCrops().contains(evt.getClickedBlock().getType())) {
+            if (Storage.COMPATIBILITY_ADAPTER.persephoneCrops().contains(evt.getClickedBlock().getType())) {
                 Block block = loc.getBlock();
                 for (int x = -radiusXZ; x <= radiusXZ; x++) {
                     for (int y = -2; y <= 0; y++) {
@@ -49,7 +49,7 @@ public class Persephone extends CustomEnchantment {
                             if (block.getRelative(x, y, z).getLocation().distanceSquared(loc)
                                     < radiusXZ * radiusXZ) {
                                 if (block.getRelative(x, y, z).getType() == FARMLAND
-                                        && Storage.COMPATIBILITY_ADAPTER.Airs().contains(block.getRelative(x, y + 1, z).getType())) {
+                                        && Storage.COMPATIBILITY_ADAPTER.airs().contains(block.getRelative(x, y + 1, z).getType())) {
                                     if (evt.getPlayer().getInventory().contains(CARROT)) {
                                         if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, CARROTS,
                                                 null)) {
@@ -71,7 +71,7 @@ public class Persephone extends CustomEnchantment {
                                         }
                                     }
                                 } else if (block.getRelative(x, y, z).getType() == SOUL_SAND
-                                        && Storage.COMPATIBILITY_ADAPTER.Airs().contains(block.getRelative(x, y + 1, z).getType())) {
+                                        && Storage.COMPATIBILITY_ADAPTER.airs().contains(block.getRelative(x, y + 1, z).getType())) {
                                     if (evt.getPlayer().getInventory().contains(NETHER_WART)) {
                                         if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, NETHER_WART,
                                                 null)) {

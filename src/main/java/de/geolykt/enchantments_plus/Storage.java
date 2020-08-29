@@ -22,6 +22,7 @@ public class Storage {
     // The plugin Logo to be used in chat commands
     public static final String LOGO = ChatColor.BLUE + "[" + ChatColor.DARK_AQUA + "Enchantments" + ChatColor.RED + "+"
             + ChatColor.BLUE + "] " + ChatColor.AQUA;
+    public static final String MINILOGO = ChatColor.DARK_AQUA + "Enchantments" + ChatColor.RED + "+";
 
     // Current Enchantments_plus version
     public static String version = "";

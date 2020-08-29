@@ -52,53 +52,53 @@ public class CompatibilityAdapter {
     private static final CompatibilityAdapter INSTANCE = new CompatibilityAdapter();
     private static final Random RND = new Random();
     
-    public List<Material> GrownCrops() {
+    public List<Material> grownCrops() {
         return Arrays.asList(WHEAT, POTATOES, CARROTS, COCOA, BEETROOTS, NETHER_WART, SWEET_BERRY_BUSH);
     }
     
-    public List<Material> CropYields() {
+    public List<Material> cropYields() {
         return Arrays.asList(WHEAT, POTATOES, CARROTS, COCOA, BEETROOTS, NETHER_WART, SWEET_BERRIES);
     }
 
-    public List<Material> GrownMelon() {
+    public List<Material> grownMelon() {
         return Arrays.asList(MELON, PUMPKIN);
     }
 
-    public List<Material> MelonYields() {
+    public List<Material> melonYields() {
         return Arrays.asList(MELON_SLICE, PUMPKIN);
     }
 
-    public List<Material> Mushrooms() {
+    public List<Material> mushrooms() {
         return Arrays.asList(RED_MUSHROOM, BROWN_MUSHROOM);
     }
     
-    public List<Material> MushroomBlocks() {
+    public List<Material> mushroomBlocks() {
         return Arrays.asList(MUSHROOM_STEM, BROWN_MUSHROOM_BLOCK, RED_MUSHROOM_BLOCK);
     }
 
-    public Set<Material> Airs() {
+    public Set<Material> airs() {
         return Sets.immutableEnumSet(AIR, CAVE_AIR, VOID_AIR);
     }
 
-    protected static List<Material> ores;
+    protected static List<Material> list_ores;
     
-    public List<Material> Ores() {
-        if (ores == null) {
-            ores = new ArrayList<Material>();
-            ores.addAll(Tag.GOLD_ORES.getValues());
-            ores.addAll(Arrays.asList(COAL_ORE, REDSTONE_ORE, DIAMOND_ORE,
+    public List<Material> ores() {
+        if (list_ores == null) {
+            list_ores = new ArrayList<Material>();
+            list_ores.addAll(Tag.GOLD_ORES.getValues());
+            list_ores.addAll(Arrays.asList(COAL_ORE, REDSTONE_ORE, DIAMOND_ORE,
                     IRON_ORE, LAPIS_ORE, GLOWSTONE, NETHER_QUARTZ_ORE, EMERALD_ORE, ANCIENT_DEBRIS));
-            return ores;
+            return list_ores;
         } else {
-            return ores;
+            return list_ores;
         }
     }
 
-    public List<Material> Dirts() {
+    public List<Material> dirts() {
         return Arrays.asList(DIRT, COARSE_DIRT, MYCELIUM, PODZOL, GRASS_BLOCK, GRASS_PATH);
     }
 
-    public Set<Biome> DryBiomes() {
+    public Set<Biome> dryBiomes() {
         return Sets.immutableEnumSet(Biome.DESERT, Biome.FROZEN_OCEAN,
                 Biome.FROZEN_RIVER, Biome.SNOWY_TUNDRA, Biome.SNOWY_MOUNTAINS, Biome.DESERT_HILLS, Biome.SNOWY_BEACH,
                 Biome.SNOWY_TAIGA, Biome.SNOWY_TAIGA_HILLS, Biome.SAVANNA, Biome.SAVANNA_PLATEAU, Biome.BADLANDS,
@@ -107,44 +107,32 @@ public class CompatibilityAdapter {
                 Biome.MODIFIED_WOODED_BADLANDS_PLATEAU, Biome.MODIFIED_BADLANDS_PLATEAU);
     }
     
-    public List<Material> Stones() {
+    public List<Material> stones() {
         return Arrays.asList(STONE, GRANITE, ANDESITE, DIORITE, BASALT, BLACKSTONE);
     }
 
-    public List<Material> Cobblestones() {
+    public List<Material> cobblestones() {
         return Arrays.asList(COBBLESTONE, MOSSY_COBBLESTONE);
     }
 
-    public List<Material> Netherbricks() {
+    public List<Material> netherbricks() {
         return Arrays.asList(NETHER_BRICKS, RED_NETHER_BRICKS);
     }
     
-    public List<Material> Netherracks() {
+    public List<Material> netherracks() {
         return Arrays.asList(NETHERRACK, WARPED_NYLIUM, CRIMSON_NYLIUM);
     }
 
 
-    public List<Material> UnbreakableBlocks() {
+    public List<Material> unbreakableBlocks() {
         return Arrays.asList(BARRIER, BEDROCK, AIR, CAVE_AIR, VOID_AIR, COMMAND_BLOCK, REPEATING_COMMAND_BLOCK,
                 BUBBLE_COLUMN, DRAGON_BREATH, DRAGON_EGG, END_CRYSTAL, END_GATEWAY, END_PORTAL, END_PORTAL_FRAME, LAVA,
                 STRUCTURE_VOID, STRUCTURE_BLOCK, WATER, PISTON_HEAD, MOVING_PISTON);
     }
 
-    public List<Material> LaserBlackListBlocks() {
+    public List<Material> laserBlackListBlocks() {
         return Arrays.asList(OBSIDIAN, CRYING_OBSIDIAN);
     }
-
-    protected List<Material> chestlike;
-    
-    /*
-    public List<Material> StorageBlocks() {
-        if (chestlike == null) {
-            chestlike = Arrays.asList(DISPENSER, SPAWNER, CHEST, FURNACE, JUKEBOX, ENDER_CHEST,
-                    BEACON, TRAPPED_CHEST, HOPPER, DROPPER, BREWING_STAND, ANVIL);
-            chestlike.addAll(Tag.SHULKER_BOXES.getValues());
-        }
-        return chestlike;
-    }*/
     
     public List<Material> terracottas() {
         return Arrays.asList(Material.WHITE_TERRACOTTA, Material.ORANGE_TERRACOTTA, Material.MAGENTA_TERRACOTTA,
@@ -189,7 +177,7 @@ public class CompatibilityAdapter {
     
     protected static List<Material> terraformer_materials;
 
-    public List<Material> TerraformerMaterials() {
+    public List<Material> terraformerMaterials() {
         if (terraformer_materials == null) {
             terraformer_materials = Arrays.asList(
                     BRICK, TNT, BOOKSHELF, ICE,
@@ -197,20 +185,19 @@ public class CompatibilityAdapter {
                     PRISMARINE, PACKED_ICE, RED_SANDSTONE, NETHERRACK, WARPED_NYLIUM);
             terraformer_materials.addAll(terracottas());
             terraformer_materials.addAll(glazedTerracottas());
-            terraformer_materials.addAll(Ores());
+            terraformer_materials.addAll(ores());
             terraformer_materials.addAll(Tag.LOGS.getValues());
             terraformer_materials.addAll(Tag.ENDERMAN_HOLDABLE.getValues());
             terraformer_materials.addAll(Tag.WOOL.getValues());
             terraformer_materials.addAll(concretes());
             terraformer_materials.addAll(concretePowders());
-            terraformer_materials.addAll(Cobblestones());
-            terraformer_materials.addAll(Stones());
-            terraformer_materials.addAll(concretePowders());
+            terraformer_materials.addAll(cobblestones());
+            terraformer_materials.addAll(stones());
         }
         return terraformer_materials;
     }
 
-    public List<EntityType> TransformationEntityTypesFrom() {
+    public List<EntityType> transformationEntityTypesFrom() {
         return Arrays.asList(
                 HUSK, WITCH, EntityType.COD, PHANTOM, HORSE, SKELETON, EntityType.CHICKEN, SQUID, OCELOT, POLAR_BEAR, COW, PIG,
                 SPIDER, SLIME, GUARDIAN, ENDERMITE, SKELETON_HORSE, EntityType.RABBIT, SHULKER, SNOWMAN, DROWNED, VINDICATOR,
@@ -220,7 +207,7 @@ public class CompatibilityAdapter {
                 LLAMA, CREEPER, EntityType.HOGLIN);
     }
 
-    public List<EntityType> TransformationEntityTypesTo() {
+    public List<EntityType> transformationEntityTypesTo() {
         return Arrays.asList(
                 DROWNED, VINDICATOR, EntityType.SALMON, BLAZE, DONKEY, STRAY, PARROT, DOLPHIN, WOLF, SHEEP, MUSHROOM_COW,
                 ZOMBIFIED_PIGLIN, CAVE_SPIDER, MAGMA_CUBE, ELDER_GUARDIAN, SILVERFISH, ZOMBIE_HORSE, EntityType.RABBIT, ENDERMAN,
@@ -230,12 +217,12 @@ public class CompatibilityAdapter {
                 EntityType.COD, PHANTOM, HORSE, CREEPER, EntityType.ZOGLIN);
     }
 
-    public LivingEntity TransformationCycle(LivingEntity ent, Random rnd) {
-        int newTypeID = TransformationEntityTypesFrom().indexOf(ent.getType());
+    public LivingEntity transformationCycle(LivingEntity ent, Random rnd) {
+        int newTypeID = transformationEntityTypesFrom().indexOf(ent.getType());
         if (newTypeID == -1) {
             return null;
         }
-        EntityType newType = TransformationEntityTypesTo().get(newTypeID);
+        EntityType newType = transformationEntityTypesTo().get(newTypeID);
         LivingEntity newEnt = (LivingEntity) ent.getWorld().spawnEntity(ent.getLocation(), newType);
 
         switch (newType) {
@@ -285,42 +272,42 @@ public class CompatibilityAdapter {
     
     protected static Set<Material> shredPickSet;
 
-    public Set<Material> ShredPicks() {
+    public Set<Material> shredPicks() {
         if  (shredPickSet == null) {
             List<Material> shredPick = Arrays.asList(STONE, GRANITE,
                     ANDESITE, DIORITE, GLOWSTONE, SANDSTONE, RED_SANDSTONE, ICE, PACKED_ICE, BLUE_ICE, BASALT);
-            shredPick.addAll(Ores());
+            shredPick.addAll(ores());
             shredPick.addAll(terracottas());
-            shredPick.addAll(Netherracks());
+            shredPick.addAll(netherracks());
             shredPickSet = Sets.immutableEnumSet(shredPick);
         }
         return shredPickSet;
     }
 
-    public Set<Material> ShredShovels() {
+    public Set<Material> shredShovels() {
         return Tag.ENDERMAN_HOLDABLE.getValues();
     }
 
-    public List<Material> PersephoneCrops() {
+    public List<Material> persephoneCrops() {
         return Arrays.asList(WHEAT, POTATO, CARROT, BEETROOT, NETHER_WART, SOUL_SAND, FARMLAND);
     }
 
-    public List<PotionEffectType> PotionPotions() {
+    public List<PotionEffectType> potionPotions() {
         return Arrays.asList(ABSORPTION,
                 DAMAGE_RESISTANCE, FIRE_RESISTANCE, SPEED, JUMP, INVISIBILITY, INCREASE_DAMAGE, HEALTH_BOOST, HEAL,
                 REGENERATION, NIGHT_VISION, SATURATION, FAST_DIGGING, WATER_BREATHING, DOLPHINS_GRACE);
     }
     
-    private final int[] GLUTTONY_FOOD_LEVELS = {4, 5, 1, 6, 5, 3, 1, 6, 5, 6, 8, 5, 6, 2, 1, 2, 6, 8, 10, 8};
+    private static final int[] GLUTTONY_FOOD_LEVELS = {4, 5, 1, 6, 5, 3, 1, 6, 5, 6, 8, 5, 6, 2, 1, 2, 6, 8, 10, 8};
 
-    public int[] GluttonyFoodLevels() {
+    public int[] gluttonyFoodLevels() {
         return GLUTTONY_FOOD_LEVELS;
     }
     
-    private final double[] GLUTTONY_SATURATIONS = {2.4, 6, 1.2, 7.2, 6, 3.6, 0.2, 7.2, 6, 9.6, 12.8, 6, 9.6, 0.4, 0.6,
+    private static final double[] GLUTTONY_SATURATIONS = {2.4, 6, 1.2, 7.2, 6, 3.6, 0.2, 7.2, 6, 9.6, 12.8, 6, 9.6, 0.4, 0.6,
             1.2, 7.2, 4.8, 12, 12.8};
 
-    public double[] GluttonySaturations() {
+    public double[] gluttonySaturations() {
         return GLUTTONY_SATURATIONS;
     }
     
@@ -329,7 +316,7 @@ public class CompatibilityAdapter {
             COOKED_MUTTON, COOKED_PORKCHOP, COOKED_RABBIT, COOKED_SALMON, COOKIE, DRIED_KELP, MELON_SLICE, MUSHROOM_STEW,
             PUMPKIN_PIE, RABBIT_STEW, COOKED_BEEF};
 
-    public Material[] GluttonyFoodItems() {
+    public Material[] gluttonyFoodItems() {
         return GLUTTONY_FOOD_ITEMS;
     }
     
@@ -602,7 +589,7 @@ public class CompatibilityAdapter {
 
     public boolean isBlockSafeToBreak(Block b) {
         Material mat = b.getType();
-        return mat.isSolid() && !b.isLiquid() && !mat.isInteractable() && !UnbreakableBlocks().contains(mat);
+        return mat.isSolid() && !b.isLiquid() && !mat.isInteractable() && !unbreakableBlocks().contains(mat);
     }
 
     public boolean grow(Block cropBlock, Player player) {
@@ -641,7 +628,7 @@ public class CompatibilityAdapter {
                     return false;
                 }
             }
-            if (!Airs().contains(cropBlock.getType())) { // Only grow if argument is the base block
+            if (!airs().contains(cropBlock.getType())) { // Only grow if argument is the base block
                 return false;
             }
 

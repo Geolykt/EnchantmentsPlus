@@ -496,7 +496,7 @@ public class Utilities {
                     if (placed.containsKey(possiblePlatformLoc)) {
                         placed.put(possiblePlatformLoc, System.nanoTime());
                     } else if (possiblePlatformBlock.getType() == check
-                        && Storage.COMPATIBILITY_ADAPTER.Airs().contains( possiblePlatformBlock.getRelative(0, 1, 0).getType())) {
+                        && Storage.COMPATIBILITY_ADAPTER.airs().contains( possiblePlatformBlock.getRelative(0, 1, 0).getType())) {
 
 
                         if (possiblePlatformBlock.getBlockData() instanceof Levelled) {

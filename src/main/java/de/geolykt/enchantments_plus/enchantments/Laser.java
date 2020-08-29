@@ -67,7 +67,7 @@ public class Laser extends CustomEnchantment {
                 }
             }
         }
-        if (ADAPTER.isBlockSafeToBreak(blk) && !ADAPTER.LaserBlackListBlocks().contains(blk.getType())) {
+        if (ADAPTER.isBlockSafeToBreak(blk) && !ADAPTER.laserBlackListBlocks().contains(blk.getType())) {
             ADAPTER.breakBlockNMS(blk, player);
         }
     }

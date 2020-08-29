@@ -48,7 +48,7 @@ public class Terraformer extends CustomEnchantment {
                 for (int i = 0; i < 9; i++) {
                     if (evt.getPlayer().getInventory().getItem(i) != null) {
                         if (evt.getPlayer().getInventory().getItem(i).getType().isBlock() &&
-                            Storage.COMPATIBILITY_ADAPTER.TerraformerMaterials().contains(
+                            Storage.COMPATIBILITY_ADAPTER.terraformerMaterials().contains(
                                 evt.getPlayer().getInventory().getItem(i).getType())) {
                             mat = evt.getPlayer().getInventory().getItem(i).getType();
                             break;
@@ -57,7 +57,7 @@ public class Terraformer extends CustomEnchantment {
                 }
 
                 for (Block b : Utilities.BFS(start, MAX_BLOCKS, false, 5.f, SEARCH_FACES,
-                    Storage.COMPATIBILITY_ADAPTER.Airs(), new HashSet<Material>(), false, true)) {
+                    Storage.COMPATIBILITY_ADAPTER.airs(), new HashSet<Material>(), false, true)) {
                     if (b.getType().equals(AIR)) {
                         if (Utilities.hasItem(evt.getPlayer(), mat, 1)) {
                             if (Storage.COMPATIBILITY_ADAPTER.placeBlock(b, evt.getPlayer(), mat, null)) {

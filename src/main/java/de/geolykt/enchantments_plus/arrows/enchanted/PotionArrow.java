@@ -17,7 +17,7 @@ public class PotionArrow extends EnchantedArrow {
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (Storage.rnd.nextInt((int) Math.round(10 / (getLevel() * getPower() + 1))) == 1) {
             Utilities.addPotion((LivingEntity) arrow.getShooter(),
-                Storage.COMPATIBILITY_ADAPTER.PotionPotions().get(Storage.rnd.nextInt(12)),
+                Storage.COMPATIBILITY_ADAPTER.potionPotions().get(Storage.rnd.nextInt(12)),
                 150 + (int) Math.round(getLevel() * getPower() * 50), (int) Math.round(getLevel() * getPower()));
         }
         die();
