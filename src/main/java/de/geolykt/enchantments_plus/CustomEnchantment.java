@@ -781,7 +781,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      *  it's data. It is modified to be backwards compatible
      */
     static class PersistentDataGatherer implements IEnchGatherer {
-        private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
+        private ProvisionalLoreGatherer legacyGatherer = new ProvisionalLoreGatherer();
         public boolean doCompat = true;
         
         /**
