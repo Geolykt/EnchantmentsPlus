@@ -11,6 +11,16 @@ Zenchantments is a custom enchantment plugin that adds 70+ new enchantments (it 
 ## Download
 See [Releases](https://github.com/Geolykt/NMSless-Zenchantments/releases) for downloads
 
+## Permissions
+enchplus.enchant.get - On player enchant event, allow player to have a chance at the enabled custom enchantments
+enchplus.enchant.use - Allow player to use the given custom enchants on an item
+enchplus.command.reload - Access to /ench reload, to reload the configuration (try not to use, may lead to memory leaks)
+enchplus.command.give 
+enchplus.command.list
+enchplus.command.info
+enchplus.command.onoff
+enchplus.command.enchant
+
 ## Compilation
 Compile this project like every other project out there
 

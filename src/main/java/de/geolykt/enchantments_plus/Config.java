@@ -29,6 +29,7 @@ public class Config {
     public static final Map<World, Config> CONFIGS = new HashMap<>(); // Map of all world configs on the current server
     public static final HashSet<CustomEnchantment> allEnchants = new HashSet<>();
 
+    private static final int CONFIG_BUFFER_SIZE = 16 * 1024; 
     private final Set<CustomEnchantment> worldEnchants;     // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
     private final Map<Integer, CustomEnchantment> idToEnch;
@@ -163,7 +164,7 @@ public class Config {
         if (patchCFG.getString("enchantmentGatherer", "NBT").equals("NBT")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer();
             ((CustomEnchantment.PersistentDataGatherer) CustomEnchantment.Enchantment_Adapter).doCompat =
-                    Storage.enchantments_plus.getConfig().getBoolean("compatibility", true);
+                Storage.enchantments_plus.getConfig().getBoolean("compatibility", true);
         } else if (patchCFG.getString("enchantmentGatherer").equals("PR47-lore")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
         } else {
@@ -175,11 +176,11 @@ public class Config {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;
-        byte[] data = new byte[16384];
+        byte[] data = new byte[CONFIG_BUFFER_SIZE];
 
         try {
             while ((nRead = stream.read(data, 0, data.length)) != -1) {
-              buffer.write(data, 0, nRead);
+                buffer.write(data, 0, nRead);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -188,7 +189,7 @@ public class Config {
 
         return buffer.toByteArray();
     }
-    
+
     public static Config getWorldConfig (World world) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
@@ -259,53 +260,86 @@ public class Config {
             //Load CustomEnchantment Classes
             Set<CustomEnchantment> enchantments = new HashSet<>();
             Map<String, LinkedHashMap<String, Object>> configInfo = new HashMap<>();
-            for (Map<String, LinkedHashMap<String, Object>> part
-                : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig.get("enchantments")) {
-                for (String name : part.keySet()) {
-                    configInfo.put(name, part.get(name));
+            for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig.get(ConfigValues.ENCHANTMENTS.toString()) ) {
+                for (String enchantmentName : definition.keySet()) {
+                    configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
             }
-
             List<Class<? extends CustomEnchantment>> customEnchantments = new ArrayList<>();
-
             new FastClasspathScanner(CustomEnchantment.class.getPackage().getName()).overrideClasspath(Storage.pluginPath)
-                                                                                    .matchSubclassesOf(CustomEnchantment.class, customEnchantments::add).scan();
-
+                .matchSubclassesOf(CustomEnchantment.class, customEnchantments::add).scan();
             for (Class<? extends CustomEnchantment> cl : customEnchantments) {
                 try {
-
                     CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.newInstance().defaults();
                     if (configInfo.containsKey(ench.loreName())) {
                         LinkedHashMap<String, Object> data = configInfo.get(ench.loreName());
-                        ench.probability((float) (double) data.get("Probability"));
-                        ench.loreName((String) data.get("Name"));
-                        ench.cooldown((int) data.get("Cooldown"));
-
-                        if (data.get("Max Level") != null) {
-                            ench.maxLevel((int) data.get("Max Level"));
-                        }
-                        if (data.get("Power") != null) {
-                            ench.power((double) data.get("Power"));
-                        }
-                        Set<Tool> materials = new HashSet<>();
-                        for (String s : ((String) data.get("Tools")).split(", |\\,")) {
-                            materials.add(Tool.fromString(s));
-                        }
-                        ench.enchantable(materials.toArray(new Tool[0]));
+                        ench.probability(getProbability(data));
+                        ench.loreName(getLoreName(data));
+                        ench.cooldown(getCooldown(data));
+                        ench.maxLevel(getMaxLevel(data));
+                        ench.power(getPower(data));
+                        ench.enchantable(getTools(data));
                         if (ench.probability() != -1) {
                             enchantments.add(ench.build());
                         }
                     }
                 } catch (IllegalAccessException | ClassCastException | InstantiationException ex) {
-                    System.err.println("Error parsing config for enchantment " + cl.getName() + ", skipping");
+                    System.err.println(String.format("Error parsing config for enchantment '%s'. Skipping.", cl.getName()));
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
-                descriptionLore, descriptionColor, enchantColor, curseColor, enchantGlow, world);
+                    descriptionLore, descriptionColor, enchantColor, curseColor, enchantGlow, world);
         } catch (IOException | InvalidConfigurationException ex) {
-            System.err.println("Error parsing config for world " + world.getName() + ", skipping");
+            System.err.println(String.format("Error parsing config for world '%s'. Skipping", world.getName()));
         }
         return null;
+    }
+
+    /**
+     * Must be specified
+     */
+    private static float getProbability(LinkedHashMap<String, Object> data) {
+        return (float) (double) data.get(ConfigValues.PROBABILITY.toString());
+    }
+
+    /**
+     * Must be specified
+     */
+    private static String getLoreName(LinkedHashMap<String, Object> data) {
+        return (String) data.get(ConfigValues.NAME.toString());
+    }
+
+    /**
+     * Must be specified
+     */
+    private static int getCooldown(LinkedHashMap<String, Object> data) {
+        return (int) data.get(ConfigValues.COOLDOWN.toString());
+    }
+
+    /**
+     * Must be specified.
+     */
+    private static int getMaxLevel(LinkedHashMap<String, Object> data) {
+        return (int) data.get(ConfigValues.MAX_LEVEL.toString());
+    }
+
+    /**
+     * Must be specified
+     */
+    private static Tool[] getTools(LinkedHashMap<String, Object> data) {
+        Set<Tool> materials = new HashSet<>();
+        for (String s : ((String) data.get(ConfigValues.TOOLS.toString())).split(", |\\,")) {
+            materials.add(Tool.fromString(s));
+        }
+        return materials.toArray(new Tool[0]);
+    }
+
+    /**
+     * Defaulting to 0, as stated in CustomEnchantment
+     */
+    private static double getPower(LinkedHashMap<String, Object> data) {
+        Object power = data.get(ConfigValues.POWER.toString());
+        return power == null ? 0.0 : (double) power;
     }
 
     // Returns the config object associated with the given world
@@ -316,4 +350,42 @@ public class Config {
         return CONFIGS.get(world);
     }
 
+}
+
+enum ConfigValues {
+    ENCHANTMENTS {
+        public String toString() {
+            return "enchantments";
+        }
+    },
+    NAME {
+        public String toString() {
+            return "Name";
+        }
+    },
+    PROBABILITY {
+        public String toString() {
+            return "Probability";
+        }
+    },
+    COOLDOWN {
+        public String toString() {
+            return "Cooldown";
+        }
+    },
+    POWER {
+        public String toString() {
+            return "Power";
+        }
+    },
+    MAX_LEVEL {
+        public String toString() {
+            return "Max Level";
+        }
+    },
+    TOOLS {
+        public String toString() {
+            return "Tools";
+        }
+    }
 }

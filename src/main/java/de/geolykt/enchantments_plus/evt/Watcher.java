@@ -32,6 +32,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.util.Utilities;
+import de.geolykt.enchantments_plus.PermissionHandler;
+import de.geolykt.enchantments_plus.PermissionTypes;
 
 import java.util.*;
 
@@ -194,10 +196,8 @@ public class Watcher implements Listener {
     //      probability, and the level at which the item is being enchanted if the player has permission
     @EventHandler
     public void onEnchantItem(EnchantItemEvent evt) {
-        if (!evt.getEnchanter().hasPermission("enchantments_plus.enchant.get")) {
-            return;
-        }
-        if (evt.getItem().getType() == FISHING_ROD && evt.getExpLevelCost() <= 4) {
+        if (!PermissionHandler.hasPermission(evt.getEnchanter(), PermissionTypes.GET)
+                || (evt.getItem().getType() == FISHING_ROD && evt.getExpLevelCost() <= 4)) {
             return;
         }
 

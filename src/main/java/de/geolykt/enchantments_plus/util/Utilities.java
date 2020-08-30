@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -16,6 +17,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.PermissionHandler;
+import de.geolykt.enchantments_plus.PermissionTypes;
 
 import java.util.*;
 
@@ -354,7 +357,7 @@ public class Utilities {
     // Returns true if a player can use a certain enchantment at a certain time (permissions and cooldowns),
     //      otherwise false
     public static boolean canUse(Player player, int enchantmentID) {
-        if (!player.hasPermission("enchantments_plus.enchant.use")) {
+        if (!PermissionHandler.hasPermission((CommandSender) player, PermissionTypes.USE)) {
             return false;
         }
         if (EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) != 0) {

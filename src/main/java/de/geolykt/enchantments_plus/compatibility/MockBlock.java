@@ -271,4 +271,8 @@ public class MockBlock implements Block {
         return realBlock.getDrops(arg0, arg1);
     }
 
+    @Override
+    public boolean applyBoneMeal(@NotNull BlockFace face) {
+	return false;
+    }
 }

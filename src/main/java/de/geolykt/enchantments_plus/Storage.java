@@ -12,22 +12,20 @@ import java.util.*;
 
 public class Storage {
 
-    // Instance of the Enchantments_plus plugin to be used by the rest of the classes
-    public static Enchantments_plus enchantments_plus;
+    /**
+     * Assigned values onEnable()
+     */
+    public static String pluginPath;                   // Absolute path to the plugin jar
+    public static String version;                      // Current Enchantments_plus version
+    public static Enchantments_plus enchantments_plus; // Plugin instance variable
 
     public static final String BRAND = "Enchantments+";
     public static final String DISTRIBUTION = "Git";
-    
-    // Absolute path to the plugin jar
-    public static String pluginPath;
 
     // The plugin Logo to be used in chat commands
     public static final String LOGO = ChatColor.BLUE + "[" + ChatColor.DARK_AQUA + "Enchantments" + ChatColor.RED + "+"
             + ChatColor.BLUE + "] " + ChatColor.AQUA;
     public static final String MINILOGO = ChatColor.DARK_AQUA + "Enchantments" + ChatColor.RED + "+";
-
-    // Current Enchantments_plus version
-    public static String version = "";
 
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER;
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();

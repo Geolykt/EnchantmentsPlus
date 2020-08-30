@@ -95,9 +95,4 @@ public class EnchantPlayer {
         player.sendMessage(message);
     }
 
-    // Returns true if the EnchantPlayer has the given permission, otherwise false
-    public boolean hasPermission(String permission) {
-        return player.hasPermission(permission);
-    }
-
 }

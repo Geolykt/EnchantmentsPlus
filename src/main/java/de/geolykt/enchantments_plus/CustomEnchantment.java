@@ -45,7 +45,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
     public static IEnchGatherer Enchantment_Adapter = new PersistentDataGatherer();
-    
+
     protected int id;
 
     protected int maxLevel;         // Max level the given enchant can naturally obtain
@@ -189,7 +189,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     void setConflicting(Set<Class<? extends CustomEnchantment>> conflicts) {
         this.conflicting = conflicts;
     }
-    
+
     void addConflicting(Class<? extends CustomEnchantment> conflict) {
         if (conflicting == null) {
             conflicting = new HashSet<Class<? extends CustomEnchantment>>();
@@ -240,11 +240,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public BaseEnchantments asEnum() {
         return base;
     }
-    
+
     void setBase(BaseEnchantments baseEnchant) {
         base = baseEnchant;
     }
-    
+
     @Override
     public int compareTo(CustomEnchantment o) {
         return this.getLoreName().compareTo(o.getLoreName());
@@ -344,7 +344,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     // Returns a mapping of custom enchantments and their level on a given tool
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
             List<String> outExtraLore) {
-    	return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
+        return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
     }
 
     // Returns a mapping of custom enchantments and their level on a given tool
@@ -397,14 +397,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public String getShown(int level, World world) {
         String levelStr = Utilities.getRomanString(level);
         return (isCursed ? Config.get(world).getCurseColor() : Config.get(world).getEnchantmentColor()) + loreName
-                + (maxLevel == 1 ? " " : " " + levelStr);
+            + (maxLevel == 1 ? " " : " " + levelStr);
     }
 
     public List<String> getDescription(World world) {
         List<String> desc = new LinkedList<>();
         if (Config.get(world).descriptionLore()) {
             String strStart = Utilities.toInvisibleString("ze.desc." + getId())
-                    + Config.get(world).getDescriptionColor() + "" + ChatColor.ITALIC + " ";
+                + Config.get(world).getDescriptionColor() + "" + ChatColor.ITALIC + " ";
             StringBuilder bldr = new StringBuilder();
 
             int i = 0;
@@ -564,16 +564,16 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             }
             return this;
         }
-        
+
         public Set<Class<? extends CustomEnchantment>> getConflicting() {
             return customEnchantment.getConflicting();
         }
-        
+
         public Builder<T> conflicting() {
             customEnchantment.setConflicting(new HashSet<Class<? extends CustomEnchantment>>());
             return this;
         }
-        
+
         public Builder<T> description(String description) {
             customEnchantment.setDescription(description);
             return this;
@@ -614,13 +614,13 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             customEnchantment.setBase(base);
             return this;
         }
-        
+
         public T build() {
             return customEnchantment;
         }
     } 
     public static interface IEnchGatherer {
-    	// Returns a mapping of custom enchantments and their level on a given tool
+        // Returns a mapping of custom enchantments and their level on a given tool
         public abstract LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
                 List<String> outExtraLore);
 
@@ -636,12 +636,12 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 List<String> outExtraLore);
         public abstract void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world);
     }
-    
+
     /**
      * The legacy Adapter for gathering Enchantments used up until 1.16
      */
     static class LegacyLoreGatherer implements IEnchGatherer {
-    	// Returns a mapping of custom enchantments and their level on a given tool
+        // Returns a mapping of custom enchantments and their level on a given tool
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
                 List<String> outExtraLore) {
@@ -704,37 +704,37 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, World world) {
             raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "");
             switch (raw.split(" ").length) {
-            case 0: 
-            case 1:
-                return null; // Invalid length
-            case 2:
-                CustomEnchantment ench = Config.get(world).enchantFromString(raw.split(" ")[0]);
-                if (ench == null) {
-                    return null; // Not able to map enchantment
-                }
-                try {
-                    return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench,
-                            Utilities.getNumber(raw.split(" ")[1]));
-                } catch (NumberFormatException expected){
-                    return null; // Invalid roman numeral
-                }
-            case 3:
-                CustomEnchantment ench2 = Config.get(world).enchantFromString(raw.split(" ")[0] +
-                        raw.split(" ")[1]);
-                if (ench2 == null) {
-                    return null; // Not able to map enchantment
-                }
-                try {
-                    return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench2,
-                            Utilities.getNumber(raw.split(" ")[2]));
-                } catch (NumberFormatException expected){
-                    return null; // Invalid roman numeral
-                }
-            default:
-                return null; // Invalid length
+                case 0: 
+                case 1:
+                    return null; // Invalid length
+                case 2:
+                    CustomEnchantment ench = Config.get(world).enchantFromString(raw.split(" ")[0]);
+                    if (ench == null) {
+                        return null; // Not able to map enchantment
+                    }
+                    try {
+                        return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench,
+                                Utilities.getNumber(raw.split(" ")[1]));
+                    } catch (NumberFormatException expected){
+                        return null; // Invalid roman numeral
+                    }
+                case 3:
+                    CustomEnchantment ench2 = Config.get(world).enchantFromString(raw.split(" ")[0] +
+                            raw.split(" ")[1]);
+                    if (ench2 == null) {
+                        return null; // Not able to map enchantment
+                    }
+                    try {
+                        return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench2,
+                                Utilities.getNumber(raw.split(" ")[2]));
+                    } catch (NumberFormatException expected){
+                        return null; // Invalid roman numeral
+                    }
+                default:
+                    return null; // Invalid length
             }
         }
-        
+
         @Override
         public void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world) {
             if (stk == null) {
@@ -783,16 +783,16 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     static class PersistentDataGatherer implements IEnchGatherer {
         private ProvisionalLoreGatherer legacyGatherer = new ProvisionalLoreGatherer();
         public boolean doCompat = true;
-        
+
         /**
          * Used for enchantment conversion purposes
          */
         public final NamespacedKey ench_converted;
-        
+
         public PersistentDataGatherer() {
             ench_converted = new NamespacedKey(Storage.enchantments_plus, "e_convert");
         }
-        
+
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
                 List<String> outExtraLore) {
@@ -803,7 +803,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world) {
             return getEnchants(stk, acceptBooks, world, null);
         }
-        
+
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world) {
             return getEnchants(stk, false, world, null);
@@ -812,15 +812,21 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
                 List<String> outExtraLore) {
-            
+
             LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
             if ( (stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
                 if (stk.hasItemMeta()) {
                     final PersistentDataContainer cont = stk.getItemMeta().getPersistentDataContainer();
-                    
+
                     if (doCompat && cont.getOrDefault(ench_converted, PersistentDataType.BYTE, (byte) 0) == 0) {
                         //Legacy conversion
-                        Bukkit.getLogger().info("Item converted");
+                        Bukkit.getLogger().info(
+                                String.format("[%s] Item converted (%s)", 
+                                    world.getName(), 
+                                    stk.getType().toString()
+                                    )
+                                );
+
                         map = legacyGatherer.getEnchants(stk, acceptBooks, world, outExtraLore);
                         for (Map.Entry<CustomEnchantment, Integer> ench : map.entrySet()) {
                             this.setEnchantment(stk, ench.getKey(), ench.getValue(), world);
@@ -830,7 +836,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                         stk.setItemMeta(itemMeta);
                         return map;
                     }
-                    
+
                     Set<NamespacedKey> keys = cont.getKeys();
 
                     for (NamespacedKey key : keys) {
@@ -888,17 +894,17 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 meta.getPersistentDataContainer().set(ench.key, PersistentDataType.SHORT, (short) level);
                 lore.add(ench.getShown(level, world));
             }
-        
+
             //Disenchant item
             if (ench != null &&
                     level <= 0 &&
                     meta.getPersistentDataContainer().has(ench.key, PersistentDataType.SHORT)) {
                 meta.getPersistentDataContainer().remove(ench.key);
-            }
-            
+                    }
+
             meta.setLore(lore);
             stk.setItemMeta(meta);
-        
+
             if (stk.getType() == BOOK) {
                 stk.setType(ENCHANTED_BOOK);
             }
@@ -906,15 +912,15 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             setGlow(stk, true, world);
         }
     }
-    
-    
+
+
     /**
      * The upstream's implementation of handling enchantments post 1.16
      */
     static class ProvisionalLoreGatherer implements IEnchGatherer {
 
         private static final Pattern ENCH_LORE_PATTERN = Pattern.compile("§[a-fA-F0-9]([^§]+?)(?:$| $| (I|II|III|IV|V|VI|VII|VIII|IX|X)$)");
-        
+
         // Returns a mapping of custom enchantments and their level on a given tool
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
@@ -992,7 +998,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
             return new AbstractMap.SimpleEntry<>(ench, enchLvl);
         }
-        
+
         @Override
         public void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world) {
             if (stk == null) {
