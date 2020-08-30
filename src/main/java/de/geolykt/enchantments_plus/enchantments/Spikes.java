@@ -36,7 +36,7 @@ public class Spikes extends CustomEnchantment {
             for (Entity e : player.getNearbyEntities(1, 2, 1)) {
                 double fall = Math.min(player.getFallDistance(), 20.0);
                 if (e instanceof LivingEntity) {
-                    ADAPTER.attackEntity((LivingEntity) e, player, power * level * fall * 0.25);
+                    ADAPTER.attackEntity((LivingEntity) e, player, power * level * fall * 0.25, false);
                 }
             }
         }
