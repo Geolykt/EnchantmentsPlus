@@ -171,5 +171,7 @@ public class Enchantments_plus extends JavaPlugin {
         Lumber.SEARCH_FACES = ALL_SEARCH_FACES;
         Spectral.SEARCH_FACES = ALL_SEARCH_FACES;
         Pierce.SEARCH_FACES = ALL_SEARCH_FACES;
+        
+        Storage.ANTICHEAT_ADAPTER.onEnable();
     }
 }

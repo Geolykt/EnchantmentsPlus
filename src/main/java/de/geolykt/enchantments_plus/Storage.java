@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
+import de.geolykt.enchantments_plus.compatibility.anticheat.AbstractAnticheatAdapter;
+import de.geolykt.enchantments_plus.compatibility.anticheat.None;
 
 import java.util.*;
 
@@ -28,6 +30,7 @@ public class Storage {
     public static String version = "";
 
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER;
+    public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     // Random object
     public static final Random rnd = new Random();
