@@ -8,6 +8,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.TracerArrow;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
@@ -34,7 +35,8 @@ public class Tracer extends CustomEnchantment {
             .description("Guides the arrow to targets and then attacks")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.RIGHT);
+            .handUse(Hand.RIGHT)
+            .base(BaseEnchantments.TRACER);
     }
 
     @Override

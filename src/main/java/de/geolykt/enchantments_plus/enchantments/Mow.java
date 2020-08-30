@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -31,7 +32,8 @@ public class Mow extends CustomEnchantment {
             .description("Shears all nearby sheep")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.RIGHT);
+            .handUse(Hand.RIGHT)
+            .base(BaseEnchantments.MOW);
     }
 
     private boolean shear(PlayerEvent evt, int level, boolean usedHand) {

@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -44,7 +45,8 @@ public class Pierce extends CustomEnchantment {
             .description("Lets the player mine in several modes which can be changed through shift clicking")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.BOTH);
+            .handUse(Hand.BOTH)
+            .base(BaseEnchantments.PIERCE);
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -32,7 +33,8 @@ public class FrozenStep extends CustomEnchantment {
             .description("Allows the player to walk on water and safely emerge from it when sneaking")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.FROZEN_STEP);
     }
 
     public boolean onScan(Player player, int level, boolean usedHand) {

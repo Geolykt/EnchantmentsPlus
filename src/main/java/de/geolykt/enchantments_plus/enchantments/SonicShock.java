@@ -8,6 +8,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -26,7 +27,8 @@ public class SonicShock extends CustomEnchantment {
             .description("Damages mobs when flying past at high speed")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.SONIC_SHOCK);
     }
 
     @Override

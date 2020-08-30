@@ -11,6 +11,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.VortexArrow;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -37,7 +38,8 @@ public class Vortex extends CustomEnchantment {
                 .description("Teleports mob loot and XP directly to the player")
                 .cooldown(0)
                 .power(-1.0)
-                .handUse(Hand.BOTH);
+                .handUse(Hand.BOTH)
+                .base(BaseEnchantments.VORTEX);
     }
 
     @Override

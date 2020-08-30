@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.SiphonArrow;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -33,7 +34,8 @@ public class Siphon extends CustomEnchantment {
                 .description("Drains the health of the mob that you attack, giving it to you")
                 .cooldown(0)
                 .power(1.0)
-                .handUse(Hand.BOTH);
+                .handUse(Hand.BOTH)
+                .base(BaseEnchantments.SIPHON);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -32,7 +33,8 @@ public class Grab extends CustomEnchantment {
             .description("Teleports mined items and XP directly to the player")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.LEFT);
+            .handUse(Hand.LEFT)
+            .base(BaseEnchantments.GRAB);
     }
 
     @Override

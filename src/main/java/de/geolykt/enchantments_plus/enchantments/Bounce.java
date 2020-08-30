@@ -3,6 +3,7 @@ package de.geolykt.enchantments_plus.enchantments;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -21,10 +22,11 @@ public class Bounce extends CustomEnchantment {
             .probability(0)
             .enchantable(new Tool[]{BOOTS})
             .conflicting()
-            .description("Preserves momentum when on slime blocks")
+            .description("Shoots you in the air if you jump on slime blocks")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.BOUNCE);
     }
 
     @Override

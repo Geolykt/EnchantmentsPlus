@@ -5,6 +5,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -27,7 +28,8 @@ public class IceAspect extends CustomEnchantment {
             .description("Temporarily freezes the target")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.LEFT);
+            .handUse(Hand.LEFT)
+            .base(BaseEnchantments.ICE_ASPECT);
     }
 
     @Override

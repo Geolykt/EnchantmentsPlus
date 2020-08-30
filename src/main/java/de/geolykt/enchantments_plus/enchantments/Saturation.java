@@ -7,6 +7,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -25,8 +26,8 @@ public class Saturation extends CustomEnchantment {
             .description("Uses less of the player's hunger")
             .cooldown(0)
             .power(1.0)
-
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.SATURATION);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -31,7 +32,8 @@ public class Bind extends CustomEnchantment {
             .description("Keeps items with this enchantment in your inventory after death")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.BIND);
     }
 
     @Override

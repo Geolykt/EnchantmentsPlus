@@ -5,6 +5,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -27,7 +28,8 @@ public class Haste extends CustomEnchantment {
             .description("Gives the player a mining boost")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.HASTE);
     }
 
     @Override

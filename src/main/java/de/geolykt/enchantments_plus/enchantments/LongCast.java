@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -24,7 +25,8 @@ public class LongCast extends CustomEnchantment {
             .description("Launches fishing hooks farther out when casting")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.RIGHT);
+            .handUse(Hand.RIGHT)
+            .base(BaseEnchantments.LONG_CAST);
     }
 
     @Override

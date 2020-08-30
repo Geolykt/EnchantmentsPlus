@@ -6,6 +6,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -25,10 +26,11 @@ public class PotionResistance extends CustomEnchantment {
             .probability(0)
             .enchantable(new Tool[]{HELMET, CHESTPLATE, LEGGINGS, BOOTS})
             .conflicting()
-            .description("Lessens the effects of all potions on players")
+            .description("Lessens the effects of all potions on players, even the good ones")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.POTION_RESISTANCE);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -28,7 +29,8 @@ public class Stock extends CustomEnchantment {
             .description("Refills the player's item in hand when they run out")
             .cooldown(-1)
             .power(-1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.STOCK);
     }
 
     @Override

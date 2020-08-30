@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -25,7 +26,8 @@ public class Spikes extends CustomEnchantment {
             .description("Damages entities the player jumps onto")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.NONE);
+            .handUse(Hand.NONE)
+            .base(BaseEnchantments.SPIKES);
     }
 
     @Override

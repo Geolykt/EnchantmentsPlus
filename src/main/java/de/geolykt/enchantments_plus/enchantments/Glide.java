@@ -8,6 +8,7 @@ import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -35,7 +36,8 @@ public class Glide extends CustomEnchantment {
                 .description("Gently brings the player back to the ground when sneaking")
                 .cooldown(0)
                 .power(1.0)
-                .handUse(Hand.NONE);
+                .handUse(Hand.NONE)
+                .base(BaseEnchantments.GLIDE);
     }
 
     @Override

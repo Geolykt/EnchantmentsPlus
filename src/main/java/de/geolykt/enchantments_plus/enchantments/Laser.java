@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -39,7 +40,8 @@ public class Laser extends CustomEnchantment {
                 .description("Breaks blocks and damages mobs using a powerful beam of light")
                 .cooldown(0)
                 .power(1.0)
-                .handUse(Hand.RIGHT);
+                .handUse(Hand.RIGHT)
+                .base(BaseEnchantments.LASER);
     }
 
     public void shoot(Player player, int level, boolean usedHand) {

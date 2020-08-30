@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -38,7 +39,8 @@ public class Force extends CustomEnchantment {
             .description("Pushes and pulls nearby mobs, configurable through shift clicking")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.BOTH);
+            .handUse(Hand.BOTH)
+            .base(BaseEnchantments.FORCE);
     }
 
     @Override

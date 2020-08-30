@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -29,7 +30,8 @@ public class Variety extends CustomEnchantment {
             .description("Drops random types of wood or leaves")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.LEFT);
+            .handUse(Hand.LEFT)
+            .base(BaseEnchantments.VARIETY);
     }
 
     @Override

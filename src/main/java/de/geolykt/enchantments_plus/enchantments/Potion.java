@@ -10,6 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.PotionArrow;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -29,7 +30,8 @@ public class Potion extends CustomEnchantment {
             .description("Gives the shooter random positive potion effects when attacking")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.RIGHT);
+            .handUse(Hand.RIGHT)
+            .base(BaseEnchantments.POTION);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.*;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.BlockShredEvent;
@@ -37,7 +38,8 @@ public class Shred extends CustomEnchantment {
                 .description("Breaks the blocks within a radius of the original block mined")
                 .cooldown(0)
                 .power(-1.0)
-                .handUse(Hand.LEFT);
+                .handUse(Hand.LEFT)
+                .base(BaseEnchantments.SHRED);
     }
 
     @Override

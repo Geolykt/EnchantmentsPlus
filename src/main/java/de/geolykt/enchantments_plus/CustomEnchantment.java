@@ -23,6 +23,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enchantments.*;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.ench.ZenchantmentUseEvent;
@@ -44,6 +45,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
     public static IEnchGatherer Enchantment_Adapter = new PersistentDataGatherer();
+    
     protected int id;
 
     protected int maxLevel;         // Max level the given enchant can naturally obtain
@@ -61,6 +63,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     // Indicates that an enchantment has already been applied to an event, avoiding infinite regress
     protected boolean isCursed;
     protected NamespacedKey key; // The NamespacedKey for this enchantment which can be used for storage
+    protected BaseEnchantments base; // The base of the enchantment
 
     public abstract Builder<? extends CustomEnchantment> defaults();
 
@@ -234,6 +237,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         this.id = id;
     }
 
+    public BaseEnchantments asEnum() {
+        return base;
+    }
+    
+    void setBase(BaseEnchantments baseEnchant) {
+        base = baseEnchant;
+    }
+    
     @Override
     public int compareTo(CustomEnchantment o) {
         return this.getLoreName().compareTo(o.getLoreName());
@@ -599,6 +610,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return customEnchantment.getHandUse();
         }
 
+        public Builder<T> base(BaseEnchantments base) {
+            customEnchantment.setBase(base);
+            return this;
+        }
+        
         public T build() {
             return customEnchantment;
         }

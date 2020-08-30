@@ -12,6 +12,7 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.SingularityArrow;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
@@ -39,7 +40,8 @@ public class Singularity extends CustomEnchantment {
             .description("Creates a black hole that attracts nearby entities and then discharges them")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.RIGHT);
+            .handUse(Hand.RIGHT)
+            .base(BaseEnchantments.SINGULARITY);
     }
 
     @Override

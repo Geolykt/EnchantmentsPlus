@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.MissileArrow;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -29,7 +30,8 @@ public class Missile extends CustomEnchantment {
             .description("Shoots a missile from the bow")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.RIGHT);
+            .handUse(Hand.RIGHT)
+            .base(BaseEnchantments.MISSILE);
     }
 
     @Override

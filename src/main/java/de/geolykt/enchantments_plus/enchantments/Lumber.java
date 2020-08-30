@@ -8,6 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import com.google.common.collect.ImmutableSet;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -55,7 +56,8 @@ public class Lumber extends CustomEnchantment {
             .description("Breaks the entire tree at once")
             .cooldown(0)
             .power(-1.0)
-            .handUse(Hand.LEFT);
+            .handUse(Hand.LEFT)
+            .base(BaseEnchantments.LUMBER);
 
 
     }

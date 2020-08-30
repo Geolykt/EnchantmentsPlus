@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -33,7 +34,8 @@ public class Decapitation extends CustomEnchantment {
             .description("Increases the chance for dropping the enemies head on death")
             .cooldown(0)
             .power(1.0)
-            .handUse(Hand.LEFT);
+            .handUse(Hand.LEFT)
+            .base(BaseEnchantments.DECAPITATION);
     }
 
     private static EntityType[] entities = new EntityType[]{PLAYER, SKELETON, WITHER_SKULL, ZOMBIE, CREEPER};

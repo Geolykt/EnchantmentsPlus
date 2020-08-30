@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.annotations.EffectTask;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
@@ -49,7 +50,8 @@ public class Anthropomorphism extends CustomEnchantment {
                         "Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking")
                 .cooldown(0)
                 .power(1.0)
-                .handUse(Hand.BOTH);
+                .handUse(Hand.BOTH)
+                .base(BaseEnchantments.ANTHROPOMORPHISM);
     }
 
     @EffectTask(Frequency.MEDIUM_HIGH)
