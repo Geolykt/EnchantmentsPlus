@@ -260,7 +260,7 @@ public class Config {
             //Load CustomEnchantment Classes
             Set<CustomEnchantment> enchantments = new HashSet<>();
             Map<String, LinkedHashMap<String, Object>> configInfo = new HashMap<>();
-            for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig.get(ConfigValues.ENCHANTMENTS.toString()) ) {
+            for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig.get(ConfigKeys.ENCHANTMENTS.toString()) ) {
                 for (String enchantmentName : definition.keySet()) {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
@@ -299,28 +299,28 @@ public class Config {
      * Must be specified
      */
     private static float getProbability(LinkedHashMap<String, Object> data) {
-        return (float) (double) data.get(ConfigValues.PROBABILITY.toString());
+        return (float) (double) data.get(ConfigKeys.PROBABILITY.toString());
     }
 
     /**
      * Must be specified
      */
     private static String getLoreName(LinkedHashMap<String, Object> data) {
-        return (String) data.get(ConfigValues.NAME.toString());
+        return (String) data.get(ConfigKeys.NAME.toString());
     }
 
     /**
      * Must be specified
      */
     private static int getCooldown(LinkedHashMap<String, Object> data) {
-        return (int) data.get(ConfigValues.COOLDOWN.toString());
+        return (int) data.get(ConfigKeys.COOLDOWN.toString());
     }
 
     /**
      * Must be specified.
      */
     private static int getMaxLevel(LinkedHashMap<String, Object> data) {
-        return (int) data.get(ConfigValues.MAX_LEVEL.toString());
+        return (int) data.get(ConfigKeys.MAX_LEVEL.toString());
     }
 
     /**
@@ -328,7 +328,7 @@ public class Config {
      */
     private static Tool[] getTools(LinkedHashMap<String, Object> data) {
         Set<Tool> materials = new HashSet<>();
-        for (String s : ((String) data.get(ConfigValues.TOOLS.toString())).split(", |\\,")) {
+        for (String s : ((String) data.get(ConfigKeys.TOOLS.toString())).split(", |\\,")) {
             materials.add(Tool.fromString(s));
         }
         return materials.toArray(new Tool[0]);
@@ -338,7 +338,7 @@ public class Config {
      * Defaulting to 0, as stated in CustomEnchantment
      */
     private static double getPower(LinkedHashMap<String, Object> data) {
-        Object power = data.get(ConfigValues.POWER.toString());
+        Object power = data.get(ConfigKeys.POWER.toString());
         return power == null ? 0.0 : (double) power;
     }
 
@@ -352,40 +352,22 @@ public class Config {
 
 }
 
-enum ConfigValues {
-    ENCHANTMENTS {
-        public String toString() {
-            return "enchantments";
-        }
-    },
-    NAME {
-        public String toString() {
-            return "Name";
-        }
-    },
-    PROBABILITY {
-        public String toString() {
-            return "Probability";
-        }
-    },
-    COOLDOWN {
-        public String toString() {
-            return "Cooldown";
-        }
-    },
-    POWER {
-        public String toString() {
-            return "Power";
-        }
-    },
-    MAX_LEVEL {
-        public String toString() {
-            return "Max Level";
-        }
-    },
-    TOOLS {
-        public String toString() {
-            return "Tools";
-        }
+enum ConfigKeys {
+    ENCHANTMENTS("enchantments"),
+    NAME("Name"),
+    PROBABILITY("Probability"),
+    COOLDOWN("Cooldown"),
+    POWER("Power"),
+    MAX_LEVEL("Max Level"),
+    TOOLS("Tools");
+    
+    private String key;
+
+    ConfigKeys(String key) {
+        this.key = key;
+    }
+
+    public String toString() {
+        return this.key;
     }
 }
