@@ -4,7 +4,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -17,11 +16,11 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.PermissionHandler;
 import de.geolykt.enchantments_plus.PermissionTypes;
 
 import java.util.*;
 
+import static de.geolykt.enchantments_plus.PermissionHandler.hasPermission;
 import static org.bukkit.GameMode.CREATIVE;
 import static org.bukkit.Material.AIR;
 import static org.bukkit.inventory.EquipmentSlot.HAND;
@@ -41,43 +40,44 @@ public class Utilities {
         return stk;
     }
 
-    // Removes the given ItemStack's durability by the given 'damage' and then sets the item direction the given
+    // Removes the given ItemStack's durability by the given 'damage' and then sets
+    // the item direction the given
     // players hand.
-    //      This also takes into account the unbreaking enchantment
+    // This also takes into account the unbreaking enchantment
     public static void damageTool(Player player, int damage, boolean handUsed) {
         if (!player.getGameMode().equals(CREATIVE)) {
-            ItemStack hand =
-                handUsed ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+            ItemStack hand = handUsed ? player.getInventory().getItemInMainHand()
+                    : player.getInventory().getItemInOffHand();
             for (int i = 0; i < damage; i++) {
-                if (Storage.rnd.nextInt(100) <= (100 / (
-                    hand.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
+                if (Storage.rnd.nextInt(100) <= (100
+                        / (hand.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
                     setDamage(hand, getDamage(hand) + 1);
                 }
             }
             if (handUsed) {
                 player.getInventory().setItemInMainHand(
-                    getDamage(hand) > hand.getType().getMaxDurability() ? new ItemStack(AIR) : hand);
+                        getDamage(hand) > hand.getType().getMaxDurability() ? new ItemStack(AIR) : hand);
             } else {
                 player.getInventory().setItemInOffHand(
-                    getDamage(hand) > hand.getType().getMaxDurability() ? new ItemStack(AIR) : hand);
+                        getDamage(hand) > hand.getType().getMaxDurability() ? new ItemStack(AIR) : hand);
             }
         }
     }
 
     // Displays a particle with the given data
     public static void display(Location loc, Particle particle, int amount, double speed, double xO, double yO,
-        double zO) {
+            double zO) {
         loc.getWorld().spawnParticle(particle, loc.getX(), loc.getY(), loc.getZ(), amount, (float) xO, (float) yO,
-            (float) zO, (float) speed);
+                (float) zO, (float) speed);
     }
 
     // Removes the given ItemStack's durability by the given 'damage'
-    //      This also takes into account the unbreaking enchantment
+    // This also takes into account the unbreaking enchantment
     public static void addUnbreaking(Player player, ItemStack is, int damage) {
         if (!player.getGameMode().equals(CREATIVE)) {
             for (int i = 0; i < damage; i++) {
-                if (Storage.rnd.nextInt(100) <= (100 / (
-                    is.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
+                if (Storage.rnd.nextInt(
+                        100) <= (100 / (is.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
                     setDamage(is, getDamage(is) + 1);
                 }
             }
@@ -100,7 +100,8 @@ public class Utilities {
         return 0;
     }
 
-    // Returns the item stack direction the player's main or off hand, determinted by 'handUsed'
+    // Returns the item stack direction the player's main or off hand, determinted
+    // by 'handUsed'
     public static ItemStack usedStack(Player player, boolean handUsed) {
         return handUsed ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
     }
@@ -124,8 +125,9 @@ public class Utilities {
         return removeItem(player, is.getType(), is.getAmount());
     }
 
-    // Removes a certain number of an item stack of the given description from the players inventory and returns true
-    //      if the item stack was direction their inventory
+    // Removes a certain number of an item stack of the given description from the
+    // players inventory and returns true
+    // if the item stack was direction their inventory
     public static boolean removeItem(Player player, Material mat, int amount) {
         if (player.getGameMode().equals(CREATIVE)) {
             return true;
@@ -153,8 +155,9 @@ public class Utilities {
         return true;
     }
 
-    // Removes a certain number of an item stack of the given description from the players inventory and returns true
-    //      if the item stack was direction their inventory
+    // Removes a certain number of an item stack of the given description from the
+    // players inventory and returns true
+    // if the item stack was direction their inventory
     public static boolean hasItem(Player player, Material mat, int amount) {
         if (player.getGameMode().equals(CREATIVE)) {
             return true;
@@ -174,7 +177,8 @@ public class Utilities {
         return amount == 0;
     }
 
-    // Returns a level for the enchant event given the XP level and the enchantments max level
+    // Returns a level for the enchant event given the XP level and the enchantments
+    // max level
     public static int getEnchantLevel(int maxlevel, int levels) {
         if (maxlevel == 1) {
             return 1;
@@ -249,7 +253,8 @@ public class Utilities {
         }
     }
 
-    // Returns the roman number string representation of the given english number, capped at the int 'limit'
+    // Returns the roman number string representation of the given english number,
+    // capped at the int 'limit'
     public static String getRomanString(int number, int limit) {
         if (number > limit) {
             return getRomanString(limit);
@@ -329,7 +334,8 @@ public class Utilities {
         return direction;
     }
 
-    // Returns a more simple direction integer, 0-6, for the given player's pitch and yaw
+    // Returns a more simple direction integer, 0-6, for the given player's pitch
+    // and yaw
     public static BlockFace getCardinalDirection(float yaw, float pitch) {
         BlockFace direction;
         if (yaw < 0) {
@@ -354,10 +360,11 @@ public class Utilities {
         return direction;
     }
 
-    // Returns true if a player can use a certain enchantment at a certain time (permissions and cooldowns),
-    //      otherwise false
+    // Returns true if a player can use a certain enchantment at a certain time
+    // (permissions and cooldowns),
+    // otherwise false
     public static boolean canUse(Player player, int enchantmentID) {
-        if (!PermissionHandler.hasPermission((CommandSender) player, PermissionTypes.USE)) {
+        if (!hasPermission(player, PermissionTypes.USE)) {
             return false;
         }
         if (EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) != 0) {
@@ -382,7 +389,8 @@ public class Utilities {
         ent.addPotionEffect(new PotionEffect(type, length, intensity));
     }
 
-    // Encodes a given string to be invisible to players surrounded by the escape sequence "\< \>"
+    // Encodes a given string to be invisible to players surrounded by the escape
+    // sequence "\< \>"
     public static String toInvisibleString(String str) {
         str = "\\<" + str + "\\>" + ChatColor.COLOR_CHAR + 'F';
         StringBuilder builder = new StringBuilder();
@@ -397,7 +405,8 @@ public class Utilities {
     public static Map<String, Boolean> fromInvisibleString(String str) {
         Map<String, Boolean> strs = new LinkedHashMap<>();
 
-        int state = 0; // 0 = close, 1 = waiting for next to open, 2 = open, 3 = waiting for next to close
+        int state = 0; // 0 = close, 1 = waiting for next to open, 2 = open, 3 = waiting for next to
+                       // close
         StringBuilder builder = new StringBuilder();
         for (char c : str.toCharArray()) {
             switch (state) {
@@ -489,7 +498,7 @@ public class Utilities {
     }
 
     public static void selfRemovingArea(Material fill, Material check, int radius, Block center, Player player,
-        Map<Location, Long> placed) {
+            Map<Location, Long> placed) {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
 
@@ -498,8 +507,8 @@ public class Utilities {
                 if (possiblePlatformLoc.distanceSquared(center.getLocation()) < radius * radius - 2) {
                     if (placed.containsKey(possiblePlatformLoc)) {
                         placed.put(possiblePlatformLoc, System.nanoTime());
-                    } else if (possiblePlatformBlock.getType() == check
-                        && Storage.COMPATIBILITY_ADAPTER.airs().contains( possiblePlatformBlock.getRelative(0, 1, 0).getType())) {
+                    } else if (possiblePlatformBlock.getType() == check && Storage.COMPATIBILITY_ADAPTER.airs()
+                            .contains(possiblePlatformBlock.getRelative(0, 1, 0).getType())) {
                         if (possiblePlatformBlock.getBlockData() instanceof Levelled) {
                             if (((Levelled) possiblePlatformBlock.getBlockData()).getLevel() != 0) {
                                 continue;
@@ -514,21 +523,31 @@ public class Utilities {
         }
     }
 
-
     /**
-     * Returns a list of blocks found using the BFS algorithm given the passed search parameters
-     * @param startBlock The starting position of the BFS algorithm
-     * @param maxBlocks The max number of blocks to found (will return empty list if strict is true)
-     * @param strictMax true -> return nothing if maxBlocks number is exceeded; false -> return current find if maxBlock number is exceeded
-     * @param maxDistFromOrigin The max distance the center of a found block can be from the center of startBlock to be a valid find
-     * @param searchFaces The block faces to search
-     * @param validFind valid materials for a found block
-     * @param validSearch valid materials for a searched block; Will return empty list if not one of these
-     * @param strictValidSearch true -> return nothing if denylist block is found; false -> return current find if blacklist block is found
-     * @param flipValidSearch true -> validSearch is a allowlist; false -> validSearch is a denylist
+     * Returns a list of blocks found using the BFS algorithm given the passed
+     * search parameters
+     * 
+     * @param startBlock        The starting position of the BFS algorithm
+     * @param maxBlocks         The max number of blocks to found (will return empty
+     *                          list if strict is true)
+     * @param strictMax         true -> return nothing if maxBlocks number is
+     *                          exceeded; false -> return current find if maxBlock
+     *                          number is exceeded
+     * @param maxDistFromOrigin The max distance the center of a found block can be
+     *                          from the center of startBlock to be a valid find
+     * @param searchFaces       The block faces to search
+     * @param validFind         valid materials for a found block
+     * @param validSearch       valid materials for a searched block; Will return
+     *                          empty list if not one of these
+     * @param strictValidSearch true -> return nothing if denylist block is found;
+     *                          false -> return current find if blacklist block is
+     *                          found
+     * @param flipValidSearch   true -> validSearch is a allowlist; false ->
+     *                          validSearch is a denylist
      */
-    public static List<Block> BFS(Block startBlock, int maxBlocks, boolean strictMax, float maxDistFromOrigin, int[][] searchFaces,
-            Set<Material> validFind, Set<Material> validSearch,  boolean strictValidSearch, boolean flipValidSearch) {
+    public static List<Block> BFS(Block startBlock, int maxBlocks, boolean strictMax, float maxDistFromOrigin,
+            int[][] searchFaces, Set<Material> validFind, Set<Material> validSearch, boolean strictValidSearch,
+            boolean flipValidSearch) {
 
         // Ensure the search list is in the allowlist
         if (!flipValidSearch) {
@@ -538,7 +557,8 @@ public class Utilities {
             validSearch = validSearchNew;
         }
 
-        // BFS through the trunk, cancel if forbidden blocks are adjacent or search body becomes too large
+        // BFS through the trunk, cancel if forbidden blocks are adjacent or search body
+        // becomes too large
 
         // Searched blocks
         Set<Block> searchedBlocks = new LinkedHashSet<>();
@@ -569,7 +589,8 @@ public class Utilities {
                     // See if its been searched before
                     if (!searchedBlocks.contains(nextBlock)) {
 
-                        // Determine if the block is in the allowlist and flip the condition if flipValidSearch
+                        // Determine if the block is in the allowlist and flip the condition if
+                        // flipValidSearch
                         boolean check = validSearch.contains(nextBlock.getType());
                         if (flipValidSearch) {
                             check = !check;
