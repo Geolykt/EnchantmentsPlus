@@ -4,7 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -21,7 +25,7 @@ import java.util.HashMap;
 
 public class Reveal extends CustomEnchantment {
 
-    public static final HashMap<Location, FallingBlock> GLOWING_BLOCKS = new HashMap<>();
+    public static final HashMap<Location, Entity> GLOWING_BLOCKS = new HashMap<>();
     public static final int ID = 68;
 
     @Override
@@ -63,15 +67,17 @@ public class Reveal extends CustomEnchantment {
                                 
                                 // Show fallingBlock Code
                                 Location loc = blk.getLocation();
-                                FallingBlock block = blk.getWorld().spawnFallingBlock(loc, blk.getBlockData());
-                                block.setGlowing(true);
-                                block.setGravity(false);
-                                GLOWING_BLOCKS.put(loc, block);
+                                LivingEntity entity = (LivingEntity) blk.getWorld().spawnEntity(loc, EntityType.SHULKER);
+                                entity.setGlowing(true);
+                                entity.setGravity(false);
+                                entity.setInvulnerable(true);
+                                ((LivingEntity)entity).setAI(false);
+                                GLOWING_BLOCKS.put(loc, entity);
                                 
                                 Bukkit.getServer().getScheduler()
                                     .scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
                                         // Hide fallingBlockCode
-                                        FallingBlock blockToRemove = GLOWING_BLOCKS.remove(loc);
+                                        Entity blockToRemove = GLOWING_BLOCKS.remove(loc);
                                         if (blockToRemove != null) {
                                             blockToRemove.remove();
                                         }

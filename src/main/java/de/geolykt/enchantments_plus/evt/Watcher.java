@@ -171,7 +171,7 @@ public class Watcher implements Listener {
     @EventHandler
     public void onOreUncover(BlockBreakEvent evt) {
         for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
-            FallingBlock blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
+            Entity blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
             if (blockToRemove != null) {
                 blockToRemove.remove();
             }
