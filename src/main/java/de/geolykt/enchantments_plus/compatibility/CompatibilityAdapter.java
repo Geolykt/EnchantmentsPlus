@@ -569,16 +569,6 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    public boolean showShulker(Block blockToHighlight, int entityId, Player player) {
-        // This cannot be done without NMS
-        return false;
-    }
-
-    public boolean hideShulker(int entityId, Player player) {
-        // This cannot be done without NMS
-        return false;
-    }
-
     public Entity spawnGuardian(Location loc, boolean elderGuardian) {
         return loc.getWorld().spawnEntity(loc, elderGuardian ? EntityType.ELDER_GUARDIAN : EntityType.GUARDIAN);
     }

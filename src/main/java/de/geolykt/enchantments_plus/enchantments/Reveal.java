@@ -1,9 +1,10 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -17,12 +18,10 @@ import de.geolykt.enchantments_plus.util.Utilities;
 import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Reveal extends CustomEnchantment {
 
-    // Blocks made to glow by the Reveal enchantment
-    public static final Map<Block, Integer> glowingBlocks = new HashMap<>();
+    public static final HashMap<Location, FallingBlock> GLOWING_BLOCKS = new HashMap<>();
     public static final int ID = 68;
 
     @Override
@@ -41,11 +40,10 @@ public class Reveal extends CustomEnchantment {
     }
     @Override
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {
-        Player player = evt.getPlayer();
         if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (evt.getPlayer().isSneaking()) {
                 int radius = (int) Math.max(2, Math.round((2 + level) * power));
-                int found = 0;
+                int found_blocks = 0;
                 for (int x = -radius; x <= radius; x++) {
                     for (int y = -radius; y <= radius; y++) {
                         for (int z = -radius; z <= radius; z++) {
@@ -55,39 +53,34 @@ public class Reveal extends CustomEnchantment {
                                 for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
                                     if (Storage.COMPATIBILITY_ADAPTER.airs().contains(blk.getRelative(face).getType())) {
                                         exposed = true;
+                                        break;
                                     }
                                 }
                                 if (exposed) {
                                     continue;
                                 }
-
-                                found++;
-                                int entityId = 2000000000 + (blk.hashCode()) % 10000000;
-                                if (glowingBlocks.containsKey(blk)) {
-                                    glowingBlocks.put(blk, glowingBlocks.get(blk) + 1);
-                                } else {
-                                    glowingBlocks.put(blk, 1);
-                                }
-
-                                if (!ADAPTER.showShulker(blk, entityId, player)) {
-                                    return false;
-                                }
+                                found_blocks++;
+                                
+                                // Show fallingBlock Code
+                                Location loc = blk.getLocation();
+                                FallingBlock block = blk.getWorld().spawnFallingBlock(loc, blk.getBlockData());
+                                block.setGlowing(true);
+                                block.setGravity(false);
+                                GLOWING_BLOCKS.put(loc, block);
+                                
                                 Bukkit.getServer().getScheduler()
-                                      .scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
-                                          ADAPTER.hideShulker(entityId, player);
-                                          if (glowingBlocks.containsKey(blk)
-                                             && glowingBlocks.get(blk) > 1) {
-                                              glowingBlocks.put(blk,
-                                                                        glowingBlocks.get(blk) - 1);
-                                          } else {
-                                              glowingBlocks.remove(blk);
-                                          }
-                                      }, 100);
+                                    .scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                                        // Hide fallingBlockCode
+                                        FallingBlock blockToRemove = GLOWING_BLOCKS.remove(loc);
+                                        if (blockToRemove != null) {
+                                            blockToRemove.remove();
+                                        }
+                                    }, 100);
                             }
                         }
                     }
                 }
-                Utilities.damageTool(evt.getPlayer(), Math.max(16, (int) Math.round(found * 1.3)), usedHand);
+                Utilities.damageTool(evt.getPlayer(), Math.max(16, (int) Math.round(found_blocks * 1.3)), usedHand);
 
                 return true;
             }

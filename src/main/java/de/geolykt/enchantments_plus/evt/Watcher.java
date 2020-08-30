@@ -171,14 +171,9 @@ public class Watcher implements Listener {
     @EventHandler
     public void onOreUncover(BlockBreakEvent evt) {
         for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
-            if (Reveal.glowingBlocks.containsKey(evt.getBlock().getRelative(face))) {
-                int entityId = 2000000000 + (evt.getBlock().getRelative(face).hashCode()) % 10000000;
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getWorld().equals(evt.getBlock().getWorld())) {
-                        Storage.COMPATIBILITY_ADAPTER.hideShulker(entityId, player);
-                    }
-                }
-                Reveal.glowingBlocks.remove(evt.getBlock());
+            FallingBlock blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
+            if (blockToRemove != null) {
+                blockToRemove.remove();
             }
         }
     }
