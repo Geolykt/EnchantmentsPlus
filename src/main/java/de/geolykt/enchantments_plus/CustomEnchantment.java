@@ -30,6 +30,7 @@ import de.geolykt.enchantments_plus.evt.ench.ZenchantmentUseEvent;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -704,6 +705,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, World world) {
             raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "");
             switch (raw.split(" ").length) {
+<<<<<<< HEAD
                 case 0: 
                 case 1:
                     return null; // Invalid length
@@ -732,6 +734,42 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                     }
                 default:
                     return null; // Invalid length
+=======
+            case 0:
+                return null; // Invalid length, don't tell me otherwise
+            case 1:
+                CustomEnchantment enchant = Config.get(world).enchantFromString(raw);
+                if (enchant == null) {
+                    return null; // Not able to map enchantment
+                } else {
+                    return new SimpleEntry<CustomEnchantment, Integer>(enchant, 1);
+                }
+            case 2:
+                CustomEnchantment ench = Config.get(world).enchantFromString(raw.split(" ")[0]);
+                if (ench == null) {
+                    return null; // Not able to map enchantment
+                }
+                try {
+                    return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench,
+                            Utilities.getNumber(raw.split(" ")[1]));
+                } catch (NumberFormatException expected){
+                    return null; // Invalid roman numeral
+                }
+            case 3:
+                CustomEnchantment ench2 = Config.get(world).enchantFromString(raw.split(" ")[0] +
+                        raw.split(" ")[1]);
+                if (ench2 == null) {
+                    return null; // Not able to map enchantment
+                }
+                try {
+                    return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench2,
+                            Utilities.getNumber(raw.split(" ")[2]));
+                } catch (NumberFormatException expected){
+                    return null; // Invalid roman numeral
+                }
+            default:
+                return null; // Invalid length
+>>>>>>> Fixed enchantment gatherer (?)
             }
         }
 
@@ -781,7 +819,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      *  it's data. It is modified to be backwards compatible
      */
     static class PersistentDataGatherer implements IEnchGatherer {
-        private ProvisionalLoreGatherer legacyGatherer = new ProvisionalLoreGatherer();
+        private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
         public boolean doCompat = true;
 
         /**
