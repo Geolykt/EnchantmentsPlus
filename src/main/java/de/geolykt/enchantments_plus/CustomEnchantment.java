@@ -30,6 +30,7 @@ import de.geolykt.enchantments_plus.evt.ench.ZenchantmentUseEvent;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -704,9 +705,15 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, World world) {
             raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "");
             switch (raw.split(" ").length) {
-            case 0: 
+            case 0:
+                return null; // Invalid length, don't tell me otherwise
             case 1:
-                return null; // Invalid length
+                CustomEnchantment enchant = Config.get(world).enchantFromString(raw);
+                if (enchant == null) {
+                    return null; // Not able to map enchantment
+                } else {
+                    return new SimpleEntry<CustomEnchantment, Integer>(enchant, 1);
+                }
             case 2:
                 CustomEnchantment ench = Config.get(world).enchantFromString(raw.split(" ")[0]);
                 if (ench == null) {
@@ -781,7 +788,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      *  it's data. It is modified to be backwards compatible
      */
     static class PersistentDataGatherer implements IEnchGatherer {
-        private ProvisionalLoreGatherer legacyGatherer = new ProvisionalLoreGatherer();
+        private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
         public boolean doCompat = true;
         
         /**
