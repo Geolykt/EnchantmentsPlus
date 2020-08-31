@@ -23,6 +23,8 @@ import de.geolykt.enchantments_plus.util.Utilities;
 import static de.geolykt.enchantments_plus.enums.Tool.BOW;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
+import static org.bukkit.inventory.EquipmentSlot.HAND;
+import static org.bukkit.inventory.EquipmentSlot.OFF_HAND;
 
 public class Burst extends CustomEnchantment {
 
@@ -62,7 +64,8 @@ public class Burst extends CustomEnchantment {
                             arrow.setFireTicks(Integer.MAX_VALUE);
                         }
                         arrow.setVelocity(player.getLocation().getDirection().normalize().multiply(1.7));
-                        EntityShootBowEvent shootEvent = new EntityShootBowEvent(player, hand, arrow, 1f);
+                        EntityShootBowEvent shootEvent = new EntityShootBowEvent(player, hand, null, arrow,
+                                usedHand ? HAND : OFF_HAND, 1f, false);
                         ProjectileLaunchEvent launchEvent = new ProjectileLaunchEvent(arrow);
                         Bukkit.getPluginManager().callEvent(shootEvent);
                         Bukkit.getPluginManager().callEvent(launchEvent);
