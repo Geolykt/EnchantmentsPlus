@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.geolykt.enchantments_plus.compatibility;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
@@ -44,8 +41,12 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Sets;
+
+import de.geolykt.enchantments_plus.Storage;
 
 public class CompatibilityAdapter {
 
@@ -698,6 +699,62 @@ public class CompatibilityAdapter {
             return Material.YELLOW_WOOL;
         default:
             return Material.WHITE_WOOL;
+        }
+    }
+    
+    private boolean legacyEntityShootBowEvent = false;
+    
+    /**
+     * Method that scans whether API methods can be used. Right now it's only used for the EntityShootBowEvent, whose constructor has changed
+     * on the 31 August of 2020
+     */
+    public void scanMethods() {
+        // Test for java.lang.NoSuchMethodError in the Spigot API with the EntityShootBowEvent.
+        try {
+            EntityShootBowEvent.class.getConstructor(LivingEntity.class, ItemStack.class, ItemStack.class, Entity.class,
+                    EquipmentSlot.class, float.class, boolean.class);
+        } catch (NoSuchMethodException excepted) {
+            Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
+                    + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
+            legacyEntityShootBowEvent = true;
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
+                    + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
+            legacyEntityShootBowEvent = true;
+        }
+    }
+    
+    /**
+     * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
+     *  the correct constructor without throwing a java.lang.NoSuchMethodError.
+     * @param shooter The shooter
+     * @param bow The used bow
+     * @param consumable Not used in legacy mode. The item that was consumed
+     * @param projectile The spawned projectile/arrow
+     * @param hand  Not used in legacy mode. The used hand
+     * @param force The force at which the bow is drawn
+     * @param consumeItem  Not used in legacy mode.  Whether or not to consume the item
+     * @return The constructed EntityShootBowEvent
+     */
+    public EntityShootBowEvent ConstructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
+            @Nullable ItemStack consumable, @NotNull Entity projectile, @NotNull EquipmentSlot hand, float force, boolean consumeItem) {
+        if (legacyEntityShootBowEvent) {
+            try {
+                return EntityShootBowEvent.class.getConstructor(LivingEntity.class, ItemStack.class, Entity.class, float.class)
+                .newInstance(shooter, bow, projectile, force);
+            } catch (NoSuchMethodException | SecurityException e) {
+                e.printStackTrace();
+                Bukkit.getLogger().severe(Storage.LOGO + ChatColor.RED + " Unable to construct EntityShootBowEvent as the method was not found.");
+                return null;
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                e.printStackTrace();
+                Bukkit.getLogger().severe(Storage.LOGO + ChatColor.RED + " Unable to construct EntityShootBowEvent as argument errors"
+                        + " occured (report this to the Issue page).");
+                return null;
+            }
+        } else {
+            return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
         }
     }
 }

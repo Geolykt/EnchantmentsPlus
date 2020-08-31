@@ -51,6 +51,7 @@ public class Storage {
         switch (nmsVersionString) {
             default:
                 COMPATIBILITY_ADAPTER = de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter.getInstance();
+                COMPATIBILITY_ADAPTER.scanMethods();
                 break;
         }
     }

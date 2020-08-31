@@ -48,10 +48,13 @@ public class Spread extends CustomEnchantment {
         ItemStack hand = Utilities.usedStack(player, usedHand);
         MultiArrow ar = new MultiArrow(originalArrow);
         EnchantedArrow.putArrow(originalArrow, ar, player);
+
         Bukkit.getPluginManager().callEvent(
-            new EntityShootBowEvent(player, hand, null, originalArrow, usedHand ? HAND : OFF_HAND,
-                    (float) originalArrow.getVelocity().length(), false));
+            Storage.COMPATIBILITY_ADAPTER.ConstructEntityShootBowEvent(player, hand, null, originalArrow,
+                    usedHand ? HAND : OFF_HAND, (float) originalArrow.getVelocity().length(), false));
+
         Utilities.damageTool(player, (int) Math.round(level / 2.0 + 1), usedHand);
+
         for (int i = 0; i < (int) Math.round(power * level * 4); i++) {
             Vector v = originalArrow.getVelocity();
             v.setX(v.getX() + Math.max(Math.min(Storage.rnd.nextGaussian() / 8, 0.75), -0.75));
@@ -62,11 +65,10 @@ public class Spread extends CustomEnchantment {
             arrow.setVelocity(v.normalize().multiply(originalArrow.getVelocity().length()));
             arrow.setFireTicks(originalArrow.getFireTicks());
             arrow.setKnockbackStrength(originalArrow.getKnockbackStrength());
-            EntityShootBowEvent event =
-                new EntityShootBowEvent(player, hand, null, arrow, usedHand ? HAND : OFF_HAND,
-                        (float) originalArrow.getVelocity().length(), false);
+            EntityShootBowEvent event = Storage.COMPATIBILITY_ADAPTER.ConstructEntityShootBowEvent(player, hand,
+                    null, arrow, usedHand ? HAND : OFF_HAND, (float) arrow.getVelocity().length(), false);
             Bukkit.getPluginManager().callEvent(event);
-            if (evt.isCancelled()) {
+            if (event.isCancelled()) {
                 arrow.remove();
                 return false;
             }
