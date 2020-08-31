@@ -1,6 +1,8 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import static de.geolykt.enchantments_plus.enums.Tool.BOW;
+import static org.bukkit.inventory.EquipmentSlot.HAND;
+import static org.bukkit.inventory.EquipmentSlot.OFF_HAND;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
@@ -47,7 +49,8 @@ public class Spread extends CustomEnchantment {
         MultiArrow ar = new MultiArrow(originalArrow);
         EnchantedArrow.putArrow(originalArrow, ar, player);
         Bukkit.getPluginManager().callEvent(
-            new EntityShootBowEvent(player, hand, originalArrow, (float) originalArrow.getVelocity().length()));
+            new EntityShootBowEvent(player, hand, null, originalArrow, usedHand ? HAND : OFF_HAND,
+                    (float) originalArrow.getVelocity().length(), false));
         Utilities.damageTool(player, (int) Math.round(level / 2.0 + 1), usedHand);
         for (int i = 0; i < (int) Math.round(power * level * 4); i++) {
             Vector v = originalArrow.getVelocity();
@@ -60,7 +63,8 @@ public class Spread extends CustomEnchantment {
             arrow.setFireTicks(originalArrow.getFireTicks());
             arrow.setKnockbackStrength(originalArrow.getKnockbackStrength());
             EntityShootBowEvent event =
-                new EntityShootBowEvent(player, hand, arrow, (float) originalArrow.getVelocity().length());
+                new EntityShootBowEvent(player, hand, null, arrow, usedHand ? HAND : OFF_HAND,
+                        (float) originalArrow.getVelocity().length(), false);
             Bukkit.getPluginManager().callEvent(event);
             if (evt.isCancelled()) {
                 arrow.remove();
