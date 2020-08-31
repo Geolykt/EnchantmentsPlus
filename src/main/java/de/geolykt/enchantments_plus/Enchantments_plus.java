@@ -157,7 +157,7 @@ public class Enchantments_plus extends JavaPlugin {
         if(getConfig().getBoolean("forceUpdateDescriptions")) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, Enchantments_plus::updateDescrptions, 1, 200);
         }
-        
+
 
         int[][] ALL_SEARCH_FACES = new int[27][3];
         int i = 0;
@@ -171,7 +171,7 @@ public class Enchantments_plus extends JavaPlugin {
         Lumber.SEARCH_FACES = ALL_SEARCH_FACES;
         Spectral.SEARCH_FACES = ALL_SEARCH_FACES;
         Pierce.SEARCH_FACES = ALL_SEARCH_FACES;
-        
+
         Storage.ANTICHEAT_ADAPTER.onEnable();
     }
 }
