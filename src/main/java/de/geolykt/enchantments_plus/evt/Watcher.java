@@ -194,7 +194,7 @@ public class Watcher implements Listener {
     //      probability, and the level at which the item is being enchanted if the player has permission
     @EventHandler
     public void onEnchantItem(EnchantItemEvent evt) {
-        if (!evt.getEnchanter().hasPermission("enchantments_plus.enchant.get")) {
+        if (!evt.getEnchanter().hasPermission("enchplus.enchant.get")) {
             return;
         }
         if (evt.getItem().getType() == FISHING_ROD && evt.getExpLevelCost() <= 4) {

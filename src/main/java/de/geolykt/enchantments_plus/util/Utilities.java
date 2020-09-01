@@ -354,7 +354,7 @@ public class Utilities {
     // Returns true if a player can use a certain enchantment at a certain time (permissions and cooldowns),
     //      otherwise false
     public static boolean canUse(Player player, int enchantmentID) {
-        if (!player.hasPermission("enchantments_plus.enchant.use")) {
+        if (!player.hasPermission("enchplus.enchant.use")) {
             return false;
         }
         if (EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) != 0) {
