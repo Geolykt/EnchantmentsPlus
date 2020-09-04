@@ -76,15 +76,18 @@ public class Fire extends CustomEnchantment {
             Collection<ItemStack> original = evt.getBlock().getDrops(hand, evt.getPlayer());
             List<ItemStack> newDrops = new ArrayList<ItemStack>();
             for (ItemStack is: original) {
-                ItemStack ns = RecipeUtil.getSmeltedVariant(is);
+                ItemStack ns = RecipeUtil.getSmeltedVariantCached(is);
                 int oldAmount = ns.getAmount();
+                if (ns.getMaxStackSize() == 0) { // Probably air or other cursed items
+                    continue;
+                }
                 int amount = ns.getAmount();
-                while (amount > ns.getMaxStackSize()) {
+                while (amount >= ns.getMaxStackSize()) {
                     ns.setAmount(ns.getMaxStackSize());
                     newDrops.add(ns);
                     amount -= ns.getMaxStackSize();
                 }
-                ns.setAmount(oldAmount);
+                ns.setAmount(oldAmount % ns.getMaxStackSize());
                 newDrops.add(ns);
             }
             if (newDrops.size() != 0) {
