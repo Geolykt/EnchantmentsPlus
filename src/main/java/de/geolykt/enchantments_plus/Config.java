@@ -3,6 +3,7 @@ package de.geolykt.enchantments_plus;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,26 +30,25 @@ public class Config {
     public static final Map<World, Config> CONFIGS = new HashMap<>(); // Map of all world configs on the current server
     public static final HashSet<CustomEnchantment> allEnchants = new HashSet<>();
 
-    private static final int CONFIG_BUFFER_SIZE = 16 * 1024; 
-    private final Set<CustomEnchantment> worldEnchants;     // Set of active Custom Enchantments
+    private static final int CONFIG_BUFFER_SIZE = 16 * 1024;
+    private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
     private final Map<Integer, CustomEnchantment> idToEnch;
-    private final double enchantRarity;                        // Overall rarity of obtaining enchantments
-    private final int maxEnchants;                             // Max number of Custom Enchantments on a tool
-    private final int shredDrops;                              // The setting (all, block, none) for shred drops
-    private final boolean explosionBlockBreak;                 // Determines whether enchantment explosions cause world damage
-    private final boolean descriptionLore;                     // Determines if description lore appears on tools
-    private final ChatColor descriptionColor;                  // The color of the description lore
-    private final World world;                                 // The World associated with the config
+    private final double enchantRarity; // Overall rarity of obtaining enchantments
+    private final int maxEnchants; // Max number of Custom Enchantments on a tool
+    private final int shredDrops; // The setting (all, block, none) for shred drops
+    private final boolean explosionBlockBreak; // Determines whether enchantment explosions cause world damage
+    private final boolean descriptionLore; // Determines if description lore appears on tools
+    private final ChatColor descriptionColor; // The color of the description lore
+    private final World world; // The World associated with the config
     private final boolean enchantGlow;
     private final ChatColor enchantmentColor;
     private final ChatColor curseColor;
 
     // Constructs a new config object
-    public Config(Set<CustomEnchantment> worldEnchants, double enchantRarity,
-            int maxEnchants, int shredDrops, boolean explosionBlockBreak,
-            boolean descriptionLore, ChatColor descriptionColor, ChatColor enchantmentColor,
-            ChatColor curseColor, boolean enchantGlow, World world) {
+    public Config(Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
+            boolean explosionBlockBreak, boolean descriptionLore, ChatColor descriptionColor,
+            ChatColor enchantmentColor, ChatColor curseColor, boolean enchantGlow, World world) {
         this.worldEnchants = worldEnchants;
         this.enchantRarity = enchantRarity;
         this.maxEnchants = maxEnchants;
@@ -90,12 +90,14 @@ public class Config {
         return maxEnchants;
     }
 
-    // Returns which block break setting is enabled for shred (0 = all; 1 = blocks; 2 = none)
+    // Returns which block break setting is enabled for shred (0 = all; 1 = blocks;
+    // 2 = none)
     public int getShredDrops() {
         return shredDrops;
     }
 
-    // Returns if certain enchantments can break blocks with the explosions they create
+    // Returns if certain enchantments can break blocks with the explosions they
+    // create
     public boolean explosionBlockBreak() {
         return explosionBlockBreak;
     }
@@ -111,13 +113,19 @@ public class Config {
     }
 
     // Returns whether enchant glow is enabled for custom enchantments
-    public boolean enchantGlow() { return enchantGlow; }
+    public boolean enchantGlow() {
+        return enchantGlow;
+    }
 
     // Returns the color for enchantment lore
-    public ChatColor getEnchantmentColor() { return enchantmentColor; }
+    public ChatColor getEnchantmentColor() {
+        return enchantmentColor;
+    }
 
     // Returns the color for curse lore
-    public ChatColor getCurseColor() { return curseColor; }
+    public ChatColor getCurseColor() {
+        return curseColor;
+    }
 
     // Returns the world associated with the config
     public World getWorld() {
@@ -140,7 +148,8 @@ public class Config {
         return idToEnch.get(id);
     }
 
-    // Loads, parses, and auto updates the config file, creating a new config for each map 
+    // Loads, parses, and auto updates the config file, creating a new config for
+    // each map
     public static void loadConfigs() {
         CONFIGS.clear();
         for (World world : Bukkit.getWorlds()) {
@@ -154,17 +163,22 @@ public class Config {
         WatcherEnchant.apply_patch_explosion = patchCFG.getBoolean("explosion.enable", true);
         WatcherEnchant.apply_patch_piston = patchCFG.getBoolean("piston.enable", true);
         WatcherEnchant.patch_cancel_explosion = !patchCFG.getBoolean("explosion.removeBlocksInsteadOfCancel", false);
-        WatcherEnchant.patch_cancel_netherstep = !patchCFG.getBoolean("patch_ench_protect.netherstep_removeBlocksInsteadOfCancel", false);
-        WatcherEnchant.patch_cancel_frozenstep = !patchCFG.getBoolean("patch_ench_protect.frozenstep_removeBlocksInsteadOfCancel", false);
+        WatcherEnchant.patch_cancel_netherstep = !patchCFG
+                .getBoolean("patch_ench_protect.netherstep_removeBlocksInsteadOfCancel", false);
+        WatcherEnchant.patch_cancel_frozenstep = !patchCFG
+                .getBoolean("patch_ench_protect.frozenstep_removeBlocksInsteadOfCancel", false);
         Spectral.performWorldProtection = patchCFG.getBoolean("worldProtection.spectral", true);
         Arborist.doGoldenAppleDrop = patchCFG.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
         Siphon.ratio = patchCFG.getDouble("nerfs.siphonRatio", 0.5);
         Siphon.calcAmour = patchCFG.getBoolean("nerfs.siphonsubstractAmour", true);
 
         if (patchCFG.getString("enchantmentGatherer", "NBT").equals("NBT")) {
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer();
-            ((CustomEnchantment.PersistentDataGatherer) CustomEnchantment.Enchantment_Adapter).doCompat =
-                Storage.enchantments_plus.getConfig().getBoolean("compatibility", true);
+            Collection<Material> col = EnumSet.noneOf(Material.class);
+            boolean doCompat = Storage.enchantments_plus.getConfig().getBoolean("compatibility", false);
+            for (String s : patchCFG.getStringList("getterDeny")) {
+                col.add(Material.matchMaterial(s));
+            }
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(col, doCompat);
         } else if (patchCFG.getString("enchantmentGatherer").equals("PR47-lore")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
         } else {
@@ -172,7 +186,7 @@ public class Config {
         }
     }
 
-    private static byte[] streamReadAllBytes (InputStream stream) {
+    private static byte[] streamReadAllBytes(InputStream stream) {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;
@@ -190,7 +204,7 @@ public class Config {
         return buffer.toByteArray();
     }
 
-    public static Config getWorldConfig (World world) {
+    public static Config getWorldConfig(World world) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
             File file = new File(Storage.enchantments_plus.getDataFolder(), world.getName() + ".yml");
@@ -221,15 +235,15 @@ public class Config {
                         version[i] = Integer.parseInt(versionString[i]);
                     }
                 } else {
-                    version = new int[]{0, 0, 0};
+                    version = new int[] { 0, 0, 0 };
                 }
             } catch (Exception ex) {
-                version = new int[]{1, 5, 0};
+                version = new int[] { 1, 5, 0 };
             }
-            //Init variables
+            // Init variables
             final int shredDrops;
             yamlConfig.save(file);
-            //Load Variables
+            // Load Variables
             double rarity = (double) (yamlConfig.get("enchant_rarity"));
             double enchantRarity = (rarity / 100.0);
             int maxEnchants = (int) yamlConfig.get("max_enchants");
@@ -257,17 +271,19 @@ public class Config {
                 default:
                     shredDrops = 0;
             }
-            //Load CustomEnchantment Classes
+            // Load CustomEnchantment Classes
             Set<CustomEnchantment> enchantments = new HashSet<>();
             Map<String, LinkedHashMap<String, Object>> configInfo = new HashMap<>();
-            for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig.get(ConfigKeys.ENCHANTMENTS.toString()) ) {
+            for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig
+                    .get(ConfigKeys.ENCHANTMENTS.toString())) {
                 for (String enchantmentName : definition.keySet()) {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
             }
             List<Class<? extends CustomEnchantment>> customEnchantments = new ArrayList<>();
-            new FastClasspathScanner(CustomEnchantment.class.getPackage().getName()).overrideClasspath(Storage.pluginPath)
-                .matchSubclassesOf(CustomEnchantment.class, customEnchantments::add).scan();
+            new FastClasspathScanner(CustomEnchantment.class.getPackage().getName())
+                    .overrideClasspath(Storage.pluginPath)
+                    .matchSubclassesOf(CustomEnchantment.class, customEnchantments::add).scan();
             for (Class<? extends CustomEnchantment> cl : customEnchantments) {
                 try {
                     CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.newInstance().defaults();
@@ -284,7 +300,8 @@ public class Config {
                         }
                     }
                 } catch (IllegalAccessException | ClassCastException | InstantiationException ex) {
-                    System.err.println(String.format("Error parsing config for enchantment '%s'. Skipping.", cl.getName()));
+                    System.err.println(
+                            String.format("Error parsing config for enchantment '%s'. Skipping.", cl.getName()));
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
@@ -353,14 +370,9 @@ public class Config {
 }
 
 enum ConfigKeys {
-    ENCHANTMENTS("enchantments"),
-    NAME("Name"),
-    PROBABILITY("Probability"),
-    COOLDOWN("Cooldown"),
-    POWER("Power"),
-    MAX_LEVEL("Max Level"),
-    TOOLS("Tools");
-    
+    ENCHANTMENTS("enchantments"), NAME("Name"), PROBABILITY("Probability"), COOLDOWN("Cooldown"), POWER("Power"),
+    MAX_LEVEL("Max Level"), TOOLS("Tools");
+
     private String key;
 
     ConfigKeys(String key) {

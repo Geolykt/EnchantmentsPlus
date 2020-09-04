@@ -16,3 +16,6 @@ nerfs:
   siphonsubstractAmour: true
 enchantmentGatherer: "NBT" # `NBT` uses our cozy NBT-based storage format, `PR47-lore` is another implementation for lore based conversion, `upstream` is upstream's provisional lore based implementation. There is not much difference between the last two implementations
 compatibility: false # only has an effect if NBT is used above, if set to true, it will use PR47-lore to read non-converted enchantments and convert them, it is only done once per item, but is relatively slow nonetheless
+getterDeny: # the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items.
+  - "TRIPWIRE_HOOK"
+  - "LEVER"
