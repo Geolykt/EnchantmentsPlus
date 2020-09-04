@@ -45,12 +45,13 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
 <ul>
  <li>Major changes:
   <ul>
-   <li>None yet</li>
+   <li>Most values in the compatibillity adapter can be changed via magic configuration files now</li>
   </ul>
  </li>
  <li>Minor changes:
   <ul>
    <li>Fixed the Reveal enchantment, with it's own twist</li>
+   <li>Added an enchantment gatherer denylist - only works with NBT right now</li>
   </ul>
  </li>
  <li>Patches:

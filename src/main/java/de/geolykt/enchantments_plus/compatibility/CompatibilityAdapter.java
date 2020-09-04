@@ -1,11 +1,10 @@
 package de.geolykt.enchantments_plus.compatibility;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -14,6 +13,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -25,14 +25,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
-import static org.bukkit.Material.*;
-import static org.bukkit.Material.TROPICAL_FISH;
 import static org.bukkit.entity.EntityType.*;
-import static org.bukkit.entity.EntityType.PUFFERFISH;
 import org.bukkit.event.block.Action;
 import static org.bukkit.potion.PotionEffectType.*;
-import static org.bukkit.potion.PotionEffectType.DOLPHINS_GRACE;
-import static org.bukkit.potion.PotionEffectType.WATER_BREATHING;
 
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -44,158 +39,113 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.collect.Sets;
-
 import de.geolykt.enchantments_plus.Storage;
 
 public class CompatibilityAdapter {
 
-    private static final CompatibilityAdapter INSTANCE = new CompatibilityAdapter();
+    public CompatibilityAdapter() {
+        scanMethods();
+    }
+
+    private EnumSet<Material> grownCrops;
+    private EnumSet<Material> melonCrops;
+    private EnumSet<Material> airs;
+    private EnumSet<Material> ores;
+    private EnumSet<Material> unbreakable;
+    private EnumSet<Material> laserDenylist;
+    private EnumSet<Material> terraformerAllowlist;
+    private EnumSet<Material> shredAllowlistPickaxes;
+    private EnumSet<Material> shredAllowlistShovels;
+
+    private EnumSet<Biome> dryBiomes;
+    
+    /**
+     * Load the magic compatibility file
+     * @param config The appropriate FileConfiguration
+     */
+    public void loadValues(FileConfiguration config) {
+        grownCrops = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("grownCrops")) {
+            grownCrops.add(Material.matchMaterial(s));
+        }
+        melonCrops = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("melonCrops")) {
+            melonCrops.add(Material.matchMaterial(s));
+        }
+        airs = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("airs")) {
+            airs.add(Material.matchMaterial(s));
+        }
+        ores = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("ores")) {
+            ores.add(Material.matchMaterial(s));
+        }
+        unbreakable = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("unbreakable")) {
+            unbreakable.add(Material.matchMaterial(s));
+        }
+        laserDenylist = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("laserDenylist")) {
+            laserDenylist.add(Material.matchMaterial(s));
+        }
+        terraformerAllowlist = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("terraformerAllowlist")) {
+            terraformerAllowlist.add(Material.matchMaterial(s));
+        }
+        for (String s : config.getStringList("terraformerAllowlistTags")) {
+            try {
+                terraformerAllowlist.addAll(((Tag<Material>)Tag.class.getDeclaredField(s).get(null)).getValues()); // FIXME do this properly
+            } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        shredAllowlistPickaxes = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("shredAllowlistPickaxes")) {
+            shredAllowlistPickaxes.add(Material.matchMaterial(s));
+        }
+        shredAllowlistShovels = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("shredAllowlistShovels")) {
+            shredAllowlistShovels.add(Material.matchMaterial(s));
+        }
+        dryBiomes = EnumSet.noneOf(Biome.class);
+        for (String s : config.getStringList("dryBiomes")) {
+            dryBiomes.add(Biome.valueOf(s));
+        }
+    }
+
     private static final Random RND = new Random();
-    
-    public List<Material> grownCrops() {
-        return Arrays.asList(WHEAT, POTATOES, CARROTS, COCOA, BEETROOTS, NETHER_WART, SWEET_BERRY_BUSH);
-    }
-    
-    public List<Material> cropYields() {
-        return Arrays.asList(WHEAT, POTATOES, CARROTS, COCOA, BEETROOTS, NETHER_WART, SWEET_BERRIES);
+
+    public EnumSet<Material> grownCrops() {
+        return grownCrops;
     }
 
-    public List<Material> grownMelon() {
-        return Arrays.asList(MELON, PUMPKIN);
+    public EnumSet<Material> grownMelon() {
+        return melonCrops;
     }
 
-    public List<Material> melonYields() {
-        return Arrays.asList(MELON_SLICE, PUMPKIN);
-    }
-
-    public List<Material> mushrooms() {
-        return Arrays.asList(RED_MUSHROOM, BROWN_MUSHROOM);
+    public EnumSet<Material> airs() {
+        return airs;
     }
     
-    public List<Material> mushroomBlocks() {
-        return Arrays.asList(MUSHROOM_STEM, BROWN_MUSHROOM_BLOCK, RED_MUSHROOM_BLOCK);
+    public EnumSet<Material> ores() {
+        return ores;
     }
 
-    public Set<Material> airs() {
-        return Sets.immutableEnumSet(AIR, CAVE_AIR, VOID_AIR);
+    public EnumSet<Biome> dryBiomes() {
+        return dryBiomes;
     }
 
-    protected static List<Material> list_ores;
-    
-    public List<Material> ores() {
-        if (list_ores == null) {
-            list_ores = new ArrayList<Material>();
-            list_ores.addAll(Tag.GOLD_ORES.getValues());
-            list_ores.addAll(Arrays.asList(COAL_ORE, REDSTONE_ORE, DIAMOND_ORE,
-                    IRON_ORE, LAPIS_ORE, GLOWSTONE, NETHER_QUARTZ_ORE, EMERALD_ORE, ANCIENT_DEBRIS));
-            return list_ores;
-        } else {
-            return list_ores;
-        }
+    public EnumSet<Material> unbreakableBlocks() {
+        return unbreakable;
     }
 
-    public List<Material> dirts() {
-        return Arrays.asList(DIRT, COARSE_DIRT, MYCELIUM, PODZOL, GRASS_BLOCK, GRASS_PATH);
+    public EnumSet<Material> laserDenylist() {
+        return laserDenylist;
     }
 
-    public Set<Biome> dryBiomes() {
-        return Sets.immutableEnumSet(Biome.DESERT, Biome.FROZEN_OCEAN,
-                Biome.FROZEN_RIVER, Biome.SNOWY_TUNDRA, Biome.SNOWY_MOUNTAINS, Biome.DESERT_HILLS, Biome.SNOWY_BEACH,
-                Biome.SNOWY_TAIGA, Biome.SNOWY_TAIGA_HILLS, Biome.SAVANNA, Biome.SAVANNA_PLATEAU, Biome.BADLANDS,
-                Biome.WOODED_BADLANDS_PLATEAU, Biome.BADLANDS_PLATEAU, Biome.DESERT_LAKES, Biome.ICE_SPIKES,
-                Biome.SNOWY_TAIGA_MOUNTAINS, Biome.SHATTERED_SAVANNA, Biome.SHATTERED_SAVANNA_PLATEAU, Biome.ERODED_BADLANDS,
-                Biome.MODIFIED_WOODED_BADLANDS_PLATEAU, Biome.MODIFIED_BADLANDS_PLATEAU);
-    }
-    
-    public List<Material> stones() {
-        return Arrays.asList(STONE, GRANITE, ANDESITE, DIORITE, BASALT, BLACKSTONE);
-    }
-
-    public List<Material> cobblestones() {
-        return Arrays.asList(COBBLESTONE, MOSSY_COBBLESTONE);
-    }
-
-    public List<Material> netherbricks() {
-        return Arrays.asList(NETHER_BRICKS, RED_NETHER_BRICKS);
-    }
-    
-    public List<Material> netherracks() {
-        return Arrays.asList(NETHERRACK, WARPED_NYLIUM, CRIMSON_NYLIUM);
-    }
-
-
-    public List<Material> unbreakableBlocks() {
-        return Arrays.asList(BARRIER, BEDROCK, AIR, CAVE_AIR, VOID_AIR, COMMAND_BLOCK, REPEATING_COMMAND_BLOCK,
-                BUBBLE_COLUMN, DRAGON_BREATH, DRAGON_EGG, END_CRYSTAL, END_GATEWAY, END_PORTAL, END_PORTAL_FRAME, LAVA,
-                STRUCTURE_VOID, STRUCTURE_BLOCK, WATER, PISTON_HEAD, MOVING_PISTON);
-    }
-
-    public List<Material> laserBlackListBlocks() {
-        return Arrays.asList(OBSIDIAN, CRYING_OBSIDIAN);
-    }
-    
-    public List<Material> terracottas() {
-        return Arrays.asList(Material.WHITE_TERRACOTTA, Material.ORANGE_TERRACOTTA, Material.MAGENTA_TERRACOTTA,
-                Material.LIGHT_BLUE_TERRACOTTA, Material.BLUE_TERRACOTTA, Material.BLACK_TERRACOTTA, 
-                Material.RED_TERRACOTTA, Material.GREEN_TERRACOTTA, Material.CYAN_TERRACOTTA,
-                Material.GRAY_TERRACOTTA, Material.LIGHT_GRAY_TERRACOTTA, Material.YELLOW_TERRACOTTA, LIME_TERRACOTTA,
-                Material.PURPLE_TERRACOTTA, Material.PINK_TERRACOTTA);
-    }
-    
-    public List<Material> glazedTerracottas() {
-        return Arrays.asList(Material.WHITE_GLAZED_TERRACOTTA, Material.ORANGE_GLAZED_TERRACOTTA,
-                Material.MAGENTA_GLAZED_TERRACOTTA, Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
-                Material.BLUE_GLAZED_TERRACOTTA, Material.BLACK_GLAZED_TERRACOTTA, Material.RED_GLAZED_TERRACOTTA,
-                Material.GREEN_GLAZED_TERRACOTTA, Material.CYAN_GLAZED_TERRACOTTA, Material.GRAY_GLAZED_TERRACOTTA,
-                Material.LIGHT_GRAY_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA, LIME_GLAZED_TERRACOTTA,
-                Material.PURPLE_GLAZED_TERRACOTTA, Material.PINK_GLAZED_TERRACOTTA);
-    }
-    
-    public List<Material> concretes() {
-        return Arrays.asList(Material.WHITE_CONCRETE, Material.ORANGE_CONCRETE, Material.MAGENTA_CONCRETE,
-                Material.LIGHT_BLUE_CONCRETE, Material.BLUE_CONCRETE, Material.BLACK_CONCRETE, 
-                Material.RED_CONCRETE, Material.GREEN_CONCRETE, Material.CYAN_CONCRETE,
-                Material.GRAY_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.YELLOW_CONCRETE, LIME_CONCRETE,
-                Material.PURPLE_CONCRETE, Material.PINK_CONCRETE);
-    }
-    
-    public List<Material> concretePowders() {
-        return Arrays.asList(Material.WHITE_CONCRETE_POWDER, Material.ORANGE_CONCRETE_POWDER, Material.MAGENTA_CONCRETE_POWDER,
-                Material.LIGHT_BLUE_CONCRETE_POWDER, Material.BLUE_CONCRETE_POWDER, Material.BLACK_CONCRETE_POWDER, 
-                Material.RED_CONCRETE_POWDER, Material.GREEN_CONCRETE_POWDER, Material.CYAN_CONCRETE_POWDER,
-                Material.GRAY_CONCRETE_POWDER, Material.LIGHT_GRAY_CONCRETE_POWDER, Material.YELLOW_CONCRETE_POWDER, LIME_CONCRETE_POWDER,
-                Material.PURPLE_CONCRETE_POWDER, Material.PINK_CONCRETE_POWDER);
-    }
-    
-    public List<Material> stainedGlasses() {
-        return Arrays.asList(Material.WHITE_STAINED_GLASS, Material.ORANGE_STAINED_GLASS, Material.MAGENTA_STAINED_GLASS,
-                        Material.LIGHT_BLUE_STAINED_GLASS, Material.BLUE_STAINED_GLASS, Material.BLACK_STAINED_GLASS,
-                        Material.RED_STAINED_GLASS, Material.GREEN_STAINED_GLASS, Material.CYAN_STAINED_GLASS,
-                        Material.GRAY_STAINED_GLASS, Material.LIGHT_GRAY_STAINED_GLASS, Material.YELLOW_STAINED_GLASS, LIME_STAINED_GLASS,
-                        Material.PURPLE_STAINED_GLASS, Material.PINK_STAINED_GLASS);
-    }
-    
-    protected static List<Material> terraformer_materials;
-
-    public List<Material> terraformerMaterials() {
-        if (terraformer_materials == null) {
-            terraformer_materials = new ArrayList<Material>(Arrays.asList(
-                    BRICK, TNT, BOOKSHELF, ICE,
-                    STONE_BRICKS, NETHER_BRICK, END_STONE, QUARTZ_BLOCK, WARPED_HYPHAE,
-                    PRISMARINE, PACKED_ICE, RED_SANDSTONE, NETHERRACK, WARPED_NYLIUM));
-            terraformer_materials.addAll(terracottas());
-            terraformer_materials.addAll(glazedTerracottas());
-            terraformer_materials.addAll(ores());
-            terraformer_materials.addAll(Tag.LOGS.getValues());
-            terraformer_materials.addAll(Tag.ENDERMAN_HOLDABLE.getValues());
-            terraformer_materials.addAll(Tag.WOOL.getValues());
-            terraformer_materials.addAll(concretes());
-            terraformer_materials.addAll(concretePowders());
-            terraformer_materials.addAll(cobblestones());
-            terraformer_materials.addAll(stones());
-        }
-        return terraformer_materials;
+    public EnumSet<Material> terraformerMaterials() {
+        return terraformerAllowlist;
     }
 
     public List<EntityType> transformationEntityTypesFrom() {
@@ -270,27 +220,18 @@ public class CompatibilityAdapter {
         newEnt.setCustomNameVisible(ent.isCustomNameVisible());
         return ent;
     }
-    
-    protected static Set<Material> shredPickSet;
 
-    public Set<Material> shredPicks() {
-        if  (shredPickSet == null) {
-            List<Material> shredPick = new ArrayList<Material>(Arrays.asList(STONE, GRANITE,
-                    ANDESITE, DIORITE, GLOWSTONE, SANDSTONE, RED_SANDSTONE, ICE, PACKED_ICE, BLUE_ICE, BASALT));
-            shredPick.addAll(ores());
-            shredPick.addAll(terracottas());
-            shredPick.addAll(netherracks());
-            shredPickSet = Sets.immutableEnumSet(shredPick);
-        }
-        return shredPickSet;
+    public EnumSet<Material> shredPicks() {
+        return shredAllowlistPickaxes;
     }
 
-    public Set<Material> shredShovels() {
-        return Tag.ENDERMAN_HOLDABLE.getValues();
+    public EnumSet<Material> shredShovels() {
+        return shredAllowlistShovels;
     }
 
     public List<Material> persephoneCrops() {
-        return Arrays.asList(WHEAT, POTATO, CARROT, BEETROOT, NETHER_WART, SOUL_SAND, FARMLAND);
+        return Arrays.asList(Material.WHEAT, Material.POTATO, Material.CARROT, Material.BEETROOT, Material.NETHER_WART,
+                Material.SOUL_SAND, Material.FARMLAND);
     }
 
     public List<PotionEffectType> potionPotions() {
@@ -313,16 +254,14 @@ public class CompatibilityAdapter {
     }
     
     private final Material[] GLUTTONY_FOOD_ITEMS = new Material[]{
-            APPLE, BAKED_POTATO, BEETROOT, BEETROOT_SOUP, BREAD, CARROT, TROPICAL_FISH, COOKED_CHICKEN, COOKED_COD,
-            COOKED_MUTTON, COOKED_PORKCHOP, COOKED_RABBIT, COOKED_SALMON, COOKIE, DRIED_KELP, MELON_SLICE, MUSHROOM_STEW,
-            PUMPKIN_PIE, RABBIT_STEW, COOKED_BEEF};
+            Material.APPLE, Material.BAKED_POTATO, Material.BEETROOT, 
+            Material.BEETROOT_SOUP, Material.BREAD, Material.CARROT, Material.TROPICAL_FISH, Material.COOKED_CHICKEN, 
+            Material.COOKED_COD, Material.COOKED_MUTTON, Material.COOKED_PORKCHOP, Material.COOKED_RABBIT,
+            Material.COOKED_SALMON, Material.COOKIE, Material.DRIED_KELP, Material.MELON_SLICE, 
+            Material.MUSHROOM_STEW, Material.PUMPKIN_PIE, Material.RABBIT_STEW, Material.COOKED_BEEF};
 
     public Material[] gluttonyFoodItems() {
         return GLUTTONY_FOOD_ITEMS;
-    }
-    
-    public static CompatibilityAdapter getInstance() {
-        return INSTANCE;
     }
 
     // Removes the given ItemStack's durability by the given 'damage' and then sets the item direction the given
@@ -389,9 +328,6 @@ public class CompatibilityAdapter {
             return dm.getDamage();
         }
         return 0;
-    }
-
-    protected CompatibilityAdapter() {
     }
 
     public void collectXP(Player player, int amount) {
@@ -491,31 +427,7 @@ public class CompatibilityAdapter {
         }
         return false;
     }
-
-    public boolean haulOrBreakBlock(Block from, Block to, BlockFace face, Player player) {
-        BlockState state = from.getState();
-        if (state.getClass().getName().endsWith("CraftBlockState")) {
-            return false;
-        }
-        BlockBreakEvent breakEvent = new BlockBreakEvent(from, player);
-        Bukkit.getPluginManager().callEvent(breakEvent);
-        if (breakEvent.isCancelled()) {
-            return false;
-        }
-        ItemStack stack = new ItemStack(state.getType(), 1);
-        from.setType(AIR);
-        BlockPlaceEvent placeEvent = new BlockPlaceEvent(to, to.getRelative(face.getOppositeFace()).getState(),
-                to.getRelative(face.getOppositeFace()), stack, player, true,
-                EquipmentSlot.HAND);
-        Bukkit.getPluginManager().callEvent(placeEvent);
-        if (placeEvent.isCancelled()) {
-            from.getWorld().dropItem(from.getLocation(), stack);
-            return true;
-        }
-        to.setType(state.getType());
-        return true;
-    }
-
+    
     public boolean igniteEntity(Entity target, Player player, int duration) {
         EntityCombustByEntityEvent evt = new EntityCombustByEntityEvent(target, player, duration);
         Bukkit.getPluginManager().callEvent(evt);
@@ -708,7 +620,7 @@ public class CompatibilityAdapter {
      * Method that scans whether API methods can be used. Right now it's only used for the EntityShootBowEvent, whose constructor has changed
      * on the 31 August of 2020
      */
-    public void scanMethods() {
+    private void scanMethods() {
         // Test for java.lang.NoSuchMethodError in the Spigot API with the EntityShootBowEvent.
         try {
             EntityShootBowEvent.class.getConstructor(LivingEntity.class, ItemStack.class, ItemStack.class, Entity.class,

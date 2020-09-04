@@ -500,17 +500,11 @@ public class Utilities {
                         placed.put(possiblePlatformLoc, System.nanoTime());
                     } else if (possiblePlatformBlock.getType() == check
                         && Storage.COMPATIBILITY_ADAPTER.airs().contains( possiblePlatformBlock.getRelative(0, 1, 0).getType())) {
-
-
                         if (possiblePlatformBlock.getBlockData() instanceof Levelled) {
                             if (((Levelled) possiblePlatformBlock.getBlockData()).getLevel() != 0) {
                                 continue;
                             }
                         }
-
-
-
-
                         if (Storage.COMPATIBILITY_ADAPTER.formBlock(possiblePlatformBlock, fill, player)) {
                             placed.put(possiblePlatformLoc, System.nanoTime());
                         }
