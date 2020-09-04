@@ -46,7 +46,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
  </li>
  <li>Patches:
   <ul>
-   <li>None yet</li>
+   <li>Fire enchantment no longer OOMs when attempting to smelt unsmeltable stuff</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
