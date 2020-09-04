@@ -45,7 +45,7 @@ import static org.bukkit.Material.ENCHANTED_BOOK;
 public abstract class CustomEnchantment implements Comparable<CustomEnchantment> {
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
-    public static IEnchGatherer Enchantment_Adapter = new PersistentDataGatherer();
+    public static IEnchGatherer Enchantment_Adapter = new ProvisionalLoreGatherer();
     
     protected int id;
 
@@ -789,17 +789,20 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      */
     static class PersistentDataGatherer implements IEnchGatherer {
         private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
-        public boolean doCompat = true;
-        
+        private final boolean doCompat;
+        private final Collection<Material> getterDenyList;
+
         /**
          * Used for enchantment conversion purposes
          */
         public final NamespacedKey ench_converted;
-        
-        public PersistentDataGatherer() {
+
+        public PersistentDataGatherer(Collection<Material> denylist, boolean doCompat2) {
             ench_converted = new NamespacedKey(Storage.enchantments_plus, "e_convert");
+            getterDenyList = denylist;
+            doCompat = doCompat2;
         }
-        
+
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
                 List<String> outExtraLore) {
@@ -810,7 +813,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world) {
             return getEnchants(stk, acceptBooks, world, null);
         }
-        
+
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world) {
             return getEnchants(stk, false, world, null);
@@ -819,15 +822,13 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
                 List<String> outExtraLore) {
-            
             LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
             if ( (stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
-                if (stk.hasItemMeta()) {
+                if (stk.hasItemMeta() && !getterDenyList.contains(stk.getType())) {
                     final PersistentDataContainer cont = stk.getItemMeta().getPersistentDataContainer();
-                    
+
                     if (doCompat && cont.getOrDefault(ench_converted, PersistentDataType.BYTE, (byte) 0) == 0) {
                         //Legacy conversion
-                        Bukkit.getLogger().info("Item converted");
                         map = legacyGatherer.getEnchants(stk, acceptBooks, world, outExtraLore);
                         for (Map.Entry<CustomEnchantment, Integer> ench : map.entrySet()) {
                             this.setEnchantment(stk, ench.getKey(), ench.getValue(), world);
@@ -837,11 +838,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                         stk.setItemMeta(itemMeta);
                         return map;
                     }
-                    
+
                     Set<NamespacedKey> keys = cont.getKeys();
 
                     for (NamespacedKey key : keys) {
-                        if (!key.getNamespace().equals("enchantments_plus")) {
+                        if (!key.getNamespace().toLowerCase(Locale.ROOT).equals("enchantments_plus")) {
                             continue;
                         }
                         if (!key.getKey().split("\\.")[0].equals("ench")) {

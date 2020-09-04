@@ -3,6 +3,7 @@ package de.geolykt.enchantments_plus;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -161,9 +162,12 @@ public class Config {
         Siphon.calcAmour = patchCFG.getBoolean("nerfs.siphonsubstractAmour", true);
 
         if (patchCFG.getString("enchantmentGatherer", "NBT").equals("NBT")) {
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer();
-            ((CustomEnchantment.PersistentDataGatherer) CustomEnchantment.Enchantment_Adapter).doCompat =
-                    Storage.enchantments_plus.getConfig().getBoolean("compatibility", true);
+            Collection<Material> col = EnumSet.noneOf(Material.class);
+            boolean doCompat = Storage.enchantments_plus.getConfig().getBoolean("compatibility", false);
+            for (String s : patchCFG.getStringList("getterDeny")) {
+                col.add(Material.matchMaterial(s));
+            }
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(col, doCompat);
         } else if (patchCFG.getString("enchantmentGatherer").equals("PR47-lore")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
         } else {
