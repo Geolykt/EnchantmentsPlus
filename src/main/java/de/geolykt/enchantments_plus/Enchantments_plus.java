@@ -5,6 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -141,6 +143,13 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Loads configs and starts tasks
     public void onEnable() {
+        File compatFile = new File(getDataFolder(), "magicCompat.yml");
+        if (!compatFile.exists()) {
+            saveResource("magicCompat.yml", false);
+        }
+        FileConfiguration compatConfig = YamlConfiguration.loadConfiguration(compatFile);
+        Storage.COMPATIBILITY_ADAPTER.loadValues(compatConfig);
+
         Storage.enchantments_plus = this;
         Storage.pluginPath = Bukkit.getPluginManager().getPlugin("Enchantments_plus").getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         Storage.version = Bukkit.getServer().getPluginManager().getPlugin(this.getName()).getDescription().getVersion();

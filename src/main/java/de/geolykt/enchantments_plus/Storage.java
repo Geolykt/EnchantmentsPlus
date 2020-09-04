@@ -1,5 +1,7 @@
 package de.geolykt.enchantments_plus;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
@@ -7,8 +9,6 @@ import org.bukkit.block.BlockFace;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.compatibility.anticheat.AbstractAnticheatAdapter;
 import de.geolykt.enchantments_plus.compatibility.anticheat.None;
-
-import java.util.*;
 
 public class Storage {
 
@@ -50,8 +50,7 @@ public class Storage {
         System.out.println(BRAND + ": Detected NMS version \"" + nmsVersionString + "\"");
         switch (nmsVersionString) {
             default:
-                COMPATIBILITY_ADAPTER = de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter.getInstance();
-                COMPATIBILITY_ADAPTER.scanMethods();
+                COMPATIBILITY_ADAPTER = new CompatibilityAdapter();
                 break;
         }
     }
