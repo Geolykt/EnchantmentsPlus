@@ -44,6 +44,8 @@ public class Config {
     private final ChatColor enchantmentColor;
     private final ChatColor curseColor;
 
+    public static final FileConfiguration PATCH_CONFIGURATION;
+    
     // Constructs a new config object
     public Config(Set<CustomEnchantment> worldEnchants, double enchantRarity,
             int maxEnchants, int shredDrops, boolean explosionBlockBreak,
@@ -143,32 +145,24 @@ public class Config {
     // Loads, parses, and auto updates the config file, creating a new config for each map 
     public static void loadConfigs() {
         CONFIGS.clear();
-        for (World world : Bukkit.getWorlds()) {
-            Config.CONFIGS.put(world, getWorldConfig(world));
-        }
-        File patchFile = new File(Storage.enchantments_plus.getDataFolder(), "patches.yml");
-        if (!patchFile.exists()) {
-            Storage.enchantments_plus.saveResource("patches.yml", false);
-        }
-        FileConfiguration patchCFG = YamlConfiguration.loadConfiguration(patchFile);
-        WatcherEnchant.apply_patch_explosion = patchCFG.getBoolean("explosion.enable", true);
-        WatcherEnchant.apply_patch_piston = patchCFG.getBoolean("piston.enable", true);
-        WatcherEnchant.patch_cancel_explosion = !patchCFG.getBoolean("explosion.removeBlocksInsteadOfCancel", false);
-        WatcherEnchant.patch_cancel_netherstep = !patchCFG.getBoolean("patch_ench_protect.netherstep_removeBlocksInsteadOfCancel", false);
-        WatcherEnchant.patch_cancel_frozenstep = !patchCFG.getBoolean("patch_ench_protect.frozenstep_removeBlocksInsteadOfCancel", false);
-        Spectral.performWorldProtection = patchCFG.getBoolean("worldProtection.spectral", true);
-        Arborist.doGoldenAppleDrop = patchCFG.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
-        Siphon.ratio = patchCFG.getDouble("nerfs.siphonRatio", 0.5);
-        Siphon.calcAmour = patchCFG.getBoolean("nerfs.siphonsubstractAmour", true);
+        WatcherEnchant.apply_patch_explosion = PATCH_CONFIGURATION.getBoolean("explosion.enable", true);
+        WatcherEnchant.apply_patch_piston = PATCH_CONFIGURATION.getBoolean("piston.enable", true);
+        WatcherEnchant.patch_cancel_explosion = !PATCH_CONFIGURATION.getBoolean("explosion.removeBlocksInsteadOfCancel", false);
+        WatcherEnchant.patch_cancel_netherstep = !PATCH_CONFIGURATION.getBoolean("patch_ench_protect.netherstep_removeBlocksInsteadOfCancel", false);
+        WatcherEnchant.patch_cancel_frozenstep = !PATCH_CONFIGURATION.getBoolean("patch_ench_protect.frozenstep_removeBlocksInsteadOfCancel", false);
+        Spectral.performWorldProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.spectral", true);
+        Arborist.doGoldenAppleDrop = PATCH_CONFIGURATION.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
+        Siphon.ratio = PATCH_CONFIGURATION.getDouble("nerfs.siphonRatio", 0.5);
+        Siphon.calcAmour = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);
 
-        if (patchCFG.getString("enchantmentGatherer", "NBT").equals("NBT")) {
+        if (PATCH_CONFIGURATION.getString("enchantmentGatherer", "NBT").equals("NBT")) {
             Collection<Material> col = EnumSet.noneOf(Material.class);
             boolean doCompat = Storage.enchantments_plus.getConfig().getBoolean("compatibility", false);
-            for (String s : patchCFG.getStringList("getterDeny")) {
+            for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
                 col.add(Material.matchMaterial(s));
             }
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(col, doCompat);
-        } else if (patchCFG.getString("enchantmentGatherer").equals("PR47-lore")) {
+        } else if (PATCH_CONFIGURATION.getString("enchantmentGatherer").equals("PR47-lore")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
         } else {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.ProvisionalLoreGatherer();
@@ -318,6 +312,17 @@ public class Config {
             Config.CONFIGS.put(world, getWorldConfig(world));
         }
         return CONFIGS.get(world);
+    }
+    
+    static {
+        for (World world : Bukkit.getWorlds()) {
+            Config.CONFIGS.put(world, getWorldConfig(world));
+        }
+        File patchFile = new File(Storage.enchantments_plus.getDataFolder(), "patches.yml");
+        if (!patchFile.exists()) {
+            Storage.enchantments_plus.saveResource("patches.yml", false);
+        }
+        PATCH_CONFIGURATION = YamlConfiguration.loadConfiguration(patchFile);
     }
 
 }

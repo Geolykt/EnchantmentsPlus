@@ -131,6 +131,7 @@ public class Enchantments_plus extends JavaPlugin {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     private static void updateDescrptions() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             for (ItemStack stk : (ItemStack[]) org.apache.commons.lang.ArrayUtils.addAll(
@@ -143,6 +144,7 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Loads configs and starts tasks
     public void onEnable() {
+        Storage.enchantments_plus = this;
         File compatFile = new File(getDataFolder(), "magicCompat.yml");
         if (!compatFile.exists()) {
             saveResource("magicCompat.yml", false);
@@ -150,7 +152,6 @@ public class Enchantments_plus extends JavaPlugin {
         FileConfiguration compatConfig = YamlConfiguration.loadConfiguration(compatFile);
         Storage.COMPATIBILITY_ADAPTER.loadValues(compatConfig);
 
-        Storage.enchantments_plus = this;
         Storage.pluginPath = Bukkit.getPluginManager().getPlugin("Enchantments_plus").getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         Storage.version = Bukkit.getServer().getPluginManager().getPlugin(this.getName()).getDescription().getVersion();
         loadConfigs();
