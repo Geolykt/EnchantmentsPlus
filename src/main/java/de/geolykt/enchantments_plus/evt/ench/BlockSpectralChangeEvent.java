@@ -1,4 +1,4 @@
-package de.geolykt.enchantments_plus.evt;
+package de.geolykt.enchantments_plus.evt.ench;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

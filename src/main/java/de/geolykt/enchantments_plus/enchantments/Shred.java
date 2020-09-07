@@ -12,8 +12,8 @@ import de.geolykt.enchantments_plus.*;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
-import de.geolykt.enchantments_plus.evt.BlockShredEvent;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
+import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.HashSet;

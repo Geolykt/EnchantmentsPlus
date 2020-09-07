@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.evt.AnvilMerge;
+import de.geolykt.enchantments_plus.evt.GrindstoneMerge;
 import de.geolykt.enchantments_plus.evt.Watcher;
 import de.geolykt.enchantments_plus.evt.WatcherArrow;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;

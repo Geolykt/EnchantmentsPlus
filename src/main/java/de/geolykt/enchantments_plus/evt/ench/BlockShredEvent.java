@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.geolykt.enchantments_plus.evt;
+package de.geolykt.enchantments_plus.evt.ench;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
