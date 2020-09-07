@@ -19,3 +19,5 @@ compatibility: false # only has an effect if NBT is used above, if set to true, 
 getterDeny: # the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items.
   - "TRIPWIRE_HOOK"
   - "LEVER"
+pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found 
+  combatLogX: true # setting it to true will fix an obscure bug with the plugin and the Bind enchantment

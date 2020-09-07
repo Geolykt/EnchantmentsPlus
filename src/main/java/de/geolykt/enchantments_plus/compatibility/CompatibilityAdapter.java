@@ -26,6 +26,7 @@ import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import static org.bukkit.entity.EntityType.*;
+
 import org.bukkit.event.block.Action;
 import static org.bukkit.potion.PotionEffectType.*;
 
@@ -39,12 +40,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.Storage;
 
 public class CompatibilityAdapter {
-
+    
     public CompatibilityAdapter() {
-        scanMethods();
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Enchantments_plus"), () -> {
+            scanMethods();
+        }, 0l);
     }
 
     private EnumSet<Material> grownCrops;
@@ -617,8 +621,7 @@ public class CompatibilityAdapter {
     private boolean legacyEntityShootBowEvent = false;
     
     /**
-     * Method that scans whether API methods can be used. Right now it's only used for the EntityShootBowEvent, whose constructor has changed
-     * on the 31 August of 2020
+     * Method that scans whether API methods can be used. It also checks whether plugin integrations are possible and enabled
      */
     private void scanMethods() {
         // Test for java.lang.NoSuchMethodError in the Spigot API with the EntityShootBowEvent.
@@ -634,6 +637,11 @@ public class CompatibilityAdapter {
             Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
                     + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
             legacyEntityShootBowEvent = true;
+        }
+        
+        if (Config.PATCH_CONFIGURATION.getBoolean("pluginCompat.combatLogX", true) && Bukkit.getPluginManager().getPlugin("CombatLogX") != null) {
+            Bukkit.getLogger().warning(Storage.MINILOGO + " The Bind enchantments is known to be incompatible with the combatLogX plugin."
+                    + " This can easily be fixed by using the kill command instead and by setting the punish kill time to never.");
         }
     }
     
