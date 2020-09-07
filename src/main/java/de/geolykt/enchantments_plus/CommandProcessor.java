@@ -40,9 +40,9 @@ public class CommandProcessor {
 
             switch (label) {
                 case "lasercol":
-                    List<String> resul = new ArrayList<>(Arrays.asList(new String[] {"AQUA","BLACK","BLUE","FUCHSIA",
+                    List<String> resul = new ArrayList<>(Arrays.asList("AQUA","BLACK","BLUE","FUCHSIA",
                         ((Player)sender).getLocale().toLowerCase(Locale.ROOT).contains("us") ? "GRAY" : "GREY",
-                        "GREEN","LIME","MAROON","NAVY","OLIVE","ORANGE","PURPLE","RED","SILVER","TEAL","WHITE","YELLOW"}));
+                        "GREEN","LIME","MAROON","NAVY","OLIVE","ORANGE","PURPLE","RED","SILVER","TEAL","WHITE","YELLOW"));
                     if (args.length != 1)
                         resul.removeIf(e -> !e.startsWith(args[1]));
                     return resul;
@@ -90,6 +90,8 @@ public class CommandProcessor {
                     break;
                 default:
                     if (args.length == 1) {
+                        results.addAll(Arrays.asList("version", "info", "list", "lasercol"));
+                        results.removeIf(e -> !e.startsWith(args[0]));
                         for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
                             if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (stack.getType() == BOOK
                                     || stack.getType() == ENCHANTED_BOOK || ench.getValue().validMaterial(
