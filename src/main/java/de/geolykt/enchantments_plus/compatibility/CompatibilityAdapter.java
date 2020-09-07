@@ -1,5 +1,6 @@
 package de.geolykt.enchantments_plus.compatibility;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -40,7 +41,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.Storage;
 
 public class CompatibilityAdapter {
@@ -98,9 +98,13 @@ public class CompatibilityAdapter {
         }
         for (String s : config.getStringList("terraformerAllowlistTags")) {
             try {
-                terraformerAllowlist.addAll(((Tag<Material>)Tag.class.getDeclaredField(s).get(null)).getValues()); // FIXME do this properly
+                Field f = Tag.class.getDeclaredField(s);
+                @SuppressWarnings("unchecked")
+                Tag<? extends Material> tag = (Tag<? extends Material>) f.get(null);
+                terraformerAllowlist.addAll(tag.getValues());
             } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-                // TODO Auto-generated catch block
+                Bukkit.getLogger().warning("looks like an issue occoured with the Enchantments+ plugin. "
+                        + "This is likely the cause of an unsupported minecraft version.");
                 e.printStackTrace();
             }
         }
@@ -637,11 +641,6 @@ public class CompatibilityAdapter {
             Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
                     + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
             legacyEntityShootBowEvent = true;
-        }
-        
-        if (Config.PATCH_CONFIGURATION.getBoolean("pluginCompat.combatLogX", true) && Bukkit.getPluginManager().getPlugin("CombatLogX") != null) {
-            Bukkit.getLogger().warning(Storage.MINILOGO + " The Bind enchantments is known to be incompatible with the combatLogX plugin."
-                    + " This can easily be fixed by using the kill command instead and by setting the punish kill time to never.");
         }
     }
     
