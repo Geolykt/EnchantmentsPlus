@@ -3,6 +3,7 @@ package de.geolykt.enchantments_plus.enchantments;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -10,6 +11,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
@@ -28,6 +32,8 @@ public class Laser extends CustomEnchantment {
     // Time at which a later enchantment was fired; this is used to prevent double firing when clicking an entity
     // public static final Map<Player, Long> laserTimes = new HashMap<>();
     public static final int ID = 31;
+    
+    public static NamespacedKey colorKey;
 
     @Override
     public Builder<Laser> defaults() {
@@ -52,6 +58,7 @@ public class Laser extends CustomEnchantment {
         Location target = Utilities.getCenter(blk.getLocation());
         target.setY(target.getY() + .5);
         playLoc.setY(playLoc.getY() + 1.1);
+        ItemStack itemInHand = usedHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
         double d = target.distance(playLoc);
         for (int i = 0; i < (int) d * 5; i++) {
             Location tempLoc = target.clone();
@@ -59,7 +66,7 @@ public class Laser extends CustomEnchantment {
             tempLoc.setY(playLoc.getY() + (i * ((target.getY() - playLoc.getY()) / (d * 5))));
             tempLoc.setZ(playLoc.getZ() + (i * ((target.getZ() - playLoc.getZ()) / (d * 5))));
 
-            player.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1, new Particle.DustOptions(Color.RED, 0.5f));
+            player.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1, new Particle.DustOptions(getColor(itemInHand), 0.5f));
 
             for (Entity ent : Bukkit.getWorld(playLoc.getWorld().getName()).getNearbyEntities(tempLoc, .3, .3, .3)) {
                 if (ent instanceof LivingEntity && ent != player) {
@@ -91,5 +98,18 @@ public class Laser extends CustomEnchantment {
             return true;
         }
         return false;
+    }
+
+    public static org.bukkit.Color getColor(ItemStack stack) {
+        if (stack.hasItemMeta() && !stack.getItemMeta().getPersistentDataContainer().isEmpty()) {
+            return Color.fromRGB(stack.getItemMeta().getPersistentDataContainer().getOrDefault(colorKey, PersistentDataType.INTEGER, Color.RED.asRGB()));
+        }
+        return Color.RED;
+    }
+
+    public static void setColor(ItemStack stack, org.bukkit.Color color) {
+        ItemMeta im = stack.getItemMeta();
+       im.getPersistentDataContainer().set(colorKey, PersistentDataType.INTEGER, color.asRGB());
+       stack.setItemMeta(im);
     }
 }

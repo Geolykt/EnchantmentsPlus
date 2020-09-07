@@ -2,6 +2,7 @@ package de.geolykt.enchantments_plus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,7 +12,9 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import de.geolykt.enchantments_plus.enchantments.Laser;
 import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.ColUtil;
 import me.zombie_striker.psudocommands.CommandUtils;
 
 import java.util.*;
@@ -36,6 +39,13 @@ public class CommandProcessor {
             List<String> results = new LinkedList<>();
 
             switch (label) {
+                case "lasercol":
+                    List<String> resul = new ArrayList<>(Arrays.asList(new String[] {"AQUA","BLACK","BLUE","FUCHSIA",
+                        ((Player)sender).getLocale().toLowerCase(Locale.ROOT).contains("us") ? "GRAY" : "GREY",
+                        "GREEN","LIME","MAROON","NAVY","OLIVE","ORANGE","PURPLE","RED","SILVER","TEAL","WHITE","YELLOW"}));
+                    if (args.length != 1)
+                        resul.removeIf(e -> !e.startsWith(args[1]));
+                    return resul;
                 case "reload":
                 case "list":
                 case "help":
@@ -346,6 +356,8 @@ public class CommandProcessor {
                     + "Disables selected enchantment for the user");
             player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench enable <enchantment/all>: " + ChatColor.AQUA
                     + "Enables selected enchantment for the user");
+            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench lasercol: " + ChatColor.AQUA
+                    + "Sets the color of your laser.");
             player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench version: " + ChatColor.AQUA
                     + "Shows the version the plugin runs on.");
             return true;
@@ -381,6 +393,8 @@ public class CommandProcessor {
                     return enable(sender, args);
                 case "version":
                     return versionInfo(sender);
+                case "lasercol":
+                    return setLaserColor(sender, args);
                 case "help":
                 default:
                     return helpEnchantment(sender, label) || enchant(sender, args);
@@ -478,5 +492,38 @@ public class CommandProcessor {
     
     private static boolean ench(CommandSender infoReciever, String enchantmentName, Integer level) {
         return ench(infoReciever, enchantmentName, level, true);
+    }
+
+    private static boolean setLaserColor(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("enchplus.command.lasercol")) {
+            sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
+            return true;
+        }
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType().isAir()) {
+                player.sendMessage(Storage.LOGO + ChatColor.RED + "Did you thought air was a Laser?");
+                return true;
+            }
+            final ItemStack stk = player.getInventory().getItemInMainHand();
+            if (CustomEnchantment.getEnchants(stk, player.getWorld()).containsKey(Config.get(player.getWorld()).enchantFromString("laser"))) {
+                Color col = Color.RED;
+                if (args.length != 1) {
+                    col = ColUtil.toBukkitColor(args[1].toUpperCase(Locale.ROOT), Color.RED);
+                }
+                
+                Laser.setColor(stk, col);
+                player.getInventory().setItemInMainHand(stk);
+                if (player.getLocale().toLowerCase(Locale.ROOT).contains("uk")) {
+                    player.sendMessage(Storage.LOGO + ChatColor.RED + "Colour of the laser set successfully.");
+                } else {
+                    player.sendMessage(Storage.LOGO + ChatColor.RED + "Color of the laser set successfully.");
+                }
+            } else {
+                player.sendMessage(Storage.LOGO + ChatColor.RED + "The item in hand does not have the laser enchantment applied.");
+            }
+            return true;
+        }
+        return false;
     }
 }

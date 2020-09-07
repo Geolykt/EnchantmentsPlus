@@ -1,4 +1,3 @@
-<hr>
 Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public
 
 It also only intends to support 1.16.2 and newer versions when the time comes.
@@ -9,14 +8,15 @@ Zenchantments is a custom enchantment plugin that adds 70+ new enchantments (it 
 <br> While we currently don't add or remove any Enchantments, we will attempt to rebalance them and make them futureproof. In essence, we attempt to make this Fork as stable as possible to support Production-grade Servers.
 
 ## Permissions
-enchplus.enchant.get - On player enchant event, allow player to have a chance at the enabled custom enchantments
-enchplus.enchant.use - Allow player to use the given custom enchants on an item
-enchplus.command.reload - Access to /ench reload, to reload the configuration (try not to use, may lead to memory leaks)
-enchplus.command.give - Gives an enchanted item, while similar to enchant, it also gives the underlying material
-enchplus.command.list - Lists all availiable enchantments
-enchplus.command.info - Returns the info of an enchantments
-enchplus.command.onoff - Abillity to turn on / turn off a certain enchantment
-enchplus.command.enchant - Enchants a item without giving the underlying material. Also allows to enchant other people's stuff, so be cautious.
+enchplus.enchant.get - On player enchant event, allow player to have a chance at the enabled custom enchantments<br>
+enchplus.enchant.use - Allow player to use the given custom enchants on an item<br>
+enchplus.command.reload - Access to /ench reload, to reload the configuration (try not to use, may lead to memory leaks)<br>
+enchplus.command.give - Gives an enchanted item, while similar to enchant, it also gives the underlying material<br>
+enchplus.command.list - Lists all availiable enchantments<br>
+enchplus.command.info - Returns the info of an enchantments<br>
+enchplus.command.onoff - Abillity to turn on / turn off a certain enchantment<br>
+enchplus.command.enchant - Enchants a item without giving the underlying material. Also allows to enchant other people's stuff, so be cautious.<br>
+enchplus.command.lasercol - Enables the abillity to colo(u)r the laser of your item in hand. Purely cosmetic and a good way to get a few extra "donations".<br>
 
 ## Download
 See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloads
@@ -42,6 +42,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
   <ul>
    <li>Fixed the Reveal enchantment, with it's own twist</li>
    <li>Added an enchantment gatherer denylist - only works with NBT right now</li>
+   <li>The color of the laser can now be changed for purely costmetical reasons. Why? Don't ask.</li>
   </ul>
  </li>
  <li>Patches:

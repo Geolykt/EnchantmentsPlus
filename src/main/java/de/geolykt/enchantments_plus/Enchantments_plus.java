@@ -3,6 +3,7 @@ package de.geolykt.enchantments_plus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -184,5 +185,7 @@ public class Enchantments_plus extends JavaPlugin {
         Pierce.SEARCH_FACES = ALL_SEARCH_FACES;
 
         Storage.ANTICHEAT_ADAPTER.onEnable();
+        
+        Laser.colorKey = new NamespacedKey(this, "laserCol");
     }
 }

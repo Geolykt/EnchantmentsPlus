@@ -33,6 +33,9 @@ permissions:
   enchplus.command.reload:
     description: Reloads the plugin config file
     default: false
+  enchplus.command.lasercol:
+    description: Sets the color of the laser enchantment of the Item in hand.
+    default: true
   enchplus.*:
     children:
       enchplus.enchant.get: true
@@ -43,3 +46,4 @@ permissions:
       enchplus.command.list: true
       enchplus.command.onoff: true
       enchplus.command.reload: true
+      enchplus.command.lasercol: true
