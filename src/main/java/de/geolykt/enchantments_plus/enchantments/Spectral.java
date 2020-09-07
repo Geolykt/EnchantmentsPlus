@@ -19,7 +19,7 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
-import de.geolykt.enchantments_plus.evt.BlockSpectralChangeEvent;
+import de.geolykt.enchantments_plus.evt.ench.BlockSpectralChangeEvent;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Utilities;
 

@@ -54,6 +54,7 @@ import de.geolykt.enchantments_plus.enchantments.FrozenStep;
 import de.geolykt.enchantments_plus.enchantments.NetherStep;
 import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 // This is the watcher used by the CustomEnchantment class. Each method checks the enchantments on relevant items,

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.geolykt.enchantments_plus;
+package de.geolykt.enchantments_plus.evt;
 
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -16,6 +16,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.ItemStack;
+
+import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.Storage;
 
 /**
  *
