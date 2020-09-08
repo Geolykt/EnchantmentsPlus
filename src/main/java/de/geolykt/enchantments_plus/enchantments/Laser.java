@@ -35,6 +35,8 @@ public class Laser extends CustomEnchantment {
     
     public static NamespacedKey colorKey;
 
+    public static boolean doShredCooldown = true;
+
     @Override
     public Builder<Laser> defaults() {
         return new Builder<>(Laser::new, ID)
@@ -52,6 +54,9 @@ public class Laser extends CustomEnchantment {
 
     public void shoot(Player player, int level, boolean usedHand) {
         EnchantPlayer.matchPlayer(player).setCooldown(Lumber.ID, 5); // Avoid recursing into Lumber enchant
+        if (doShredCooldown) {
+            EnchantPlayer.matchPlayer(player).setCooldown(Shred.ID, 5); // Avoid firing the shred enchantment when using the right click action
+        }
         Block blk = player.getTargetBlock(null, 6
                 + (int) Math.round(level * power * 3));
         Location playLoc = player.getLocation();
