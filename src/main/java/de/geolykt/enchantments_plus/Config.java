@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.geolykt.enchantments_plus.enchantments.Arborist;
+import de.geolykt.enchantments_plus.enchantments.Laser;
 import de.geolykt.enchantments_plus.enchantments.Siphon;
 import de.geolykt.enchantments_plus.enchantments.Spectral;
 import de.geolykt.enchantments_plus.enums.Tool;
@@ -166,6 +167,7 @@ public class Config {
         Arborist.doGoldenAppleDrop = PATCH_CONFIGURATION.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
         Siphon.ratio = PATCH_CONFIGURATION.getDouble("nerfs.siphonRatio", 0.5);
         Siphon.calcAmour = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);
+        Laser.doShredCooldown = PATCH_CONFIGURATION.getBoolean("nerfs.shredCoolDownOnLaser", true);
 
         if (PATCH_CONFIGURATION.getString("enchantmentGatherer", "NBT").equals("NBT")) {
             Collection<Material> col = EnumSet.noneOf(Material.class);

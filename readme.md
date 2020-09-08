@@ -58,6 +58,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
  <li>Patches:
   <ul>
    <li>Fire enchantment no longer OOMs when attempting to smelt unsmeltable stuff</li>
+   <li>Added toggleable shred cooldown when the laser enchantment is used.</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
