@@ -1,9 +1,10 @@
 package de.geolykt.enchantments_plus.util;
 
+import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
+
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class PermissionHandler {
 

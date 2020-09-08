@@ -16,11 +16,11 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.PermissionTypes;
+import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
 
-import static de.geolykt.enchantments_plus.PermissionHandler.hasPermission;
+import static de.geolykt.enchantments_plus.util.PermissionHandler.hasPermission;
 import static org.bukkit.GameMode.CREATIVE;
 import static org.bukkit.Material.AIR;
 import static org.bukkit.inventory.EquipmentSlot.HAND;

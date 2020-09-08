@@ -297,14 +297,13 @@ public class Config {
                         }
                     }
                 } catch (IllegalAccessException | ClassCastException | InstantiationException ex) {
-                    System.err.println(
-                            String.format("Error parsing config for enchantment '%s'. Skipping.", cl.getName()));
+                    System.err.printf("Error parsing config for enchantment '%s'. Skipping.", cl.getName());
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
                     descriptionLore, descriptionColor, enchantColor, curseColor, enchantGlow, world);
         } catch (IOException | InvalidConfigurationException ex) {
-            System.err.println(String.format("Error parsing config for world '%s'. Skipping", world.getName()));
+            System.err.printf("Error parsing config for world '%s'. Skipping", world.getName());
         }
         return null;
     }
@@ -378,14 +377,9 @@ public class Config {
 }
 
 enum ConfigKeys {
-    ENCHANTMENTS("enchantments"),
-    NAME("Name"),
-    PROBABILITY("Probability"),
-    COOLDOWN("Cooldown"),
-    POWER("Power"),
-    MAX_LEVEL("Max Level"),
-    TOOLS("Tools");
-    
+    ENCHANTMENTS("enchantments"), NAME("Name"), PROBABILITY("Probability"), COOLDOWN("Cooldown"), POWER("Power"),
+    MAX_LEVEL("Max Level"), TOOLS("Tools");
+
     private String key;
 
     ConfigKeys(String key) {

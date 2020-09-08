@@ -14,7 +14,9 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.enchantments.Laser;
 import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.enums.PermissionTypes;
 import de.geolykt.enchantments_plus.util.ColUtil;
+import de.geolykt.enchantments_plus.util.PermissionHandler;
 import me.zombie_striker.psudocommands.CommandUtils;
 
 import java.util.*;
