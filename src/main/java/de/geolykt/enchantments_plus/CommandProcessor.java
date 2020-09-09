@@ -42,17 +42,28 @@ public class CommandProcessor {
 
             switch (label) {
                 case "lasercol":
-                    List<String> resul = new ArrayList<>(Arrays.asList("AQUA","BLACK","BLUE","FUCHSIA",
-                        ((Player)sender).getLocale().toLowerCase(Locale.ROOT).contains("us") ? "GRAY" : "GREY",
-                        "GREEN","LIME","MAROON","NAVY","OLIVE","ORANGE","PURPLE","RED","SILVER","TEAL","WHITE","YELLOW"));
-                    if (args.length != 1)
-                        resul.removeIf(e -> !e.startsWith(args[1]));
-                    return resul;
+                    if (hasPermission(sender, PermissionTypes.LASERCOL))  {
+                        results.addAll(Arrays.asList("AQUA","BLACK","BLUE","FUCHSIA",
+                            ((Player)sender).getLocale().toLowerCase(Locale.ROOT).contains("us") ? "GRAY" : "GREY",
+                                    "GREEN","LIME","MAROON","NAVY","OLIVE","ORANGE","PURPLE","RED","SILVER","TEAL","WHITE","YELLOW"));
+                        if (args.length != 1)
+                            results.removeIf(e -> !e.startsWith(args[1]));
+                    }
+                    return results;
                 case "reload":
+                    if (!hasPermission(sender, PermissionTypes.RELOAD)) {
+                        return results;
+                    }
                 case "list":
+                    if (!hasPermission(sender, PermissionTypes.LIST)) {
+                        return results;
+                    }
                 case "help":
                 case "version":
                 case "give":
+                    if (!hasPermission(sender, PermissionTypes.GIVE)) {
+                        return results;
+                    }
                     if (args.length == 2) {
                         for (Player plyr : Bukkit.getOnlinePlayers()) {
                             if (plyr.getPlayerListName().toLowerCase().startsWith(args[1].toLowerCase())) {
@@ -83,39 +94,77 @@ public class CommandProcessor {
                     break;
                 case "disable":
                 case "enable":
+                    if (!hasPermission(sender, PermissionTypes.ONOFF)) {
+                        return results;
+                    }
                     results.add("all");
                 case "info":
+                    if (!hasPermission(sender, PermissionTypes.INFO)) {
+                        return results;
+                    }
                     results = config.getEnchantNames();
                     if (args.length > 1) {
                         results.removeIf(e -> !e.startsWith(args[1]));
                     }
                     break;
                 default:
+                    results.addAll(enchantTabCompletion(sender, config, stack, args));
                     if (args.length == 1) {
-                        results.addAll(Arrays.asList("version", "info", "list", "lasercol"));
+                        if (hasPermission(sender, PermissionTypes.GIVE)) {
+                            results.add("give");
+                        }
+                        if (hasPermission(sender, PermissionTypes.INFO)) {
+                            results.add("info");
+                        }
+                        if (hasPermission(sender, PermissionTypes.LASERCOL) && 
+                                CustomEnchantment.getEnchants(stack, ((Player)sender)
+                                        .getWorld()).containsKey(config.enchantFromID(Laser.ID))) {
+                            results.add("lasercol");
+                        }
+                        if (hasPermission(sender, PermissionTypes.LIST)) {
+                            results.add("list");
+                        }
+                        if (hasPermission(sender, PermissionTypes.ONOFF)) {
+                            results.addAll(Arrays.asList("enable", "disable"));
+                        }
+                        if (hasPermission(sender, PermissionTypes.RELOAD)) {
+                            results.add("reload");
+                        }
+                        results.addAll(Arrays.asList("version", "help"));
                         results.removeIf(e -> !e.startsWith(args[0]));
-                        for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
-                            if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (stack.getType() == BOOK
-                                    || stack.getType() == ENCHANTED_BOOK || ench.getValue().validMaterial(
-                                    stack.getType())
-                                    || stack.getType() == AIR)) {
-                                results.add(ench.getKey());
-                            }
-                        }
-                    } else if (args.length == 2) {
-                        CustomEnchantment ench = config.enchantFromString(args[0]);
-                        if (ench != null) {
-                            for (int i = 0; i <= ench.getMaxLevel(); i++) {
-                                results.add(i + "");
-                            }
-                        }
-                    } else if (args.length == 3) {
-                        results.addAll(Arrays.asList("@a", "@p", "@r", "@s"));
-                        results.removeIf(e -> !e.startsWith(args[2]));
-                    } else if (args.length == 4) {
-                        results.addAll(Arrays.asList("true", "false"));
-                        results.removeIf(e -> !e.startsWith(args[3]));
                     }
+            }
+            return results;
+        }
+        
+        private static Collection<String> enchantTabCompletion (CommandSender sender, Config config, ItemStack stack, String [] args) {
+            if (!hasPermission(sender, PermissionTypes.ENCHANT)) {
+                return Arrays.asList();
+            }
+            LinkedList<String> results = new LinkedList<>();
+            if (args.length == 1) {
+                for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
+                    if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (stack.getType() == BOOK
+                            || stack.getType() == ENCHANTED_BOOK || ench.getValue().validMaterial(
+                            stack.getType())
+                            || stack.getType() == AIR)) {
+                        results.add(ench.getKey());
+                    }
+                }
+                results.removeIf(e -> !e.startsWith(args[0]));
+            } else if (args.length == 2) {
+                CustomEnchantment ench = config.enchantFromString(args[0]);
+                if (ench != null) {
+                    for (int i = 0; i <= ench.getMaxLevel(); i++) {
+                        results.add(i + "");
+                    }
+                }
+            } else if (args.length == 3) {
+                results.addAll(Arrays.asList("@a", "@p", "@r", "@s"));
+                results.removeIf(e -> !e.startsWith(args[2]));
+            } else if (args.length == 4) {
+                results.addAll(Arrays.asList("true", "false"));
+                results.removeIf(e -> !e.startsWith(args[3]));
             }
             return results;
         }
