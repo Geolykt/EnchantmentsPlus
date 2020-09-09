@@ -13,7 +13,7 @@ public class PermissionHandler {
     }
 
     public static boolean hasPermission(Player player, PermissionTypes permissionType) {
-        return PermissionHandler.hasPermission((CommandSender) player.getPlayer(), permissionType);
+        return PermissionHandler.hasPermission((CommandSender) player, permissionType);
     }
 
     public static boolean hasPermission(CommandSender player, PermissionTypes permissionType) {
