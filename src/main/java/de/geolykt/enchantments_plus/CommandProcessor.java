@@ -397,20 +397,30 @@ public class CommandProcessor {
     private static boolean helpEnchantment(CommandSender player, String label) {
         if (label.isEmpty() || label.equals("help")) {
             player.sendMessage(Storage.LOGO);
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench info <?enchantment>: " + ChatColor.AQUA
-                    + "Returns information about custom enchantments.");
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench list: " + ChatColor.AQUA
-                    + "Returns a list of enchantments for the tool in hand.");
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench give <Player> <Material> <enchantment> <?level> ... "
-                    + ChatColor.AQUA + "Gives the target a specified enchanted item.");
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enchantment> <?level> <?modifier> <?doNotification>: " + ChatColor.AQUA
-                    + "Enchants the item in hand with the given enchantment and level");
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench disable <enchantment/all>: " + ChatColor.AQUA
-                    + "Disables selected enchantment for the user");
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench enable <enchantment/all>: " + ChatColor.AQUA
-                    + "Enables selected enchantment for the user");
-            player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench lasercol: " + ChatColor.AQUA
-                    + "Sets the color of your laser.");
+            if (hasPermission(player, PermissionTypes.INFO)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench info <?enchantment>: " + ChatColor.AQUA
+                        + "Returns information about custom enchantments.");
+            }
+            if (hasPermission(player, PermissionTypes.LIST)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench list: " + ChatColor.AQUA
+                        + "Returns a list of enchantments for the tool in hand.");
+            }
+            if (hasPermission(player, PermissionTypes.GIVE)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench give <Player> <Material> <enchantment> <?level> ... "
+                        + ChatColor.AQUA + "Gives the target a specified enchanted item.");
+            }
+            if (hasPermission(player, PermissionTypes.ENCHANT)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enchantment> <?level> <?modifier> <?doNotification>: " + ChatColor.AQUA
+                        + "Enchants the item in hand with the given enchantment and level");
+            }
+            if (hasPermission(player, PermissionTypes.ONOFF)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enable/disable> <enchantment/all>: " + ChatColor.AQUA
+                        + "Enables/Disables selected enchantment for the user");
+            }
+            if (hasPermission(player, PermissionTypes.LASERCOL)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench lasercol: " + ChatColor.AQUA
+                        + "Sets the color of your laser.");
+            }
             player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench version: " + ChatColor.AQUA
                     + "Shows the version the plugin runs on.");
             return true;
