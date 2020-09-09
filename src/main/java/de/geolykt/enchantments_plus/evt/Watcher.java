@@ -32,17 +32,20 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.util.Utilities;
+import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
+import static de.geolykt.enchantments_plus.util.PermissionHandler.hasPermission;
 
 // This contains extraneous watcher methods that are not relevant to arrows or enchantments
 public class Watcher implements Listener {
 
-    // Fires a laser effect from dispensers if a tool with the Laser enchantment is dispensed
+    // Fires a laser effect from dispensers if a tool with the Laser enchantment is
+    // dispensed
     @EventHandler
     public void onBlockDispense(BlockDispenseEvent evt) {
         Config config = Config.get(evt.getBlock().getWorld());
@@ -63,8 +66,8 @@ public class Watcher implements Listener {
                     evt.setCancelled(true);
                     int level = CustomEnchantment.getEnchants(stk, config.getWorld()).get(ench);
                     int range = 6 + (int) Math.round(level * ench.getPower() * 3);
-                    Block blk
-                            = evt.getBlock().getRelative(((Directional) evt.getBlock().getState().getData()).getFacing(), range);
+                    Block blk = evt.getBlock()
+                            .getRelative(((Directional) evt.getBlock().getState().getData()).getFacing(), range);
                     Location play = Utilities.getCenter(evt.getBlock());
                     Location target = Utilities.getCenter(blk);
                     play.setY(play.getY() - .5);
@@ -76,13 +79,13 @@ public class Watcher implements Listener {
                         tempLoc.setX(play.getX() + (i * ((target.getX() - play.getX()) / (d * 10))));
                         tempLoc.setY(play.getY() + (i * ((target.getY() - play.getY()) / (d * 10))));
                         tempLoc.setZ(play.getZ() + (i * ((target.getZ() - play.getZ()) / (d * 10))));
-                        tempLoc.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1, new Particle.DustOptions(Color.RED, 0.75f));
+                        tempLoc.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1,
+                                new Particle.DustOptions(Color.RED, 0.75f));
                         for (Entity ent : Bukkit.getWorld(play.getWorld().getName()).getEntities()) {
                             if (ent.getLocation().distance(tempLoc) < .75) {
                                 if (ent instanceof LivingEntity) {
-                                    EntityDamageEvent event
-                                            = new EntityDamageEvent(ent, EntityDamageEvent.DamageCause.FIRE,
-                                                    (double) (1 + (level * 2)));
+                                    EntityDamageEvent event = new EntityDamageEvent(ent,
+                                            EntityDamageEvent.DamageCause.FIRE, (double) (1 + (level * 2)));
                                     Bukkit.getPluginManager().callEvent(event);
                                     ent.setLastDamageCause(event);
                                     if (!event.isCancelled()) {
@@ -97,7 +100,8 @@ public class Watcher implements Listener {
         }
     }
 
-    // Prevents falling block entities from Anthropomorphism from becoming solid blocks or disappearing
+    // Prevents falling block entities from Anthropomorphism from becoming solid
+    // blocks or disappearing
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent evt) {
         if ((evt.getEntityType() == EntityType.FALLING_BLOCK)) {
@@ -108,7 +112,8 @@ public class Watcher implements Listener {
         }
     }
 
-    // Prevents mobs affected by Rainbow Slam from being hurt by generic "FALL" event. Damage is instead dealt via an
+    // Prevents mobs affected by Rainbow Slam from being hurt by generic "FALL"
+    // event. Damage is instead dealt via an
     // EDBEe in order to make protections and money drops work
     @EventHandler
     public void onEntityFall(EntityDamageEvent evt) {
@@ -117,8 +122,9 @@ public class Watcher implements Listener {
         }
     }
 
-    // Teleports item stacks to a certain location as they are created from breaking a block or killing an entity if
-    //      a Grab or Vortex enchantment was used
+    // Teleports item stacks to a certain location as they are created from breaking
+    // a block or killing an entity if
+    // a Grab or Vortex enchantment was used
     @EventHandler
     public void onItemSpawn(final ItemSpawnEvent evt) {
         if (Fire.cancelledItemDrops.contains(evt.getLocation().getBlock())) {
@@ -135,7 +141,8 @@ public class Watcher implements Listener {
                     evt.getEntity().setPickupDelay(0);
                     for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                         if (e instanceof ExperienceOrb) {
-                            Storage.COMPATIBILITY_ADAPTER.collectXP(Grab.grabLocs.get(block), ((ExperienceOrb) e).getExperience());
+                            Storage.COMPATIBILITY_ADAPTER.collectXP(Grab.grabLocs.get(block),
+                                    ((ExperienceOrb) e).getExperience());
                             e.remove();
                         }
                     }
@@ -148,7 +155,8 @@ public class Watcher implements Listener {
                         evt.getEntity().setPickupDelay(0);
                         for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                             if (e instanceof ExperienceOrb) {
-                                Storage.COMPATIBILITY_ADAPTER.collectXP(Grab.grabLocs.get(block), ((ExperienceOrb) e).getExperience());
+                                Storage.COMPATIBILITY_ADAPTER.collectXP(Grab.grabLocs.get(block),
+                                        ((ExperienceOrb) e).getExperience());
                                 e.remove();
                             }
                         }
@@ -158,11 +166,12 @@ public class Watcher implements Listener {
         }, 1);
     }
 
-    // Prevents players from harvesting materials from the Water Walker and Fire Walker trails
+    // Prevents players from harvesting materials from the Water Walker and Fire
+    // Walker trails
     @EventHandler
     public void onIceOrLavaBreak(BlockBreakEvent evt) {
-        if (FrozenStep.frozenLocs.containsKey(evt.getBlock().getLocation()) || NetherStep.netherstepLocs.containsKey(
-                evt.getBlock().getLocation())) {
+        if (FrozenStep.frozenLocs.containsKey(evt.getBlock().getLocation())
+                || NetherStep.netherstepLocs.containsKey(evt.getBlock().getLocation())) {
             evt.setCancelled(true);
         }
     }
@@ -181,8 +190,9 @@ public class Watcher implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if (event.getMessage().startsWith("/enchant ")) {
-            boolean customEnch = !CustomEnchantment.getEnchants(event.getPlayer().getInventory().getItemInMainHand(),
-                    event.getPlayer().getWorld()).isEmpty();
+            boolean customEnch = !CustomEnchantment
+                    .getEnchants(event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getWorld())
+                    .isEmpty();
             Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
                 CustomEnchantment.setGlow(event.getPlayer().getInventory().getItemInMainHand(), customEnch,
                         event.getPlayer().getWorld());
@@ -190,20 +200,21 @@ public class Watcher implements Listener {
         }
     }
 
-    // Randomly adds CustomEnchantments to an item based off the overall probability, enchantments' relative
-    //      probability, and the level at which the item is being enchanted if the player has permission
+    // Randomly adds CustomEnchantments to an item based off the overall
+    // probability, enchantments' relative
+    // probability, and the level at which the item is being enchanted if the player
+    // has permission
     @EventHandler
     public void onEnchantItem(EnchantItemEvent evt) {
-        if (!evt.getEnchanter().hasPermission("enchplus.enchant.get")) {
-            return;
-        }
-        if (evt.getItem().getType() == FISHING_ROD && evt.getExpLevelCost() <= 4) {
+        if (!hasPermission(evt.getEnchanter(), PermissionTypes.GET)
+                || (evt.getItem().getType() == FISHING_ROD && evt.getExpLevelCost() <= 4)) {
             return;
         }
 
         Config config = Config.get(evt.getEnchantBlock().getWorld());
 
-        Map<CustomEnchantment, Integer> existingEnchants = CustomEnchantment.getEnchants(evt.getItem(), evt.getEnchantBlock().getWorld());
+        Map<CustomEnchantment, Integer> existingEnchants = CustomEnchantment.getEnchants(evt.getItem(),
+                evt.getEnchantBlock().getWorld());
 
         Map<CustomEnchantment, Integer> addedEnchants = new HashMap<>();
         ItemStack stk = evt.getItem();
@@ -223,7 +234,8 @@ public class Watcher implements Listener {
                         break;
                     }
                 }
-                if (!conflicts && (evt.getItem().getType().equals(BOOK) || ench.validMaterial(evt.getItem().getType()))) {
+                if (!conflicts
+                        && (evt.getItem().getType().equals(BOOK) || ench.validMaterial(evt.getItem().getType()))) {
                     validPool.add(ench);
                     totalChance += ench.getProbability();
                 }
@@ -263,7 +275,8 @@ public class Watcher implements Listener {
 
     }
 
-    // Removes certain potion effects given by enchantments when the enchanted items are removed
+    // Removes certain potion effects given by enchantments when the enchanted items
+    // are removed
     @EventHandler
     public void onInventoryClick(InventoryClickEvent evt) {
         if (evt.getInventory() != null) {
@@ -271,8 +284,8 @@ public class Watcher implements Listener {
                 if (evt.getCurrentItem().hasItemMeta()) {
                     if (evt.getCurrentItem().getItemMeta().hasLore()) {
                         Player player = (Player) evt.getWhoClicked();
-                        for (CustomEnchantment e : CustomEnchantment.getEnchants(evt.getCurrentItem(),
-                                player.getWorld()).keySet()) {
+                        for (CustomEnchantment e : CustomEnchantment
+                                .getEnchants(evt.getCurrentItem(), player.getWorld()).keySet()) {
                             if (e.getClass().equals(Jump.class) || e.getClass().equals(Meador.class)) {
                                 player.removePotionEffect(PotionEffectType.JUMP);
                             }
@@ -289,16 +302,19 @@ public class Watcher implements Listener {
         }
     }
 
-    // Prevents players from being able to eat if they are stored within the 'hungerPlayers' set in Storage
+    // Prevents players from being able to eat if they are stored within the
+    // 'hungerPlayers' set in Storage
     @EventHandler
     public void onEat(PlayerInteractEvent evt) {
-        if (evt.getPlayer().getInventory().getItemInMainHand().getType().isEdible() && (evt.getAction().equals(RIGHT_CLICK_AIR)
-                || evt.getAction().equals(RIGHT_CLICK_BLOCK)) && Toxic.hungerPlayers.keySet().contains(evt.getPlayer())) {
+        if (evt.getPlayer().getInventory().getItemInMainHand().getType().isEdible()
+                && (evt.getAction().equals(RIGHT_CLICK_AIR) || evt.getAction().equals(RIGHT_CLICK_BLOCK))
+                && Toxic.hungerPlayers.keySet().contains(evt.getPlayer())) {
             evt.setCancelled(true);
         }
     }
 
-    // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up by removing them
+    // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
+    // by removing them
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onArrowPickup(PlayerPickupArrowEvent evt) {

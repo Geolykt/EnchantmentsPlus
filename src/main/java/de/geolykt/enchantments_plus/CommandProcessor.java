@@ -14,11 +14,13 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.enchantments.Laser;
 import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.enums.PermissionTypes;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import me.zombie_striker.psudocommands.CommandUtils;
 
 import java.util.*;
 
+import static de.geolykt.enchantments_plus.util.PermissionHandler.hasPermission;
 import static org.bukkit.Material.*;
 
 // This class handles all commands used by this plugin
@@ -121,7 +123,7 @@ public class CommandProcessor {
 
     // Reloads the Enchantments_plus plugin
     private static boolean reload(CommandSender player) {
-        if (!player.hasPermission("enchplus.command.reload")) {
+        if (!hasPermission(player, PermissionTypes.RELOAD)) {
             player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -133,7 +135,7 @@ public class CommandProcessor {
 
     // Gives the given player an item with certain enchantments determined by the arguments
     private static boolean give(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("enchplus.command.give")) {
+        if (!hasPermission(sender, PermissionTypes.GIVE)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -224,7 +226,7 @@ public class CommandProcessor {
         Config config = Config.get(player.getPlayer().getWorld());
         ItemStack stack = player.getPlayer().getInventory().getItemInMainHand();
         
-        if (!player.hasPermission("enchplus.command.list")) {
+        if (!hasPermission(player, PermissionTypes.LIST)) {
             player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -247,7 +249,7 @@ public class CommandProcessor {
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(player.getPlayer().getWorld());
         
-        if (!player.hasPermission("enchplus.command.info")) {
+        if (!hasPermission(player, PermissionTypes.INFO)) {
             player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -285,7 +287,7 @@ public class CommandProcessor {
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(player.getPlayer().getWorld());
         
-        if (!player.hasPermission("enchplus.command.onoff")) {
+        if (!hasPermission(player, PermissionTypes.ONOFF)) {
             player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -318,7 +320,7 @@ public class CommandProcessor {
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(player.getPlayer().getWorld());
         
-        if (!player.hasPermission("enchplus.command.onoff")) {
+        if (!hasPermission(player, PermissionTypes.ONOFF)) {
             player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -406,7 +408,7 @@ public class CommandProcessor {
     }
 
     private static boolean enchant(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("enchplus.command.enchant")) {
+        if (!hasPermission(sender, PermissionTypes.ENCHANT)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -497,7 +499,7 @@ public class CommandProcessor {
     }
 
     private static boolean setLaserColor(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("enchplus.command.lasercol")) {
+        if (!hasPermission(sender, PermissionTypes.LASERCOL)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
