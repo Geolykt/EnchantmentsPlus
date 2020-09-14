@@ -703,7 +703,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
         // Returns the custom enchantment from the lore name
         private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, World world) {
-            raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "");
+            raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "").trim();
             switch (raw.split(" ").length) {
             case 0:
                 return null; // Invalid length, don't tell me otherwise
@@ -717,7 +717,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             case 2:
                 CustomEnchantment ench = Config.get(world).enchantFromString(raw.split(" ")[0]);
                 if (ench == null) {
-                    return null; // Not able to map enchantment
+                    ench = Config.get(world).enchantFromString(raw.replace(" ", "")); // In case of nightvision
+                    if (ench == null)
+                        return null; // Not able to map enchantment
+                    else
+                        return new SimpleEntry<>(ench, 1);
                 }
                 try {
                     return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench,
