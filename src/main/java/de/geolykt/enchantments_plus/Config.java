@@ -170,7 +170,7 @@ public class Config {
 
         if (PATCH_CONFIGURATION.getString("enchantmentGatherer", "NBT").equals("NBT")) {
             Collection<Material> col = EnumSet.noneOf(Material.class);
-            boolean doCompat = Storage.enchantments_plus.getConfig().getBoolean("compatibility", false);
+            boolean doCompat = PATCH_CONFIGURATION.getBoolean("compatibility", false);
             for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
                 col.add(Material.matchMaterial(s));
             }
