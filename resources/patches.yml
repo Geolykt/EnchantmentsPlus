@@ -20,4 +20,5 @@ compatibility: false # only has an effect if NBT is used above, if set to true, 
 getterDeny: # the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items.
   - "TRIPWIRE_HOOK"
   - "LEVER"
+allowlistSwitch: false # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found

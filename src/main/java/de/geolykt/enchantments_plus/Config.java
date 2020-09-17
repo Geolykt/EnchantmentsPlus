@@ -174,7 +174,8 @@ public class Config {
             for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
                 col.add(Material.matchMaterial(s));
             }
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(col, doCompat);
+            boolean allowlistToggle = PATCH_CONFIGURATION.getBoolean("allowlistSwitch", false);
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(col, allowlistToggle, doCompat);
         } else if (PATCH_CONFIGURATION.getString("enchantmentGatherer").equals("PR47-lore")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
         } else {

@@ -795,15 +795,17 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
         private final boolean doCompat;
         private final Collection<Material> getterDenyList;
+        private final boolean isGetterAllowlist; // Defines whether the above collection should be used as an allowlist instead
 
         /**
          * Used for enchantment conversion purposes
          */
         public final NamespacedKey ench_converted;
 
-        public PersistentDataGatherer(Collection<Material> denylist, boolean doCompat2) {
+        public PersistentDataGatherer(Collection<Material> denylist, boolean allowlistToggle, boolean doCompat2) {
             ench_converted = new NamespacedKey(Storage.enchantments_plus, "e_convert");
             getterDenyList = denylist;
+            isGetterAllowlist = allowlistToggle;
             doCompat = doCompat2;
         }
 
@@ -828,7 +830,17 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 List<String> outExtraLore) {
             LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
             if ( (stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
-                if (stk.hasItemMeta() && !getterDenyList.contains(stk.getType())) {
+                if (stk.hasItemMeta()) {
+                    //TODO what would be the best approach to remove the nesting in the two conditions? Ideally in a single if clause
+                    if (isGetterAllowlist) {
+                        if (!getterDenyList.contains(stk.getType())) {
+                            return new LinkedHashMap<>();
+                        }
+                    } else {
+                        if (getterDenyList.contains(stk.getType())) {
+                            return new LinkedHashMap<>();
+                        }
+                    }
                     final PersistentDataContainer cont = stk.getItemMeta().getPersistentDataContainer();
 
                     if (doCompat && cont.getOrDefault(ench_converted, PersistentDataType.BYTE, (byte) 0) == 0) {
