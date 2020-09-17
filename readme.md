@@ -38,6 +38,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
  <li>Major changes:
   <ul>
    <li>Most values in the compatibillity adapter can be changed via magic configuration files now</li>
+   <li>Uses the 1.16.3 Spigot API</li>
   </ul>
  </li>
  <li>Minor changes:
@@ -52,6 +53,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
   <ul>
    <li>Fire enchantment no longer OOMs when attempting to smelt unsmeltable stuff</li>
    <li>Added toggleable shred cooldown when the laser enchantment is used.</li>
+   <li>Fixed potential bug with the vortex enchantment, the specifics are unknown.</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
