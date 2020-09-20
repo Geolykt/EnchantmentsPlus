@@ -535,7 +535,7 @@ public class CommandProcessor {
                 if (postPlayerFeedback) {
                     target.sendMessage(Storage.LOGO + ChatColor.RED + " You cannot enchant air");
                 }
-                return false;
+                return true;
             } else {
                 CustomEnchantment.setEnchantment(player.getInventory().getItemInMainHand(), ench, level, player.getWorld());
                 if (postPlayerFeedback) {
