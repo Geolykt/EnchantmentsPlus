@@ -29,6 +29,9 @@ import java.util.*;
 
 public class Spectral extends CustomEnchantment {
 
+    /**
+     * A hard maximum on the amount of blocks that can be changed while shift + right-clicking.
+     */
     private static final int MAX_BLOCKS = 1024;
 
     public static int[][] SEARCH_FACES = new int[][]{new int[]{}};
@@ -46,14 +49,14 @@ public class Spectral extends CustomEnchantment {
     @Override
     public Builder<Spectral> defaults() {
         return new Builder<>(Spectral::new, ID)
-                .maxLevel(1)
+                .maxLevel(3)
                 .loreName("Spectral")
                 .probability(0)
                 .enchantable(new Tool[]{SHOVEL})
                 .conflicting()
                 .description("Allows for cycling through a block's types")
                 .cooldown(0)
-                .power(-1.0)
+                .power(1)
                 .handUse(Hand.RIGHT)
                 .base(BaseEnchantments.SPECTRAL);
     }
@@ -68,8 +71,8 @@ public class Spectral extends CustomEnchantment {
         }
         Set<Block> potentialBlocks = new HashSet<>();
         potentialBlocks.add(evt.getClickedBlock());
-        if (evt.getPlayer().isSneaking()) {
-            potentialBlocks.addAll(Utilities.BFS(evt.getClickedBlock(), MAX_BLOCKS, false, Float.MAX_VALUE,
+        if (evt.getPlayer().isSneaking()) { 
+            potentialBlocks.addAll(Utilities.BFS(evt.getClickedBlock(), MAX_BLOCKS, false, (float) (level * power)+2.0f,
                     SEARCH_FACES, Sets.immutableEnumSet(evt.getClickedBlock().getType()),
                     new HashSet<Material>(), false, true));
         }

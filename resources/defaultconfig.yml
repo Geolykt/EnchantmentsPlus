@@ -399,7 +399,7 @@ enchantments:
       Probability: 1.0
       Tools: Shovel
       Name: Spectral
-      Max Level: 1
+      Max Level: 3
       Cooldown: 0
       Power: 1.0
   - Speed:

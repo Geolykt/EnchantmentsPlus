@@ -1,8 +1,8 @@
-Craftbukkit support (if you can talk about one) will be ditched rather soon. The plugin may no longer run on these Servers in the coming releases. We intend on continuing support with SpigotMC, PaperSpigot and any other Server that implements the Bukkit API
+Craftbukkit support (if you can talk about one) will be ditched rather soon. The plugin may no longer run on these Servers in the coming releases. We intend on continuing support with Spigot, Paper and any other Server that implement the Bukkit API
 <br>
-Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public
+Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public, but It'S the best if at least someone knows exploits or bugs so they can be fixed.
 
-It also only intends to support 1.16.2 and newer versions when the time comes.
+It also only intends to support 1.16.3 and newer versions when the time comes.
 
 # Enchantments+
 ## Description
@@ -27,7 +27,7 @@ See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloa
 Compile this project like every other project out there. Note that you need to have the latest bindings.
 
 ## Compatibility
-The current version of this plugin is fully compatible with Spigot version 1.16.1 and 1.16.2. Any versions under 1.16.1, will **not** work without tinkering, versions above, may, although with a few issues.
+The current version of this plugin is fully compatible with Spigot version 1.16.1, 1.16.2 and 1.16.3. Any versions under 1.16.1, will **not** work without tinkering, versions above, may, although with a few issues.
 
 ## Contribute
 Anyone is free to contribute to this repository via pull requests, issues or comments, however keep in mind that this repository uses 4 space indentation.
@@ -38,6 +38,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
  <li>Major changes:
   <ul>
    <li>Most values in the compatibillity adapter can be changed via magic configuration files now</li>
+   <li>The Spectral enchantment can now be levelled by default</li>
    <li>Uses the 1.16.3 Spigot API</li>
   </ul>
  </li>
@@ -54,6 +55,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Fire enchantment no longer OOMs when attempting to smelt unsmeltable stuff</li>
    <li>Added toggleable shred cooldown when the laser enchantment is used.</li>
    <li>Fixed potential bug with the vortex enchantment, the specifics are unknown.</li>
+   <li>Mitigated severe lag issues with the Spectral enchantment, also performed some optimisations. To get to the pervious way of how the enchantment worked, put the enchantment power to really high values</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
