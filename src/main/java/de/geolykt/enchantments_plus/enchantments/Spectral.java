@@ -175,8 +175,8 @@ public class Spectral extends CustomEnchantment {
                     break;
                 }
             }
-        } else if (Tag.SAPLINGS.isTagged(original)) {
-            Material[] items = Tag.SAPLINGS.getValues().toArray(new Material[0]);
+        } else if (Tag.SAND.isTagged(original)) {
+            Material[] items = Tag.SAND.getValues().toArray(new Material[0]);
             for (int i = 0; i < items.length; i++) {
                 if (items[i].equals(original)) {
                     newMat = items[(i+1)%items.length];
@@ -185,6 +185,14 @@ public class Spectral extends CustomEnchantment {
             }
         } else if (Tag.LEAVES.isTagged(original)) {
             Material[] items = Tag.LEAVES.getValues().toArray(new Material[0]);
+            for (int i = 0; i < items.length; i++) {
+                if (items[i].equals(original)) {
+                    newMat = items[(i+1)%items.length];
+                    break;
+                }
+            }
+        } else if (Tag.ICE.isTagged(original)) {
+            Material[] items = Tag.ICE.getValues().toArray(new Material[0]);
             for (int i = 0; i < items.length; i++) {
                 if (items[i].equals(original)) {
                     newMat = items[(i+1)%items.length];
@@ -208,16 +216,16 @@ public class Spectral extends CustomEnchantment {
                     break;
                 }
             }
-        } else if (Tag.ICE.isTagged(original)) {
-            Material[] items = Tag.ICE.getValues().toArray(new Material[0]);
+        }else if (Tag.CORAL_BLOCKS.isTagged(original)) {
+            Material[] items = Tag.CORAL_BLOCKS.getValues().toArray(new Material[0]);
             for (int i = 0; i < items.length; i++) {
                 if (items[i].equals(original)) {
                     newMat = items[(i+1)%items.length];
                     break;
                 }
             }
-        } else if (Tag.CORAL_BLOCKS.isTagged(original)) {
-            Material[] items = Tag.CORAL_BLOCKS.getValues().toArray(new Material[0]);
+        } else if (Tag.SAPLINGS.isTagged(original)) {
+            Material[] items = Tag.SAPLINGS.getValues().toArray(new Material[0]);
             for (int i = 0; i < items.length; i++) {
                 if (items[i].equals(original)) {
                     newMat = items[(i+1)%items.length];
@@ -226,14 +234,6 @@ public class Spectral extends CustomEnchantment {
             }
         } else if (Tag.CORAL_PLANTS.isTagged(original)) {
             Material[] items = Tag.CORAL_PLANTS.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.SAND.isTagged(original)) {
-            Material[] items = Tag.SAND.getValues().toArray(new Material[0]);
             for (int i = 0; i < items.length; i++) {
                 if (items[i].equals(original)) {
                     newMat = items[(i+1)%items.length];
@@ -374,9 +374,7 @@ public class Spectral extends CustomEnchantment {
                         newBlockData.setHalf(Bisected.Half.BOTTOM);
                         block.getRelative(BlockFace.DOWN).setBlockData(newBlockData, false);
                     }
-                }
-
-                if (blockData instanceof Bed) {
+                } else  if (blockData instanceof Bed) {
                     Bed newBlockData = (Bed) block.getBlockData();
                     newBlockData.setPart(((Bed) blockData).getPart());
                     block.setBlockData(newBlockData, false);
@@ -393,62 +391,45 @@ public class Spectral extends CustomEnchantment {
                             secondaryBlockData.setFacing(((Directional) blockData).getFacing());
                             block.getRelative(facing).setBlockData(secondaryBlockData, true);
 
-                }
-
-                if (blockData instanceof Gate) {
+                } else  if (blockData instanceof Gate) {
                     Gate newBlockData = (Gate) block.getBlockData();
                     newBlockData.setInWall(((Gate) blockData).isInWall());
                     block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Door) {
+                } else if (blockData instanceof Door) {
                     Door newBlockData = (Door) block.getBlockData();
                     newBlockData.setHinge(((Door) blockData).getHinge());
                     block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Orientable) {
+                } else if (blockData instanceof Orientable) {
                     Orientable newBlockData = (Orientable) block.getBlockData();
                     newBlockData.setAxis(((Orientable) blockData).getAxis());
                     block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Powerable) {
+                } else if (blockData instanceof Powerable) {
                     Powerable newBlockData = (Powerable) block.getBlockData();
                     newBlockData.setPowered(((Powerable) blockData).isPowered());
                     block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Openable) {
+                } else if (blockData instanceof Openable) {
                     Openable newBlockData = (Openable) block.getBlockData();
                     newBlockData.setOpen(((Openable) blockData).isOpen());
                     block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Stairs) {
+                } else if (blockData instanceof Stairs) {
                     Stairs newBlockData = (Stairs) block.getBlockData();
                     newBlockData.setShape(((Stairs) blockData).getShape());
                     block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Slab) {
+                } else if (blockData instanceof Slab) {
                     Slab newBlockData = (Slab) block.getBlockData();
                     newBlockData.setType(((Slab) blockData).getType());
                     block.setBlockData(newBlockData, true);
-                }
-                if (blockData instanceof MultipleFacing) {
+                } else if (blockData instanceof MultipleFacing) {
                     MultipleFacing newBlockData = (MultipleFacing) block.getBlockData();
                     for (BlockFace bf : ((MultipleFacing) blockData).getFaces()) {
                         newBlockData.setFace(bf, true);
                     }
                     block.setBlockData(newBlockData, true);
-                }
-                if (blockData instanceof Directional) {
+                } else if (blockData instanceof Directional) {
                     Directional newBlockData = (Directional) block.getBlockData();
                     newBlockData.setFacing(((Directional) blockData).getFacing());
                     block.setBlockData(newBlockData, true);
-                }
-                if (blockData instanceof Waterlogged) {
+                } else if (blockData instanceof Waterlogged) {
                     Waterlogged newBlockData = (Waterlogged) block.getBlockData();
                     newBlockData.setWaterlogged(((Waterlogged) blockData).isWaterlogged());
                     block.setBlockData(newBlockData, true);
