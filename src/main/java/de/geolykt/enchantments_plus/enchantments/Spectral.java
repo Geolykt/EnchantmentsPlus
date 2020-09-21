@@ -35,6 +35,12 @@ public class Spectral extends CustomEnchantment {
 
     public static final int ID = 54;
 
+    /**
+     * Designates whether or not the Spectral enchantment should query permissions to resolve (regional) world protection. <br>
+     * This has the direct effect that the {@link BlockSpectralChangeEvent} cannot be constructed.
+     * @since 1.0
+     * @implNote Until 1.1.4 (included) this value was ignored and thus had the result of disabling the Spectral enchantment
+     */
     public static boolean performWorldProtection = true;
     
     @Override
@@ -72,16 +78,26 @@ public class Spectral extends CustomEnchantment {
         Player p = evt.getPlayer();
         
         Material cache = null;
-        
-        for (Block b : potentialBlocks) {
-            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(b, p);
-            Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
-            
-            if (cache == null && !blockSpectralChangeEvent.isCancelled()) {
-                cache = cycleBlockType(b);
-                blocksChanged += cache == null ? 0 : 1;
-            } else if (!blockSpectralChangeEvent.isCancelled() && cycleBlockType(b, cache)){
-                blocksChanged++;
+        if (performWorldProtection) {
+            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(evt.getClickedBlock(), p);
+            for (final Block b : potentialBlocks) {
+                blockSpectralChangeEvent.adjustBlock(b);
+                Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
+                if (cache == null && !blockSpectralChangeEvent.isCancelled()) {
+                    cache = cycleBlockType(b);
+                    blocksChanged += cache == null ? 0 : 1;
+                } else if (!blockSpectralChangeEvent.isCancelled() && cycleBlockType(b, cache)){
+                    blocksChanged++;
+                }
+            }
+        } else {
+            for (final Block b : potentialBlocks) {
+                if (cache == null) {
+                    cache = cycleBlockType(b);
+                    blocksChanged += cache == null ? 0 : 1;
+                } else if (cycleBlockType(b, cache)){
+                    blocksChanged++;
+                }
             }
         }
         
@@ -180,6 +196,7 @@ public class Spectral extends CustomEnchantment {
                     break;
                 }
             }
+            // FIXME 1.16.x only!
         } else if (Tag.NYLIUM.isTagged(original)) {
             Material[] items = Tag.NYLIUM.getValues().toArray(new Material[0]);
             for (int i = 0; i < items.length; i++) {
@@ -327,8 +344,8 @@ public class Spectral extends CustomEnchantment {
         return newMat;
     }
     
-    private boolean cycleBlockType(Block block, Material newMat) {
-        Material original = block.getType();
+    private boolean cycleBlockType(Block block, final Material newMat) {
+        final Material original = block.getType();
         boolean changed = false;
         
         
