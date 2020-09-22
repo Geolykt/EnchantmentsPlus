@@ -3,7 +3,6 @@ package de.geolykt.enchantments_plus.enchantments;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.*;
@@ -79,26 +78,39 @@ public class Spectral extends CustomEnchantment {
         
         int blocksChanged = 0;
         Player p = evt.getPlayer();
-        
+
+        boolean doInteract = false;
         Material cache = null;
         if (performWorldProtection) {
             BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(evt.getClickedBlock(), p);
             for (final Block b : potentialBlocks) {
                 blockSpectralChangeEvent.adjustBlock(b);
                 Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
-                if (cache == null && !blockSpectralChangeEvent.isCancelled()) {
-                    cache = cycleBlockType(b);
-                    blocksChanged += cache == null ? 0 : 1;
-                } else if (!blockSpectralChangeEvent.isCancelled() && cycleBlockType(b, cache)){
-                    blocksChanged++;
+                if (!blockSpectralChangeEvent.isCancelled()) {
+                    if (cache == null) {
+                        cache = cycleBlockType(b);
+                        doInteract = blockstateInteract(b);
+                        if (!doInteract && cache == b.getType()) {
+                            return false;
+                        }
+                        blocksChanged += cache == null ? 0 : 1;
+                    } else {
+                        cycleBlockType(b, cache, doInteract);
+                        blocksChanged++;
+                    }
                 }
             }
         } else {
             for (final Block b : potentialBlocks) {
                 if (cache == null) {
                     cache = cycleBlockType(b);
+                    doInteract = blockstateInteract(b);
+                    if (!doInteract && cache == b.getType()) {
+                        return false;
+                    }
                     blocksChanged += cache == null ? 0 : 1;
-                } else if (cycleBlockType(b, cache)){
+                } else {
+                    cycleBlockType(b, cache, doInteract);
                     blocksChanged++;
                 }
             }
@@ -108,6 +120,119 @@ public class Spectral extends CustomEnchantment {
         evt.setCancelled(true);
         
         return blocksChanged != 0;
+    }
+
+    private boolean blockstateInteract(Block block) {
+        BlockData blockData = block.getBlockData();
+        boolean performed = false;
+        
+        if (blockData instanceof Bisected) {
+            Bisected newBlockData = (Bisected) block.getBlockData();
+            newBlockData.setHalf(((Bisected) blockData).getHalf());
+            block.setBlockData(newBlockData, false);
+
+            Material original = block.getType();
+            // Set the second half's data
+            if (block.getRelative(BlockFace.UP).getType().equals(original)) {
+                newBlockData.setHalf(Bisected.Half.TOP);
+                block.getRelative(BlockFace.UP).setBlockData(newBlockData, false);
+            }
+            if (block.getRelative(BlockFace.DOWN).getType().equals(original)) {
+                newBlockData.setHalf(Bisected.Half.BOTTOM);
+                block.getRelative(BlockFace.DOWN).setBlockData(newBlockData, false);
+            }
+            performed = true;
+        }
+
+        if (blockData instanceof Bed) {
+            Bed newBlockData = (Bed) block.getBlockData();
+            newBlockData.setPart(((Bed) blockData).getPart());
+            block.setBlockData(newBlockData, false);
+
+            // Set the second bed's part
+            BlockFace facing = !newBlockData.getPart().equals(Bed.Part.HEAD)
+                    ? ((Bed) blockData).getFacing()
+                            : ((Bed) blockData).getFacing().getOppositeFace();
+            newBlockData.setPart(((Bed) block.getRelative(facing).getBlockData()).getPart());
+            block.getRelative(facing).setBlockData(newBlockData, false);
+
+            // Set the second bed's direction since we never do that later on
+            Directional secondaryBlockData = (Directional) block.getRelative(facing).getBlockData();
+            secondaryBlockData.setFacing(((Directional) blockData).getFacing());
+            block.getRelative(facing).setBlockData(secondaryBlockData, true);
+            performed = true;
+
+        }
+
+        if (blockData instanceof Gate) {
+            Gate newBlockData = (Gate) block.getBlockData();
+            newBlockData.setInWall(((Gate) blockData).isInWall());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+
+        if (blockData instanceof Door) {
+            Door newBlockData = (Door) block.getBlockData();
+            newBlockData.setHinge(((Door) blockData).getHinge());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+
+        if (blockData instanceof Orientable) {
+            Orientable newBlockData = (Orientable) block.getBlockData();
+            newBlockData.setAxis(((Orientable) blockData).getAxis());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+
+        if (blockData instanceof Powerable) {
+            Powerable newBlockData = (Powerable) block.getBlockData();
+            newBlockData.setPowered(((Powerable) blockData).isPowered());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+
+        if (blockData instanceof Openable) {
+            Openable newBlockData = (Openable) block.getBlockData();
+            newBlockData.setOpen(((Openable) blockData).isOpen());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+
+        if (blockData instanceof Stairs) {
+            Stairs newBlockData = (Stairs) block.getBlockData();
+            newBlockData.setShape(((Stairs) blockData).getShape());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+
+        if (blockData instanceof Slab) {
+            Slab newBlockData = (Slab) block.getBlockData();
+            newBlockData.setType(((Slab) blockData).getType());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+        if (blockData instanceof MultipleFacing) {
+            MultipleFacing newBlockData = (MultipleFacing) block.getBlockData();
+            for (BlockFace bf : ((MultipleFacing) blockData).getFaces()) {
+                newBlockData.setFace(bf, true);
+            }
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+        if (blockData instanceof Directional) {
+            Directional newBlockData = (Directional) block.getBlockData();
+            newBlockData.setFacing(((Directional) blockData).getFacing());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+        if (blockData instanceof Waterlogged) {
+            Waterlogged newBlockData = (Waterlogged) block.getBlockData();
+            newBlockData.setWaterlogged(((Waterlogged) blockData).isWaterlogged());
+            block.setBlockData(newBlockData, true);
+            performed = true;
+        }
+        return performed;
     }
 
     @Override
@@ -132,200 +257,23 @@ public class Spectral extends CustomEnchantment {
         }
 
         if (newMat != original) {
-            BlockData blockData = block.getBlockData();
             final Material newMatFinal = newMat; // Why are we doing this?
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
 
                 block.setType(newMatFinal, false);
-
-                if (blockData instanceof Bisected) {
-                    Bisected newBlockData = (Bisected) block.getBlockData();
-                    newBlockData.setHalf(((Bisected) blockData).getHalf());
-                    block.setBlockData(newBlockData, false);
-
-                    // Set the second half's data
-                    if (block.getRelative(BlockFace.UP).getType().equals(original)) {
-                        newBlockData.setHalf(Bisected.Half.TOP);
-                        block.getRelative(BlockFace.UP).setBlockData(newBlockData, false);
-                    }
-                    if (block.getRelative(BlockFace.DOWN).getType().equals(original)) {
-                        newBlockData.setHalf(Bisected.Half.BOTTOM);
-                        block.getRelative(BlockFace.DOWN).setBlockData(newBlockData, false);
-                    }
-                }
-
-                if (blockData instanceof Bed) {
-                    Bed newBlockData = (Bed) block.getBlockData();
-                    newBlockData.setPart(((Bed) blockData).getPart());
-                    block.setBlockData(newBlockData, false);
-
-                    // Set the second bed's part
-                    BlockFace facing = !newBlockData.getPart().equals(Bed.Part.HEAD)
-                            ? ((Bed) blockData).getFacing()
-                                    : ((Bed) blockData).getFacing().getOppositeFace();
-                            newBlockData.setPart(((Bed) block.getRelative(facing).getBlockData()).getPart());
-                            block.getRelative(facing).setBlockData(newBlockData, false);
-
-                            // Set the second bed's direction since we never do that later on
-                            Directional secondaryBlockData = (Directional) block.getRelative(facing).getBlockData();
-                            secondaryBlockData.setFacing(((Directional) blockData).getFacing());
-                            block.getRelative(facing).setBlockData(secondaryBlockData, true);
-
-                }
-
-                if (blockData instanceof Gate) {
-                    Gate newBlockData = (Gate) block.getBlockData();
-                    newBlockData.setInWall(((Gate) blockData).isInWall());
-                    block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Door) {
-                    Door newBlockData = (Door) block.getBlockData();
-                    newBlockData.setHinge(((Door) blockData).getHinge());
-                    block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Orientable) {
-                    Orientable newBlockData = (Orientable) block.getBlockData();
-                    newBlockData.setAxis(((Orientable) blockData).getAxis());
-                    block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Powerable) {
-                    Powerable newBlockData = (Powerable) block.getBlockData();
-                    newBlockData.setPowered(((Powerable) blockData).isPowered());
-                    block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Openable) {
-                    Openable newBlockData = (Openable) block.getBlockData();
-                    newBlockData.setOpen(((Openable) blockData).isOpen());
-                    block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Stairs) {
-                    Stairs newBlockData = (Stairs) block.getBlockData();
-                    newBlockData.setShape(((Stairs) blockData).getShape());
-                    block.setBlockData(newBlockData, true);
-                }
-
-                if (blockData instanceof Slab) {
-                    Slab newBlockData = (Slab) block.getBlockData();
-                    newBlockData.setType(((Slab) blockData).getType());
-                    block.setBlockData(newBlockData, true);
-                }
-                if (blockData instanceof MultipleFacing) {
-                    MultipleFacing newBlockData = (MultipleFacing) block.getBlockData();
-                    for (BlockFace bf : ((MultipleFacing) blockData).getFaces()) {
-                        newBlockData.setFace(bf, true);
-                    }
-                    block.setBlockData(newBlockData, true);
-                }
-                if (blockData instanceof Directional) {
-                    Directional newBlockData = (Directional) block.getBlockData();
-                    newBlockData.setFacing(((Directional) blockData).getFacing());
-                    block.setBlockData(newBlockData, true);
-                }
-                if (blockData instanceof Waterlogged) {
-                    Waterlogged newBlockData = (Waterlogged) block.getBlockData();
-                    newBlockData.setWaterlogged(((Waterlogged) blockData).isWaterlogged());
-                    block.setBlockData(newBlockData, true);
-                }
+                blockstateInteract(block);
             }, 0);
         }
         return newMat;
     }
     
-    private boolean cycleBlockType(Block block, final Material newMat) {
-        final Material original = block.getType();
-        boolean changed = false;
-        
-        
-        if (!newMat.equals(original)) {
-            changed = true;
-            BlockData blockData = block.getBlockData();
-            final Material newMatFinal = newMat;
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
-
-                block.setType(newMatFinal, false);
-
-                if (blockData instanceof Bisected) {
-                    Bisected newBlockData = (Bisected) block.getBlockData();
-                    newBlockData.setHalf(((Bisected) blockData).getHalf());
-                    block.setBlockData(newBlockData, false);
-
-                    // Set the second half's data
-                    if (block.getRelative(BlockFace.UP).getType().equals(original)) {
-                        newBlockData.setHalf(Bisected.Half.TOP);
-                        block.getRelative(BlockFace.UP).setBlockData(newBlockData, false);
-                    }
-                    if (block.getRelative(BlockFace.DOWN).getType().equals(original)) {
-                        newBlockData.setHalf(Bisected.Half.BOTTOM);
-                        block.getRelative(BlockFace.DOWN).setBlockData(newBlockData, false);
-                    }
-                } else  if (blockData instanceof Bed) {
-                    Bed newBlockData = (Bed) block.getBlockData();
-                    newBlockData.setPart(((Bed) blockData).getPart());
-                    block.setBlockData(newBlockData, false);
-
-                    // Set the second bed's part
-                    BlockFace facing = !newBlockData.getPart().equals(Bed.Part.HEAD)
-                            ? ((Bed) blockData).getFacing()
-                                    : ((Bed) blockData).getFacing().getOppositeFace();
-                            newBlockData.setPart(((Bed) block.getRelative(facing).getBlockData()).getPart());
-                            block.getRelative(facing).setBlockData(newBlockData, false);
-
-                            // Set the second bed's direction since we never do that later on
-                            Directional secondaryBlockData = (Directional) block.getRelative(facing).getBlockData();
-                            secondaryBlockData.setFacing(((Directional) blockData).getFacing());
-                            block.getRelative(facing).setBlockData(secondaryBlockData, true);
-
-                } else  if (blockData instanceof Gate) {
-                    Gate newBlockData = (Gate) block.getBlockData();
-                    newBlockData.setInWall(((Gate) blockData).isInWall());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Door) {
-                    Door newBlockData = (Door) block.getBlockData();
-                    newBlockData.setHinge(((Door) blockData).getHinge());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Orientable) {
-                    Orientable newBlockData = (Orientable) block.getBlockData();
-                    newBlockData.setAxis(((Orientable) blockData).getAxis());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Powerable) {
-                    Powerable newBlockData = (Powerable) block.getBlockData();
-                    newBlockData.setPowered(((Powerable) blockData).isPowered());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Openable) {
-                    Openable newBlockData = (Openable) block.getBlockData();
-                    newBlockData.setOpen(((Openable) blockData).isOpen());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Stairs) {
-                    Stairs newBlockData = (Stairs) block.getBlockData();
-                    newBlockData.setShape(((Stairs) blockData).getShape());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Slab) {
-                    Slab newBlockData = (Slab) block.getBlockData();
-                    newBlockData.setType(((Slab) blockData).getType());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof MultipleFacing) {
-                    MultipleFacing newBlockData = (MultipleFacing) block.getBlockData();
-                    for (BlockFace bf : ((MultipleFacing) blockData).getFaces()) {
-                        newBlockData.setFace(bf, true);
-                    }
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Directional) {
-                    Directional newBlockData = (Directional) block.getBlockData();
-                    newBlockData.setFacing(((Directional) blockData).getFacing());
-                    block.setBlockData(newBlockData, true);
-                } else if (blockData instanceof Waterlogged) {
-                    Waterlogged newBlockData = (Waterlogged) block.getBlockData();
-                    newBlockData.setWaterlogged(((Waterlogged) blockData).isWaterlogged());
-                    block.setBlockData(newBlockData, true);
-                }
-            }, 0);
-        }
-        return changed;
+    private void cycleBlockType(Block block, final Material newMat, final boolean doBlockStateInteraction) {
+       Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+           block.setType(newMat, false);
+           if (doBlockStateInteraction) {
+               blockstateInteract(block);
+           }
+        }, 0);
     }
 
 }
