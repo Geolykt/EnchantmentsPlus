@@ -696,4 +696,18 @@ public class CompatibilityAdapter {
             return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
         }
     }
+    
+    /**
+     * This method queries the correct Permission interfaces, which are plugins. 
+     * If the plugin is not loaded the method will ignore it gracefully. <br>
+     * Plugins are detected during the {@link CompatibilityAdapter#scanMethods()} private function which is called shortly after the 
+     *constructor. <br>
+     * @param source The player, from where the Query originates from.
+     * @param target The Block which should be tested whether the player may break/alter.
+     * @return True if the player may break/alter the block, false otherwise
+     * @since 1.2.0
+     */
+    public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
+        return false; // TODO
+    }
 }

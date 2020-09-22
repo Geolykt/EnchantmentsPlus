@@ -44,6 +44,15 @@ public class Spectral extends CustomEnchantment {
      * @implNote Until 1.1.4 (included) this value was ignored and thus had the result of disabling the Spectral enchantment
      */
     public static boolean performWorldProtection = true;
+
+    /**
+     * Designates whether Bukkit-based world protection should be used (if false) or it's own native World protection 
+     * where individual plugins are queried (if true). <br>
+     * If false the Plugin supports more Compatibility however also allows for more exploits with plugins such as McMMO or Jobs. <br>
+     * This is used alongside {@link Spectral#performWorldProtection}, if performWorldProtection is false this field can be ignored.
+     * @since 1.2.0
+     */
+    public static boolean useNativeProtection;
     
     @Override
     public Builder<Spectral> defaults() {
@@ -60,6 +69,23 @@ public class Spectral extends CustomEnchantment {
                 .base(BaseEnchantments.SPECTRAL);
     }
 
+    /**
+     * This method queries the correct Permission interface, which place that may be is dependent on {@link Spectral#useNativeProtection}.
+     * @param blk The Block to query
+     * @param player The player that modified the block and thus is the "source" of the query
+     * @return True if the player is allowed to alter the given block, false otherwise
+     * @since 1.2.0
+     */
+    private static boolean permissionQuery (Block blk, Player player) {
+        if (useNativeProtection) {
+            return Storage.COMPATIBILITY_ADAPTER.nativeBlockPermissionQueryingSystem(player, blk);
+        } else {
+            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(blk, player);
+            Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
+            return !blockSpectralChangeEvent.isCancelled();
+        }
+    }
+    
     public boolean doEvent(PlayerInteractEvent evt, int level, boolean usedHand) {
         if (evt.getClickedBlock() == null) {
             return false;
@@ -82,11 +108,8 @@ public class Spectral extends CustomEnchantment {
         boolean doInteract = false;
         Material cache = null;
         if (performWorldProtection) {
-            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(evt.getClickedBlock(), p);
             for (final Block b : potentialBlocks) {
-                blockSpectralChangeEvent.adjustBlock(b);
-                Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
-                if (!blockSpectralChangeEvent.isCancelled()) {
+                if (permissionQuery(b, p)) {
                     if (cache == null) {
                         cache = cycleBlockType(b);
                         doInteract = blockstateInteract(b);
@@ -122,7 +145,14 @@ public class Spectral extends CustomEnchantment {
         return blocksChanged != 0;
     }
 
-    private boolean blockstateInteract(Block block) {
+    /**
+     * Internal Spectral utility to easy caching, the goal is to not unnecessarily change blockstates very often,
+     *  which is a resource-consuming task.<br>
+     * @param block The target block
+     * @return True if a change was performed, false otherwise
+     * @since 1.2.0
+     */
+    private static boolean blockstateInteract(Block block) {
         BlockData blockData = block.getBlockData();
         boolean performed = false;
         
@@ -249,7 +279,7 @@ public class Spectral extends CustomEnchantment {
         return DyeColor.values()[(oldCol.ordinal()+1)%DyeColor.values().length]; // TODO this is a hacky approach
     }
 
-    private Material cycleBlockType(Block block) {
+    private static Material cycleBlockType(Block block) {
         Material original = block.getType();
         Material newMat = Storage.COMPATIBILITY_ADAPTER.spectralConversionMap().getOrDefault(original, original);
         if ((newMat == original) && ColUtil.isDyeable(original)) {
@@ -267,7 +297,7 @@ public class Spectral extends CustomEnchantment {
         return newMat;
     }
     
-    private void cycleBlockType(Block block, final Material newMat, final boolean doBlockStateInteraction) {
+    private static void cycleBlockType(Block block, final Material newMat, final boolean doBlockStateInteraction) {
        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
            block.setType(newMat, false);
            if (doBlockStateInteraction) {

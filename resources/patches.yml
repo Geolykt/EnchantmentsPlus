@@ -8,6 +8,7 @@ patch_ench_protect:
   frozenstep_removeBlocksInsteadOfCancel: false
 worldProtection:
   spectral: true
+  native: true # If false the Plugin supports more Compatibility with world protection plugins however also allows for more exploits with plugins such as McMMO or Jobs.
 recipe:
   misc:
     arborist-doGoldenAppleDrop: true

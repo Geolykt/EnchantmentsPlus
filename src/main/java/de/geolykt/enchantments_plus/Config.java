@@ -181,6 +181,7 @@ public class Config {
         } else {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.ProvisionalLoreGatherer();
         }
+        Spectral.useNativeProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.native", true);
     }
 
     private static byte[] streamReadAllBytes(InputStream stream) {
