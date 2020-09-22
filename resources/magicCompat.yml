@@ -238,8 +238,8 @@ spectralConversions:
   - "GRASS_BLOCK:GRASS_PATH" # dirt-like conversions
   - "GRASS_PATH:DIRT"
   - "DIRT:MYCELIUM"
-  - "MYCELIUM:PODSOL"
-  - "PODSOL:COARSE_DIRT"
+  - "MYCELIUM:PODZOL"
+  - "PODZOL:COARSE_DIRT"
   - "COARSE_DIRT:GRASS_BLOCK"
   - "ICE:PACKED_ICE" # ice-like conversions
   - "PACKED_ICE:BLUE_ICE"
@@ -247,9 +247,9 @@ spectralConversions:
   - "WARPED_NYLIUM:CRIMSON_NYLIUM" # Nylium
   - "CRIMSON_NYLIUM:WARPED_NYLIUM"
   - "SAND:RED_SAND" # sand
-  - "RED_SAND:SAD"
-  - "OAK_LOG:STRIPPED_OAK" # Log - Stripped Log conversions
-  - "STRIPPED_OAK:OAK_LOG"
+  - "RED_SAND:SAND"
+  - "OAK_LOG:STRIPPED_OAK_LOG" # Log - Stripped Log conversions
+  - "STRIPPED_OAK_LOG:OAK_LOG"
   - "BIRCH_LOG:STRIPPED_BIRCH_LOG"
   - "STRIPPED_BIRCH_LOG:BIRCH_LOG"
   - "ACACIA_LOG:STRIPPED_ACACIA_LOG"

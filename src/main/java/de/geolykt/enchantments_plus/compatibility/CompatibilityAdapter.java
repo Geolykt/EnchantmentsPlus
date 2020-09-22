@@ -125,7 +125,6 @@ public class CompatibilityAdapter {
         }
         spectralMaterialConversion = new EnumMap<>(Material.class);
         for (String s : config.getStringList("spectralConversions")) {
-            System.out.println(s);
             spectralMaterialConversion.put(Material.matchMaterial(s.split(":")[0]), Material.matchMaterial(s.split(":")[1]));
         }
     }
