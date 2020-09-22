@@ -42,6 +42,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 import de.geolykt.enchantments_plus.Storage;
 
 public class CompatibilityAdapter {
@@ -643,6 +647,18 @@ public class CompatibilityAdapter {
     }
     
     private boolean legacyEntityShootBowEvent = false;
+    /**
+     * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
+     *  should target Towny, in most cases this is just a boolean that is true if towny was found, false otherwise.
+     */
+    private boolean perm_useTowny = false;
+    
+    /**
+     * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
+     *  should target WorldGuard, in most cases this is just a boolean that is true if WorldGuard was found, false otherwise. <br>
+     *  Note that this may not represent the actual state due to method not found issues.
+     */
+    private boolean perm_useWG = false;
     
     /**
      * Method that scans whether API methods can be used. It also checks whether plugin integrations are possible and enabled
@@ -661,6 +677,24 @@ public class CompatibilityAdapter {
             Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
                     + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
             legacyEntityShootBowEvent = true;
+        }
+
+        Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.RESET + ": Loading permission integrations. Please note that"
+                + " depending on the server lots of things will fail, don't worry much about that though "
+                + "(unless it fails even though it shouldn't)");
+        try {
+            Class.forName("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
+            perm_useTowny = true;
+            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.GREEN + ": Towny runtime found.");
+        } catch (ClassNotFoundException excepted) {
+            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.YELLOW + ": Towny runtime not found.");
+        }
+        try {
+            Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+            perm_useWG = true;
+            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.GREEN + ": Worldguard runtime found.");
+        } catch (ClassNotFoundException excepted) {
+            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.YELLOW + ": Worldguard runtime not found.");
         }
     }
     
@@ -708,6 +742,16 @@ public class CompatibilityAdapter {
      * @since 1.2.0
      */
     public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
-        return false; // TODO
+        
+        if (perm_useTowny && !(PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.BUILD)
+                || PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.DESTROY))) {
+            return false;
+        }
+        if (perm_useWG && !(WorldGuardPlugin.inst().createProtectionQuery().testBlockBreak(source, target) ||
+                WorldGuardPlugin.inst().createProtectionQuery().testBlockInteract(source, target))) {
+            return false;
+        }
+        // TODO Other plugins (factions, Grief protects, etc...) - Just create an issue to create priority if you need one in specific
+        return true;
     }
 }

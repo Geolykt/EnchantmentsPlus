@@ -15,6 +15,14 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository> <!-- For towny and other plugins -->
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository> <!-- For WG -->
+             <id>sk89q-repo</id>
+             <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -36,6 +44,20 @@
             <version>19.0.0</version>
         </dependency>
 
+        <!-- World protection plugins to integrate with -->
+        <dependency>
+            <groupId>com.github.TownyAdvanced</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.96.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.4-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
     </dependencies>
 
