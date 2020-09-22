@@ -119,132 +119,21 @@ public class Spectral extends CustomEnchantment {
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
         return doEvent(evt, level, usedHand);
     }
-    
+
     private static DyeColor nextCol(DyeColor oldCol) {
         return DyeColor.values()[(oldCol.ordinal()+1)%DyeColor.values().length]; // TODO this is a hacky approach
     }
 
-    private static boolean isDirtlike(Material in) {
-        switch (in) {
-        case GRASS_BLOCK:
-        case GRASS_PATH:
-        case DIRT:
-        case MYCELIUM:
-        case PODZOL:
-        case COARSE_DIRT:
-            return true;
-        default:
-            return false;
-        }
-    }
-    
-
     private Material cycleBlockType(Block block) {
         Material original = block.getType();
-        Material newMat = original;
-        
-        if (ColUtil.isDyeable(original)) {
+        Material newMat = Storage.COMPATIBILITY_ADAPTER.spectralConversionMap().getOrDefault(original, original);
+        if ((newMat == original) && ColUtil.isDyeable(original)) {
             newMat = ColUtil.getDyedVariant(ColUtil.getAbstractDyeableType(original), nextCol(ColUtil.getDye(original)));
-        } else if (isDirtlike(original)) {
-            switch (original) {
-            case GRASS_BLOCK:
-                newMat = Material.COARSE_DIRT;
-                break;
-            case GRASS_PATH:
-                newMat = Material.GRASS_BLOCK;
-                break;
-            case DIRT:
-                newMat = Material.GRASS_PATH;
-                break;
-            case MYCELIUM:
-                newMat = Material.DIRT;
-                break;
-            case PODZOL:
-                newMat = Material.MYCELIUM;
-                break;
-            case COARSE_DIRT:
-                newMat = Material.PODZOL;
-                break;
-            default:
-            }
-        } else if (Tag.LOGS.isTagged(original)) {
-            Material[] items = Tag.LOGS.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.SAND.isTagged(original)) {
-            Material[] items = Tag.SAND.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.LEAVES.isTagged(original)) {
-            Material[] items = Tag.LEAVES.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.ICE.isTagged(original)) {
-            Material[] items = Tag.ICE.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.PLANKS.isTagged(original)) {
-            Material[] items = Tag.PLANKS.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-            // FIXME 1.16.x only!
-        } else if (Tag.NYLIUM.isTagged(original)) {
-            Material[] items = Tag.NYLIUM.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        }else if (Tag.CORAL_BLOCKS.isTagged(original)) {
-            Material[] items = Tag.CORAL_BLOCKS.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.SAPLINGS.isTagged(original)) {
-            Material[] items = Tag.SAPLINGS.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
-        } else if (Tag.CORAL_PLANTS.isTagged(original)) {
-            Material[] items = Tag.CORAL_PLANTS.getValues().toArray(new Material[0]);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].equals(original)) {
-                    newMat = items[(i+1)%items.length];
-                    break;
-                }
-            }
         }
-        
-        if (!newMat.equals(original)) {
+
+        if (newMat != original) {
             BlockData blockData = block.getBlockData();
-            final Material newMatFinal = newMat;
+            final Material newMatFinal = newMat; // Why are we doing this?
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
 
                 block.setType(newMatFinal, false);

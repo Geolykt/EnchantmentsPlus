@@ -3,6 +3,7 @@ package de.geolykt.enchantments_plus.compatibility;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
@@ -63,6 +64,8 @@ public class CompatibilityAdapter {
 
     private EnumSet<Biome> dryBiomes;
     
+    private EnumMap<Material, Material> spectralMaterialConversion;
+    
     /**
      * Load the magic compatibility file
      * @param config The appropriate FileConfiguration
@@ -119,6 +122,11 @@ public class CompatibilityAdapter {
         dryBiomes = EnumSet.noneOf(Biome.class);
         for (String s : config.getStringList("dryBiomes")) {
             dryBiomes.add(Biome.valueOf(s));
+        }
+        spectralMaterialConversion = new EnumMap<>(Material.class);
+        for (String s : config.getStringList("spectralConversions")) {
+            System.out.println(s);
+            spectralMaterialConversion.put(Material.matchMaterial(s.split(":")[0]), Material.matchMaterial(s.split(":")[1]));
         }
     }
 
@@ -247,20 +255,21 @@ public class CompatibilityAdapter {
                 DAMAGE_RESISTANCE, FIRE_RESISTANCE, SPEED, JUMP, INVISIBILITY, INCREASE_DAMAGE, HEALTH_BOOST, HEAL,
                 REGENERATION, NIGHT_VISION, SATURATION, FAST_DIGGING, WATER_BREATHING, DOLPHINS_GRACE);
     }
-    
-    private static final int[] GLUTTONY_FOOD_LEVELS = {4, 5, 1, 6, 5, 3, 1, 6, 5, 6, 8, 5, 6, 2, 1, 2, 6, 8, 10, 8};
+
+    // TODO what do these values even mean?
+    private static final int[] GLUTTONY_FOOD_LEVELS = {4, 5, 1, 6, 5, 3, 1, 6, 5, 6, 8, 5, 6, 2, 1, 2, 6, 8, 10, 8}; 
 
     public int[] gluttonyFoodLevels() {
         return GLUTTONY_FOOD_LEVELS;
     }
-    
+
     private static final double[] GLUTTONY_SATURATIONS = {2.4, 6, 1.2, 7.2, 6, 3.6, 0.2, 7.2, 6, 9.6, 12.8, 6, 9.6, 0.4, 0.6,
             1.2, 7.2, 4.8, 12, 12.8};
 
     public double[] gluttonySaturations() {
         return GLUTTONY_SATURATIONS;
     }
-    
+
     private final Material[] GLUTTONY_FOOD_ITEMS = new Material[]{
             Material.APPLE, Material.BAKED_POTATO, Material.BEETROOT, 
             Material.BEETROOT_SOUP, Material.BREAD, Material.CARROT, Material.TROPICAL_FISH, Material.COOKED_CHICKEN, 
@@ -270,6 +279,18 @@ public class CompatibilityAdapter {
 
     public Material[] gluttonyFoodItems() {
         return GLUTTONY_FOOD_ITEMS;
+    }
+
+    /**
+     * The spectral conversion map provides mappings from the source material to the target material, those are meant to represent
+     * (former) blockstate changes, which however was now adapted to convert between Materials since the flattening. <br>
+     * As such, the Materials may not be totally related to each other, but with the MagicCompat.yml file everything can be changed now<br>
+     * The reason an Enum Map is being used over the "traditional" dynamic approach with Tags.
+     * @return An Enum Map used by the Spectral enchantment, using it outside of it may have little use. The exact values are user-generated.
+     * @since 1.2.0
+     */
+    public EnumMap<Material, Material> spectralConversionMap() {
+        return spectralMaterialConversion;
     }
 
     // Removes the given ItemStack's durability by the given 'damage' and then sets the item direction the given
