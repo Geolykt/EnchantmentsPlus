@@ -2,6 +2,7 @@ package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Guardian;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -19,7 +20,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static de.geolykt.enchantments_plus.enums.Tool.ROD;
-import static org.bukkit.entity.EntityType.SQUID;
 
 public class MysteryFish extends CustomEnchantment {
 
@@ -30,12 +30,12 @@ public class MysteryFish extends CustomEnchantment {
     @Override
     public Builder<MysteryFish> defaults() {
         return new Builder<>(MysteryFish::new, ID)
-            .maxLevel(3)
+            .maxLevel(1)
             .loreName("Mystery Fish")
             .probability(0)
             .enchantable(new Tool[]{ROD})
             .conflicting()
-            .description("Catches water mobs like Squid and Guardians")
+            .description("Catches water mobs and fishes")
             .cooldown(0)
             .power(1.0)
             .handUse(Hand.RIGHT)
@@ -44,15 +44,31 @@ public class MysteryFish extends CustomEnchantment {
 
     @Override
     public boolean onPlayerFish(final PlayerFishEvent evt, int level, boolean usedHand) {
-        if (Storage.rnd.nextInt(10) < level * power) {
+        if (Storage.rnd.nextInt((int) (6-power)) < level) {
             //TODO also spawn fish
             if (evt.getCaught() != null) {
                 Location location = evt.getCaught().getLocation();
-                if (Storage.rnd.nextBoolean()) {
-                    evt.getPlayer().getWorld().spawnEntity(location, SQUID);
-                } else {
+                switch (Storage.rnd.nextInt(7)) {
+                case 0:
+                    evt.getPlayer().getWorld().spawnEntity(location, EntityType.SQUID);
+                    break;
+                case 1:
+                case 2:
                     final Entity g = Storage.COMPATIBILITY_ADAPTER.spawnGuardian(location, Storage.rnd.nextBoolean());
                     guardianMove.put(g, evt.getPlayer());
+                    break;
+                case 3:
+                    evt.getPlayer().getWorld().spawnEntity(location, EntityType.COD);
+                    break;
+                case 4:
+                    evt.getPlayer().getWorld().spawnEntity(location, EntityType.PUFFERFISH);
+                    break;
+                case 5:
+                    evt.getPlayer().getWorld().spawnEntity(location, EntityType.SALMON);
+                    break;
+                case 6:
+                    evt.getPlayer().getWorld().spawnEntity(location, EntityType.TROPICAL_FISH);
+                    break;
                 }
             }
         }

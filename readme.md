@@ -46,16 +46,19 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
   <ul>
    <li>Fixed the Reveal enchantment, with it's own twist</li>
    <li>Added an enchantment gatherer denylist - only works with NBT right now</li>
-   <li>The color of the laser can now be changed for purely costmetical reasons. Why? Don't ask.</li>
+   <li>The color of the laser can now be changed for purely costmetical reasons. Why? Don't ask</li>
    <li>Help and tab completion now handle permissions</li>
+   <li>Mystery fish can now catch other water mobs such as cod, pufferfish and salmon and was buffed overall</li>
   </ul>
  </li>
  <li>Patches:
   <ul>
    <li>Fire enchantment no longer OOMs when attempting to smelt unsmeltable stuff</li>
-   <li>Added toggleable shred cooldown when the laser enchantment is used.</li>
-   <li>Fixed potential bug with the vortex enchantment, the specifics are unknown.</li>
+   <li>Added toggleable shred cooldown when the laser enchantment is used</li>
+   <li>Fixed potential bug with the vortex enchantment, the specifics are unknown</li>
    <li>Mitigated severe lag issues with the Spectral enchantment, also performed some optimisations. To get to the pervious way of how the enchantment worked, put the enchantment power to really high values</li>
+   <li>Spectral now can use it's own Protection system nullifying the risk of McMMO/Jobs exploits</li>
+   <li>Spectral performance increased noticeably.</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
