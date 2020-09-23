@@ -65,6 +65,8 @@ public class CompatibilityAdapter {
     private EnumSet<Material> terraformerAllowlist;
     private EnumSet<Material> shredAllowlistPickaxes;
     private EnumSet<Material> shredAllowlistShovels;
+    private EnumSet<Material> lumberTrunkBlocks;
+    private EnumSet<Material> lumberAllowBlocks;
 
     private EnumSet<Biome> dryBiomes;
     
@@ -122,6 +124,14 @@ public class CompatibilityAdapter {
         shredAllowlistShovels = EnumSet.noneOf(Material.class);
         for (String s : config.getStringList("shredAllowlistShovels")) {
             shredAllowlistShovels.add(Material.matchMaterial(s));
+        }
+        lumberTrunkBlocks = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList("lumberTrunks")) {
+            lumberTrunkBlocks.add(Material.matchMaterial(s));
+        }
+        lumberAllowBlocks = lumberTrunkBlocks.clone();
+        for (String s : config.getStringList("lumberAllowlist")) {
+            lumberAllowBlocks.add(Material.matchMaterial(s));
         }
         dryBiomes = EnumSet.noneOf(Biome.class);
         for (String s : config.getStringList("dryBiomes")) {
@@ -246,6 +256,28 @@ public class CompatibilityAdapter {
 
     public EnumSet<Material> shredShovels() {
         return shredAllowlistShovels;
+    }
+
+    /**
+     * Returns the base lumber trunk blocks, which are usually logs but can be user-modified to returns arbitrary Materials. <br>
+     * More specifically, this list is used to calculate which blocks will be removed when the lumber enchantment is used.
+     * @return An EnumSet with arbitrary values, usually logs.
+     * @since 1.2.0
+     */
+    public EnumSet<Material> lumberTrunk() {
+        return lumberTrunkBlocks;
+    }    
+
+    /**
+     * Returns the additional lumber allowlist blocks, which usually are an extension of the {@link CompatibilityAdapter#lumberTrunk()}
+     * set. <br> The internal usage is to calculate where the BFS Algorithm should not stop and as such all lumberTrunk Materials should
+     * exist in this set. <br> It is useful to do big-tree calculations as some bigger tree won't be purely be made out of logs. <br>
+     * However may also contain blocks that should not be removed (e.g. leaves as per default)
+     * @return An EnumSet with arbitrary values
+     * @since 1.2.0
+     */
+    public EnumSet<Material> lumberAllow() {
+        return lumberAllowBlocks;
     }
 
     public List<Material> persephoneCrops() {
