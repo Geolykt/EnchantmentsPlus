@@ -448,7 +448,7 @@ enchantments:
       Tools: Pickaxe
       Name: Switch
       Max Level: 1
-      Cooldown: 0
+      Cooldown: 1
       Power: 1.0
   - Terraformer:
       Probability: 1.0

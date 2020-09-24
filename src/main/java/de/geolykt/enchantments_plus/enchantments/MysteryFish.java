@@ -45,7 +45,6 @@ public class MysteryFish extends CustomEnchantment {
     @Override
     public boolean onPlayerFish(final PlayerFishEvent evt, int level, boolean usedHand) {
         if (Storage.rnd.nextInt((int) (6-power)) < level) {
-            //TODO also spawn fish
             if (evt.getCaught() != null) {
                 Location location = evt.getCaught().getLocation();
                 switch (Storage.rnd.nextInt(7)) {

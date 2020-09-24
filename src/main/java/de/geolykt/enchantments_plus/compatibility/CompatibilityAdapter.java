@@ -349,6 +349,8 @@ public class CompatibilityAdapter {
     }
 
     public static ItemStack damageItem(ItemStack stack, int damage) {
+        if (stack == null || stack.getType() == Material.AIR)
+            return new ItemStack(Material.AIR);
         if (!stack.getItemMeta().isUnbreakable()) {
             for (int i = 0; i < damage; i++) {
                 if (RND.nextInt(100) <= (100 / (stack.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
