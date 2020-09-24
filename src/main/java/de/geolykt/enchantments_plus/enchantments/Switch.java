@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
@@ -64,13 +65,17 @@ public class Switch extends CustomEnchantment {
                 return false;
             }
 
+            Block clickedBlock = evt.getClickedBlock();
+            
             // Block has been selected, attempt breaking
-            if (!ADAPTER.breakBlockNMS(evt.getClickedBlock(), evt.getPlayer())) {
+            if (Spectral.permissionQuery(clickedBlock, player, BaseEnchantments.SWITCH)) {
+                evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand());
+                CompatibilityAdapter.damageTool(player, 1, true);
+            } else {
                 return false;
             }
 
             // Breaking succeeded, begin invasive operations
-            Block clickedBlock = evt.getClickedBlock();
             Grab.grabLocs.put(clickedBlock, evt.getPlayer());
             evt.setCancelled(true);
 

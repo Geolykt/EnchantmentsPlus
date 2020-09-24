@@ -32,7 +32,9 @@ public class BlockSpectralChangeEvent extends BlockBreakEvent  {
      * @param player The player that is targeted
      * @since 1.0
      * @throws IllegalStateException If the {@link Spectral#performWorldProtection} is false, at which the constructor is disabled.
+     * @deprecated This is no longer used internally, {@link BlockSpectralChangeEvent#BlockSpectralChangeEvent(Block, Player, BaseEnchantments)} should be used instead
      */
+    @Deprecated
     public BlockSpectralChangeEvent(@NotNull Block theBlock, @NotNull Player player) {
         this(theBlock, player, BaseEnchantments.SPECTRAL);
         if (!Spectral.performWorldProtection) {

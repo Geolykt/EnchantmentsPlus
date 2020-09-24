@@ -73,14 +73,15 @@ public class Spectral extends CustomEnchantment {
      * This method queries the correct Permission interface, which place that may be is dependent on {@link Spectral#useNativeProtection}.
      * @param blk The Block to query
      * @param player The player that modified the block and thus is the "source" of the query
+     * @param ench the Enchantment that is used for the {@link BlockSpectralChangeEvent}
      * @return True if the player is allowed to alter the given block, false otherwise
-     * @since 1.2.0
+     * @since 1.2.1
      */
-    private static boolean permissionQuery (Block blk, Player player) {
+    protected static boolean permissionQuery (Block blk, Player player, BaseEnchantments ench) {
         if (useNativeProtection) {
             return Storage.COMPATIBILITY_ADAPTER.nativeBlockPermissionQueryingSystem(player, blk);
         } else {
-            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(blk, player);
+            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(blk, player, ench);
             Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
             return !blockSpectralChangeEvent.isCancelled();
         }
@@ -109,7 +110,7 @@ public class Spectral extends CustomEnchantment {
         Material cache = null;
         if (performWorldProtection) {
             for (final Block b : potentialBlocks) {
-                if (permissionQuery(b, p)) {
+                if (permissionQuery(b, p, BaseEnchantments.SPECTRAL)) {
                     if (cache == null) {
                         cache = cycleBlockType(b);
                         doInteract = blockstateInteract(b);
