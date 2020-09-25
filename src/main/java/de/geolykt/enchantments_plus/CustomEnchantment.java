@@ -794,15 +794,27 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     static class PersistentDataGatherer implements IEnchGatherer {
         private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
         private final boolean doCompat;
-        private final Collection<Material> getterDenyList;
-        private final boolean isGetterAllowlist; // Defines whether the above collection should be used as an allowlist instead
+        private final EnumSet<Material> getterDenyList;
+
+        /**
+         *  If true the {@link #getterDenyList} denylist will be used as a allowlist, false if it should be kept a denylist
+         * @since 1.1.4
+         */
+        private final boolean isGetterAllowlist;
 
         /**
          * Used for enchantment conversion purposes
          */
         public final NamespacedKey ench_converted;
 
-        public PersistentDataGatherer(Collection<Material> denylist, boolean allowlistToggle, boolean doCompat2) {
+        /**
+         * Constructor
+         * @param denylist The denylist that should be used (items in the denylist will always return an empty enchantment list)
+         * @param allowlistToggle If true the denylist will be used as a allowlist, false if it should be kept a denylist
+         * @param doCompat2 Whether compatibility should be enforced
+         * @since 1.1.4
+         */
+        public PersistentDataGatherer(EnumSet<Material> denylist, boolean allowlistToggle, boolean doCompat2) {
             ench_converted = new NamespacedKey(Storage.enchantments_plus, "e_convert");
             getterDenyList = denylist;
             isGetterAllowlist = allowlistToggle;
@@ -833,10 +845,13 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 if (stk.hasItemMeta()) {
                     //TODO what would be the best approach to remove the nesting in the two conditions? Ideally in a single if clause
                     if (isGetterAllowlist) {
+                        // denylist is an allowlist
+                        // if item is not in the allowlist, then return nothing
                         if (!getterDenyList.contains(stk.getType())) {
                             return new LinkedHashMap<>();
                         }
                     } else {
+                        // if item is not in the denylist, then return nothing
                         if (getterDenyList.contains(stk.getType())) {
                             return new LinkedHashMap<>();
                         }

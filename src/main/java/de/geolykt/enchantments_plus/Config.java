@@ -169,13 +169,23 @@ public class Config {
         Laser.doShredCooldown = PATCH_CONFIGURATION.getBoolean("nerfs.shredCoolDownOnLaser", true);
 
         if (PATCH_CONFIGURATION.getString("enchantmentGatherer", "NBT").equals("NBT")) {
-            Collection<Material> col = EnumSet.noneOf(Material.class);
-            boolean doCompat = PATCH_CONFIGURATION.getBoolean("compatibility", false);
-            for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
-                col.add(Material.matchMaterial(s));
+            EnumSet<Material> denylist = EnumSet.noneOf(Material.class);
+            if (PATCH_CONFIGURATION.getBoolean("denyPartial", false)) {
+                for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
+                    for (Material m : Material.values()) {
+                        if (m.toString().toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
+                            denylist.add(m);
+                        }
+                    }
+                }
+            } else {
+                for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
+                    denylist.add(Material.matchMaterial(s));
+                }
             }
+            boolean doCompat = PATCH_CONFIGURATION.getBoolean("compatibility", false);
             boolean allowlistToggle = PATCH_CONFIGURATION.getBoolean("allowlistSwitch", false);
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(col, allowlistToggle, doCompat);
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(denylist, allowlistToggle, doCompat);
         } else if (PATCH_CONFIGURATION.getString("enchantmentGatherer").equals("PR47-lore")) {
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
         } else {
