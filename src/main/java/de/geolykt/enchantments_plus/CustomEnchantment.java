@@ -45,7 +45,7 @@ import static org.bukkit.Material.ENCHANTED_BOOK;
 public abstract class CustomEnchantment implements Comparable<CustomEnchantment> {
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
-    public static IEnchGatherer Enchantment_Adapter = new ProvisionalLoreGatherer();
+    public static IEnchGatherer Enchantment_Adapter = new LegacyLoreGatherer();
     
     protected int id;
 
@@ -639,7 +639,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
     
     /**
-     * The legacy Adapter for gathering Enchantments used up until 1.16
+     * The legacy Adapter for gathering Enchantments used up until 1.16. <br>
+     * Unlike it's name implies, it is still used for performance reasons and as such should be preferred over other implementations,
+     * unless it's because of stability reasons. <br>
+     * It was changed to the default adapter on release 1.2.1.
+     * @since 1.0.0
      */
     static class LegacyLoreGatherer implements IEnchGatherer {
     	// Returns a mapping of custom enchantments and their level on a given tool
@@ -787,39 +791,61 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     /**
-     * The Enchantment gatherer used by <a href="https://github.com/Geolykt/NMSless-Enchantments_plus">
-     *  Geolykt's NMSless-Enchantments_plus </a>, the implementation uses Persistent Data to store
-     *  it's data. It is modified to be backwards compatible
+     * A more advanced form of the LegacyLoreGatherer with a denylist/allowlist
+     * @since 1.2.1
      */
-    static class PersistentDataGatherer implements IEnchGatherer {
-        private LegacyLoreGatherer legacyGatherer = new LegacyLoreGatherer();
-        private final boolean doCompat;
-        private final EnumSet<Material> getterDenyList;
+    static class advancedLoreGetter extends LegacyLoreGatherer {
+        private final EnumSet<Material> getterAllowlistList;
 
         /**
-         *  If true the {@link #getterDenyList} denylist will be used as a allowlist, false if it should be kept a denylist
-         * @since 1.1.4
+         *  If true the {@link #getterAllowlistList} denylist will be used as a allowlist, false if it should be kept an allowlist
+         * @since 1.2.1
          */
-        private final boolean isGetterAllowlist;
+        private final boolean isDenyList;
 
         /**
-         * Used for enchantment conversion purposes
+         * Constructor which specifies the Allowlist/denylist
+         * @param allowlist The allowlist that should be used (items in the allowlist will always return an empty enchantment list)
+         * @param denylistToggle If false the allowlist stays an allowlist, true if it should be changed into a denylist
+         * @since 1.2.1
          */
-        public final NamespacedKey ench_converted;
-
-        /**
-         * Constructor
-         * @param denylist The denylist that should be used (items in the denylist will always return an empty enchantment list)
-         * @param allowlistToggle If true the denylist will be used as a allowlist, false if it should be kept a denylist
-         * @param doCompat2 Whether compatibility should be enforced
-         * @since 1.1.4
-         */
-        public PersistentDataGatherer(EnumSet<Material> denylist, boolean allowlistToggle, boolean doCompat2) {
-            ench_converted = new NamespacedKey(Storage.enchantments_plus, "e_convert");
-            getterDenyList = denylist;
-            isGetterAllowlist = allowlistToggle;
-            doCompat = doCompat2;
+        public advancedLoreGetter(EnumSet<Material> allowlist, boolean denylistToggle) {
+            getterAllowlistList = allowlist;
+            isDenyList = denylistToggle;
         }
+
+        @Override
+        public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
+                List<String> outExtraLore) {
+            if (stk != null) {
+                //TODO what would be the best approach to remove the nesting in the two conditions? Ideally in a single if clause
+                if (isDenyList) {
+                    // if item is in the allowlist, then return nothing
+                    if (getterAllowlistList.contains(stk.getType())) {
+                        return new LinkedHashMap<>();
+                    }
+                } else {
+                    // if item is not in the allowlist, then return nothing
+                    if (!getterAllowlistList.contains(stk.getType())) {
+                        return new LinkedHashMap<>();
+                    }
+                }
+                return super.getEnchants(stk, acceptBooks, world, outExtraLore);
+            } else {
+                return new LinkedHashMap<>(0);
+            }
+        }
+        
+    }
+    
+    /**
+     * The lightWeightNBTGetter, which is a more lightweight variant of the usual NBT getter, however lacks some important features 
+     *  such as denylists or automatic conversions / compatibility mode. <br>
+     *  Only functional for 1.16+
+     *  @see PersistentDataGatherer
+     *  @since 1.2.1
+     */
+    static class lwNBTGetter implements IEnchGatherer {
 
         @Override
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
@@ -843,32 +869,8 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
             if ( (stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
                 if (stk.hasItemMeta()) {
-                    //TODO what would be the best approach to remove the nesting in the two conditions? Ideally in a single if clause
-                    if (isGetterAllowlist) {
-                        // denylist is an allowlist
-                        // if item is not in the allowlist, then return nothing
-                        if (!getterDenyList.contains(stk.getType())) {
-                            return new LinkedHashMap<>();
-                        }
-                    } else {
-                        // if item is not in the denylist, then return nothing
-                        if (getterDenyList.contains(stk.getType())) {
-                            return new LinkedHashMap<>();
-                        }
-                    }
+                    
                     final PersistentDataContainer cont = stk.getItemMeta().getPersistentDataContainer();
-
-                    if (doCompat && cont.getOrDefault(ench_converted, PersistentDataType.BYTE, (byte) 0) == 0) {
-                        //Legacy conversion
-                        map = legacyGatherer.getEnchants(stk, acceptBooks, world, outExtraLore);
-                        for (Map.Entry<CustomEnchantment, Integer> ench : map.entrySet()) {
-                            this.setEnchantment(stk, ench.getKey(), ench.getValue(), world);
-                        }
-                        ItemMeta itemMeta = stk.getItemMeta();
-                        itemMeta.getPersistentDataContainer().set(ench_converted, PersistentDataType.BYTE, (byte) 1);
-                        stk.setItemMeta(itemMeta);
-                        return map;
-                    }
 
                     Set<NamespacedKey> keys = cont.getKeys();
 
@@ -946,10 +948,69 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         }
     }
     
+    /**
+     * The Enchantment gatherer used by <a href="https://github.com/Geolykt/NMSless-Zenchantments">
+     *  Geolykt's NMSless-Enchantments_plus </a>, the implementation uses Persistent Data to store
+     *  it's data modified for various reasons.<br>
+     *  For performance reasons it's not recommended to use it,
+     *  however it may be used when stability is a bigger concern as it doesn't use string manipulation. <br>
+     *  Only functional for 1.16+
+     *  @see LegacyLoreGatherer
+     *  @see lwNBTGetter
+     *  @since 1.0.0
+     */
+    static class PersistentDataGatherer extends lwNBTGetter {
+        private final EnumSet<Material> getterDenyList;
+
+        /**
+         *  If true the {@link #getterDenyList} denylist will be used as a allowlist, false if it should be kept a denylist
+         * @since 1.1.4
+         */
+        private final boolean isGetterAllowlist;
+
+        /**
+         * Constructor
+         * @param denylist The denylist that should be used (items in the denylist will always return an empty enchantment list)
+         * @param allowlistToggle If true the denylist will be used as a allowlist, false if it should be kept a denylist
+         * @param doCompat2 Whether compatibility should be enforced - unused
+         * @since 1.1.4
+         */
+        public PersistentDataGatherer(EnumSet<Material> denylist, boolean allowlistToggle, boolean doCompat2) {
+            getterDenyList = denylist;
+            isGetterAllowlist = allowlistToggle;
+        }
+
+        @Override
+        public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
+                List<String> outExtraLore) {
+            if (stk != null) {
+                //TODO what would be the best approach to remove the nesting in the two conditions? Ideally in a single if clause
+                if (isGetterAllowlist) {
+                    // denylist is an allowlist
+                    // if item is not in the allowlist, then return nothing
+                    if (!getterDenyList.contains(stk.getType())) {
+                        return new LinkedHashMap<>();
+                    }
+                } else {
+                    // if item is not in the denylist, then return nothing
+                    if (getterDenyList.contains(stk.getType())) {
+                        return new LinkedHashMap<>();
+                    }
+                }
+                return super.getEnchants(stk, acceptBooks, world, outExtraLore);
+            } else {
+                return new LinkedHashMap<>(0);
+            }
+        }
+    }
+    
     
     /**
-     * The upstream's implementation of handling enchantments post 1.16
+     * The upstream's implementation of handling enchantments post 1.16.
+     * @since 1.0.0
+     * @deprecated This implementation is known to not be stable and is unmaintained. Will be removed in the next big release.
      */
+    @Deprecated
     static class ProvisionalLoreGatherer implements IEnchGatherer {
 
         private static final Pattern ENCH_LORE_PATTERN = Pattern.compile("§[a-fA-F0-9]([^§]+?)(?:$| $| (I|II|III|IV|V|VI|VII|VIII|IX|X)$)");

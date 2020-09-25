@@ -41,7 +41,6 @@ public class TaskRunner implements Runnable {
                 Class<?> clazz = classinfo.loadClass();
                 for (Method meth : clazz.getDeclaredMethods()) {
                     if (meth.isAnnotationPresent(EffectTask.class)) {
-                      System.out.println(meth.getName());
                         tasks.add(meth);
                     }
                 }

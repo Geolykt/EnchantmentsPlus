@@ -16,8 +16,14 @@ nerfs:
   siphonRatio: 0.5
   siphonsubstractAmour: true
   shredCoolDownOnLaser: true
-enchantmentGatherer: "NBT" # `NBT` uses our cozy NBT-based storage format, `PR47-lore` is another implementation for lore based conversion, `upstream` is upstream's provisional lore based implementation. There is not much difference between the last two implementations
-compatibility: true # only has an effect if NBT is used above, if set to true, it will use PR47-lore to read non-converted enchantments and convert them, it is only done once per item, but is relatively slow nonetheless
+# Specifies the reader / writer for enchantments. They can be divided into two main categories, NBT getters and Lore getters, NBT getters are more stable, however can bork other plugins and are inefficent
+# Lore Getters are more efficent, however prone to break with some edge-case plugins. they also have implicit backwards-compatibillity. The also work before 1.16
+# NBT The highly configurable, but laggy NBT getter
+# lwNBT The not very configurable, but stable NBT getter
+# PR47-lore The not very configurable, but stable Lore getter, the name comes from the PR it was introduced first, PR #47
+# advLore The higly configurable experimental Lore getter
+# upstream Will be removed in 2.0.0 as it's not exactly known to be stable in any kind. It's a Lore getter and works with Regex instead of split unlike other implementations.
+enchantmentGatherer: "advLore"
 getterDeny: # the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items. Only works for NBT
   - "SWORD"
   - "AXE"

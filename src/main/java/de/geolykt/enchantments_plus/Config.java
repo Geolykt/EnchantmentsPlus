@@ -154,6 +154,7 @@ public class Config {
 
     // Loads, parses, and auto updates the config file, creating a new config for
     // each map
+    @SuppressWarnings("deprecation")
     public static void loadConfigs() {
         CONFIGS.clear();
         WatcherEnchant.apply_patch_explosion = PATCH_CONFIGURATION.getBoolean("explosion.enable", true);
@@ -169,8 +170,30 @@ public class Config {
         Siphon.ratio = PATCH_CONFIGURATION.getDouble("nerfs.siphonRatio", 0.5);
         Siphon.calcAmour = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);
         Laser.doShredCooldown = PATCH_CONFIGURATION.getBoolean("nerfs.shredCoolDownOnLaser", true);
-
-        if (PATCH_CONFIGURATION.getString("enchantmentGatherer", "NBT").equals("NBT")) {
+        
+        switch (PATCH_CONFIGURATION.getString("enchantmentGatherer", "advLore")) {
+        case "advLore":
+            EnumSet<Material> allowlist = EnumSet.noneOf(Material.class);
+            if (PATCH_CONFIGURATION.getBoolean("denyPartial", false)) {
+                for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
+                    for (Material m : Material.values()) {
+                        if (m.toString().toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
+                            allowlist.add(m);
+                        }
+                    }
+                }
+            } else {
+                for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
+                    allowlist.add(Material.matchMaterial(s));
+                }
+            }
+            boolean denylistToggle = !PATCH_CONFIGURATION.getBoolean("allowlistSwitch", false); // Inverted because why not? FIXME Refractor
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.advancedLoreGetter(allowlist, denylistToggle);
+            break;
+        case "lwNBT":
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.lwNBTGetter();
+            break;
+        case "NBT":
             EnumSet<Material> denylist = EnumSet.noneOf(Material.class);
             if (PATCH_CONFIGURATION.getBoolean("denyPartial", false)) {
                 for (String s : PATCH_CONFIGURATION.getStringList("getterDeny")) {
@@ -185,13 +208,17 @@ public class Config {
                     denylist.add(Material.matchMaterial(s));
                 }
             }
-            boolean doCompat = PATCH_CONFIGURATION.getBoolean("compatibility", false);
             boolean allowlistToggle = PATCH_CONFIGURATION.getBoolean("allowlistSwitch", false);
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(denylist, allowlistToggle, doCompat);
-        } else if (PATCH_CONFIGURATION.getString("enchantmentGatherer").equals("PR47-lore")) {
+            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(denylist, allowlistToggle, false);
+            break;
+        case "PR47-lore":
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
-        } else {
+            break;
+        case "upstream":
             CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.ProvisionalLoreGatherer();
+            break;
+        default:
+            Bukkit.getLogger().severe(Storage.MINILOGO + ChatColor.RED + "No (or invalid) enchantment gatherer specified, fallback to default.");
         }
         Spectral.useNativeProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.native", true);
     }
