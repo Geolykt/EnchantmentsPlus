@@ -1,14 +1,15 @@
 package de.geolykt.enchantments_plus;
 
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.Bukkit;
 
 import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.enums.Frequency;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -33,21 +34,19 @@ public class TaskRunner implements Runnable {
         this.logger = Bukkit.getLogger();
 
         tasks = new HashSet<>();
-
-        new FastClasspathScanner(Enchantments_plus.class.getPackage().getName()).overrideClasspath(Storage.pluginPath)
-                .matchClassesWithMethodAnnotation(
-                        EffectTask.class,
-                        (clazz, method) -> {
-                            if (!Modifier.isStatic(method.getModifiers())) {
-                                this.logger.warning(
-                                        "EffectTask on non-static method '" + method.getName() + "' in class '"
-                                        + clazz.getName() + "'");
-                            }
-                            if (method.getAnnotation(EffectTask.class).value() == freq) {
-                                assert method instanceof Method : "Event annotation not valid on constructors";
-                                tasks.add((Method) method);
-                            }
-                        }).scan();
+        try (ScanResult scanResult = new ClassGraph().acceptPackages("de.geolykt.enchantments_plus")
+                .enableAnnotationInfo()
+                .enableMethodInfo().scan()) {
+            for (ClassInfo classinfo : scanResult.getClassesWithMethodAnnotation(EffectTask.class.getName())) {
+                Class<?> clazz = classinfo.loadClass();
+                for (Method meth : clazz.getDeclaredMethods()) {
+                    if (meth.isAnnotationPresent(EffectTask.class)) {
+                      System.out.println(meth.getName());
+                        tasks.add(meth);
+                    }
+                }
+            }
+        }
     }
 
     /**

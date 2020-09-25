@@ -1,6 +1,5 @@
 package de.geolykt.enchantments_plus;
 
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,12 +14,15 @@ import de.geolykt.enchantments_plus.enchantments.Siphon;
 import de.geolykt.enchantments_plus.enchantments.Spectral;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -288,13 +290,14 @@ public class Config {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
             }
-            List<Class<? extends CustomEnchantment>> customEnchantments = new ArrayList<>();
-            new FastClasspathScanner(CustomEnchantment.class.getPackage().getName())
-                    .overrideClasspath(Storage.pluginPath)
-                    .matchSubclassesOf(CustomEnchantment.class, customEnchantments::add).scan();
+            Collection<Class<? extends CustomEnchantment>> customEnchantments = new ArrayList<>();
+            try (ScanResult scanResult = new ClassGraph().acceptPackages("de.geolykt.enchantments_plus.enchantments")
+                    .enableClassInfo().scan()) {
+                customEnchantments.addAll(scanResult.getAllClasses().loadClasses(CustomEnchantment.class));
+            }
             for (Class<? extends CustomEnchantment> cl : customEnchantments) {
                 try {
-                    CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.newInstance().defaults();
+                    CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.getDeclaredConstructor().newInstance().defaults();
                     if (configInfo.containsKey(ench.loreName())) {
                         LinkedHashMap<String, Object> data = configInfo.get(ench.loreName());
                         ench.probability(getProbability(data));
@@ -307,7 +310,8 @@ public class Config {
                             enchantments.add(ench.build());
                         }
                     }
-                } catch (IllegalAccessException | ClassCastException | InstantiationException ex) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                        NoSuchMethodException | SecurityException ex) {
                     System.err.printf("Error parsing config for enchantment '%s'. Skipping.", cl.getName());
                 }
             }

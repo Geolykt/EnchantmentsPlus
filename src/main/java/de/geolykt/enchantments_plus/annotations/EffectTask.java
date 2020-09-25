@@ -9,7 +9,6 @@ import de.geolykt.enchantments_plus.enums.Frequency;
  * Method annotation used by {@link TaskRunner} to control frequency of execution of scheduled
  * events. Annotations must only be on static methods.
  */
-
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
