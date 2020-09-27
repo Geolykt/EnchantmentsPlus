@@ -8,14 +8,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import de.geolykt.enchantments_plus.enchantments.Arborist;
-import de.geolykt.enchantments_plus.enchantments.Laser;
-import de.geolykt.enchantments_plus.enchantments.Siphon;
-import de.geolykt.enchantments_plus.enchantments.Spectral;
+import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ScanResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,12 +21,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-// This class manages indivudual world configs, loading them each from the config file. It will start the process
+// This class manages individual world configs, loading them each from the config file. It will start the process
 //      to automatically update the config files if they are old
 public class Config {
 
     public static final Map<World, Config> CONFIGS = new HashMap<>(); // Map of all world configs on the current server
-    public static final HashSet<CustomEnchantment> allEnchants = new HashSet<>();
+    public static final Set<CustomEnchantment> allEnchants = new HashSet<>(72); // Set of all active Custom enchantments in form of instances.
+    
+    /**
+     * This variable holds the classes of every registered enchantment in the plugin, please do not modify the variable, as it may have some
+     * Unforeseen consequences.
+     * @since 1.2.2
+     */
+    public static final Set<Class<? extends CustomEnchantment>> REGISTERED_ENCHANTMENTS = new HashSet<>(72);
 
     private static final int CONFIG_BUFFER_SIZE = 16 * 1024;
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
@@ -317,12 +319,7 @@ public class Config {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
             }
-            Collection<Class<? extends CustomEnchantment>> customEnchantments = new ArrayList<>();
-            try (ScanResult scanResult = new ClassGraph().acceptPackages("de.geolykt.enchantments_plus.enchantments")
-                    .enableClassInfo().scan()) {
-                customEnchantments.addAll(scanResult.getAllClasses().loadClasses(CustomEnchantment.class));
-            }
-            for (Class<? extends CustomEnchantment> cl : customEnchantments) {
+            for (Class<? extends CustomEnchantment> cl : REGISTERED_ENCHANTMENTS) {
                 try {
                     CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.getDeclaredConstructor().newInstance().defaults();
                     if (configInfo.containsKey(ench.loreName())) {
@@ -414,6 +411,80 @@ public class Config {
             Storage.enchantments_plus.saveResource("patches.yml", false);
         }
         PATCH_CONFIGURATION = YamlConfiguration.loadConfiguration(patchFile);
+        
+        REGISTERED_ENCHANTMENTS.add(Anthropomorphism.class);
+        REGISTERED_ENCHANTMENTS.add(Apocalypse.class);
+        REGISTERED_ENCHANTMENTS.add(Arborist.class);
+        REGISTERED_ENCHANTMENTS.add(Bind.class);
+        REGISTERED_ENCHANTMENTS.add(BlazesCurse.class);
+        REGISTERED_ENCHANTMENTS.add(Blizzard.class);
+        REGISTERED_ENCHANTMENTS.add(Bounce.class);
+        REGISTERED_ENCHANTMENTS.add(Burst.class);
+        REGISTERED_ENCHANTMENTS.add(Combustion.class);
+        REGISTERED_ENCHANTMENTS.add(Conversion.class);
+        REGISTERED_ENCHANTMENTS.add(Decapitation.class);
+        REGISTERED_ENCHANTMENTS.add(Ethereal.class);
+        REGISTERED_ENCHANTMENTS.add(Extraction.class);
+        REGISTERED_ENCHANTMENTS.add(Fire.class);
+        REGISTERED_ENCHANTMENTS.add(Firestorm.class);
+        REGISTERED_ENCHANTMENTS.add(Fireworks.class);
+        REGISTERED_ENCHANTMENTS.add(Force.class);
+        REGISTERED_ENCHANTMENTS.add(FrozenStep.class);
+        REGISTERED_ENCHANTMENTS.add(Fuse.class);
+        REGISTERED_ENCHANTMENTS.add(Germination.class);
+        REGISTERED_ENCHANTMENTS.add(Glide.class);
+        REGISTERED_ENCHANTMENTS.add(Gluttony.class);
+        REGISTERED_ENCHANTMENTS.add(GoldRush.class);
+        REGISTERED_ENCHANTMENTS.add(Grab.class);
+        REGISTERED_ENCHANTMENTS.add(GreenThumb.class);
+        REGISTERED_ENCHANTMENTS.add(Gust.class);
+        REGISTERED_ENCHANTMENTS.add(Harvest.class);
+        REGISTERED_ENCHANTMENTS.add(Haste.class);
+        REGISTERED_ENCHANTMENTS.add(IceAspect.class);
+        REGISTERED_ENCHANTMENTS.add(Jump.class);
+        REGISTERED_ENCHANTMENTS.add(Laser.class);
+        REGISTERED_ENCHANTMENTS.add(Level.class);
+        REGISTERED_ENCHANTMENTS.add(LongCast.class);
+        REGISTERED_ENCHANTMENTS.add(Lumber.class);
+        REGISTERED_ENCHANTMENTS.add(Magnetism.class);
+        REGISTERED_ENCHANTMENTS.add(Meador.class);
+        REGISTERED_ENCHANTMENTS.add(Missile.class);
+        REGISTERED_ENCHANTMENTS.add(Mow.class);
+        REGISTERED_ENCHANTMENTS.add(MysteryFish.class);
+        REGISTERED_ENCHANTMENTS.add(NetherStep.class);
+        REGISTERED_ENCHANTMENTS.add(NightVision.class);
+        REGISTERED_ENCHANTMENTS.add(Persephone.class);
+        REGISTERED_ENCHANTMENTS.add(Pierce.class);
+        REGISTERED_ENCHANTMENTS.add(Plough.class);
+        REGISTERED_ENCHANTMENTS.add(Potion.class);
+        REGISTERED_ENCHANTMENTS.add(PotionResistance.class);
+        REGISTERED_ENCHANTMENTS.add(QuickShot.class);
+        REGISTERED_ENCHANTMENTS.add(Rainbow.class);
+        REGISTERED_ENCHANTMENTS.add(RainbowSlam.class);
+        REGISTERED_ENCHANTMENTS.add(Reaper.class);
+        REGISTERED_ENCHANTMENTS.add(Reveal.class);
+        REGISTERED_ENCHANTMENTS.add(Saturation.class);
+        REGISTERED_ENCHANTMENTS.add(ShortCast.class);
+        REGISTERED_ENCHANTMENTS.add(Shred.class);
+        REGISTERED_ENCHANTMENTS.add(Singularity.class);
+        REGISTERED_ENCHANTMENTS.add(Siphon.class);
+        REGISTERED_ENCHANTMENTS.add(SonicShock.class);
+        REGISTERED_ENCHANTMENTS.add(Spectral.class);
+        REGISTERED_ENCHANTMENTS.add(Speed.class);
+        REGISTERED_ENCHANTMENTS.add(Spikes.class);
+        REGISTERED_ENCHANTMENTS.add(Spread.class);
+        REGISTERED_ENCHANTMENTS.add(Stationary.class);
+        REGISTERED_ENCHANTMENTS.add(Stock.class);
+        REGISTERED_ENCHANTMENTS.add(Stream.class);
+        REGISTERED_ENCHANTMENTS.add(Switch.class);
+        REGISTERED_ENCHANTMENTS.add(Terraformer.class);
+        REGISTERED_ENCHANTMENTS.add(Toxic.class);
+        REGISTERED_ENCHANTMENTS.add(Tracer.class);
+        REGISTERED_ENCHANTMENTS.add(Transformation.class);
+        REGISTERED_ENCHANTMENTS.add(Unrepairable.class);
+        REGISTERED_ENCHANTMENTS.add(Variety.class);
+        REGISTERED_ENCHANTMENTS.add(Vortex.class);
+        REGISTERED_ENCHANTMENTS.add(Weight.class);
     }
 
 }

@@ -49,10 +49,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.HighFrequencyRunnableCache;
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.enchantments.FrozenStep;
 import de.geolykt.enchantments_plus.enchantments.NetherStep;
-import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -418,7 +416,7 @@ public class WatcherEnchant implements Listener {
         }
     }
 
-    @EffectTask(Frequency.HIGH) // Fast Scan of Player's Armor and their hand to register enchantments
+    // Fast Scan of Player's Armor and their hand to register enchantments
     public static void scanPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             EnchantPlayer enchPlayer = EnchantPlayer.matchPlayer(player);

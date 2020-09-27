@@ -9,11 +9,9 @@ import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.SingularityArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
-import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -53,7 +51,6 @@ public class Singularity extends CustomEnchantment {
 
     // Moves entities towards the black hole from the Singularity enchantment in pull state
     // Throws entities in the black hole out in reverse state
-    @EffectTask(Frequency.HIGH)
     public static void blackholes() {
         for (Location l : blackholes.keySet()) {
             for (Entity e : l.getWorld().getNearbyEntities(l, 10, 10, 10)) {
@@ -64,7 +61,7 @@ public class Singularity extends CustomEnchantment {
                 }
                 if (blackholes.get(l)) {
                     Vector v = l.clone().subtract(e.getLocation()).toVector();
-                    v.setX(v.getX() + (-.5f + Storage.rnd.nextFloat()) * 10);
+                    v.setX(v.getX() + (-.5f + Storage.rnd.nextFloat()) * 10); // TODO lots of math that could likely be simplified
                     v.setY(v.getY() + (-.5f + Storage.rnd.nextFloat()) * 10);
                     v.setZ(v.getZ() + (-.5f + Storage.rnd.nextFloat()) * 10);
                     e.setVelocity(v.multiply(.35f));

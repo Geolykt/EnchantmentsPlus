@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.enchantments.*;
-import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.evt.AnvilMerge;
 import de.geolykt.enchantments_plus.evt.GrindstoneMerge;
 import de.geolykt.enchantments_plus.evt.Watcher;
@@ -163,9 +163,6 @@ public class Enchantments_plus extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new WatcherArrow(), this);
         getServer().getPluginManager().registerEvents(WatcherEnchant.instance(), this);
         getServer().getPluginManager().registerEvents(new Watcher(), this);
-        for (Frequency f : Frequency.values()) {
-            getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskRunner(f), 1, f.period);
-        }
         if(getConfig().getBoolean("forceUpdateDescriptions")) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, Enchantments_plus::updateDescrptions, 1, 200);
         }
@@ -187,5 +184,24 @@ public class Enchantments_plus extends JavaPlugin {
         Storage.ANTICHEAT_ADAPTER.onEnable();
         
         Laser.colorKey = new NamespacedKey(this, "laserCol");
+        
+        // Load runnables
+        // High frequency runnable (every tick) -> Gotta run fast
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            EnchantedArrow.doTick();
+            Anthropomorphism.entityPhysics();
+            MysteryFish.guardian(); // TODO is this even needed?
+            Toxic.hunger(); // TODO this SHOULD be performed less often
+            WatcherEnchant.scanPlayers(); // TODO this could be done less often, right?
+            Tracer.tracer();
+            Singularity.blackholes();
+        }, 1, 1);
+        
+        // medium-high frequency runnable (every five ticks)
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            EnchantedArrow.scanAndReap();
+            Anthropomorphism.removeCheck(); // TODO check if this can be done in async
+            NetherStep.updateBlocks(); // TODO maybe allocate it to a player move event executor?
+        }, 5, 5);
     }
 }

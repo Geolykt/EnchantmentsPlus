@@ -12,9 +12,7 @@ import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
-import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -54,7 +52,6 @@ public class Anthropomorphism extends CustomEnchantment {
                 .base(BaseEnchantments.ANTHROPOMORPHISM);
     }
 
-    @EffectTask(Frequency.MEDIUM_HIGH)
     // Removes Anthropomorphism blocks when they are dead
     public static void removeCheck() {
         Iterator<FallingBlock> it = idleBlocks.keySet().iterator();
@@ -74,7 +71,6 @@ public class Anthropomorphism extends CustomEnchantment {
     }
 
     // Moves Anthropomorphism blocks around depending on their state
-    @EffectTask(Frequency.HIGH)
     public static void entityPhysics() {
         // Move agressive Anthropomorphism Blocks towards a target & attack
         Iterator<FallingBlock> anthroIterator = attackBlocks.keySet().iterator();

@@ -5,9 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.annotations.EffectTask;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
-import de.geolykt.enchantments_plus.enums.Frequency;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
 
@@ -54,13 +52,12 @@ public class NetherStep extends CustomEnchantment {
         return true;
     }
 
-    @EffectTask(Frequency.MEDIUM_HIGH)
-    // Removes the blocks from NetherStep and FrozenStep after a peroid of time
+    // Removes the blocks from NetherStep and FrozenStep after a period of time
     public static void updateBlocks() {
         Iterator<Location> it = FrozenStep.frozenLocs.keySet().iterator();
         while (it.hasNext()) {
             Location location = (Location) it.next();
-            if (Math.abs(System.nanoTime() - FrozenStep.frozenLocs.get(location)) > 9E8) {
+            if (Math.abs(System.nanoTime() - FrozenStep.frozenLocs.get(location)) > 9E8) { // FIXME why in nanoseconds?
                 location.getBlock().setType(WATER);
                 it.remove();
             }

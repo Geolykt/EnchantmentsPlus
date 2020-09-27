@@ -6,8 +6,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.annotations.EffectTask;
-import de.geolykt.enchantments_plus.enums.Frequency;
 
 import java.util.*;
 
@@ -196,7 +194,6 @@ public class EnchantedArrow {
     }
 
     //endregion
-    @EffectTask(Frequency.MEDIUM_HIGH)
     public static void scanAndReap() {
         synchronized (advancedProjectiles) {
             for (Arrow a : advancedProjectiles.keySet()) {
@@ -217,7 +214,6 @@ public class EnchantedArrow {
         }
     }
 
-    @EffectTask(Frequency.HIGH)
     public static void doTick() {
         synchronized (advancedProjectiles) {
             advancedProjectiles.values().forEach((set) -> set.forEach(EnchantedArrow::tick));
