@@ -308,7 +308,7 @@ public class Watcher implements Listener {
     public void onEat(PlayerInteractEvent evt) {
         if (evt.getPlayer().getInventory().getItemInMainHand().getType().isEdible()
                 && (evt.getAction().equals(RIGHT_CLICK_AIR) || evt.getAction().equals(RIGHT_CLICK_BLOCK))
-                && Toxic.hungerPlayers.keySet().contains(evt.getPlayer())) {
+                && (Toxic.hungerPlayers.getOrDefault(evt.getPlayer().getUniqueId(), -1l) > System.currentTimeMillis())) {
             evt.setCancelled(true);
         }
     }

@@ -191,7 +191,6 @@ public class Enchantments_plus extends JavaPlugin {
             EnchantedArrow.doTick();
             Anthropomorphism.entityPhysics();
             MysteryFish.guardian(); // TODO is this even needed?
-            Toxic.hunger(); // TODO this SHOULD be performed less often
             WatcherEnchant.scanPlayers(); // TODO this could be done less often, right?
             Tracer.tracer();
             Singularity.blackholes();
@@ -201,7 +200,7 @@ public class Enchantments_plus extends JavaPlugin {
         getServer().getScheduler().runTaskTimer(this, () -> {
             EnchantedArrow.scanAndReap();
             Anthropomorphism.removeCheck(); // TODO check if this can be done in async
-            NetherStep.updateBlocks(); // TODO maybe allocate it to a player move event executor?
+            NetherStep.updateBlocks(); // TODO maybe allocate it to a PlayerMoveEvent executor?
         }, 5, 5);
     }
 }

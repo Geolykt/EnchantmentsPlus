@@ -17,8 +17,8 @@ import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import static de.geolykt.enchantments_plus.enums.Tool.BOW;
 import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
@@ -28,7 +28,7 @@ import static org.bukkit.potion.PotionEffectType.HUNGER;
 public class Toxic extends CustomEnchantment {
 
     // Players that have been affected by the Toxic enchantment who cannot currently eat
-    public static final Map<Player, Integer> hungerPlayers = new HashMap<>();
+    public static final Map<UUID, Long> hungerPlayers = new HashMap<>();
     public static final int                  ID            = 62;
 
     @Override
@@ -65,22 +65,9 @@ public class Toxic extends CustomEnchantment {
                     ((LivingEntity) evt.getEntity()).removePotionEffect(HUNGER);
                     Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 60 + 40 * value, 0);
                 }, 20 + 60 * value);
-                hungerPlayers.put((Player) evt.getEntity(), (1 + value) * 100);
+                hungerPlayers.put(evt.getEntity().getUniqueId(), (1 + value) * 5000 + System.currentTimeMillis());
             }
         }
         return true;
-    }
-
-    // Manages time left for players affected by Toxic enchantment
-    public static void hunger() {
-        Iterator<Player> it = hungerPlayers.keySet().iterator();
-        while (it.hasNext()) {
-            Player player = (Player) it.next();
-            if (hungerPlayers.get(player) < 1) {
-                it.remove();
-            } else {
-                hungerPlayers.put(player, hungerPlayers.get(player) - 1);
-            }
-        }
     }
 }

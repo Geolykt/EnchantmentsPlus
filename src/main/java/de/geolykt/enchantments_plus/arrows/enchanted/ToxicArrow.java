@@ -31,7 +31,7 @@ public class ToxicArrow extends EnchantedArrow {
                     ((LivingEntity) evt.getEntity()).removePotionEffect(HUNGER);
                     Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 60 + 40 * value, 0);
                 }, 20 + 60 * value);
-                Toxic.hungerPlayers.put((Player) evt.getEntity(), (1 + value) * 100);
+                Toxic.hungerPlayers.put(evt.getEntity().getUniqueId(), (1 + value) * 5000 + System.currentTimeMillis());
             }
         }
         die();
