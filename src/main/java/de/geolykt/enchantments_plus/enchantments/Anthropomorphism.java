@@ -18,19 +18,45 @@ import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.*;
 
 public class Anthropomorphism extends CustomEnchantment {
-    // The falling blocks from the Anthropomorphism enchantment that are attacking, moving towards a set target
 
-    public static final Map<FallingBlock, Pair<Double, Vector>> attackBlocks = new HashMap<>();
-    // Players currently using the Anthropomorphism enchantment
-    private static final List<Entity> anthVortex = new ArrayList<>();
-    // The falling blocks from the Anthropomorphism enchantment that are idle, staying within the relative region
-    public static final Map<FallingBlock, Entity> idleBlocks = new HashMap<>();
+    /**
+     * The falling blocks from the Anthropomorphism enchantment that are attacking, moving towards a set target <br>
+     * Warning: not iterating over the map in a thread-safe manner will lead to non-deterministic behavior 
+     * as some code that uses this map is running in async! <br>
+     * Key: the falling block that is used <br>
+     * Value: Key: The power of the enchantment, Value: Vector <br>
+     * <br>Thread safe since 1.2.3
+     * @since 1.2.3 (existed with another internal Value type since 1.0) 
+     */
+    public static final Map<FallingBlock, Entry<Double, Vector>> attackBlocks = 
+            Collections.synchronizedMap(new HashMap<FallingBlock, Entry<Double, Vector>>());
+
+    /**
+     * The UUIDs of Players currently using the Anthropomorphism enchantment <br>
+     * Up until 1.2.3 this represented the direct entities of the players currently using the Anthropomorphism enchantment.
+     * @since 1.2.3
+     */
+    private static final List<UUID> anthVortex = new ArrayList<>();
+
+    /**
+     * The falling blocks from the Anthropomorphism enchantment that are idle, staying within the relative region<br>
+     * Warning: not iterating over the map in a thread-safe manner will lead to non-deterministic behavior 
+     * as some code that uses this map is running in async! <br>
+     * Key: the falling block that is used <br>
+     * Value: The player that is linked with the Key<br>
+     * <br>Thread safe since 1.2.3
+     * @since 1.0, Type of key changed in 1.2.3 from Player to UUID
+     */
+    public static final Map<FallingBlock, UUID> idleBlocks = Collections.synchronizedMap(new HashMap<FallingBlock, UUID>());
+
     private static final Material[] MAT = new Material[]{STONE, GRAVEL, DIRT, GRASS_BLOCK};
     public static final int ID = 1;
     // Determines if falling entities from Anthropomorphism should fall up or down
@@ -52,20 +78,28 @@ public class Anthropomorphism extends CustomEnchantment {
                 .base(BaseEnchantments.ANTHROPOMORPHISM);
     }
 
-    // Removes Anthropomorphism blocks when they are dead
+    /**
+     * Removes Anthropomorphism blocks when they are dead
+     * Thread-safe since 1.2.3
+     * @since 1.0
+     */
     public static void removeCheck() {
-        Iterator<FallingBlock> it = idleBlocks.keySet().iterator();
-        while (it.hasNext()) {
-            FallingBlock b = it.next();
-            if (b.isDead()) {
-                it.remove();
+        synchronized (idleBlocks) {
+            Iterator<FallingBlock> it = idleBlocks.keySet().iterator();
+            while (it.hasNext()) {
+                FallingBlock b = it.next();
+                if (b.isDead()) {
+                    it.remove();
+                }
             }
         }
-        it = attackBlocks.keySet().iterator();
-        while (it.hasNext()) {
-            FallingBlock b = it.next();
-            if (b.isDead()) {
-                it.remove();
+        synchronized (attackBlocks) {
+            Iterator<FallingBlock> it = attackBlocks.keySet().iterator();
+            while (it.hasNext()) {
+                FallingBlock b = it.next();
+                if (b.isDead()) {
+                    it.remove();
+                }
             }
         }
     }
@@ -73,31 +107,33 @@ public class Anthropomorphism extends CustomEnchantment {
     // Moves Anthropomorphism blocks around depending on their state
     public static void entityPhysics() {
         // Move agressive Anthropomorphism Blocks towards a target & attack
-        Iterator<FallingBlock> anthroIterator = attackBlocks.keySet().iterator();
-        while (anthroIterator.hasNext()) {
-            FallingBlock blockEntity = anthroIterator.next();
-            if (!anthVortex.contains(idleBlocks.get(blockEntity))) {
-                for (Entity e : blockEntity.getNearbyEntities(7, 7, 7)) {
-                    if (e instanceof Monster) {
-                        LivingEntity targetEntity = (LivingEntity) e;
+        synchronized (attackBlocks) {
+            Iterator<FallingBlock> anthroIterator = attackBlocks.keySet().iterator();
+            while (anthroIterator.hasNext()) {
+                FallingBlock blockEntity = anthroIterator.next();
+                if (!anthVortex.contains(idleBlocks.get(blockEntity))) {
+                    for (Entity e : blockEntity.getNearbyEntities(7, 7, 7)) {
+                        if (e instanceof Monster) {
+                            LivingEntity targetEntity = (LivingEntity) e;
 
-                        Vector playerDir = attackBlocks.get(blockEntity) == null
-                                ? new Vector()
-                                : attackBlocks.get(blockEntity).getValue();
+                            Vector playerDir = attackBlocks.get(blockEntity) == null
+                                    ? new Vector()
+                                    : attackBlocks.get(blockEntity).getValue();
 
-                        blockEntity.setVelocity(e.getLocation().add(playerDir.multiply(.75)).subtract(blockEntity.getLocation()).toVector().multiply(0.25));
+                            blockEntity.setVelocity(e.getLocation().add(playerDir.multiply(.75)).subtract(blockEntity.getLocation()).toVector().multiply(0.25));
 
-                        if (targetEntity.getLocation().getWorld().equals(blockEntity.getLocation().getWorld())) {
-                            if (targetEntity.getLocation().distance(blockEntity.getLocation()) < 1.2
-                                    && blockEntity.hasMetadata("ze.anthrothrower")) {
-                                Player attacker = (Player) blockEntity.getMetadata("ze.anthrothrower").get(0).value();
+                            if (targetEntity.getLocation().getWorld().equals(blockEntity.getLocation().getWorld())) {
+                                if (targetEntity.getLocation().distance(blockEntity.getLocation()) < 1.2
+                                        && blockEntity.hasMetadata("ze.anthrothrower")) {
+                                    Player attacker = (Player) blockEntity.getMetadata("ze.anthrothrower").get(0).value();
 
-                                if (targetEntity.getNoDamageTicks() == 0 && attackBlocks.get(blockEntity) != null
-                                        && Storage.COMPATIBILITY_ADAPTER.attackEntity(targetEntity, attacker,
-                                                2.0 * attackBlocks.get(blockEntity).getKey())) {
-                                    targetEntity.setNoDamageTicks(0);
-                                    anthroIterator.remove();
-                                    blockEntity.remove();
+                                    if (targetEntity.getNoDamageTicks() == 0 && attackBlocks.get(blockEntity) != null
+                                            && Storage.COMPATIBILITY_ADAPTER.attackEntity(targetEntity, attacker,
+                                                    2.0 * attackBlocks.get(blockEntity).getKey())) {
+                                        targetEntity.setNoDamageTicks(0);
+                                        anthroIterator.remove();
+                                        blockEntity.remove();
+                                    }
                                 }
                             }
                         }
@@ -107,34 +143,36 @@ public class Anthropomorphism extends CustomEnchantment {
         }
         // Move passive Anthropomorphism Blocks around
         fallBool = !fallBool;
-        for (FallingBlock b : idleBlocks.keySet()) {
-            if (anthVortex.contains(idleBlocks.get(b))) {
-                Location loc = idleBlocks.get(b).getLocation();
-                Vector v;
-                if (b.getLocation().getWorld().equals(idleBlocks.get(b).getLocation().getWorld())) {
-                    if (fallBool && b.getLocation().distance(idleBlocks.get(b).getLocation()) < 10) {
-                        v = b.getLocation().subtract(loc).toVector();
-                    } else {
-                        double x = 6f * Math.sin(b.getTicksLived() / 10f);
-                        double z = 6f * Math.cos(b.getTicksLived() / 10f);
-                        Location tLoc = loc.clone();
-                        tLoc.setX(tLoc.getX() + x);
-                        tLoc.setZ(tLoc.getZ() + z);
-                        v = tLoc.subtract(b.getLocation()).toVector();
-                    }
-                    v.multiply(.05);
-                    boolean close = false;
-                    for (int x = -3; x < 0; x++) {
-                        if (b.getLocation().getBlock().getRelative(0, x, 0).getType() != AIR) {
-                            close = true;
+        synchronized (idleBlocks) {
+            for (FallingBlock b : idleBlocks.keySet()) {
+                if (anthVortex.contains(idleBlocks.get(b))) {
+                    Location loc = Bukkit.getPlayer(idleBlocks.get(b)).getLocation();
+                    Vector v;
+                    if (b.getLocation().getWorld().equals(loc.getWorld())) { // Check world teleport
+                        if (fallBool && b.getLocation().distance(loc) < 10) {
+                            v = b.getLocation().subtract(loc).toVector();
+                        } else {
+                            double x = 6f * Math.sin(b.getTicksLived() / 10f);
+                            double z = 6f * Math.cos(b.getTicksLived() / 10f);
+                            Location tLoc = loc.clone();
+                            tLoc.setX(tLoc.getX() + x);
+                            tLoc.setZ(tLoc.getZ() + z);
+                            v = tLoc.subtract(b.getLocation()).toVector();
                         }
+                        v.multiply(.05);
+                        boolean close = false;
+                        for (int x = -3; x < 0; x++) {
+                            if (b.getLocation().getBlock().getRelative(0, x, 0).getType() != AIR) {
+                                close = true;
+                            }
+                        }
+                        if (close) {
+                            v.setY(Math.abs(Math.sin(b.getTicksLived() / 10f)));
+                        } else {
+                            v.setY(0);
+                        }
+                        b.setVelocity(v);
                     }
-                    if (close) {
-                        v.setY(Math.abs(Math.sin(b.getTicksLived() / 10f)));
-                    } else {
-                        v.setY(0);
-                    }
-                    b.setVelocity(v);
                 }
             }
         }
@@ -143,16 +181,17 @@ public class Anthropomorphism extends CustomEnchantment {
     @Override
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
         Player player = evt.getPlayer();
+        UUID uid = player.getUniqueId();
         ItemStack hand = Utilities.usedStack(player, usedHand);
 
         if (evt.getAction() == RIGHT_CLICK_AIR || evt.getAction() == RIGHT_CLICK_BLOCK) {
             if (player.isSneaking()) {
-                if (!anthVortex.contains(player)) {
-                    anthVortex.add(player);
+                if (!anthVortex.contains(uid)) {
+                    anthVortex.add(uid);
                 }
                 int counter = 0;
-                for (Entity p : idleBlocks.values()) {
-                    if (p.equals(player)) {
+                for (UUID p : idleBlocks.values()) {
+                    if (p.equals(uid)) {
                         counter++;
                     }
                 }
@@ -166,50 +205,31 @@ public class Anthropomorphism extends CustomEnchantment {
                     blockEntity.setGravity(false);
                     blockEntity
                             .setMetadata("ze.anthrothrower", new FixedMetadataValue(Storage.enchantments_plus, player));
-                    idleBlocks.put(blockEntity, player);
+                    idleBlocks.put(blockEntity, player.getUniqueId());
                     return true;
                 }
             }
             return false;
         } else if ((evt.getAction() == LEFT_CLICK_AIR || evt.getAction() == LEFT_CLICK_BLOCK)
                 || hand.getType() == AIR) {
-            anthVortex.remove(player);
+            anthVortex.remove(uid);
             List<FallingBlock> toRemove = new ArrayList<>();
-            for (FallingBlock blk : idleBlocks.keySet()) {
-                if (idleBlocks.get(blk).equals(player)) {
-                    attackBlocks.put(blk, new Pair<>(power, player.getLocation().getDirection()));
-                    toRemove.add(blk);
-                    Block targetBlock = player.getTargetBlock(null, 7);
-                    blk.setVelocity(targetBlock
-                            .getLocation().subtract(player.getLocation()).toVector().multiply(.25));
+            synchronized (idleBlocks) {
+                for (FallingBlock blk : idleBlocks.keySet()) {
+                    if (idleBlocks.get(blk).equals(uid)) {
+                        blk.setGravity(true);
+                        blk.setGlowing(true);
+                        attackBlocks.put(blk, new SimpleEntry<Double, Vector>(power, player.getLocation().getDirection()));
+                        toRemove.add(blk);
+                        Block targetBlock = player.getTargetBlock(null, 7);
+                        blk.setVelocity(targetBlock
+                                .getLocation().subtract(player.getLocation()).toVector().multiply(.25));
+                    }
                 }
             }
-            for (FallingBlock blk : toRemove) {
-                idleBlocks.remove(blk);
-                blk.setGravity(true);
-                blk.setGlowing(true);
-            }
+            // This is done because of concurrency issues
+            toRemove.forEach((FallingBlock blk) -> {idleBlocks.remove(blk);});
         }
         return false;
     }
-
-    private class Pair<K, V> {
-
-        private K key;
-        private V value;
-
-        public Pair(K k, V v) {
-            this.key = k;
-            this.value = v;
-        }
-
-        public K getKey() {
-            return key;
-        }
-
-        public V getValue() {
-            return value;
-        }
-    }
-
 }
