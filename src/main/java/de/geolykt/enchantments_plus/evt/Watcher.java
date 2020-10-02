@@ -286,13 +286,16 @@ public class Watcher implements Listener {
                         Player player = (Player) evt.getWhoClicked();
                         for (CustomEnchantment e : CustomEnchantment
                                 .getEnchants(evt.getCurrentItem(), player.getWorld()).keySet()) {
-                            if (e.getClass().equals(Jump.class) || e.getClass().equals(Meador.class)) {
+                            if (e.getClass().equals(Jump.class)) {
                                 player.removePotionEffect(PotionEffectType.JUMP);
-                            }
-                            if (e.getClass().equals(NightVision.class)) {
+                            } else if (e.getClass().equals(Meador.class)) {
+                                player.removePotionEffect(PotionEffectType.JUMP);
+                                player.removePotionEffect(PotionEffectType.SPEED);
+                            } else if (e.getClass().equals(Speed.class)) {
+                                player.removePotionEffect(PotionEffectType.SPEED);
+                            } else if (e.getClass().equals(NightVision.class)) {
                                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                            }
-                            if (e.getClass().equals(Weight.class)) {
+                            } else if (e.getClass().equals(Weight.class)) {
                                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                             }
                         }

@@ -43,7 +43,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
@@ -470,15 +469,7 @@ public class WatcherEnchant implements Listener {
             return ench.onScanHands(player, level, false);
         });
 
-        long currentTime = System.currentTimeMillis();
-        if (player.hasMetadata("ze.speed") && (player.getMetadata("ze.speed").get(0).asLong() < currentTime - 1000)) {
-            player.removeMetadata("ze.speed", Storage.enchantments_plus);
-            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-            player.setFlySpeed(0.1F);
-            player.setWalkSpeed(0.2F);
-        }
-
-        if (player.hasMetadata("ze.haste") && (player.getMetadata("ze.haste").get(0).asLong() < currentTime - 1000)) {
+        if (player.hasMetadata("ze.haste") && (player.getMetadata("ze.haste").get(0).asLong() < System.currentTimeMillis() - 1000)) {
             player.removePotionEffect(FAST_DIGGING);
             player.removeMetadata("ze.haste", Storage.enchantments_plus);
         }

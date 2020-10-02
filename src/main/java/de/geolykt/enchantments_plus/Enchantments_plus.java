@@ -53,11 +53,6 @@ public class Enchantments_plus extends JavaPlugin {
             e.remove();
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasMetadata("ze.speed")) {
-                player.removeMetadata("ze.speed", Storage.enchantments_plus);
-                player.setFlySpeed(0.1F);
-                player.setWalkSpeed(0.2F);
-            }
 
             if (player.hasMetadata("ze.haste")) {
                 player.removePotionEffect(FAST_DIGGING);
@@ -201,7 +196,8 @@ public class Enchantments_plus extends JavaPlugin {
             EnchantedArrow.scanAndReap();
             NetherStep.updateBlocks(); // TODO maybe allocate it to a PlayerMoveEvent executor?
         }, 5, 5);
-        
+
+        // medium-high asynchronous frequency runnable (every five ticks)
         getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {Anthropomorphism.removeCheck();}, 5, 5);
     }
 }

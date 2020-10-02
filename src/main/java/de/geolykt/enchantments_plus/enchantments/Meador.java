@@ -1,17 +1,15 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
-import static org.bukkit.potion.PotionEffectType.JUMP;
 
 public class Meador extends CustomEnchantment {
 
@@ -34,10 +32,8 @@ public class Meador extends CustomEnchantment {
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
-        player.setWalkSpeed((float) Math.min(.5f + level * power * .05f, 1));
-        player.setFlySpeed((float) Math.min(.5f + level * power * .05f, 1));
-        player.setMetadata("ze.speed", new FixedMetadataValue(Storage.enchantments_plus, System.currentTimeMillis()));
-        Utilities.addPotion(player, JUMP, 610, (int) Math.round(power * level + 2));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 100, (int) (level * power) + 2));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, (int) (level * power) + 2));
         return true;
     }
 }
