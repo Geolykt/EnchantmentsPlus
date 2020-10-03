@@ -22,7 +22,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
-import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.enums.Tool;
@@ -670,7 +669,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
                 World world,
                 List<String> outExtraLore) {
-            Map<CustomEnchantment, Integer> map = new LinkedHashMap<>();
+            LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
             if (stk != null && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
                 if (stk.hasItemMeta()) {
                     if (stk.getItemMeta().hasLore()) {
@@ -688,21 +687,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                     }
                 }
             }
-            LinkedHashMap<CustomEnchantment, Integer> finalMap = new LinkedHashMap<>();
-            for (int id : new int[]{Lumber.ID, Shred.ID, Mow.ID, Pierce.ID, Extraction.ID, Plough.ID}) {
-                CustomEnchantment e = null;
-                for (CustomEnchantment en : Config.allEnchants) {
-                    if (en.getId() == id) {
-                        e = en;
-                    }
-                }
-                if (map.containsKey(e)) {
-                    finalMap.put(e, map.get(e));
-                    map.remove(e);
-                }
-            }
-            finalMap.putAll(map);
-            return finalMap;
+            return map;
         }
 
         // Returns the custom enchantment from the lore name
@@ -892,22 +877,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                     }
                 }
             }
-
-            LinkedHashMap<CustomEnchantment, Integer> finalMap = new LinkedHashMap<>();
-            for (int id : new int[] { Lumber.ID, Shred.ID, Mow.ID, Pierce.ID, Extraction.ID, Plough.ID }) {
-                CustomEnchantment e = null;
-                for (CustomEnchantment en : Config.allEnchants) {
-                    if (en.getId() == id) {
-                        e = en;
-                    }
-                }
-                if (map.containsKey(e)) {
-                    finalMap.put(e, map.get(e));
-                    map.remove(e);
-                }
-            }
-            finalMap.putAll(map);
-            return finalMap;
+            return map;
         }
 
         @Override
@@ -1039,7 +1009,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
                 World world,
                 List<String> outExtraLore) {
-            Map<CustomEnchantment, Integer> map = new LinkedHashMap<>();
+            LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
             if (stk != null && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
                 if (stk.hasItemMeta()) {
                     if (stk.getItemMeta().hasLore()) {
@@ -1057,21 +1027,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                     }
                 }
             }
-            LinkedHashMap<CustomEnchantment, Integer> finalMap = new LinkedHashMap<>();
-            for (int id : new int[]{Lumber.ID, Shred.ID, Mow.ID, Pierce.ID, Extraction.ID, Plough.ID}) {
-                CustomEnchantment e = null;
-                for (CustomEnchantment en : Config.allEnchants) {
-                    if (en.getId() == id) {
-                        e = en;
-                    }
-                }
-                if (map.containsKey(e)) {
-                    finalMap.put(e, map.get(e));
-                    map.remove(e);
-                }
-            }
-            finalMap.putAll(map);
-            return finalMap;
+            return map;
         }
 
         // Returns the custom enchantment from the lore name
