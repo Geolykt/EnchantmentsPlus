@@ -40,12 +40,13 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Most values in the compatibillity adapter can be changed via magic configuration files now</li>
    <li>The Spectral enchantment can now be levelled by default</li>
    <li>Uses the 1.16.3 Spigot API</li>
+   <li>2 more enchantment getters</li>
   </ul>
  </li>
  <li>Minor changes:
   <ul>
    <li>Fixed the Reveal enchantment, with it's own twist</li>
-   <li>Added an enchantment gatherer denylist - only works with NBT right now</li>
+   <li>Added an enchantment gatherer denylist - only works with NBT and advLore right now</li>
    <li>The color of the laser can now be changed for purely costmetical reasons. Why? Don't ask</li>
    <li>Help and tab completion now handle permissions</li>
    <li>Mystery fish can now catch other water mobs such as cod, pufferfish and salmon and was buffed overall</li>
@@ -59,6 +60,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Mitigated severe lag issues with the Spectral enchantment, also performed some optimisations. To get to the pervious way of how the enchantment worked, put the enchantment power to really high values</li>
    <li>Spectral now can use it's own Protection system nullifying the risk of McMMO/Jobs exploits</li>
    <li>Spectral performance increased noticeably.</li>
+   <li>Lots of performance improvements for periodically running tasks.</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
@@ -66,6 +68,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Refractored to it's own structure</li>
    <li>Fix compilation issues with later bindings</li>
    <li>Changed the way permissions are handled within the code</li>
+   <li>Removed ClassGraph as a dependency</li>
   </ul>
  </li>
 </ul>

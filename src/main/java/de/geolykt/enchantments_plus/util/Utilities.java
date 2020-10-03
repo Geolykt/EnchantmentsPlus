@@ -540,7 +540,7 @@ public class Utilities {
      * @param validSearch       valid materials for a searched block; Will return
      *                          empty list if not one of these
      * @param strictValidSearch true -> return nothing if denylist block is found;
-     *                          false -> return current find if blacklist block is
+     *                          false -> return current find if denylist block is
      *                          found
      * @param flipValidSearch   true -> validSearch is a allowlist; false ->
      *                          validSearch is a denylist

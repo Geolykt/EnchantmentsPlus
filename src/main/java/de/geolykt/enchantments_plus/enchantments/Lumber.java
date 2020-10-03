@@ -35,8 +35,6 @@ public class Lumber extends CustomEnchantment {
             .power(-1.0)
             .handUse(Hand.LEFT)
             .base(BaseEnchantments.LUMBER);
-
-
     }
 
     @Override

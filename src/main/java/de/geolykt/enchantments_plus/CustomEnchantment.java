@@ -637,7 +637,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 List<String> outExtraLore);
         public abstract void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world);
     }
-    
+
     /**
      * The legacy Adapter for gathering Enchantments used up until 1.16. <br>
      * Unlike it's name implies, it is still used for performance reasons and as such should be preferred over other implementations,
