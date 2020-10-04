@@ -289,7 +289,7 @@ public class Spectral extends CustomEnchantment {
 
         if (newMat != original) {
             final Material newMatFinal = newMat; // Why are we doing this?
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
 
                 block.setType(newMatFinal, false);
                 blockstateInteract(block);
@@ -299,7 +299,7 @@ public class Spectral extends CustomEnchantment {
     }
     
     private static void cycleBlockType(Block block, final Material newMat, final boolean doBlockStateInteraction) {
-       Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+       Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
            block.setType(newMat, false);
            if (doBlockStateInteraction) {
                blockstateInteract(block);

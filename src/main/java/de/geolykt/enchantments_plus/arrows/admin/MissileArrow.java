@@ -29,7 +29,7 @@ public class MissileArrow extends EnchantedArrow {
         final double d = target.distance(c);
         for (int i = 9; i <= ((int) (d * 5) + 9); i++) {
             final int i1 = i;
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 Location loc = target.clone();
                 loc.setX(c.getX() + (i1 * ((target.getX() - c.getX()) / (d * 5))));
                 loc.setY(c.getY() + (i1 * ((target.getY() - c.getY()) / (d * 5))));

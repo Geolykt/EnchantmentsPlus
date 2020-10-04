@@ -178,7 +178,7 @@ public class CommandProcessor {
         }
         player.sendMessage(Storage.LOGO + "Reloaded Enchantments_plus configurations.");
         player.sendMessage(ChatColor.RED + " Please avoid using the command. It may create memory leaks and inaccurate configurations.");
-        Storage.enchantments_plus.loadConfigs();
+        Storage.plugin.loadConfigs();
         return true;
     }
 

@@ -53,7 +53,7 @@ public class Bind extends CustomEnchantment {
                 evt.getDrops().remove(contents[i]);
             }
         }
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             if (evt.getKeepInventory()) {
                 evt.getDrops().addAll(removed);
             } else {

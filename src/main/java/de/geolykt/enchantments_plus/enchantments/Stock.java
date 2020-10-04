@@ -40,7 +40,7 @@ public class Stock extends CustomEnchantment {
             return false;
         }
         final Player player = evt.getPlayer();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             int current = -1;
             ItemStack newHandItem = evt.getPlayer().getInventory().getItemInMainHand();
             if (newHandItem != null && newHandItem.getType() != AIR) {

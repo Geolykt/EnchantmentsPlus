@@ -42,7 +42,7 @@ public class Grab extends CustomEnchantment {
         grabLocs.put(evt.getBlock(), evt.getPlayer());
         final Block block = evt.getBlock();
         //ADAPTER.breakBlockNMS(evt.getBlock(), evt.getPlayer());
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             grabLocs.remove(block);
         }, 3);
         return true;

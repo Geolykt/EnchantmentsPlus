@@ -97,7 +97,7 @@ public class Fire extends CustomEnchantment {
                 }
                 Block affectedBlock = evt.getBlock();
                 cancelledItemDrops.add(affectedBlock);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     cancelledItemDrops.remove(affectedBlock);
                 }, 5);
 
@@ -128,7 +128,7 @@ public class Fire extends CustomEnchantment {
 
                 cancelledItemDrops.add(block);
 
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     cancelledItemDrops.remove(block);
                 }, 5);
 
@@ -155,7 +155,7 @@ public class Fire extends CustomEnchantment {
                 }
 
                 cancelledItemDrops.add(block);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     cancelledItemDrops.remove(block);
                 }, 5);
 

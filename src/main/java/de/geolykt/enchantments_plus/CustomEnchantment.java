@@ -269,78 +269,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         });
     }
 
-    // Updates lore enchantments and descriptions to new format. This will be removed eventually
-    @Deprecated
-    public static ItemStack updateToNewFormat(ItemStack stk, World world) {
-        if (stk != null) {
-            if (stk.hasItemMeta()) {
-                if (stk.getItemMeta().hasLore()) {
-                    boolean hasEnch = false;
-                    ItemMeta meta = stk.getItemMeta();
-                    List<String> lore = new ArrayList<>();
-                    CustomEnchantment lastEnch = null;
-
-                    List<String> tempLore = new LinkedList<>();
-                    for (String str : meta.getLore()) {
-
-                        CustomEnchantment ench = null;
-                        int level = 0;
-                        if (str.startsWith(ChatColor.GRAY + "")) {
-                            String stripString = ChatColor.stripColor(str);
-
-                            int splitIndex = stripString.lastIndexOf(" ");
-                            if (splitIndex != -1) {
-                                if (stripString.length() > 2) {
-                                    String enchant;
-                                    level = Utilities.getNumber(stripString.substring(splitIndex + 1));
-                                    try {
-                                        enchant = stripString.substring(0, splitIndex);
-                                    } catch (Exception e) {
-                                        enchant = "";
-                                    }
-                                    ench = Config.get(world).enchantFromString(enchant);
-                                }
-                            }
-                        }
-
-                        if (ench != null) {
-                            lastEnch = ench;
-                            hasEnch = true;
-                            lore.add(ench.getShown(level, world));
-                            lore.addAll(tempLore);
-                            tempLore.clear();
-                            continue;
-                        }
-
-                        if (lastEnch != null) {
-                            tempLore.add(str);
-
-                            StringBuilder bldr = new StringBuilder();
-                            for (String ls : tempLore) {
-                                bldr.append(ChatColor.stripColor(ls));
-                            }
-                            if (lastEnch.description.equals(bldr.toString())) {
-                                lastEnch = null;
-                                tempLore.clear();
-                            }
-                        } else {
-                            lore.add(str);
-                        }
-                    }
-                    lore.addAll(tempLore);
-
-                    meta.setLore(lore);
-                    stk.setItemMeta(meta);
-                    if (hasEnch) {
-                        setGlow(stk, true, world);
-                    }
-                    return stk;
-                }
-            }
-        }
-        return stk;
-    }
-
     // Returns a mapping of custom enchantments and their level on a given tool
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
             List<String> outExtraLore) {
@@ -512,7 +440,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public Builder(Supplier<T> sup, int id) {
             customEnchantment = sup.get();
             customEnchantment.setId(id);
-            customEnchantment.key = new NamespacedKey(Storage.enchantments_plus, "ench." + id);
+            customEnchantment.key = new NamespacedKey(Storage.plugin, "ench." + id);
         }
 
         public Builder<T> maxLevel(int maxLevel) {

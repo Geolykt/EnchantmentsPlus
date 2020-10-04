@@ -53,12 +53,12 @@ public class Pierce extends CustomEnchantment {
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
         Player player = evt.getPlayer();
         if (!evt.getPlayer().hasMetadata("ze.pierce.mode")) {
-            player.setMetadata("ze.pierce.mode", new FixedMetadataValue(Storage.enchantments_plus, 1));
+            player.setMetadata("ze.pierce.mode", new FixedMetadataValue(Storage.plugin, 1));
         }
         if (player.isSneaking() && (evt.getAction() == RIGHT_CLICK_AIR || evt.getAction() == RIGHT_CLICK_BLOCK)) {
             int b = player.getMetadata("ze.pierce.mode").get(0).asInt();
             b = b == 5 ? 1 : b + 1;
-            player.setMetadata("ze.pierce.mode", new FixedMetadataValue(Storage.enchantments_plus, b));
+            player.setMetadata("ze.pierce.mode", new FixedMetadataValue(Storage.plugin, b));
             switch (b) {
                 case 1:
                     player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "1x Normal Mode");
@@ -85,7 +85,7 @@ public class Pierce extends CustomEnchantment {
         //1 = normal; 2 = wide; 3 = deep; 4 = tall; 5 = ore
         Player player = evt.getPlayer();
         if (!evt.getPlayer().hasMetadata("ze.pierce.mode")) {
-            player.setMetadata("ze.pierce.mode", new FixedMetadataValue(Storage.enchantments_plus, 1));
+            player.setMetadata("ze.pierce.mode", new FixedMetadataValue(Storage.plugin, 1));
         }
         final int mode = player.getMetadata("ze.pierce.mode").get(0).asInt();
         Set<Block> total = new HashSet<>();

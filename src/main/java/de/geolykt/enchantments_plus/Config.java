@@ -246,7 +246,7 @@ public class Config {
     public static Config getWorldConfig(World world) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
-            File file = new File(Storage.enchantments_plus.getDataFolder(), world.getName() + ".yml");
+            File file = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
             if (!file.exists()) {
                 try {
                     String raw = new String(streamReadAllBytes(stream), StandardCharsets.UTF_8);
@@ -406,9 +406,9 @@ public class Config {
         for (World world : Bukkit.getWorlds()) {
             Config.CONFIGS.put(world, getWorldConfig(world));
         }
-        File patchFile = new File(Storage.enchantments_plus.getDataFolder(), "patches.yml");
+        File patchFile = new File(Storage.plugin.getDataFolder(), "patches.yml");
         if (!patchFile.exists()) {
-            Storage.enchantments_plus.saveResource("patches.yml", false);
+            Storage.plugin.saveResource("patches.yml", false);
         }
         PATCH_CONFIGURATION = YamlConfiguration.loadConfiguration(patchFile);
         

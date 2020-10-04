@@ -73,7 +73,7 @@ public class Reveal extends CustomEnchantment {
                                 GLOWING_BLOCKS.put(loc, entity);
                                 
                                 Bukkit.getServer().getScheduler()
-                                    .scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                                    .scheduleSyncDelayedTask(Storage.plugin, () -> {
                                         // Hide fallingBlockCode
                                         Entity blockToRemove = GLOWING_BLOCKS.remove(loc);
                                         if (blockToRemove != null) {

@@ -40,7 +40,7 @@ public class GrindstoneMerge implements Listener {
             if (evt.getSlot() == 2) {
                 removeOutputEnchants(gi, world);
             } else {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     removeOutputEnchants(gi, world);
                 }, 0);
             }

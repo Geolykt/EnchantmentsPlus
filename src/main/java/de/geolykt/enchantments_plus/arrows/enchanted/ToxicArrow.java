@@ -27,7 +27,7 @@ public class ToxicArrow extends EnchantedArrow {
             Utilities.addPotion((LivingEntity) evt.getEntity(), CONFUSION, 80 + 60 * value, 4);
             Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 40 + 60 * value, 4);
             if (evt.getEntity() instanceof Player) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     ((LivingEntity) evt.getEntity()).removePotionEffect(HUNGER);
                     Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 60 + 40 * value, 0);
                 }, 20 + 60 * value);

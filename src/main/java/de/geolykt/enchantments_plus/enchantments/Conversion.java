@@ -44,7 +44,7 @@ public class Conversion extends CustomEnchantment {
                         player.setLevel((player.getLevel() - 1));
                         player.setHealth(Math.min(20, player.getHealth() + 2 * power * level));
                         for (int i = 0; i < 3; i++) {
-                            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                                 Utilities
                                     .display(Utilities.getCenter(player.getLocation()), Particle.HEART, 10, .1f,
                                         .5f, .5f, .5f);

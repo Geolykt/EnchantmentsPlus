@@ -132,7 +132,7 @@ public class Watcher implements Listener {
             return;
         }
         Location loc = evt.getEntity().getLocation();
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             for (Block block : Grab.grabLocs.keySet()) {
                 if (block.getLocation().getBlockX() == loc.getBlockX()
                         && block.getLocation().getBlockY() == loc.getBlockY()
@@ -193,7 +193,7 @@ public class Watcher implements Listener {
             boolean customEnch = !CustomEnchantment
                     .getEnchants(event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getWorld())
                     .isEmpty();
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 CustomEnchantment.setGlow(event.getPlayer().getInventory().getItemInMainHand(), customEnch,
                         event.getPlayer().getWorld());
             }, 0);
@@ -260,7 +260,7 @@ public class Watcher implements Listener {
 
             List<String> finalLore = stk.getItemMeta().getLore();
             Inventory inv = evt.getInventory();
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 ItemStack book = inv.getItem(0);
                 ItemMeta bookMeta = book.getItemMeta();
                 bookMeta.setLore(finalLore);
@@ -269,7 +269,7 @@ public class Watcher implements Listener {
             }, 0);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             CustomEnchantment.setGlow(stk, !addedEnchants.isEmpty(), config.getWorld());
         }, 0);
 

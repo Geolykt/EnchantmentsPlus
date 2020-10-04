@@ -29,7 +29,7 @@ public class MultiArrow extends EnchantedArrow {
             (float) (arrow.getVelocity().length() / 10), 0);
         p.setFireTicks(arrow.getFireTicks());
         p.getLocation().setDirection(arrow.getLocation().getDirection());
-        p.setMetadata("ze.arrow", new FixedMetadataValue(Storage.enchantments_plus, null));
+        p.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
         this.arrow.remove();
     }
 }
