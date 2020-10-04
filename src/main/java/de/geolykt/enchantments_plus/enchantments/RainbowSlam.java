@@ -54,7 +54,7 @@ public class RainbowSlam extends CustomEnchantment {
         ent.teleport(l);
         for (int i = 0; i < 30; i++) {
             final int fI = i;
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 for (int j = 0; j < 40; j++) {
                     if (ent.isDead()) {
                         return;
@@ -78,7 +78,7 @@ public class RainbowSlam extends CustomEnchantment {
         AtomicBoolean applied = new AtomicBoolean(false);
         rainbowSlamNoFallEntities.add(ent);
         for (int i = 0; i < 3; i++) {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 // ent.setNoDamageTicks(20); // Prevent fall damage
                 ent.setVelocity(l.toVector().subtract(ent.getLocation().toVector()).multiply(.3));
                 ent.setFallDistance(0);

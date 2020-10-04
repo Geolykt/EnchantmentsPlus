@@ -204,7 +204,7 @@ public class Anthropomorphism extends CustomEnchantment {
                     blockEntity.setDropItem(false);
                     blockEntity.setGravity(false);
                     blockEntity
-                            .setMetadata("ze.anthrothrower", new FixedMetadataValue(Storage.enchantments_plus, player));
+                            .setMetadata("ze.anthrothrower", new FixedMetadataValue(Storage.plugin, player));
                     idleBlocks.put(blockEntity, player.getUniqueId());
                     return true;
                 }

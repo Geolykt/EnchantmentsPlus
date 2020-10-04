@@ -93,14 +93,13 @@ public class Utilities {
     }
 
     public static int getDamage(ItemStack is) {
-        if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
-            org.bukkit.inventory.meta.Damageable dm = ((Damageable) is.getItemMeta());
-            return dm.getDamage();
+        if (is.getItemMeta() instanceof Damageable) {
+            return ((Damageable)is.getItemMeta()).getDamage();
         }
         return 0;
     }
 
-    // Returns the item stack direction the player's main or off hand, determinted
+    // Returns the item stack direction the player's main or off hand, determined
     // by 'handUsed'
     public static ItemStack usedStack(Player player, boolean handUsed) {
         return handUsed ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
@@ -193,7 +192,7 @@ public class Utilities {
         }
     }
 
-    // Returns the english number representation of the given roman number string
+    // Returns the English number representation of the given Roman number string
     public static int getNumber(String numeral) {
         switch (numeral.toUpperCase()) {
             case "-":
@@ -388,9 +387,15 @@ public class Utilities {
         }
         ent.addPotionEffect(new PotionEffect(type, length, intensity));
     }
-
-    // Encodes a given string to be invisible to players surrounded by the escape
-    // sequence "\< \>"
+    /**
+     * Function to encode "invisible" strings, the strings are made invisible via {@link ChatColor#COLOR_CHAR}.<br>
+     * They are surrounded by the escape sequence "\< \>".
+     * @param str The input string which is to be made invisible.
+     * @return An "invisible" string escaped by "\< \>".
+     * @since 1.0.0
+     * @deprecated This function may no longer work after spigot 1.16.2.
+     * @see #fromInvisibleString(String)
+     */
     public static String toInvisibleString(String str) {
         str = "\\<" + str + "\\>" + ChatColor.COLOR_CHAR + 'F';
         StringBuilder builder = new StringBuilder();
@@ -401,7 +406,14 @@ public class Utilities {
         return builder.toString();
     }
 
-    // Returns a map of strings to booleans, where the boolean represents visibility
+    /**
+     * Function to decode "invisible" strings, the strings are made invisible via {@link ChatColor#COLOR_CHAR}.
+     * @param str The input string which is invisible.
+     * @return A map of strings to booleans, where the boolean represents visibility.
+     * @since 1.0.0
+     * @deprecated This function may no longer work after spigot 1.16.2.
+     * @see #toInvisibleString(String)
+     */
     public static Map<String, Boolean> fromInvisibleString(String str) {
         Map<String, Boolean> strs = new LinkedHashMap<>();
 

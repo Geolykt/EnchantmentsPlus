@@ -471,7 +471,7 @@ public class WatcherEnchant implements Listener {
 
         if (player.hasMetadata("ze.haste") && (player.getMetadata("ze.haste").get(0).asLong() < System.currentTimeMillis() - 1000)) {
             player.removePotionEffect(FAST_DIGGING);
-            player.removeMetadata("ze.haste", Storage.enchantments_plus);
+            player.removeMetadata("ze.haste", Storage.plugin);
         }
     }
 }

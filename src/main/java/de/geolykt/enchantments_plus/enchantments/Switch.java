@@ -81,11 +81,11 @@ public class Switch extends CustomEnchantment {
 
             Material mat = switchItem.getType();
 
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 Grab.grabLocs.remove(clickedBlock);
             }, 3);
 
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 ADAPTER.placeBlock(clickedBlock, player, mat, null); // TODO blockData
             }, 1);
             Utilities.removeItem(evt.getPlayer(), mat, 1);

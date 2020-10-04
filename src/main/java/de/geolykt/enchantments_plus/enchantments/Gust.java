@@ -47,7 +47,7 @@ public class Gust extends CustomEnchantment {
                                       .multiply(.25 * power));
                 player.setFallDistance(-40);
                 ADAPTER.damagePlayer(player, 3, EntityDamageEvent.DamageCause.MAGIC);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     Utilities.damageTool(evt.getPlayer(), 1, usedHand);
                 }, 1);
                 return true;

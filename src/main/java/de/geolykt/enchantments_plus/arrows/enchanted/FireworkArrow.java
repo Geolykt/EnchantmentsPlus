@@ -29,7 +29,7 @@ public class FireworkArrow extends EnchantedArrow {
         d.setPower(0);
         d.addEffect(b.build());
         f.setFireworkMeta(d);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             f.detonate();
         }, 1);
         die();

@@ -36,7 +36,7 @@ public class EnchantPlayer {
         if (player.hasMetadata("ze." + enchantmentID)) {
             return player.getMetadata("ze." + enchantmentID).get(0).asBoolean();
         } else {
-            player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.enchantments_plus, false));
+            player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.plugin, false));
             return false;
         }
     }
@@ -53,25 +53,25 @@ public class EnchantPlayer {
 
     // Disables the given enchantment for the player
     public void disable(int enchantmentID) {
-        player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.enchantments_plus, true));
+        player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.plugin, true));
     }
 
     // Enables the given enchantment for the player
     public void enable(int enchantmentID) {
-        player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.enchantments_plus, false));
+        player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.plugin, false));
     }
 
     // Disables all enchantments for the player
     public void disableAll() {
         for (CustomEnchantment enchant : Config.get(player.getWorld()).getEnchants()) {
-            player.setMetadata("ze." + enchant.getId(), new FixedMetadataValue(Storage.enchantments_plus, true));
+            player.setMetadata("ze." + enchant.getId(), new FixedMetadataValue(Storage.plugin, true));
         }
     }
 
     // Enables all enchantments for the player
     public void enableAll() {
         for (CustomEnchantment enchant : Config.get(player.getWorld()).getEnchants()) {
-            player.setMetadata("ze." + enchant.getId(), new FixedMetadataValue(Storage.enchantments_plus, false));
+            player.setMetadata("ze." + enchant.getId(), new FixedMetadataValue(Storage.plugin, false));
         }
     }
 

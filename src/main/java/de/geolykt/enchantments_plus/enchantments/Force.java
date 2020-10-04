@@ -47,11 +47,11 @@ public class Force extends CustomEnchantment {
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
         Player player = evt.getPlayer();
         if (!evt.getPlayer().hasMetadata("ze.force.direction")) {
-            player.setMetadata("ze.force.direction", new FixedMetadataValue(Storage.enchantments_plus, true));
+            player.setMetadata("ze.force.direction", new FixedMetadataValue(Storage.plugin, true));
         }
         if (player.isSneaking() && (evt.getAction() == RIGHT_CLICK_AIR || evt.getAction() == RIGHT_CLICK_BLOCK)) {
             boolean b = !player.getMetadata("ze.force.direction").get(0).asBoolean();
-            player.setMetadata("ze.force.direction", new FixedMetadataValue(Storage.enchantments_plus, b));
+            player.setMetadata("ze.force.direction", new FixedMetadataValue(Storage.plugin, b));
             player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + (b ? "Push Mode" : "Pull Mode"));
             return false;
         }

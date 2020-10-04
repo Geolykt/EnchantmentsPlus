@@ -50,12 +50,12 @@ public class Stream extends CustomEnchantment {
         Player player = evt.getPlayer();
 
         if (!evt.getPlayer().hasMetadata("ze.stream.mode")) {
-            player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.enchantments_plus, 0));
+            player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.plugin, 0));
         }
         if (player.isSneaking() && (evt.getAction() == RIGHT_CLICK_AIR || evt.getAction() == RIGHT_CLICK_BLOCK)) {
             int b = player.getMetadata("ze.stream.mode").get(0).asInt();
             b = b == 4 ? 0 : b + 1;
-            player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.enchantments_plus, b));
+            player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.plugin, b));
             switch (b) {
                 case 0:
                     player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "Clouds");
@@ -78,7 +78,7 @@ public class Stream extends CustomEnchantment {
             // Prevent auto-equipping
             if ((player.getInventory().getChestplate() == null ||
                 player.getInventory().getChestplate().getType() == Material.AIR)) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     if ((player.getInventory().getItemInMainHand() == null ||
                         player.getInventory().getItemInMainHand().getType() == Material.AIR)) {
                         ItemStack stack = player.getInventory().getChestplate();
@@ -95,7 +95,7 @@ public class Stream extends CustomEnchantment {
     public boolean onFastScan(Player player, int level, boolean usedHand) {
         if (player.isGliding() && player.getVelocity().length() >= 0.5) {
             if (!player.hasMetadata("ze.stream.mode")) {
-                player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.enchantments_plus, 0));
+                player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.plugin, 0));
             }
             int b = player.getMetadata("ze.stream.mode").get(0).asInt();
 

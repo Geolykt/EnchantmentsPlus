@@ -4,6 +4,7 @@ package de.geolykt.enchantments_plus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,10 +54,9 @@ public class Enchantments_plus extends JavaPlugin {
             e.remove();
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
-
             if (player.hasMetadata("ze.haste")) {
                 player.removePotionEffect(FAST_DIGGING);
-                player.removeMetadata("ze.haste", Storage.enchantments_plus);
+                player.removeMetadata("ze.haste", Storage.plugin);
             }
         }
     }
@@ -80,11 +80,17 @@ public class Enchantments_plus extends JavaPlugin {
     // Returns enchantment names mapped to their level from the given item stack
     public Map<String, Integer> getEnchantments(ItemStack stack) {
         Map<String, Integer> enchantments = new TreeMap<>();
-        for (Config c : Config.CONFIGS.values()) {
-            Map<CustomEnchantment, Integer> ench = CustomEnchantment.getEnchants(stack, c.getWorld());
-            for (CustomEnchantment e : ench.keySet()) {
-                enchantments.put(e.loreName, ench.get(e));
-            }
+        for (Map.Entry<CustomEnchantment, Integer> ench : 
+            CustomEnchantment.getEnchants(stack, (World) Config.CONFIGS.keySet().toArray()[0]).entrySet()) {
+            enchantments.put(ench.getKey().getLoreName(), ench.getValue());
+        }
+        return enchantments;
+    }
+
+    public Map<String, Integer> getEnchantments(ItemStack stack, World world) {
+        Map<String, Integer> enchantments = new TreeMap<>();
+        for (Map.Entry<CustomEnchantment, Integer> ench : CustomEnchantment.getEnchants(stack, world).entrySet()) {
+            enchantments.put(ench.getKey().getLoreName(), ench.getValue());
         }
         return enchantments;
     }
@@ -128,20 +134,9 @@ public class Enchantments_plus extends JavaPlugin {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
-    private static void updateDescrptions() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            for (ItemStack stk : (ItemStack[]) org.apache.commons.lang.ArrayUtils.addAll(
-                    player.getInventory().getArmorContents(), player.getInventory().getContents())) {
-                CustomEnchantment.setEnchantment(stk, null, 0, player.getWorld());
-                CustomEnchantment.updateToNewFormat(stk, player.getWorld());
-            }
-        }
-    }
-
     // Loads configs and starts tasks
     public void onEnable() {
-        Storage.enchantments_plus = this;
+        Storage.plugin = this;
         File compatFile = new File(getDataFolder(), "magicCompat.yml");
         if (!compatFile.exists()) {
             saveResource("magicCompat.yml", false);
@@ -149,8 +144,7 @@ public class Enchantments_plus extends JavaPlugin {
         FileConfiguration compatConfig = YamlConfiguration.loadConfiguration(compatFile);
         Storage.COMPATIBILITY_ADAPTER.loadValues(compatConfig);
 
-        Storage.pluginPath = Bukkit.getPluginManager().getPlugin("Enchantments_plus").getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        Storage.version = Bukkit.getServer().getPluginManager().getPlugin(this.getName()).getDescription().getVersion();
+        Storage.version = this.getDescription().getVersion();
         loadConfigs();
         getCommand("ench").setTabCompleter(new CommandProcessor.TabCompletion());
         getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
@@ -158,9 +152,6 @@ public class Enchantments_plus extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new WatcherArrow(), this);
         getServer().getPluginManager().registerEvents(WatcherEnchant.instance(), this);
         getServer().getPluginManager().registerEvents(new Watcher(), this);
-        if(getConfig().getBoolean("forceUpdateDescriptions")) {
-            getServer().getScheduler().scheduleSyncRepeatingTask(this, Enchantments_plus::updateDescrptions, 1, 200);
-        }
 
 
         int[][] ALL_SEARCH_FACES = new int[27][3];

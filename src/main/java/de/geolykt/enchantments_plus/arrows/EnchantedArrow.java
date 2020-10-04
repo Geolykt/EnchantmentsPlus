@@ -82,7 +82,7 @@ public class EnchantedArrow {
         if (removeArrow) {
             arrow.remove();
         }
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             if (advancedProjectiles.containsKey(arrow)) {
                 advancedProjectiles.get(arrow).remove(this);
                 if (advancedProjectiles.get(arrow).isEmpty()) {

@@ -56,7 +56,7 @@ public class Burst extends CustomEnchantment {
                         || Utilities.removeItem(player, Material.ARROW, 1)) {
                     result = true;
                     Utilities.setHand(player, hand, usedHand);
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                         Arrow arrow = player.getWorld().spawnArrow(player.getEyeLocation(),
                                 player.getLocation().getDirection(), 1, 0);
                         arrow.setShooter(player);
@@ -72,7 +72,7 @@ public class Burst extends CustomEnchantment {
                         if (shootEvent.isCancelled() || launchEvent.isCancelled()) {
                             arrow.remove();
                         } else {
-                            arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.enchantments_plus, null));
+                            arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
                             arrow.setCritical(true);
                             EnchantedArrow.putArrow(arrow, new MultiArrow(arrow), player);
                             Utilities.damageTool(player, 1, usedHand);

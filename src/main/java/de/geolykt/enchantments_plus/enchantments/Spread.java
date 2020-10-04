@@ -72,7 +72,7 @@ public class Spread extends CustomEnchantment {
                 arrow.remove();
                 return false;
             }
-            arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.enchantments_plus, null));
+            arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
             arrow.setCritical(originalArrow.isCritical());
             EnchantedArrow.putArrow(originalArrow, new MultiArrow(originalArrow), player);
         }

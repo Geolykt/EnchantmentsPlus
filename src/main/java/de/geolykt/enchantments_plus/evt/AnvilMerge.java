@@ -157,7 +157,7 @@ public class AnvilMerge implements Listener {
         }
 
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.enchantments_plus, () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
 
             ItemStack leftItem = anvilInv.getItem(0);
             ItemStack rightItem = anvilInv.getItem(1);

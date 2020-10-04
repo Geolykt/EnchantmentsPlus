@@ -8,8 +8,9 @@ import org.bukkit.Material;
 /**
  * Mojang, whyy?
  * <hr>
- * This class exists to make of colo(u)red items and blocks and to convert between their different colo(u)rs<br>
- * This class should be removed once bukkit has an efficient way of converting between colo(u)rs without requiring 1000 lines of code.
+ * This class exists to make of coled items and blocks and to convert between their different cols<br>
+ * This class should be removed once bukkit has an efficient way of converting between cols without requiring 1000 lines of code. <br>
+ * The functions within this class are rather fast due to using switch statements
  */
 public class ColUtil {
 
