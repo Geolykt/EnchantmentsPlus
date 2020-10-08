@@ -22,9 +22,10 @@ nerfs:
 # lwNBT The not very configurable, but stable NBT getter
 # PR47-lore The not very configurable, but stable Lore getter, the name comes from the PR it was introduced first, PR #47
 # advLore The higly configurable experimental Lore getter
-# upstream Will be removed in 2.0.0 as it's not exactly known to be stable in any kind. It's a Lore getter and works with Regex instead of split unlike other implementations.
 enchantmentGatherer: "advLore"
-getterDeny: # the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items. Only works for NBT
+# the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items.
+# Only works for advanced lore getters
+getterAllow:
   - "SWORD"
   - "AXE"
   - "SHOVEL"
@@ -39,5 +40,5 @@ getterDeny: # the list of materials can be found at https://hub.spigotmc.org/jav
   - "ELYTRA"
   - "FLINT_AND_STEEL"
 denyPartial: true # whether even partial matches shall be denied (dangerous for some things, such as GRASS (You could also mean GRASS_PATH and GRASS_BLOCK)!), requires longer startup times, but sleaker configuration.
-allowlistSwitch: true # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
+isAllowlist: true # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found
