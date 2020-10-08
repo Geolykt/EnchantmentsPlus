@@ -8,6 +8,10 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.LeightweightPDCGetter;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentDataGetter;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
@@ -156,7 +160,6 @@ public class Config {
 
     // Loads, parses, and auto updates the config file, creating a new config for
     // each map
-    @SuppressWarnings("deprecation")
     public static void loadConfigs() {
         CONFIGS.clear();
         WatcherEnchant.apply_patch_explosion = PATCH_CONFIGURATION.getBoolean("explosion.enable", true);
@@ -190,10 +193,10 @@ public class Config {
                 }
             }
             boolean denylistToggle = !PATCH_CONFIGURATION.getBoolean("allowlistSwitch", false); // Inverted because why not? FIXME Refractor
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.advancedLoreGetter(allowlist, denylistToggle);
+            CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, denylistToggle);
             break;
         case "lwNBT":
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.lwNBTGetter();
+            CustomEnchantment.Enchantment_Adapter = new LeightweightPDCGetter();
             break;
         case "NBT":
             EnumSet<Material> denylist = EnumSet.noneOf(Material.class);
@@ -211,13 +214,10 @@ public class Config {
                 }
             }
             boolean allowlistToggle = PATCH_CONFIGURATION.getBoolean("allowlistSwitch", false);
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.PersistentDataGatherer(denylist, allowlistToggle, false);
+            CustomEnchantment.Enchantment_Adapter = new PersistentDataGetter(denylist, !allowlistToggle);
             break;
         case "PR47-lore":
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.LegacyLoreGatherer();
-            break;
-        case "upstream":
-            CustomEnchantment.Enchantment_Adapter = new CustomEnchantment.ProvisionalLoreGatherer();
+            CustomEnchantment.Enchantment_Adapter = new BasicLoreGetter();
             break;
         default:
             Bukkit.getLogger().severe(Storage.MINILOGO + ChatColor.RED + "No (or invalid) enchantment gatherer specified, fallback to default.");
