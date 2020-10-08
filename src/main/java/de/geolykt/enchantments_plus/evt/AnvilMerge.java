@@ -1,22 +1,19 @@
 package de.geolykt.enchantments_plus.evt;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.Unrepairable;
 
 import java.util.*;
@@ -27,11 +24,67 @@ import static org.bukkit.event.EventPriority.MONITOR;
 
 // This class manages the combination of enchantments in an anvil. It takes into account conflicting enchantments, 
 //      the max number of enchantments per tool, and the enchantment's max level. It shuffles the results every time
-//      so that the player can find the combination they desire when there are conficting or too many enchantment
+//      so that the player can find the combination they desire when there are conflicting or too many enchantment
 public class AnvilMerge implements Listener {
 
-    public ItemStack doMerge(ItemStack leftItem, ItemStack rightItem, ItemStack oldOutItem, Config config) {
+    public ItemStack simulateMerge(ItemStack leftItem, ItemStack rightItem, Config config) {
+        if (leftItem == null || rightItem == null) {
+            return null;
+        }
+        if (leftItem.getType() == Material.AIR || rightItem.getType() == Material.AIR) {
+            return null;
+        }
 
+        List<String> normalLeftLore = new ArrayList<>();
+        Map<CustomEnchantment, Integer> leftEnchantments =
+            CustomEnchantment.getEnchants(leftItem, true, config.getWorld(), normalLeftLore);
+        Map<CustomEnchantment, Integer> rightEnchantments =
+            CustomEnchantment.getEnchants(rightItem, true, config.getWorld());
+
+        for (CustomEnchantment e : leftEnchantments.keySet()) {
+            if (e.getId() == Unrepairable.ID) {
+                return new ItemStack(Material.AIR);
+            }
+        }
+        for (CustomEnchantment e : rightEnchantments.keySet()) {
+            if (e.getId() == Unrepairable.ID) {
+                return new ItemStack(Material.AIR);
+            }
+        }
+        if(leftEnchantments.isEmpty() && rightEnchantments.isEmpty()) {
+            return null;
+        }
+        
+        EnchantmentPool pool = new EnchantmentPool(leftItem, config.getMaxEnchants());
+        pool.addAll(leftEnchantments);
+        List<Entry<CustomEnchantment, Integer>> rightEnchantmentList = new ArrayList<>(rightEnchantments.entrySet());
+        Collections.shuffle(rightEnchantmentList);
+        pool.addAll(rightEnchantmentList);
+        HashMap<CustomEnchantment, Integer> outEnchantments = pool.getEnchantmentMap();
+
+        ItemStack newOutItem = new ItemStack(leftItem);
+        ItemMeta meta = leftItem.getItemMeta();
+        meta.setLore(new ArrayList<>());
+        newOutItem.setItemMeta(meta);
+
+        for (Entry<CustomEnchantment, Integer> enchantEntry : outEnchantments.entrySet()) {
+            enchantEntry.getKey().setEnchantment(newOutItem, enchantEntry.getValue(), config.getWorld());
+        }
+
+        ItemMeta newOutMeta = newOutItem.getItemMeta();
+        List<String> outLore = newOutMeta.hasLore() ? newOutMeta.getLore() : new ArrayList<>();
+        outLore.addAll(normalLeftLore);
+
+        newOutMeta.setLore(outLore);
+        newOutItem.setItemMeta(newOutMeta);
+
+        CustomEnchantment.setGlow(newOutItem, !outEnchantments.isEmpty(), config.getWorld());
+
+        return newOutItem;
+        
+    }
+    
+    public ItemStack doMerge(ItemStack leftItem, ItemStack rightItem, ItemStack oldOutItem, Config config) {
         if (leftItem == null || rightItem == null || oldOutItem == null) {
             return null;
         }
@@ -49,20 +102,6 @@ public class AnvilMerge implements Listener {
         Map<CustomEnchantment, Integer> rightEnchantments =
             CustomEnchantment.getEnchants(rightItem, true, config.getWorld());
 
-        boolean isBookL = leftItem.getType() == Material.ENCHANTED_BOOK;
-        boolean isBookR = rightItem.getType() == Material.ENCHANTED_BOOK;
-
-
-        Map<Enchantment, Integer> lEnch = isBookL ?
-            ((EnchantmentStorageMeta) leftItem.getItemMeta()).getStoredEnchants()
-            : leftItem.getEnchantments();
-        Map<Enchantment, Integer> rEnch = isBookR ?
-            ((EnchantmentStorageMeta) rightItem.getItemMeta()).getStoredEnchants()
-            : rightItem.getEnchantments();
-
-        int leftUnbLvl = lEnch.getOrDefault(Enchantment.DURABILITY, -1);
-        int rightUnbLvl = rEnch.getOrDefault(Enchantment.DURABILITY, -1);
-
         for (CustomEnchantment e : leftEnchantments.keySet()) {
             if (e.getId() == Unrepairable.ID) {
                 return new ItemStack(Material.AIR);
@@ -73,11 +112,10 @@ public class AnvilMerge implements Listener {
                 return new ItemStack(Material.AIR);
             }
         }
-                
-                if(leftEnchantments.isEmpty() && rightEnchantments.isEmpty()) {
-                    return oldOutItem;
-                }
-
+        if(leftEnchantments.isEmpty() && rightEnchantments.isEmpty()) {
+            return oldOutItem;
+        }
+        
         EnchantmentPool pool = new EnchantmentPool(oldOutItem, config.getMaxEnchants());
         pool.addAll(leftEnchantments);
         List<Entry<CustomEnchantment, Integer>> rightEnchantmentList = new ArrayList<>(rightEnchantments.entrySet());
@@ -97,17 +135,6 @@ public class AnvilMerge implements Listener {
         ItemMeta newOutMeta = newOutItem.getItemMeta();
         List<String> outLore = newOutMeta.hasLore() ? newOutMeta.getLore() : new ArrayList<>();
         outLore.addAll(normalLeftLore);
-
-        if (leftUnbLvl * rightUnbLvl == 0 && leftUnbLvl < 1 && rightUnbLvl < 1) {
-            if (oldOutItem.getType() == ENCHANTED_BOOK) {
-                ((EnchantmentStorageMeta)newOutMeta).removeStoredEnchant(Enchantment.DURABILITY);
-                newOutMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-            } else {
-                newOutMeta.removeEnchant(Enchantment.DURABILITY);
-                newOutMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-            }
-        }
-
         newOutMeta.setLore(outLore);
         newOutItem.setItemMeta(newOutMeta);
 
@@ -132,7 +159,7 @@ public class AnvilMerge implements Listener {
 
     }
 
-    @EventHandler(priority = MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     public void onClicks(final PrepareAnvilEvent evt) {
         if (evt.getViewers().size() < 1) {
             return;
@@ -141,33 +168,18 @@ public class AnvilMerge implements Listener {
         final Config config = Config.get(evt.getViewers().get(0).getWorld());
         final AnvilInventory anvilInv = evt.getInventory();
 
-        if (anvilInv.getItem(0) != null && anvilInv.getItem(0).getType() == ENCHANTED_BOOK) {
-            EnchantmentStorageMeta bookMeta = (EnchantmentStorageMeta) anvilInv.getItem(0).getItemMeta();
-            if (!bookMeta.getStoredEnchants().containsKey(org.bukkit.enchantments.Enchantment.DURABILITY)) {
-                bookMeta.addStoredEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 0, true);
-                anvilInv.getItem(0).setItemMeta(bookMeta);
-            }
-        }
-        if (anvilInv.getItem(1) != null && anvilInv.getItem(1).getType() == ENCHANTED_BOOK) {
-            EnchantmentStorageMeta bookMeta = (EnchantmentStorageMeta) anvilInv.getItem(1).getItemMeta();
-            if (!bookMeta.getStoredEnchants().containsKey(org.bukkit.enchantments.Enchantment.DURABILITY)) {
-                bookMeta.addStoredEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 0, true);
-                anvilInv.getItem(1).setItemMeta(bookMeta);
-            }
+        ItemStack outItem = anvilInv.getItem(2);
+        ItemStack stack;
+        if (outItem == null) {
+            stack = simulateMerge(anvilInv.getItem(0),  anvilInv.getItem(1), config);
+            evt.getInventory().setRepairCost(CustomEnchantment.getEnchants(stack, config.getWorld()).size() * 3);
+        } else {
+            stack = doMerge(anvilInv.getItem(0),  anvilInv.getItem(1), outItem, config);
         }
 
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-
-            ItemStack leftItem = anvilInv.getItem(0);
-            ItemStack rightItem = anvilInv.getItem(1);
-            ItemStack outItem = anvilInv.getItem(2);
-            ItemStack stack = doMerge(leftItem, rightItem, outItem, config);
-
-            if (stack != null) {
-                anvilInv.setItem(2, stack);
-            }
-        }, 0);
+        if (stack != null) {
+            evt.setResult(stack);
+        }
     }
 
     private class EnchantmentPool {
@@ -176,8 +188,8 @@ public class AnvilMerge implements Listener {
         private final ItemStack                           is;
         private final int                                 maxCapacity;
 
-        public EnchantmentPool(ItemStack is, int maxCapacity) {
-            this.is = is;
+        public EnchantmentPool(ItemStack base, int maxCapacity) {
+            this.is = base;
             this.maxCapacity = maxCapacity;
         }
 

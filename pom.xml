@@ -36,6 +36,7 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>19.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- World protection plugins to integrate with -->
@@ -67,7 +68,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
