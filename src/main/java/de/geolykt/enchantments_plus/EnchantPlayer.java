@@ -75,11 +75,6 @@ public class EnchantPlayer {
         }
     }
 
-    // Returns the Player object associated with the EnchantPlayer
-    public Player getPlayer() {
-        return player;
-    }
-
     // Returns the EnchantPlayer object associated with the given Player
     public static EnchantPlayer matchPlayer(Player player) {
         for (EnchantPlayer p : PLAYERS) {
@@ -88,11 +83,6 @@ public class EnchantPlayer {
             }
         }
         return new EnchantPlayer(player);
-    }
-
-    // Sends the EnchantPlayer the given message
-    public void sendMessage(String message) {
-        player.sendMessage(message);
     }
 
 }
