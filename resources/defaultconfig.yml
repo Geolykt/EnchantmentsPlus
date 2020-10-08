@@ -549,12 +549,6 @@ shred_drops: all
 #  Determines if the certain enchantments can break blocks
 explosion_block_break: true
 
-#  Determines if the enchantment descriptions show up in lore
-description_lore : false
-
-#  Determines the color of enchantment descriptions shown in lore
-description_color: a
-
 #  Determines if enchantment glow is added by default even without vanilla enchantments.
 #  (Set to false if you have issues with the HIDE_ENCHANTMENTS flag resetting)
 enchantment_glow: false

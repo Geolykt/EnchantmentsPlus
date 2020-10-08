@@ -328,48 +328,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 + (maxLevel == 1 ? " " : " " + levelStr);
     }
 
-    public List<String> getDescription(World world) {
-        List<String> desc = new LinkedList<>();
-        if (Config.get(world).descriptionLore()) {
-            String strStart = Utilities.toInvisibleString("ze.desc." + getId())
-                    + Config.get(world).getDescriptionColor() + "" + ChatColor.ITALIC + " ";
-            StringBuilder bldr = new StringBuilder();
-
-            int i = 0;
-            for (char c : description.toCharArray()) {
-                if (i < 30) {
-                    i++;
-                    bldr.append(c);
-                } else {
-                    if (c == ' ') {
-                        desc.add(strStart + bldr.toString());
-                        bldr = new StringBuilder(" ");
-                        i = 1;
-                    } else {
-                        bldr.append(c);
-                    }
-                }
-            }
-            if (i != 0) {
-                desc.add(strStart + bldr.toString());
-            }
-        }
-        return desc;
-    }
-
-    public static boolean isDescription(String str) {
-        Map<String, Boolean> unescaped = Utilities.fromInvisibleString(str);
-        for (Map.Entry<String, Boolean> entry : unescaped.entrySet()) {
-            if (!entry.getValue()) {
-                String[] vals = entry.getKey().split("\\.");
-                if (vals.length == 3 && vals[0].equals("ze") && vals[1].equals("desc")) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public void setEnchantment(ItemStack stk, int level, World world) {
         Enchantment_Adapter.setEnchantment(stk, this, level, world);
     }
@@ -675,19 +633,17 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             if (meta.hasLore()) {
                 for (String loreStr : meta.getLore()) {
                     Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, world);
-                    if (enchEntry == null && !isDescription(loreStr)) {
+                    if (enchEntry == null) {
                         normalLore.add(loreStr);
                     } else if (enchEntry != null && enchEntry.getKey() != ench) {
                         customEnch = true;
                         lore.add(enchEntry.getKey().getShown(enchEntry.getValue(), world));
-                        lore.addAll(enchEntry.getKey().getDescription(world));
                     }
                 }
             }
 
             if (ench != null && level > 0 && level <= ench.maxLevel) {
                 lore.add(ench.getShown(level, world));
-                lore.addAll(ench.getDescription(world));
                 customEnch = true;
             }
 
@@ -989,19 +945,17 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             if (meta.hasLore()) {
                 for (String loreStr : meta.getLore()) {
                     Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, world);
-                    if (enchEntry == null && !isDescription(loreStr)) {
+                    if (enchEntry == null) {
                         normalLore.add(loreStr);
                     } else if (enchEntry != null && enchEntry.getKey() != ench) {
                         customEnch = true;
                         lore.add(enchEntry.getKey().getShown(enchEntry.getValue(), world));
-                        lore.addAll(enchEntry.getKey().getDescription(world));
                     }
                 }
             }
 
             if (ench != null && level > 0 && level <= ench.maxLevel) {
                 lore.add(ench.getShown(level, world));
-                lore.addAll(ench.getDescription(world));
                 customEnch = true;
             }
 
