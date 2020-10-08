@@ -1,6 +1,7 @@
 package de.geolykt.enchantments_plus;
 //For Bukkit & Spigot 1.16.X
 
+import org.apache.commons.lang.time.StopWatch;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -136,6 +137,8 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Loads configs and starts tasks
     public void onEnable() {
+        StopWatch w = new StopWatch();
+        w.start();
         Storage.plugin = this;
         File compatFile = new File(getDataFolder(), "magicCompat.yml");
         if (!compatFile.exists()) {
@@ -190,5 +193,7 @@ public class Enchantments_plus extends JavaPlugin {
 
         // medium-high asynchronous frequency runnable (every five ticks)
         getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {Anthropomorphism.removeCheck();}, 5, 5);
+        w.stop();
+        getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
     }
 }
