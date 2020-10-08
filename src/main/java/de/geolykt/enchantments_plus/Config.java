@@ -47,8 +47,6 @@ public class Config {
     private final int maxEnchants; // Max number of Custom Enchantments on a tool
     private final int shredDrops; // The setting (all, block, none) for shred drops
     private final boolean explosionBlockBreak; // Determines whether enchantment explosions cause world damage
-    private final boolean descriptionLore; // Determines if description lore appears on tools
-    private final ChatColor descriptionColor; // The color of the description lore
     private final World world; // The World associated with the config
     private final boolean enchantGlow;
     private final ChatColor enchantmentColor;
@@ -57,15 +55,13 @@ public class Config {
     public static final FileConfiguration PATCH_CONFIGURATION;
     // Constructs a new config object
     public Config(Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
-            boolean explosionBlockBreak, boolean descriptionLore, ChatColor descriptionColor,
+            boolean explosionBlockBreak,
             ChatColor enchantmentColor, ChatColor curseColor, boolean enchantGlow, World world) {
         this.worldEnchants = worldEnchants;
         this.enchantRarity = enchantRarity;
         this.maxEnchants = maxEnchants;
         this.shredDrops = shredDrops;
         this.explosionBlockBreak = explosionBlockBreak;
-        this.descriptionLore = descriptionLore;
-        this.descriptionColor = descriptionColor;
         this.world = world;
 
         this.nameToEnch = new HashMap<>();
@@ -110,16 +106,6 @@ public class Config {
     // create
     public boolean explosionBlockBreak() {
         return explosionBlockBreak;
-    }
-
-    // Returns if description lore appears on tools
-    public boolean descriptionLore() {
-        return descriptionLore;
-    }
-
-    // Returns the color of description lore
-    public ChatColor getDescriptionColor() {
-        return descriptionColor;
     }
 
     // Returns whether enchant glow is enabled for custom enchantments
@@ -273,13 +259,10 @@ public class Config {
             double enchantRarity = (rarity / 100.0);
             int maxEnchants = (int) yamlConfig.get("max_enchants");
             boolean explosionBlockBreak = (boolean) yamlConfig.get("explosion_block_break");
-            boolean descriptionLore = (boolean) yamlConfig.get("description_lore");
             boolean enchantGlow = (boolean) yamlConfig.get("enchantment_glow");
-            ChatColor descriptionColor = ChatColor.getByChar("" + yamlConfig.get("description_color"));
             ChatColor enchantColor = ChatColor.getByChar("" + yamlConfig.get("enchantment_color"));
             ChatColor curseColor = ChatColor.getByChar("" + yamlConfig.get("curse_color"));
 
-            descriptionColor = (descriptionColor != null) ? descriptionColor : ChatColor.GREEN;
             enchantColor = enchantColor != null ? enchantColor : ChatColor.GRAY;
             curseColor = curseColor != null ? curseColor : ChatColor.RED;
 
@@ -296,8 +279,6 @@ public class Config {
                 default:
                     shredDrops = 0;
             }
-            // Load CustomEnchantment Classes
-            Set<CustomEnchantment> enchantments = new HashSet<>();
             Map<String, LinkedHashMap<String, Object>> configInfo = new HashMap<>();
             for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig
                     .get(ConfigKeys.ENCHANTMENTS.toString())) {
@@ -305,6 +286,8 @@ public class Config {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
             }
+            // Load CustomEnchantment Classes
+            Set<CustomEnchantment> enchantments = new HashSet<>();
             for (Class<? extends CustomEnchantment> cl : REGISTERED_ENCHANTMENTS) {
                 try {
                     CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.getDeclaredConstructor().newInstance().defaults();
@@ -326,7 +309,7 @@ public class Config {
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
-                    descriptionLore, descriptionColor, enchantColor, curseColor, enchantGlow, world);
+                    enchantColor, curseColor, enchantGlow, world);
         } catch (IOException | InvalidConfigurationException ex) {
             System.err.printf("Error parsing config for world '%s'. Skipping", world.getName());
         }
