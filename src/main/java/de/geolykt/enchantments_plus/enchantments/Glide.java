@@ -68,7 +68,7 @@ public class Glide extends CustomEnchantment {
             player.setFallDistance((float) (6 - level * power) - 4);
             Location l = player.getLocation().clone();
             l.setY(l.getY() - 3);
-            Utilities.display(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
+            Utilities.spawnParticle(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
         }
         if (Storage.rnd.nextInt(5 * level) == 5) { // Slowly damage all armor
             ItemStack[] s = player.getInventory().getArmorContents();

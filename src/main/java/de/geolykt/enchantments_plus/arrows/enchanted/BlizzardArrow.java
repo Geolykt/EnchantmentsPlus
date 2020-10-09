@@ -16,7 +16,7 @@ public class BlizzardArrow extends EnchantedArrow {
     }
 
     public void onImpact() {
-        Utilities.display(Utilities.getCenter(arrow.getLocation()), Particle.CLOUD, 100 * getLevel(), 0.1f,
+        Utilities.spawnParticle(Utilities.getCenter(arrow.getLocation()), Particle.CLOUD, 100 * getLevel(), 0.1f,
                 getLevel(), 1.5f, getLevel());
         double radius = 1 + getLevel() * getPower();
         for (Entity e : arrow.getNearbyEntities(radius, radius, radius)) {

@@ -53,7 +53,7 @@ public class Extraction extends CustomEnchantment {
             o.setExperience(
                 evt.getBlock().getType() == IRON_ORE ? Storage.rnd.nextInt(5) + 1 : Storage.rnd.nextInt(5) + 3);
             evt.getBlock().setType(AIR);
-            Utilities.display(evt.getBlock().getLocation(), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+            Utilities.spawnParticle(evt.getBlock().getLocation(), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
             return true;
         }
         return false;

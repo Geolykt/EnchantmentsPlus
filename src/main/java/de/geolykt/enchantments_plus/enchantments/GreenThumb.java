@@ -78,7 +78,7 @@ public class GreenThumb extends CustomEnchantment {
                                 break;
                         }
                         if (applied) { // Display particles and damage armor
-                            Utilities.display(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
+                            Utilities.spawnParticle(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
                                 Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
                             int chc = Storage.rnd.nextInt(50);
                             if (chc > 42 && level != 10) {

@@ -46,7 +46,7 @@ public class Conversion extends CustomEnchantment {
                         for (int i = 0; i < 3; i++) {
                             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                                 Utilities
-                                    .display(Utilities.getCenter(player.getLocation()), Particle.HEART, 10, .1f,
+                                    .spawnParticle(Utilities.getCenter(player.getLocation()), Particle.HEART, 10, .1f,
                                         .5f, .5f, .5f);
                             }, ((i * 5) + 1));
                         }

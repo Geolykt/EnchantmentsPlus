@@ -58,7 +58,7 @@ public class Transformation extends CustomEnchantment {
                     if (evt.getDamage() > ((LivingEntity) evt.getEntity()).getHealth()) {
                         evt.setCancelled(true);
                     }
-                    Utilities.display(Utilities.getCenter(evt.getEntity().getLocation()), Particle.HEART, 70, .1f,
+                    Utilities.spawnParticle(Utilities.getCenter(evt.getEntity().getLocation()), Particle.HEART, 70, .1f,
                             .5f, 2, .5f);
 
                     double originalHealth = ((LivingEntity) evt.getEntity()).getHealth();
