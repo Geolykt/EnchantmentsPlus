@@ -363,8 +363,8 @@ public class Utilities {
     // otherwise false
     public static boolean canUse(Player player, int enchantmentID) {
         return PermissionTypes.USE.hasPermission(player) &&
-                EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) != 0 &&
-                EnchantPlayer.matchPlayer(player).isDisabled(enchantmentID);
+                (EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) == 0) &&
+                (!EnchantPlayer.matchPlayer(player).isDisabled(enchantmentID));
     }
 
     // Adds a potion effect of given length and intensity to the given entity.
