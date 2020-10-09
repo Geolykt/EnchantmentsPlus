@@ -396,10 +396,6 @@ public class CompatibilityAdapter {
         return 0;
     }
 
-    public void collectXP(Player player, int amount) {
-        player.giveExp(amount);
-    }
-
     public boolean breakBlockNMS(Block block, Player player) {
         BlockBreakEvent evt = new BlockBreakEvent(block, player);
         Bukkit.getPluginManager().callEvent(evt);
