@@ -26,12 +26,6 @@ import de.geolykt.enchantments_plus.Storage;
  */
 public class GrindstoneMerge implements Listener {
 
-    private static final GrindstoneMerge INSTANCE = new GrindstoneMerge();
-
-    public static GrindstoneMerge instance() {
-        return INSTANCE;
-    }
-
     @EventHandler(priority = MONITOR)
     public void onClicks(final InventoryClickEvent evt) {
         if (evt.getInventory().getType() == InventoryType.GRINDSTONE) {

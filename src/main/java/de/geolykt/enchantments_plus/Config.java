@@ -459,8 +459,13 @@ public class Config {
 }
 
 enum ConfigKeys {
-    ENCHANTMENTS("enchantments"), NAME("Name"), PROBABILITY("Probability"), COOLDOWN("Cooldown"), POWER("Power"),
-    MAX_LEVEL("Max Level"), TOOLS("Tools");
+    ENCHANTMENTS("enchantments"),
+    NAME("Name"),
+    PROBABILITY("Probability"),
+    COOLDOWN("Cooldown"),
+    POWER("Power"),
+    MAX_LEVEL("Max Level"),
+    TOOLS("Tools");
 
     private String key;
 

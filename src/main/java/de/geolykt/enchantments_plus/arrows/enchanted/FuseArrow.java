@@ -54,7 +54,7 @@ public class FuseArrow extends EnchantedArrow {
             } else if (evt.getEntity().getType().equals(EntityType.MUSHROOM_COW)) {
                 MushroomCow c = (MushroomCow) evt.getEntity();
                 if (c.isAdult()) {
-                    Utilities.display(l, Particle.EXPLOSION_LARGE, 1, 1f, 0, 0, 0);
+                    Utilities.spawnParticle(l, Particle.EXPLOSION_LARGE, 1, 1f, 0, 0, 0);
                     evt.getEntity().remove();
                     l.getWorld().spawnEntity(l, EntityType.COW);
                     l.getWorld().dropItemNaturally(l, new ItemStack(Material.RED_MUSHROOM, 5));

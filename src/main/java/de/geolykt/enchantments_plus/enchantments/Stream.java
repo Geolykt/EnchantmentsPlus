@@ -115,7 +115,7 @@ public class Stream extends CustomEnchantment {
             }
 
 
-            Utilities.display(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
+            Utilities.spawnParticle(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
             return true;
         }
         return false;

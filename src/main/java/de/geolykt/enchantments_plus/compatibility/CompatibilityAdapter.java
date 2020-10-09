@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import static org.bukkit.entity.EntityType.*;
 
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import static org.bukkit.potion.PotionEffectType.*;
 
@@ -618,14 +619,13 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     public boolean pickBerries(Block berryBlock, Player player) {
         BlockData data = berryBlock.getBlockData();
         Ageable a = (Ageable) data;
         if (a.getAge() > 1) { // Age of ripe Berries
             PlayerInteractEvent pie = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, player.getInventory().getItemInMainHand(), berryBlock, player.getFacing());
             Bukkit.getPluginManager().callEvent(pie);
-            if (!pie.isCancelled()) {
+            if (pie.useInteractedBlock() != Result.DENY) {
                 int numDropped = (a.getAge() == 3 ? 2 : 1) + (RND.nextBoolean() ? 1 : 0); // Natural drop rate. Age 2 -> 1-2 berries, Age 3 -> 2-3 berries
                 a.setAge(1); // Picked adult berry bush
                 berryBlock.setBlockData(a);

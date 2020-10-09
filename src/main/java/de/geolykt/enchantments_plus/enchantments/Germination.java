@@ -61,7 +61,7 @@ public class Germination extends CustomEnchantment {
                             ADAPTER.grow(relativeBlock, player);
                         }
 
-                        Utilities.display(Utilities.getCenter(relativeBlock), Particle.VILLAGER_HAPPY, 30, 1f, .3f,
+                        Utilities.spawnParticle(Utilities.getCenter(relativeBlock), Particle.VILLAGER_HAPPY, 30, 1f, .3f,
                                 .3f,
                                 .3f);
 

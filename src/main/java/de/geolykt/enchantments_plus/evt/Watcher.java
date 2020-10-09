@@ -281,19 +281,24 @@ public class Watcher implements Listener {
                 if (evt.getCurrentItem().hasItemMeta()) {
                     if (evt.getCurrentItem().getItemMeta().hasLore()) {
                         Player player = (Player) evt.getWhoClicked();
-                        for (CustomEnchantment e : CustomEnchantment
-                                .getEnchants(evt.getCurrentItem(), player.getWorld()).keySet()) {
-                            if (e.getClass().equals(Jump.class)) {
-                                player.removePotionEffect(PotionEffectType.JUMP);
-                            } else if (e.getClass().equals(Meador.class)) {
-                                player.removePotionEffect(PotionEffectType.JUMP);
+                        for (CustomEnchantment e : CustomEnchantment.getEnchants(evt.getCurrentItem(), player.getWorld()).keySet()) {
+                            switch (e.asEnum()) {
+                            case MEADOR:
                                 player.removePotionEffect(PotionEffectType.SPEED);
-                            } else if (e.getClass().equals(Speed.class)) {
+                            case JUMP:
+                                player.removePotionEffect(PotionEffectType.JUMP);
+                                break;
+                            case SPEED:
                                 player.removePotionEffect(PotionEffectType.SPEED);
-                            } else if (e.getClass().equals(NightVision.class)) {
+                                break;
+                            case NIGHT_VISION:
                                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                            } else if (e.getClass().equals(Weight.class)) {
+                                break;
+                            case WEIGHT:
                                 player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                                break;
+                            default:
+                                break;
                             }
                         }
                     }
