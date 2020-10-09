@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,11 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Class licensed under the GNU General Public License v2.0<br>
- *
- * see <a href:"https://github.com/ZombieStriker/PsudoCommands/blob/master/LICENSE">the license</a>, for the whole license<br>
- *  Source altered to use spaces instead of tabs and removed unused private variables and methods
+ * Class licensed under the GNU General Public License v2.0; 
+ * see https://github.com/cricri211/PsudoCommands/blob/master/LICENSE for the whole license.
+ *  Original can be found at https://github.com/cricri211/PsudoCommands/blob/master/src/me/zombie_striker/psudocommands/CommandUtils.java.
+ * <hr>
+ *  Source altered to use spaces instead of tabs.
  */
 public class CommandUtils {
 
@@ -48,7 +50,13 @@ public class CommandUtils {
      * <p>
      * Currently supports the selectors: [type=] [r=] [rm=] [c=] [w=] [m=]
      * [name=] [l=] [lm=] [h=] [hm=] [rx=] [rxm=] [ry=] [rym=] [team=]
-     * [score_---=] [score_---_min=] [x] [y] [z] [limit=] [x_rotation] [y_rotation]
+     * [score_---=] [score_---_min=] [x] [y] [z] [dx] [dy] [dz] [gamemode=]
+     * [limit=] [x_rotation] [y_rotation] [tag=] [scores={}] [level=]
+     *
+     * Note : m, r rm, rx rxm, ry rym, l lm, score_--- score_---_min are old
+     * format from 1.12-. They are respectively replaced by gamemode,
+     * distance, x_rotation, y_rotation, level, scores={}, in vanilla 1.13+
+     * Try to use newer tags if you run on 1.13+
      * <p>
      * All selectors can be inverted.
      */
@@ -59,20 +67,22 @@ public class CommandUtils {
             loc = ((Player) sender).getLocation();
         } else if (sender instanceof BlockCommandSender) {
             // Center of block.
-            loc = ((BlockCommandSender) sender).getBlock().getLocation().add(0.5, 0, 0.5);
+            loc = ((BlockCommandSender) sender).getBlock().getLocation().add(.5, 0, .5);
         } else if (sender instanceof CommandMinecart) {
             loc = ((CommandMinecart) sender).getLocation();
         }
         String[] tags = getTags(arg);
 
         // prefab fix
-        for (String s : tags) {
-            if (hasTag(SelectorType.X, s)) {
-                loc.setX(getInt(s));
-            } else if (hasTag(SelectorType.Y, s)) {
-                loc.setY(getInt(s));
-            } else if (hasTag(SelectorType.Z, s)) {
-                loc.setZ(getInt(s));
+        if (loc != null) {
+            for (String s : tags) {
+                if (hasTag(SelectorType.X, s)) {
+                    loc.setX(s.contains(".") ? getValueAsFloat(s) : getValueAsInteger(s));
+                } else if (hasTag(SelectorType.Y, s)) {
+                    loc.setY(s.contains(".") ? getValueAsFloat(s) : getValueAsInteger(s));
+                } else if (hasTag(SelectorType.Z, s)) {
+                    loc.setZ(s.contains(".") ? getValueAsFloat(s) : getValueAsInteger(s));
+                }
             }
         }
 
@@ -96,7 +106,7 @@ public class CommandUtils {
         } else if (arg.startsWith("@a")) {
             // ents = new Entity[maxEnts];
             List<Entity> listOfValidEntities = new ArrayList<>();
-            int C = getLimit(arg);
+            int C = getLimit(tags);
 
             boolean usePlayers = true;
             for (String tag : tags) {
@@ -136,8 +146,6 @@ public class CommandUtils {
 
             for (World w : getAcceptedWorldsFullString(loc, arg)) {
                 for (Player e : w.getPlayers()) {
-                    if (e == sender)
-                        continue;
                     Location temp = loc;
                     if (temp == null)
                         temp = e.getWorld().getSpawnLocation();
@@ -159,14 +167,13 @@ public class CommandUtils {
             }
             ents[0] = closest;
         } else if (arg.startsWith("@e")) {
-            List<Entity> entities = new ArrayList<Entity>();
-            int C = getLimit(arg);
+            List<Entity> entities = new ArrayList<>();
+            int C = getLimit(tags);
             for (World w : getAcceptedWorldsFullString(loc, arg)) {
                 for (Entity e : w.getEntities()) {
-                    if (entities.size() > C)
+                    if (entities.size() >= C) {
                         break;
-                    if (e == sender)
-                        continue;
+                    }
                     boolean valid = true;
                     for (String tag : tags) {
                         if (!canBeAccepted(tag, e, loc)) {
@@ -233,112 +240,169 @@ public class CommandUtils {
      */
     public static Entity getTarget(CommandSender sender, String arg) {
         Entity[] e = getTargets(sender, arg);
-        if (e.length == 0)
+        if (e == null || e.length == 0)
             return null;
         return e[0];
     }
 
     /**
-     * Returns an integer. Use this to support "~" by providing what it will mean.
-     * <p>
-     * E.g. rel="x" when ~ should be turn into the entity's X coord.
-     * <p>
-     * Currently supports "x", "y" and "z".
+     * Returns true if str is a relative, local or world coordinate.
+     * E.g. "^-2" or "~1.45" or "-2.4"
+     * If firstCoord is true, str has to be only relative or local, with "~" or "^",
+     * not only number. Easier to detect the first coordinate of the three.
+     * If it is false, str can be a double as string.
      *
-     * @param arg The target
-     * @param rel relative to the X,Y, or Z
-     * @param e   The entity to check relative to.
-     * @return the int
+     * @param str        The tested coordinate
+     * @param firstCoord Is str the first coordinate of the three.
+     * @return True if str is a relative coordinate
      */
-    public static int getIntRelative(String arg, String rel, Entity e) {
-        int relInt = 0;
-        if (arg.startsWith("~")) {
-            switch (rel.toLowerCase()) {
-            case "x":
-                relInt = e.getLocation().getBlockX();
-                break;
-            case "y":
-                relInt = e.getLocation().getBlockY();
-                break;
-            case "z":
-                relInt = e.getLocation().getBlockZ();
-                break;
-            }
-            return mathIt(arg, relInt);
-        } else if (arg.startsWith("^")) {
-            // TODO: Fix code. The currently just acts the same as ~. This should move the
-            // entity relative to what its looking at.
-
-            switch (rel.toLowerCase()) {
-            case "x":
-                relInt = e.getLocation().getBlockX();
-                break;
-            case "y":
-                relInt = e.getLocation().getBlockY();
-                break;
-            case "z":
-                relInt = e.getLocation().getBlockZ();
-                break;
-            }
-            return mathIt(arg, relInt);
+    public static boolean isRelativeCoord(String str, boolean firstCoord) {
+        // return true if it is a used coordinated like ~3.4 or ^40 or 3.1 ...
+        if(str.startsWith("~") || str.startsWith("^")) {
+            return str.length() == 1 || isDouble(str.substring(1));
         }
-        return 0;
+        return !firstCoord && isDouble(str);
+    }
+
+    /**
+     * Parse string coordinates as double coordinates.
+     * Each string is a number or starts with "~".
+     * Precondition : x, y and z verify isRelativeCoord.
+     *
+     * @param x      First coordinate
+     * @param y      Second coordinate
+     * @param z      Third coordinate
+     * @param origin The origin location for relative
+     * @return The arrival location
+     */
+    public static Location getRelativeCoord(String x, String y, String z, Location origin) {
+        Location arrival = origin.clone();
+        if(x.startsWith("~")) {
+            arrival.setX(arrival.getX() + getCoordinate(x));
+        } else {
+            arrival.setX(getCoordinate(x));
+        }
+
+        if(y.startsWith("~")) {
+            arrival.setY(arrival.getY() + getCoordinate(y));
+        } else {
+            arrival.setY(getCoordinate(y));
+        }
+
+        if(z.startsWith("~")) {
+            arrival.setZ(arrival.getZ() + getCoordinate(z));
+        } else {
+            arrival.setZ(getCoordinate(z));
+        }
+        return arrival;
+    }
+
+    /**
+     * Parse string coordinates as double coordinates.
+     * Each string starts with "^".
+     * Precondition : x, y and z verify isRelativeCoord.
+     *
+     * @param x      First coordinate
+     * @param y      Second coordinate
+     * @param z      Third coordinate
+     * @param origin The origin location for local
+     * @return The arrival location
+     */
+    public static Location getLocalCoord(String x, String y, String z, Location origin) {
+        Location arrival = origin.clone();
+
+        Vector dirX = new Location(arrival.getWorld(), 0, 0, 0, Location.normalizeYaw(arrival.getYaw()-90),
+                arrival.getPitch()).getDirection().normalize();
+        Vector dirY = new Location(arrival.getWorld(), 0, 0, 0, arrival.getYaw(),
+                arrival.getPitch()-90).getDirection().normalize();
+        Vector dirZ = arrival.getDirection().normalize();
+
+        return arrival.add(dirX.multiply(getCoordinate(x)))
+                .add(dirY.multiply(getCoordinate(y)))
+                .add(dirZ.multiply(getCoordinate(z)));
+    }
+
+    private static double getCoordinate(String c) {
+        // c is like ^3 or ~-1.2 or 489.1
+        return c.length() == 1 ? 0 : Double.parseDouble(c.substring(1));
+    }
+
+    private static boolean isDouble(String str) {
+        try {
+            Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     private static boolean canBeAccepted(String arg, Entity e, Location loc) {
-        if (hasTag(SelectorType.X_ROTATION, arg) && isWithinYaw(arg, e))
+        SelectorType type = getTag(arg);
+        if (type == null)
+            return false;
+        switch (type) {
+        case X:
+        case Y:
+        case Z:
+        case LIMIT:
+        case C:
             return true;
-        if (hasTag(SelectorType.Y_ROTATION, arg) && isWithinPitch(arg, e))
-            return true;
-        if (hasTag(SelectorType.TYPE, arg) && isType(arg, e))
-            return true;
-        if (hasTag(SelectorType.NAME, arg) && isName(arg, e))
-            return true;
-        if (hasTag(SelectorType.TEAM, arg) && isTeam(arg, e))
-            return true;
-        if (hasTag(SelectorType.SCORE_FULL, arg) && isScore(arg, e))
-            return true;
-        if (hasTag(SelectorType.SCORE_MIN, arg) && isScoreMin(arg, e))
-            return true;
-        if (hasTag(SelectorType.SCORE_13, arg) && isScoreWithin(arg, e))
-            return true;
-        if (hasTag(SelectorType.DISTANCE, arg) && isWithinDistance(arg, loc, e))
-            return true;
-        if (hasTag(SelectorType.LEVEL, arg) && isWithinLevel(arg, e))
-            return true;
-        if (hasTag(SelectorType.TAG, arg) && isHasTags(arg, e))
-            return true;
-        if (hasTag(SelectorType.RYM, arg) && isRYM(arg, e))
-            return true;
-        if (hasTag(SelectorType.RXM, arg) && isRXM(arg, e))
-            return true;
-        if (hasTag(SelectorType.HM, arg) && isHM(arg, e))
-            return true;
-        if (hasTag(SelectorType.RY, arg) && isRY(arg, e))
-            return true;
-        if (hasTag(SelectorType.RX, arg) && isRX(arg, e))
-            return true;
-        if (hasTag(SelectorType.RM, arg) && isRM(arg, loc, e))
-            return true;
-        if (hasTag(SelectorType.LMax, arg) && isLM(arg, e))
-            return true;
-        if (hasTag(SelectorType.L, arg) && isL(arg, e))
-            return true;
-        if (hasTag(SelectorType.m, arg) && isM(arg, e))
-            return true;
-        if (hasTag(SelectorType.H, arg) && isH(arg, e))
-            return true;
-        if (hasTag(SelectorType.World, arg) && isW(arg, loc, e))
-            return true;
-        if (hasTag(SelectorType.R, arg) && isR(arg, loc, e))
-            return true;
-        if (hasTag(SelectorType.X, arg))
-            return true;
-        if (hasTag(SelectorType.Y, arg))
-            return true;
-        if (hasTag(SelectorType.Z, arg))
-            return true;
-        return false;
+        case DISTANCE:
+            return isWithinDistance(arg, loc, e);
+        case TYPE:
+            return isType(arg, e);
+        case TAG:
+            return isHasTags(arg, e);
+        case NAME:
+            return isName(arg, e);
+        case TEAM:
+            return isTeam(arg, e);
+        case X_ROTATION:
+            return isWithinYaw(arg, e);
+        case Y_ROTATION:
+            return isWithinPitch(arg, e);
+        case DX:
+            return e.getLocation().getWorld() == loc.getWorld() && isDRange(arg, e.getLocation().getX(), loc.getX());
+        case DY:
+            return e.getLocation().getWorld() == loc.getWorld() && isDRange(arg, e.getLocation().getY(), loc.getY());
+        case DZ:
+            return e.getLocation().getWorld() == loc.getWorld() && isDRange(arg, e.getLocation().getZ(), loc.getZ());
+        case SCORES:
+            return isScoreWithin(arg, e);
+        case SCORE_FULL:
+            return isScore(arg, e);
+        case SCORE_MIN:
+            return isScoreMin(arg, e);
+        case R:
+            return isR(arg, loc, e);
+        case RM:
+            return isRM(arg, loc, e);
+        case RX:
+            return isRX(arg, e);
+        case RXM:
+            return isRXM(arg, e);
+        case RY:
+            return isRY(arg, e);
+        case RYM:
+            return isRYM(arg, e);
+        case LEVEL:
+            return isWithinLevel(arg, e);
+        case L:
+            return isL(arg, e);
+        case LMax:
+            return isLM(arg, e);
+        case GAMEMODE:
+        case M:
+            return isM(arg, e);
+        case H:
+            return isH(arg, e);
+        case HM:
+            return isHM(arg, e);
+        case World:
+            return isW(arg);
+        default:
+            return false;
+        }
     }
 
     private static String[] getTags(String arg) {
@@ -348,75 +412,12 @@ public class CommandUtils {
         return tags.split(",");
     }
 
-    private static int mathIt(String args, int relInt) {
-        int total = 0;
-        short mode = 0;
-        String arg = args.replace("~", String.valueOf(relInt));
-        String intString = "";
-        for (int i = 0; i < arg.length(); i++) {
-            if (arg.charAt(i) == '+' || arg.charAt(i) == '-' || arg.charAt(i) == '*' || arg.charAt(i) == '/') {
-                try {
-                    switch (mode) {
-                    case 0:
-                        total = total + Integer.parseInt(intString);
-                        break;
-                    case 1:
-                        total = total - Integer.parseInt(intString);
-                        break;
-                    case 2:
-                        total = total * Integer.parseInt(intString);
-                        break;
-                    case 3:
-                        total = total / Integer.parseInt(intString);
-                        break;
-                    }
-                    mode = (short) ((arg.charAt(i) == '+') ? 0
-                            : ((arg.charAt(i) == '-') ? 1
-                                    : ((arg.charAt(i) == '*') ? 2 : ((arg.charAt(i) == '/') ? 3 : -1))));
-                } catch (Exception e) {
-                    Bukkit.getLogger().severe("There has been an issue with a plugin using the CommandUtils class!");
-                }
-
-            } else if (args.length() == i || arg.charAt(i) == ' ' || arg.charAt(i) == ',' || arg.charAt(i) == ']') {
-                try {
-                    switch (mode) {
-                    case 0:
-                        total = total + Integer.parseInt(intString);
-                        break;
-                    case 1:
-                        total = total - Integer.parseInt(intString);
-                        break;
-                    case 2:
-                        total = total * Integer.parseInt(intString);
-                        break;
-                    case 3:
-                        total = total / Integer.parseInt(intString);
-                        break;
-                    }
-                } catch (Exception e) {
-                    Bukkit.getLogger().severe("There has been an issue with a plugin using the CommandUtils class!");
-                }
-                break;
-            } else {
-                intString += arg.charAt(i);
+    private static int getLimit(String[] tags) {
+        for (String s : tags) {
+            if (hasTag(SelectorType.LIMIT, s) || hasTag(SelectorType.C, s)) {
+                return getValueAsInteger(s);
             }
         }
-        return total;
-    }
-
-    private static int getLimit(String arg) {
-        if (hasTag(SelectorType.LIMIT, arg))
-            for (String s : getTags(arg)) {
-                if (hasTag(SelectorType.LIMIT, s)) {
-                    return getInt(s);
-                }
-            }
-        if (hasTag(SelectorType.C, arg))
-            for (String s : getTags(arg)) {
-                if (hasTag(SelectorType.C, s)) {
-                    return getInt(s);
-                }
-            }
         return Integer.MAX_VALUE;
     }
 
@@ -447,9 +448,9 @@ public class CommandUtils {
         return arg.toLowerCase().replace("!", "").split("=")[1];
     }
 
-    /*private static float getValueAsFloat(String arg) {
+    private static float getValueAsFloat(String arg) {
         return Float.parseFloat(arg.replace("!", "").split("=")[1]);
-    }*/
+    }
 
     private static int getValueAsInteger(String arg) {
         return Integer.parseInt(arg.replace("!", "").split("=")[1]);
@@ -482,7 +483,7 @@ public class CommandUtils {
             }
         }
         if (string == null) {
-            List<World> worlds = new ArrayList<World>();
+            List<World> worlds = new ArrayList<>();
             if (loc == null || loc.getWorld() == null) {
                 worlds.addAll(Bukkit.getWorlds());
             } else {
@@ -494,7 +495,7 @@ public class CommandUtils {
     }
 
     private static List<World> getAcceptedWorlds(String string) {
-        List<World> worlds = new ArrayList<World>(Bukkit.getWorlds());
+        List<World> worlds = new ArrayList<>(Bukkit.getWorlds());
         if (isInverted(string)) {
             worlds.remove(getW(string));
         } else {
@@ -504,12 +505,16 @@ public class CommandUtils {
         return worlds;
     }
 
+    private static boolean isDRange(String arg, double value, double base) {
+        return value > (base - .35) && value < (base + Double.parseDouble(arg.split("=")[1]) + 1.35);
+    }
+
     private static boolean isTeam(String arg, Entity e) {
         if (!(e instanceof Player))
             return false;
         for (Team t : Bukkit.getScoreboardManager().getMainScoreboard().getTeams()) {
             if ((t.getName().equalsIgnoreCase(getTeam(arg)) != isInverted(arg))) {
-                if ((t.getEntries().contains(((Player) e).getName()) != isInverted(arg)))
+                if ((t.getEntries().contains(e.getName()) != isInverted(arg)))
                     return true;
             }
         }
@@ -517,13 +522,11 @@ public class CommandUtils {
     }
 
     private static boolean isWithinPitch(String arg, Entity e) {
-//        float pitch = getValueAsFloat(arg);
-        return isWithinDoubleValue(isInverted(arg), arg, e.getLocation().getPitch());
+        return isWithinDoubleValue(isInverted(arg), arg.split("=")[1], e.getLocation().getPitch());
     }
 
     private static boolean isWithinYaw(String arg, Entity e) {
-//        float pitch = getValueAsFloat(arg);
-        return isWithinDoubleValue(isInverted(arg), arg, e.getLocation().getYaw());
+        return isWithinDoubleValue(isInverted(arg), arg.split("=")[1], e.getLocation().getYaw());
     }
 
     private static boolean isWithinDistance(String arg, Location start, Entity e) {
@@ -571,11 +574,10 @@ public class CommandUtils {
     }
 
     private static boolean isScore(String arg, Entity e) {
-        if (!(e instanceof Player))
-            return false;
         for (Objective o : Bukkit.getScoreboardManager().getMainScoreboard().getObjectives()) {
             if (o.getName().equalsIgnoreCase(getScoreName(arg))) {
-                if ((o.getScore(((Player) e).getName()).getScore() <= getValueAsInteger(arg) != isInverted(arg)))
+                int score = o.getScore(e instanceof Player ? e.getName() : e.getUniqueId().toString()).getScore();
+                if (score <= getValueAsInteger(arg) != isInverted(arg))
                     return true;
             }
         }
@@ -583,8 +585,6 @@ public class CommandUtils {
     }
 
     private static boolean isScoreWithin(String arg, Entity e) {
-        if (!(e instanceof Player))
-            return false;
         String[] scores = arg.split("\\{")[1].split("\\}")[0].split(",");
         for (int i = 0; i < scores.length; i++) {
             String[] s = scores[i].split("=");
@@ -592,29 +592,27 @@ public class CommandUtils {
 
             for (Objective o : Bukkit.getScoreboardManager().getMainScoreboard().getObjectives()) {
                 if (o.getName().equalsIgnoreCase(name)) {
-                    if (!isWithinDoubleValue(isInverted(arg), s[1], o.getScore(e.getName()).getScore()))
+                    int score = o.getScore(e instanceof Player ? e.getName() : e.getUniqueId().toString()).getScore();
+                    if (!isWithinDoubleValue(isInverted(arg), s[1], score)) {
                         return false;
+                    }
                 }
             }
         }
         return true;
-
     }
 
     private static boolean isHasTags(String arg, Entity e) {
-        if (!(e instanceof Player))
-            return false;
         return isInverted(arg) != e.getScoreboardTags().contains(getString(arg));
-
     }
 
     private static boolean isScoreMin(String arg, Entity e) {
-        if (!(e instanceof Player))
-            return false;
         for (Objective o : Bukkit.getScoreboardManager().getMainScoreboard().getObjectives()) {
             if (o.getName().equalsIgnoreCase(getScoreMinName(arg))) {
-                if ((o.getScore(((Player) e).getName()).getScore() >= getValueAsInteger(arg) != isInverted(arg)))
+                int score = o.getScore(e instanceof Player ? e.getName() : e.getUniqueId().toString()).getScore();
+                if (score >= getValueAsInteger(arg) != isInverted(arg)) {
                     return true;
+                }
             }
         }
         return false;
@@ -679,18 +677,17 @@ public class CommandUtils {
         if (getM(arg) == null)
             return true;
         if (e instanceof HumanEntity) {
-            if ((isInverted(arg) != (getM(arg) == ((HumanEntity) e).getGameMode())))
-                return true;
+            return isInverted(arg) != (getM(arg) == ((HumanEntity) e).getGameMode());
         }
         return false;
     }
 
-    private static boolean isW(String arg, Location loc, Entity e) {
-        if (getW(arg) == null) {
+    private static boolean isW(String arg) {
+        World w = getW(arg);
+        if (w == null) {
             return true;
-        } else if ((isInverted(arg) != getAcceptedWorlds(arg).contains(getW(arg))))
-            return true;
-        return false;
+        }
+        return isInverted(arg) != getAcceptedWorlds(arg).contains(w);
     }
 
     private static boolean isName(String arg, Entity e) {
@@ -698,7 +695,7 @@ public class CommandUtils {
             return true;
         if ((isInverted(arg) != (e.getCustomName() != null) && isInverted(arg) != (getName(arg)
                 .equals(e.getCustomName().replace(" ", "_"))
-                || (e instanceof Player && ((Player) e).getName().replace(" ", "_").equalsIgnoreCase(getName(arg))))))
+                || (e instanceof Player && e.getName().replace(" ", "_").equalsIgnoreCase(getName(arg))))))
             return true;
         return false;
     }
@@ -714,11 +711,6 @@ public class CommandUtils {
 
     private static boolean isInverted(String arg) {
         return arg.toLowerCase().split("!").length != 1;
-    }
-
-    private static int getInt(String arg) {
-        int mult = Integer.parseInt(arg.split("=")[1]);
-        return mult;
     }
 
     public static String getString(String arg) {
@@ -748,7 +740,7 @@ public class CommandUtils {
             if (temp.length > 1 && !temp[1].isEmpty()) {
                 max = Double.parseDouble(temp[1]);
             }
-            return (value <= max * max && min * min <= value) != inverted;
+            return (value <= max && min <= value) != inverted;
         } else {
             double mult = Double.parseDouble(arg);
             return (value == mult) != inverted;
@@ -759,11 +751,27 @@ public class CommandUtils {
         return arg.toLowerCase().startsWith(type.getName());
     }
 
+    private static SelectorType getTag(String arg) {
+        String name = arg.toLowerCase().split("=")[0] + "=";
+        for (SelectorType type : SelectorType.values()) {
+            if (type.getName().equals(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
     enum SelectorType {
-        LEVEL("level="), DISTANCE("distance="), TYPE("type="), NAME("name="), TEAM("team="), LMax("lm="), L(
-                "l="), World("w="), m("m="), C("c="), HM("hm="), H("h="), RM("rm="), RYM("rym="), RX("rx="), SCORE_FULL(
-                        "score="), SCORE_MIN("score_min"), SCORE_13(
-                                "scores="), R("r="), RXM("rxm="), RY("ry="), TAG("tag="), X("x="), Y("y="), Z("z="), LIMIT("limit="), Y_ROTATION("y_rotation"), X_ROTATION("x_rotation");
+        LEVEL("level="), LMax("lm="), L("l="),
+        DISTANCE("distance="), RM("rm="), R("r="),
+        X_ROTATION("x_rotation"), RYM("rym="), RY("ry="),
+        Y_ROTATION("y_rotation"), RXM("rxm="), RX("rx="),
+        LIMIT("limit="), C("c="),
+        SCORES("scores="), SCORE_FULL("score="), SCORE_MIN("score_min"),
+        GAMEMODE("gamemode="), M("m="),
+        X("x="), Y("y="), Z("z="), DX("dx="), DY("dy="), DZ("dz="),
+        TYPE("type="), NAME("name="), TEAM("team="), World("w="),
+        HM("hm="), H("h="), TAG("tag=");
         String name;
 
         SelectorType(String s) {
