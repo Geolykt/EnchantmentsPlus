@@ -20,7 +20,6 @@ import me.zombie_striker.psudocommands.CommandUtils;
 
 import java.util.*;
 
-import static de.geolykt.enchantments_plus.util.PermissionHandler.hasPermission;
 import static org.bukkit.Material.*;
 
 // This class handles all commands used by this plugin
@@ -40,26 +39,20 @@ public class CommandProcessor {
 
             switch (label) {
                 case "lasercol":
-                    if (hasPermission(sender, PermissionTypes.LASERCOL))  {
+                    if (PermissionTypes.LASERCOL.hasPermission(sender))  {
                         results.addAll(Arrays.asList("AQUA","BLACK","BLUE","FUCHSIA",
                             ((Player)sender).getLocale().toLowerCase(Locale.ROOT).contains("us") ? "GRAY" : "GREY",
                                     "GREEN","LIME","MAROON","NAVY","OLIVE","ORANGE","PURPLE","RED","SILVER","TEAL","WHITE","YELLOW"));
                         if (args.length != 1)
                             results.removeIf(e -> !e.startsWith(args[1]));
                     }
-                    return results;
                 case "reload":
-                    if (!hasPermission(sender, PermissionTypes.RELOAD)) {
-                        return results;
-                    }
                 case "list":
-                    if (!hasPermission(sender, PermissionTypes.LIST)) {
-                        return results;
-                    }
                 case "help":
                 case "version":
+                    return results;
                 case "give":
-                    if (!hasPermission(sender, PermissionTypes.GIVE)) {
+                    if (!PermissionTypes.GIVE.hasPermission(sender)) {
                         return results;
                     }
                     if (args.length == 2) {
@@ -89,54 +82,55 @@ public class CommandProcessor {
                             }
                         }
                     }
-                    break;
+                    return results;
                 case "disable":
                 case "enable":
-                    if (!hasPermission(sender, PermissionTypes.ONOFF)) {
+                    if (!PermissionTypes.ONOFF.hasPermission(sender)) {
                         return results;
                     }
                     results.add("all");
+                    return results;
                 case "info":
-                    if (!hasPermission(sender, PermissionTypes.INFO)) {
+                    if (!PermissionTypes.INFO.hasPermission(sender)) {
                         return results;
                     }
                     results = config.getEnchantNames();
                     if (args.length > 1) {
                         results.removeIf(e -> !e.startsWith(args[1]));
                     }
-                    break;
+                    return results;
                 default:
                     results.addAll(enchantTabCompletion(sender, config, stack, args));
                     if (args.length == 1) {
-                        if (hasPermission(sender, PermissionTypes.GIVE)) {
+                        if (PermissionTypes.GIVE.hasPermission(sender)) {
                             results.add("give");
                         }
-                        if (hasPermission(sender, PermissionTypes.INFO)) {
+                        if (PermissionTypes.INFO.hasPermission(sender)) {
                             results.add("info");
                         }
-                        if (hasPermission(sender, PermissionTypes.LASERCOL) && 
+                        if (PermissionTypes.LASERCOL.hasPermission(sender) && 
                                 CustomEnchantment.getEnchants(stack, ((Player)sender)
                                         .getWorld()).containsKey(config.enchantFromID(Laser.ID))) {
                             results.add("lasercol");
                         }
-                        if (hasPermission(sender, PermissionTypes.LIST)) {
+                        if (PermissionTypes.LIST.hasPermission(sender)) {
                             results.add("list");
                         }
-                        if (hasPermission(sender, PermissionTypes.ONOFF)) {
+                        if (PermissionTypes.ONOFF.hasPermission(sender)) {
                             results.addAll(Arrays.asList("enable", "disable"));
                         }
-                        if (hasPermission(sender, PermissionTypes.RELOAD)) {
+                        if (PermissionTypes.RELOAD.hasPermission(sender)) {
                             results.add("reload");
                         }
                         results.addAll(Arrays.asList("version", "help"));
                         results.removeIf(e -> !e.startsWith(args[0]));
                     }
+                    return results;
             }
-            return results;
         }
         
         private static Collection<String> enchantTabCompletion (CommandSender sender, Config config, ItemStack stack, String [] args) {
-            if (!hasPermission(sender, PermissionTypes.ENCHANT)) {
+            if (!PermissionTypes.ENCHANT.hasPermission(sender)) {
                 return Arrays.asList();
             }
             LinkedList<String> results = new LinkedList<>();
@@ -170,7 +164,7 @@ public class CommandProcessor {
 
     // Reloads the Enchantments_plus plugin
     private static boolean reload(CommandSender player) {
-        if (!hasPermission(player, PermissionTypes.RELOAD)) {
+        if (!PermissionTypes.RELOAD.hasPermission(player)) {
             player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -182,7 +176,7 @@ public class CommandProcessor {
 
     // Gives the given player an item with certain enchantments determined by the arguments
     private static boolean give(CommandSender sender, String[] args) {
-        if (!hasPermission(sender, PermissionTypes.GIVE)) {
+        if (!PermissionTypes.GIVE.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -272,7 +266,7 @@ public class CommandProcessor {
         Config config = Config.get(((Player) sender).getWorld());
         ItemStack stack = ((Player) sender).getInventory().getItemInMainHand();
         
-        if (!hasPermission(sender, PermissionTypes.LIST)) {
+        if (!PermissionTypes.LIST.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -295,7 +289,7 @@ public class CommandProcessor {
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
         
-        if (!hasPermission(sender, PermissionTypes.INFO)) {
+        if (!PermissionTypes.INFO.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -326,6 +320,8 @@ public class CommandProcessor {
 
     // Disables the given enchantment for the player
     private static boolean disable(CommandSender sender, String[] args) {
+        sender.sendMessage(Storage.LOGO + "We are planning on removing this feature, is you believe it should be kept,"
+                + " then notify us about that here: https://github.com/Geolykt/EnchantmentsPlus/issues/9");
         if (!(sender instanceof Player)) {
             return false;
         }
@@ -333,7 +329,7 @@ public class CommandProcessor {
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
         
-        if (!hasPermission(sender, PermissionTypes.ONOFF)) {
+        if (!PermissionTypes.ONOFF.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -366,10 +362,7 @@ public class CommandProcessor {
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
 
-        sender.sendMessage(Storage.LOGO + "We are planning on removing this feature, is you believe it should be kept,"
-                + " then notify us about that here: https://github.com/Geolykt/EnchantmentsPlus/issues/9");
-
-        if (!hasPermission(sender, PermissionTypes.ONOFF)) {
+        if (!PermissionTypes.ONOFF.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -396,27 +389,27 @@ public class CommandProcessor {
     private static boolean helpEnchantment(CommandSender player, String label) {
         if (label.isEmpty() || label.equals("help")) {
             player.sendMessage(Storage.LOGO);
-            if (hasPermission(player, PermissionTypes.INFO)) {
+            if (PermissionTypes.INFO.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench info <?enchantment>: " + ChatColor.AQUA
                         + "Returns information about custom enchantments.");
             }
-            if (hasPermission(player, PermissionTypes.LIST)) {
+            if (PermissionTypes.LIST.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench list: " + ChatColor.AQUA
                         + "Returns a list of enchantments for the tool in hand.");
             }
-            if (hasPermission(player, PermissionTypes.GIVE)) {
+            if (PermissionTypes.GIVE.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench give <Player> <Material> <enchantment> <?level> ... "
                         + ChatColor.AQUA + "Gives the target a specified enchanted item.");
             }
-            if (hasPermission(player, PermissionTypes.ENCHANT)) {
+            if (PermissionTypes.ENCHANT.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enchantment> <?level> <?modifier> <?doNotification>: " + ChatColor.AQUA
                         + "Enchants the item in hand with the given enchantment and level");
             }
-            if (hasPermission(player, PermissionTypes.ONOFF)) {
+            if (PermissionTypes.ONOFF.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enable/disable> <enchantment/all>: " + ChatColor.AQUA
                         + "Enables/Disables selected enchantment for the user");
             }
-            if (hasPermission(player, PermissionTypes.LASERCOL)) {
+            if (PermissionTypes.LASERCOL.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench lasercol: " + ChatColor.AQUA
                         + "Sets the color of your laser.");
             }
@@ -466,7 +459,7 @@ public class CommandProcessor {
     }
 
     private static boolean enchant(CommandSender sender, String[] args) {
-        if (!hasPermission(sender, PermissionTypes.ENCHANT)) {
+        if (!PermissionTypes.ENCHANT.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
@@ -557,7 +550,7 @@ public class CommandProcessor {
     }
 
     private static boolean setLaserColor(CommandSender sender, String[] args) {
-        if (!hasPermission(sender, PermissionTypes.LASERCOL)) {
+        if (!PermissionTypes.LASERCOL.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }

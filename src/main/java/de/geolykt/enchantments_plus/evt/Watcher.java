@@ -39,7 +39,6 @@ import java.util.*;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
-import static de.geolykt.enchantments_plus.util.PermissionHandler.hasPermission;
 
 // This contains extraneous watcher methods that are not relevant to arrows or enchantments
 public class Watcher implements Listener {
@@ -141,8 +140,7 @@ public class Watcher implements Listener {
                     evt.getEntity().setPickupDelay(0);
                     for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                         if (e instanceof ExperienceOrb) {
-                            Storage.COMPATIBILITY_ADAPTER.collectXP(Grab.grabLocs.get(block),
-                                    ((ExperienceOrb) e).getExperience());
+                            Grab.grabLocs.get(block).giveExp(((ExperienceOrb) e).getExperience());
                             e.remove();
                         }
                     }
@@ -155,8 +153,7 @@ public class Watcher implements Listener {
                         evt.getEntity().setPickupDelay(0);
                         for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                             if (e instanceof ExperienceOrb) {
-                                Storage.COMPATIBILITY_ADAPTER.collectXP(Vortex.vortexLocs.get(block),
-                                        ((ExperienceOrb) e).getExperience());
+                                Vortex.vortexLocs.get(block).giveExp(((ExperienceOrb) e).getExperience());
                                 e.remove();
                             }
                         }
@@ -206,7 +203,7 @@ public class Watcher implements Listener {
     // has permission
     @EventHandler
     public void onEnchantItem(EnchantItemEvent evt) {
-        if (!hasPermission(evt.getEnchanter(), PermissionTypes.GET)
+        if (!PermissionTypes.GET.hasPermission(evt.getEnchanter())
                 || (evt.getItem().getType() == FISHING_ROD && evt.getExpLevelCost() <= 4)) {
             return;
         }

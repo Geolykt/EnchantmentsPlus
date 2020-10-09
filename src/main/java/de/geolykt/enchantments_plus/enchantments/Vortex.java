@@ -47,9 +47,8 @@ public class Vortex extends CustomEnchantment {
         final Block deathBlock = evt.getEntity().getLocation().getBlock();
         vortexLocs.put(deathBlock, evt.getEntity().getKiller());
         
-        int i = evt.getDroppedExp();
+        evt.getEntity().getKiller().giveExp(evt.getDroppedExp());
         evt.setDroppedExp(0);
-        Storage.COMPATIBILITY_ADAPTER.collectXP(evt.getEntity().getKiller(), i);
         
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             vortexLocs.remove(deathBlock);

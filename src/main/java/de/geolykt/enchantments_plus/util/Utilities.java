@@ -20,7 +20,6 @@ import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
 
-import static de.geolykt.enchantments_plus.util.PermissionHandler.hasPermission;
 import static org.bukkit.GameMode.CREATIVE;
 import static org.bukkit.Material.AIR;
 import static org.bukkit.inventory.EquipmentSlot.HAND;
@@ -363,13 +362,9 @@ public class Utilities {
     // (permissions and cooldowns),
     // otherwise false
     public static boolean canUse(Player player, int enchantmentID) {
-        if (!hasPermission(player, PermissionTypes.USE)) {
-            return false;
-        }
-        if (EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) != 0) {
-            return false;
-        }
-        return !EnchantPlayer.matchPlayer(player).isDisabled(enchantmentID);
+        return PermissionTypes.USE.hasPermission(player) &&
+                EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) != 0 &&
+                EnchantPlayer.matchPlayer(player).isDisabled(enchantmentID);
     }
 
     // Adds a potion effect of given length and intensity to the given entity.
