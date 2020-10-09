@@ -437,7 +437,7 @@ public class CommandProcessor {
     }
 
     // Control flow for the command processor
-    static boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
+    public static boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
         if (commandlabel.equalsIgnoreCase("ench")) {
             String label = args.length == 0 ? "" : args[0].toLowerCase();
             switch (label) {

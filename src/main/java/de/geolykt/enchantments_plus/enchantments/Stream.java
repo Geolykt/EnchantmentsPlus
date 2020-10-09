@@ -24,8 +24,8 @@ public class Stream extends CustomEnchantment {
         Particle.CRIT,
         Particle.VILLAGER_HAPPY,
         Particle.REDSTONE,
-        Particle.HEART,};
-    public static final  int        ID         = 74;
+        Particle.HEART};
+    public static final int ID = 74;
 
     @Override
     public Builder<Stream> defaults() {
