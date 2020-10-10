@@ -73,39 +73,31 @@ public class CompatibilityAdapter {
     
     private EnumMap<Material, Material> spectralMaterialConversion;
     
+    private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
+        EnumSet<Material> es = EnumSet.noneOf(Material.class);
+        for (String s : config.getStringList(path)) {
+            es.add(Material.matchMaterial(s));
+        }
+        return es;
+    }
+    
     /**
      * Load the magic compatibility file
      * @param config The appropriate FileConfiguration
      */
     public void loadValues(FileConfiguration config) {
-        grownCrops = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("grownCrops")) {
-            grownCrops.add(Material.matchMaterial(s));
-        }
-        melonCrops = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("melonCrops")) {
-            melonCrops.add(Material.matchMaterial(s));
-        }
-        airs = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("airs")) {
-            airs.add(Material.matchMaterial(s));
-        }
-        ores = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("ores")) {
-            ores.add(Material.matchMaterial(s));
-        }
-        unbreakable = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("unbreakable")) {
-            unbreakable.add(Material.matchMaterial(s));
-        }
-        laserDenylist = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("laserDenylist")) {
-            laserDenylist.add(Material.matchMaterial(s));
-        }
-        terraformerAllowlist = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("terraformerAllowlist")) {
-            terraformerAllowlist.add(Material.matchMaterial(s));
-        }
+        grownCrops = getMaterialSet(config, "grownCrops");
+        melonCrops = getMaterialSet(config, "melonCrops");
+        airs = getMaterialSet(config, "airs");
+        ores = getMaterialSet(config, "ores");
+        unbreakable = getMaterialSet(config, "unbreakable");
+        laserDenylist = getMaterialSet(config, "laserDenylist");
+        terraformerAllowlist = getMaterialSet(config, "terraformerAllowlist");
+        shredAllowlistPickaxes = getMaterialSet(config, "shredAllowlistPickaxes");
+        shredAllowlistShovels = getMaterialSet(config, "shredAllowlistShovels");
+        lumberTrunkBlocks = getMaterialSet(config, "lumberTrunks");
+        lumberAllowBlocks = getMaterialSet(config, "lumberAllowlist");
+        
         for (String s : config.getStringList("terraformerAllowlistTags")) {
             try {
                 Field f = Tag.class.getDeclaredField(s);
@@ -117,22 +109,6 @@ public class CompatibilityAdapter {
                         + "This is likely the cause of an unsupported minecraft version.");
                 e.printStackTrace();
             }
-        }
-        shredAllowlistPickaxes = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("shredAllowlistPickaxes")) {
-            shredAllowlistPickaxes.add(Material.matchMaterial(s));
-        }
-        shredAllowlistShovels = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("shredAllowlistShovels")) {
-            shredAllowlistShovels.add(Material.matchMaterial(s));
-        }
-        lumberTrunkBlocks = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList("lumberTrunks")) {
-            lumberTrunkBlocks.add(Material.matchMaterial(s));
-        }
-        lumberAllowBlocks = lumberTrunkBlocks.clone();
-        for (String s : config.getStringList("lumberAllowlist")) {
-            lumberAllowBlocks.add(Material.matchMaterial(s));
         }
         dryBiomes = EnumSet.noneOf(Biome.class);
         for (String s : config.getStringList("dryBiomes")) {
