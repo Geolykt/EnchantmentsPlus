@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -12,7 +10,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.MissileArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Missile extends CustomEnchantment {
@@ -25,7 +23,7 @@ public class Missile extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Missile")
             .probability(0)
-            .enchantable(new Tool[]{BOW})
+            .enchantable(new Tool[]{Tool.BOW})
             .conflicting()
             .description("Shoots a missile from the bow")
             .cooldown(0)

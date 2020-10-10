@@ -23,8 +23,8 @@ import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGe
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.IEnchGatherer;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.ench.ZenchantmentUseEvent;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.*;

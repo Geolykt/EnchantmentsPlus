@@ -12,10 +12,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
-
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +31,7 @@ public class RainbowSlam extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Rainbow Slam")
             .probability(0)
-            .enchantable(new Tool[]{SWORD})
+            .enchantable(new Tool[]{Tool.SWORD})
             .conflicting(Force.class, Gust.class)
             .description("Attacks enemy mobs with a powerful swirling slam")
             .cooldown(0)

@@ -11,12 +11,11 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.Map;
 
-import static de.geolykt.enchantments_plus.enums.Tool.LEGGINGS;
 import static org.bukkit.Material.*;
 
 public class GreenThumb extends CustomEnchantment {
@@ -29,7 +28,7 @@ public class GreenThumb extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Green Thumb")
             .probability(0)
-            .enchantable(new Tool[]{LEGGINGS})
+            .enchantable(new Tool[]{Tool.LEGGINGS})
             .conflicting()
             .description("Grows the foliage around the player")
             .cooldown(0)

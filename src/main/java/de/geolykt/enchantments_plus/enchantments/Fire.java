@@ -14,14 +14,13 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.util.RecipeUtil;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.List;
 import java.util.Set;
 
-import static de.geolykt.enchantments_plus.enums.Tool.*;
 import static org.bukkit.Material.*;
 
 public class Fire extends CustomEnchantment {
@@ -45,7 +44,7 @@ public class Fire extends CustomEnchantment {
                 .maxLevel(1)
                 .loreName("Fire")
                 .probability(0)
-                .enchantable(new Tool[]{PICKAXE, AXE, SHOVEL})
+                .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL})
                 .conflicting(Switch.class, Variety.class)
                 .description("Drops the smelted version of the block broken")
                 .cooldown(0)

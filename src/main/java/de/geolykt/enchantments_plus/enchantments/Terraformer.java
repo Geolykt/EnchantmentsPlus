@@ -8,10 +8,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SHOVEL;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -31,7 +30,7 @@ public class Terraformer extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Terraformer")
             .probability(0)
-            .enchantable(new Tool[]{SHOVEL})
+            .enchantable(new Tool[]{Tool.SHOVEL})
             .conflicting()
             .description("Places the leftmost blocks in the players inventory within a 7 block radius")
             .cooldown(0)

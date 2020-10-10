@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
-
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -11,7 +9,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.QuickArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class QuickShot extends CustomEnchantment {
 
@@ -23,7 +21,7 @@ public class QuickShot extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Quick Shot")
             .probability(0)
-            .enchantable(new Tool[]{BOW})
+            .enchantable(new Tool[]{Tool.BOW})
             .conflicting()
             .description("Shoots arrows at full speed, instantly")
             .cooldown(0)

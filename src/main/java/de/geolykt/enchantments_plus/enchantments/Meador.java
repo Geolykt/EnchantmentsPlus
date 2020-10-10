@@ -7,9 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
-
-import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class Meador extends CustomEnchantment {
 
@@ -21,7 +19,7 @@ public class Meador extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Meador")
             .probability(0)
-            .enchantable(new Tool[]{BOOTS})
+            .enchantable(new Tool[]{Tool.BOOTS})
             .conflicting(Weight.class, Speed.class, Jump.class)
             .description("Gives the player both a speed and jump boost")
             .cooldown(0)

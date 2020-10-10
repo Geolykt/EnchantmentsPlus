@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.*;
-
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -14,7 +12,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.LevelArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class Level extends CustomEnchantment {
 
@@ -26,7 +24,7 @@ public class Level extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Level")
                 .probability(0)
-                .enchantable(new Tool[]{PICKAXE, SWORD, BOW})
+                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD, Tool.BOW})
                 .conflicting()
                 .description("Drops more XP when killing mobs or mining ores")
                 .cooldown(0)

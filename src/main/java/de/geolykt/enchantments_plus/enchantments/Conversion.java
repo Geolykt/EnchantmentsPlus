@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -12,7 +10,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Conversion extends CustomEnchantment {
@@ -25,7 +23,7 @@ public class Conversion extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Conversion")
             .probability(0)
-            .enchantable(new Tool[]{SWORD})
+            .enchantable(new Tool[]{Tool.SWORD})
             .conflicting()
             .description("Converts XP to health when right clicking and sneaking")
             .cooldown(0)

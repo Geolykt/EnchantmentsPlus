@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -9,7 +7,7 @@ import org.bukkit.entity.Player;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class Spikes extends CustomEnchantment {
 
@@ -21,7 +19,7 @@ public class Spikes extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Spikes")
             .probability(0)
-            .enchantable(new Tool[]{BOOTS})
+            .enchantable(new Tool[]{Tool.BOOTS})
             .conflicting()
             .description("Damages entities the player jumps onto")
             .cooldown(0)

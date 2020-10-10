@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
-
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -9,7 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class Speed extends CustomEnchantment {
 
@@ -21,7 +19,7 @@ public class Speed extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Speed")
             .probability(0)
-            .enchantable(new Tool[]{BOOTS})
+            .enchantable(new Tool[]{Tool.BOOTS})
             .conflicting(Meador.class, Weight.class)
             .description("Gives the player a speed boost")
             .cooldown(0)

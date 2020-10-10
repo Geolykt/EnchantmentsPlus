@@ -9,9 +9,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
-import static de.geolykt.enchantments_plus.enums.Tool.AXE;
 import static org.bukkit.Material.*;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class Arborist extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Arborist")
             .probability(0)
-            .enchantable(new Tool[]{AXE})
+            .enchantable(new Tool[]{Tool.AXE})
             .conflicting()
             .description("Drops more apples, sticks, and saplings when used on leaves")
             .cooldown(0)

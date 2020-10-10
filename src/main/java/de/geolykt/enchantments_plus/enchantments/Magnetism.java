@@ -6,9 +6,8 @@ import org.bukkit.entity.Player;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
-import static de.geolykt.enchantments_plus.enums.Tool.LEGGINGS;
 import static org.bukkit.entity.EntityType.DROPPED_ITEM;
 
 public class Magnetism extends CustomEnchantment {
@@ -21,7 +20,7 @@ public class Magnetism extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Magnetism")
             .probability(0)
-            .enchantable(new Tool[]{LEGGINGS})
+            .enchantable(new Tool[]{Tool.LEGGINGS})
             .conflicting()
             .description("Slowly attracts nearby items to the players inventory")
             .cooldown(0)

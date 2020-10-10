@@ -6,10 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
-
-import static de.geolykt.enchantments_plus.enums.Tool.ALL;
 
 import java.util.Map;
 
@@ -23,7 +21,7 @@ public class Ethereal extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Ethereal")
             .probability(0)
-            .enchantable(new Tool[]{ALL})
+            .enchantable(new Tool[]{Tool.ALL})
             .conflicting()
             .description("Prevents tools from breaking")
             .cooldown(0)

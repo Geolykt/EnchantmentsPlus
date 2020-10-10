@@ -11,10 +11,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SHEAR;
 import static org.bukkit.Material.*;
 import static org.bukkit.block.BlockFace.DOWN;
 
@@ -28,7 +27,7 @@ public class Rainbow extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Rainbow")
             .probability(0)
-            .enchantable(new Tool[]{SHEAR})
+            .enchantable(new Tool[]{Tool.SHEARS})
             .conflicting()
             .description("Drops random flowers and wool colors when used")
             .cooldown(0)

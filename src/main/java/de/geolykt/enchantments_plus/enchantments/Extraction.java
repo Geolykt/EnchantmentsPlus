@@ -10,10 +10,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
 import static org.bukkit.Material.*;
 import static org.bukkit.entity.EntityType.EXPERIENCE_ORB;
 
@@ -27,7 +26,7 @@ public class Extraction extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Extraction")
             .probability(0)
-            .enchantable(new Tool[]{PICKAXE})
+            .enchantable(new Tool[]{Tool.PICKAXE})
             .conflicting(Switch.class)
             .description("Smelts and yields more product from ores")
             .cooldown(0)

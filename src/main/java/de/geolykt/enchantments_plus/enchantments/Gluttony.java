@@ -7,10 +7,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.HELMET;
 import static org.bukkit.Material.*;
 
 public class Gluttony extends CustomEnchantment {
@@ -23,7 +22,7 @@ public class Gluttony extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Gluttony")
             .probability(0)
-            .enchantable(new Tool[]{HELMET})
+            .enchantable(new Tool[]{Tool.HELMET})
             .conflicting()
             .description("Automatically eats for the player")
             .cooldown(0)

@@ -10,13 +10,12 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.geolykt.enchantments_plus.enums.Tool.LEGGINGS;
 import static org.bukkit.Material.AIR;
 
 public class Glide extends CustomEnchantment {
@@ -31,7 +30,7 @@ public class Glide extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Glide")
                 .probability(0)
-                .enchantable(new Tool[]{LEGGINGS})
+                .enchantable(new Tool[]{Tool.LEGGINGS})
                 .conflicting()
                 .description("Gently brings the player back to the ground when sneaking")
                 .cooldown(0)

@@ -10,9 +10,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
-
-import static de.geolykt.enchantments_plus.enums.Tool.ALL;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +25,7 @@ public class Bind extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Bind")
             .probability(0)
-            .enchantable(new Tool[]{ALL})
+            .enchantable(new Tool[]{Tool.ALL})
             .conflicting()
             .description("Keeps items with this enchantment in your inventory after death")
             .cooldown(0)

@@ -11,9 +11,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
-import static de.geolykt.enchantments_plus.enums.Tool.CHESTPLATE;
 import static org.bukkit.Material.*;
 import static org.bukkit.block.BlockFace.DOWN;
 
@@ -29,7 +28,7 @@ public class BlazesCurse extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Blaze's Curse")
             .probability(0)
-            .enchantable(new Tool[]{CHESTPLATE})
+            .enchantable(new Tool[]{Tool.CHESTPLATE})
             .conflicting()
             .description("Causes the player to be unharmed in lava and fire, but damages them in water and rain")
             .cooldown(0)

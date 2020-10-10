@@ -6,7 +6,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -22,14 +21,8 @@ import java.util.*;
 
 import static org.bukkit.GameMode.CREATIVE;
 import static org.bukkit.Material.AIR;
-import static org.bukkit.inventory.EquipmentSlot.HAND;
 
 public class Utilities {
-
-    // Returns true for main hand slots, false otherwise
-    public static boolean isMainHand(EquipmentSlot preferred) {
-        return preferred == HAND;
-    }
 
     // Returns an ArrayList of ItemStacks of the player's held item and armor
     public static List<ItemStack> getArmorAndMainHandItems(Player player, boolean mainHand) {

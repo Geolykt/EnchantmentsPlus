@@ -9,10 +9,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.HOE;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -26,7 +25,7 @@ public class Persephone extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Persephone")
                 .probability(0)
-                .enchantable(new Tool[]{HOE})
+                .enchantable(new Tool[]{Tool.HOE})
                 .conflicting()
                 .description("Plants seeds from the player's inventory around them")
                 .cooldown(0)

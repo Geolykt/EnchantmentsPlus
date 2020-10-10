@@ -9,9 +9,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.TracerArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
-
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +26,7 @@ public class Tracer extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Tracer")
             .probability(0)
-            .enchantable(new Tool[]{BOW})
+            .enchantable(new Tool[]{Tool.BOW})
             .conflicting()
             .description("Guides the arrow to targets and then attacks")
             .cooldown(0)

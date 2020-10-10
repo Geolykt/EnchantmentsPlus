@@ -10,10 +10,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
 import static org.bukkit.potion.PotionEffectType.INCREASE_DAMAGE;
 
 public class Weight extends CustomEnchantment {
@@ -26,7 +25,7 @@ public class Weight extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Weight")
             .probability(0)
-            .enchantable(new Tool[]{BOOTS})
+            .enchantable(new Tool[]{Tool.BOOTS})
             .conflicting(Meador.class, Speed.class)
             .description("Slows the player down but makes them stronger and more resistant to knockback")
             .cooldown(0)

@@ -7,10 +7,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.*;
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
 public class Haste extends CustomEnchantment {
@@ -23,7 +22,7 @@ public class Haste extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Haste")
             .probability(0)
-            .enchantable(new Tool[]{PICKAXE, AXE, SHOVEL})
+            .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL})
             .conflicting()
             .description("Gives the player a mining boost")
             .cooldown(0)

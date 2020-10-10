@@ -9,10 +9,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.AXE;
 import static org.bukkit.Material.*;
 
 public class Variety extends CustomEnchantment {
@@ -25,7 +24,7 @@ public class Variety extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Variety")
             .probability(0)
-            .enchantable(new Tool[]{AXE})
+            .enchantable(new Tool[]{Tool.AXE})
             .conflicting(Fire.class)
             .description("Drops random types of wood or leaves")
             .cooldown(0)

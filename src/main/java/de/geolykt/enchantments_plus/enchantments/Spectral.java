@@ -17,12 +17,10 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.ench.BlockSpectralChangeEvent;
 import de.geolykt.enchantments_plus.util.ColUtil;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
-
-import static de.geolykt.enchantments_plus.enums.Tool.SHOVEL;
 
 import java.util.*;
 
@@ -60,7 +58,7 @@ public class Spectral extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Spectral")
                 .probability(0)
-                .enchantable(new Tool[]{SHOVEL})
+                .enchantable(new Tool[]{Tool.SHOVEL})
                 .conflicting()
                 .description("Allows for cycling through a block's types")
                 .cooldown(0)

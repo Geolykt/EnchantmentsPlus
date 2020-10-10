@@ -7,10 +7,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
-
-import static de.geolykt.enchantments_plus.enums.Tool.AXE;
 
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class Lumber extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Lumber")
             .probability(0)
-            .enchantable(new Tool[]{AXE})
+            .enchantable(new Tool[]{Tool.AXE})
             .conflicting()
             .description("Breaks the entire tree at once")
             .cooldown(0)

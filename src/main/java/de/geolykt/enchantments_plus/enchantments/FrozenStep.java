@@ -7,12 +7,11 @@ import org.bukkit.entity.Player;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
 import static de.geolykt.enchantments_plus.util.Utilities.selfRemovingArea;
 import static org.bukkit.Material.*;
 
@@ -28,7 +27,7 @@ public class FrozenStep extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Frozen Step")
             .probability(0)
-            .enchantable(new Tool[]{BOOTS})
+            .enchantable(new Tool[]{Tool.BOOTS})
             .conflicting(NetherStep.class)
             .description("Allows the player to walk on water and safely emerge from it when sneaking")
             .cooldown(0)

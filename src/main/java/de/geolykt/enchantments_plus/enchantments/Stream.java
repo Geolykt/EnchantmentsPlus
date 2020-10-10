@@ -10,10 +10,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.WINGS;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -33,7 +32,7 @@ public class Stream extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Stream")
             .probability(0)
-            .enchantable(new Tool[]{WINGS})
+            .enchantable(new Tool[]{Tool.WINGS})
             .conflicting()
             .description("Creates a trail of particles when in flight")
             .cooldown(0)

@@ -16,11 +16,10 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.List;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -34,7 +33,7 @@ public class Force extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Force")
             .probability(0)
-            .enchantable(new Tool[]{SWORD})
+            .enchantable(new Tool[]{Tool.SWORD})
             .conflicting(RainbowSlam.class, Gust.class)
             .description("Pushes and pulls nearby mobs, configurable through shift clicking")
             .cooldown(0)

@@ -8,9 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
-
-import static de.geolykt.enchantments_plus.enums.Tool.*;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.Map;
 
@@ -24,7 +22,7 @@ public class PotionResistance extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Potion Resistance")
             .probability(0)
-            .enchantable(new Tool[]{HELMET, CHESTPLATE, LEGGINGS, BOOTS})
+            .enchantable(new Tool[]{Tool.HELMET, Tool.CHESTPLATE, Tool.LEGGINGS, Tool.BOOTS})
             .conflicting()
             .description("Lessens the effects of all potions on players, even the good ones")
             .cooldown(0)

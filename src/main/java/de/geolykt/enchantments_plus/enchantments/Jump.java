@@ -5,10 +5,9 @@ import org.bukkit.entity.Player;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOOTS;
 import static org.bukkit.potion.PotionEffectType.JUMP;
 
 public class Jump extends CustomEnchantment {
@@ -21,7 +20,7 @@ public class Jump extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Jump")
             .probability(0)
-            .enchantable(new Tool[]{BOOTS})
+            .enchantable(new Tool[]{Tool.BOOTS})
             .conflicting()
             .description("Gives the player a jump boost")
             .cooldown(0)

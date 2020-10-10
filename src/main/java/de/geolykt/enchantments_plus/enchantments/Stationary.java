@@ -1,8 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
-
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -14,7 +11,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.StationaryArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Stationary extends CustomEnchantment {
@@ -27,7 +24,7 @@ public class Stationary extends CustomEnchantment {
                 .maxLevel(1)
                 .loreName("Stationary")
                 .probability(0)
-                .enchantable(new Tool[]{BOW, SWORD})
+                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
                 .conflicting()
                 .description("Negates any knockback when attacking mobs, leaving them clueless as to who is attacking")
                 .cooldown(0)

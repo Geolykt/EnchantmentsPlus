@@ -13,10 +13,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.VortexArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
-
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +30,7 @@ public class Vortex extends CustomEnchantment {
                 .maxLevel(1)
                 .loreName("Vortex")
                 .probability(0)
-                .enchantable(new Tool[]{BOW, SWORD})
+                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
                 .conflicting()
                 .description("Teleports mob loot and XP directly to the player")
                 .cooldown(0)

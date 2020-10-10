@@ -13,12 +13,11 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.SingularityArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
 import static org.bukkit.GameMode.CREATIVE;
 
 public class Singularity extends CustomEnchantment {
@@ -33,7 +32,7 @@ public class Singularity extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Singularity")
             .probability(0)
-            .enchantable(new Tool[]{BOW})
+            .enchantable(new Tool[]{Tool.BOW})
             .conflicting()
             .description("Creates a black hole that attracts nearby entities and then discharges them")
             .cooldown(0)

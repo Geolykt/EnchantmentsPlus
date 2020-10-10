@@ -1,6 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
 import static org.bukkit.inventory.EquipmentSlot.HAND;
 import static org.bukkit.inventory.EquipmentSlot.OFF_HAND;
 
@@ -19,7 +18,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.MultiArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Spread extends CustomEnchantment {
@@ -32,7 +31,7 @@ public class Spread extends CustomEnchantment {
             .maxLevel(5)
             .loreName("Spread")
             .probability(0)
-            .enchantable(new Tool[]{BOW})
+            .enchantable(new Tool[]{Tool.BOW})
             .conflicting(Burst.class)
             .description("Fires an array of arrows simultaneously")
             .cooldown(0)

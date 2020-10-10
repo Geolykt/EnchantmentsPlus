@@ -19,11 +19,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.AXE;
-import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -43,7 +41,7 @@ public class Laser extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Laser")
                 .probability(0)
-                .enchantable(new Tool[]{PICKAXE, AXE})
+                .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE})
                 .conflicting()
                 .description("Breaks blocks and damages mobs using a powerful beam of light")
                 .cooldown(0)

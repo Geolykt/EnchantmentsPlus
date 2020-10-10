@@ -10,10 +10,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -27,7 +26,7 @@ public class Gust extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Gust")
             .probability(0)
-            .enchantable(new Tool[]{SWORD})
+            .enchantable(new Tool[]{Tool.SWORD})
             .conflicting(Force.class, RainbowSlam.class)
             .description("Pushes the user through the air at the cost of their health")
             .cooldown(0)

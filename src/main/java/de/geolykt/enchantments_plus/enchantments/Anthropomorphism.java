@@ -14,14 +14,13 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 
-import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.*;
 
@@ -68,7 +67,7 @@ public class Anthropomorphism extends CustomEnchantment {
                 .maxLevel(1)
                 .loreName("Anthropomorphism")
                 .probability(0)
-                .enchantable(new Tool[]{PICKAXE})
+                .enchantable(new Tool[]{Tool.PICKAXE})
                 .conflicting(Pierce.class, Switch.class)
                 .description(
                         "Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking")

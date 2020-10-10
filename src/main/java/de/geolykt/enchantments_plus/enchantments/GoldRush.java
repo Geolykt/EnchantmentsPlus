@@ -7,9 +7,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SHOVEL;
 import static org.bukkit.Material.GOLD_NUGGET;
 import static org.bukkit.Material.SAND;
 
@@ -23,7 +22,7 @@ public class GoldRush extends CustomEnchantment {
             .maxLevel(3)
             .loreName("Gold Rush")
             .probability(0)
-            .enchantable(new Tool[]{SHOVEL})
+            .enchantable(new Tool[]{Tool.SHOVEL})
             .conflicting()
             .description("Randomly drops gold nuggets when mining sand")
             .cooldown(0)

@@ -1,14 +1,12 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.ROD;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class ShortCast extends CustomEnchantment {
 
@@ -20,7 +18,7 @@ public class ShortCast extends CustomEnchantment {
             .maxLevel(2)
             .loreName("Short Cast")
             .probability(0)
-            .enchantable(new Tool[]{ROD})
+            .enchantable(new Tool[]{Tool.ROD})
             .conflicting(LongCast.class)
             .description("Launches fishing hooks closer in when casting")
             .cooldown(0)

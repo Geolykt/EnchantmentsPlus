@@ -1,8 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
-
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
@@ -15,7 +12,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.SiphonArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class Siphon extends CustomEnchantment {
 
@@ -29,7 +26,7 @@ public class Siphon extends CustomEnchantment {
                 .maxLevel(4)
                 .loreName("Siphon")
                 .probability(0)
-                .enchantable(new Tool[]{BOW, SWORD})
+                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
                 .conflicting()
                 .description("Drains the health of the mob that you attack, giving it to you")
                 .cooldown(0)

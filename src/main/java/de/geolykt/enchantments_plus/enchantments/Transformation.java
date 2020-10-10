@@ -13,10 +13,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
 import static org.bukkit.Material.AIR;
 
 public class Transformation extends CustomEnchantment {
@@ -29,7 +28,7 @@ public class Transformation extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Transformation")
                 .probability(0)
-                .enchantable(new Tool[]{SWORD})
+                .enchantable(new Tool[]{Tool.SWORD})
                 .conflicting()
                 .description("Occasionally causes the attacked mob to be transformed into its similar cousin")
                 .cooldown(0)

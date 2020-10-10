@@ -11,16 +11,14 @@ import org.bukkit.inventory.ItemStack;
 import de.geolykt.enchantments_plus.*;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
-import static de.geolykt.enchantments_plus.enums.Tool.SHOVEL;
 import static org.bukkit.Material.*;
 
 public class Shred extends CustomEnchantment {
@@ -33,7 +31,7 @@ public class Shred extends CustomEnchantment {
                 .maxLevel(5)
                 .loreName("Shred")
                 .probability(0)
-                .enchantable(new Tool[]{SHOVEL, PICKAXE})
+                .enchantable(new Tool[]{Tool.PICKAXE, Tool.SHOVEL})
                 .conflicting(Pierce.class, Switch.class)
                 .description("Breaks the blocks within a radius of the original block mined")
                 .cooldown(0)

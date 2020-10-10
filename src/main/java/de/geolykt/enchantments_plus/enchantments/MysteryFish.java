@@ -11,13 +11,11 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import static de.geolykt.enchantments_plus.enums.Tool.ROD;
 
 public class MysteryFish extends CustomEnchantment {
 
@@ -31,7 +29,7 @@ public class MysteryFish extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Mystery Fish")
             .probability(0)
-            .enchantable(new Tool[]{ROD})
+            .enchantable(new Tool[]{Tool.ROD})
             .conflicting()
             .description("Catches water mobs and fishes")
             .cooldown(0)

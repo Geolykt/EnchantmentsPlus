@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import static de.geolykt.enchantments_plus.enums.Tool.CHESTPLATE;
-
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -9,7 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class Combustion extends CustomEnchantment {
 
@@ -21,7 +19,7 @@ public class Combustion extends CustomEnchantment {
             .maxLevel(4)
             .loreName("Combustion")
             .probability(0)
-            .enchantable(new Tool[]{CHESTPLATE})
+            .enchantable(new Tool[]{Tool.CHESTPLATE})
             .conflicting()
             .description("Lights attacking entities on fire when player is attacked")
             .cooldown(0)

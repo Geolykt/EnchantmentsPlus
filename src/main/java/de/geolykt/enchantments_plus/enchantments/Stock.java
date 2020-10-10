@@ -9,9 +9,8 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 
-import static de.geolykt.enchantments_plus.enums.Tool.CHESTPLATE;
 import static org.bukkit.Material.AIR;
 
 public class Stock extends CustomEnchantment {
@@ -24,7 +23,7 @@ public class Stock extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Stock")
             .probability(0)
-            .enchantable(new Tool[]{CHESTPLATE})
+            .enchantable(new Tool[]{Tool.CHESTPLATE})
             .conflicting()
             .description("Refills the player's item in hand when they run out")
             .cooldown(-1)

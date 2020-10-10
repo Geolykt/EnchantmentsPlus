@@ -48,6 +48,7 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.util.Tool;
 
 public class CompatibilityAdapter {
     
@@ -118,6 +119,25 @@ public class CompatibilityAdapter {
         for (String s : config.getStringList("spectralConversions")) {
             spectralMaterialConversion.put(Material.matchMaterial(s.split(":")[0]), Material.matchMaterial(s.split(":")[1]));
         }
+        
+        Tool.ALL.setMaterials(getMaterialSet(config, "tools.all"));
+        
+        Tool.AXE.setMaterials(getMaterialSet(config, "tools.axe"));
+        Tool.PICKAXE.setMaterials(getMaterialSet(config, "tools.pickaxe"));
+        Tool.SHOVEL.setMaterials(getMaterialSet(config, "tools.shovel"));
+        Tool.HOE.setMaterials(getMaterialSet(config, "tools.hoe"));
+
+        Tool.HELMET.setMaterials(getMaterialSet(config, "tools.helmet"));
+        Tool.CHESTPLATE.setMaterials(getMaterialSet(config, "tools.chestplate"));
+        Tool.WINGS.setMaterials(getMaterialSet(config, "tools.wings"));
+        Tool.LEGGINGS.setMaterials(getMaterialSet(config, "tools.leggings"));
+        Tool.BOOTS.setMaterials(getMaterialSet(config, "tools.boots"));
+        
+        Tool.SWORD.setMaterials(getMaterialSet(config, "tools.sword"));
+        Tool.BOW.setMaterials(getMaterialSet(config, "tools.bow"));
+        
+        Tool.ROD.setMaterials(getMaterialSet(config, "tools.rod"));
+        Tool.SHEARS.setMaterials(getMaterialSet(config, "tools.shears"));
     }
 
     private static final Random RND = new Random();

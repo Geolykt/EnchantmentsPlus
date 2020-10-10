@@ -13,8 +13,8 @@ import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGe
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.LeightweightPDCGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentDataGetter;
 import de.geolykt.enchantments_plus.enchantments.*;
-import de.geolykt.enchantments_plus.enums.Tool;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
+import de.geolykt.enchantments_plus.util.Tool;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

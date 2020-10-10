@@ -5,10 +5,9 @@ import org.bukkit.entity.Player;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.HELMET;
 import static org.bukkit.potion.PotionEffectType.NIGHT_VISION;
 
 public class NightVision extends CustomEnchantment {
@@ -21,7 +20,7 @@ public class NightVision extends CustomEnchantment {
             .maxLevel(1)
             .loreName("Night Vision")
             .probability(0)
-            .enchantable(new Tool[]{HELMET})
+            .enchantable(new Tool[]{Tool.HELMET})
             .conflicting()
             .description("Lets the player see in the darkness")
             .cooldown(0)

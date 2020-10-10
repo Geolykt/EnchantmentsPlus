@@ -17,10 +17,9 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.MultiArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.BOW;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 import static org.bukkit.inventory.EquipmentSlot.HAND;
@@ -36,7 +35,7 @@ public class Burst extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Burst")
                 .probability(0)
-                .enchantable(new Tool[]{BOW})
+                .enchantable(new Tool[]{Tool.BOW})
                 .conflicting(Spread.class)
                 .description("Rapidly fires arrows in series")
                 .cooldown(0)

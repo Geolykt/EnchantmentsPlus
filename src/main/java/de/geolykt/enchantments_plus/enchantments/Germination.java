@@ -11,10 +11,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.HOE;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
 public class Germination extends CustomEnchantment {
@@ -27,7 +26,7 @@ public class Germination extends CustomEnchantment {
                 .maxLevel(3)
                 .loreName("Germination")
                 .probability(0)
-                .enchantable(new Tool[]{HOE})
+                .enchantable(new Tool[]{Tool.HOE})
                 .conflicting()
                 .description("Uses bonemeal from the player's inventory to grow nearby plants")
                 .cooldown(0)

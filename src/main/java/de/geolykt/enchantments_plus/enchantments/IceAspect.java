@@ -7,10 +7,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.SWORD;
 import static org.bukkit.potion.PotionEffectType.SLOW;
 
 public class IceAspect extends CustomEnchantment {
@@ -23,7 +22,7 @@ public class IceAspect extends CustomEnchantment {
             .maxLevel(2)
             .loreName("Ice Aspect")
             .probability(0)
-            .enchantable(new Tool[]{SWORD})
+            .enchantable(new Tool[]{Tool.SWORD})
             .conflicting()
             .description("Temporarily freezes the target")
             .cooldown(0)

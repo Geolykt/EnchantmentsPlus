@@ -13,10 +13,9 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.enums.Tool;
+import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static de.geolykt.enchantments_plus.enums.Tool.PICKAXE;
 import static org.bukkit.Material.*;
 
 public class Switch extends CustomEnchantment {
@@ -29,7 +28,7 @@ public class Switch extends CustomEnchantment {
                 .maxLevel(1)
                 .loreName("Switch")
                 .probability(0)
-                .enchantable(new Tool[]{PICKAXE})
+                .enchantable(new Tool[]{Tool.PICKAXE})
                 .conflicting(Shred.class, Anthropomorphism.class, Fire.class, Extraction.class, Pierce.class,
             Reveal.class)
                 .description("Replaces the clicked block with the leftmost block in your hotbar when sneaking")
