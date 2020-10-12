@@ -32,6 +32,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.util.Utilities;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
@@ -51,20 +52,12 @@ public class Watcher implements Listener {
         if (evt.getBlock().getType() == DISPENSER) {
             ItemStack stk = evt.getItem();
             if (stk != null) {
-                Laser ench = null;
-                for (CustomEnchantment e : config.getEnchants()) {
-                    if (e.getClass().equals(Laser.class)) {
-                        ench = (Laser) e;
-                    }
-                }
-                if (ench == null) {
+                int level = CustomEnchantment.getEnchantLevel(config, stk,  BaseEnchantments.LASER);
+                if (level == 0)
                     return;
-                }
-                if (CustomEnchantment.getEnchants(stk, config.getWorld()).containsKey(ench)
-                        && !stk.getType().equals(ENCHANTED_BOOK)) {
+                if (!stk.getType().equals(ENCHANTED_BOOK)) {
                     evt.setCancelled(true);
-                    int level = CustomEnchantment.getEnchants(stk, config.getWorld()).get(ench);
-                    int range = 6 + (int) Math.round(level * ench.getPower() * 3);
+                    int range = 6 + (int) Math.round(level * 3); // TODO also calculate with the power of the enchantment
                     Block blk = evt.getBlock()
                             .getRelative(((Directional) evt.getBlock().getState().getData()).getFacing(), range);
                     Location play = Utilities.getCenter(evt.getBlock());
