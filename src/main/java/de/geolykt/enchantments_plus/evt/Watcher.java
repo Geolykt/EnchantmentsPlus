@@ -46,10 +46,11 @@ public class Watcher implements Listener {
 
     // Fires a laser effect from dispensers if a tool with the Laser enchantment is
     // dispensed
+    // TODO also break the blocks and not only look silly
     @EventHandler
     public void onBlockDispense(BlockDispenseEvent evt) {
         Config config = Config.get(evt.getBlock().getWorld());
-        if (evt.getBlock().getType() == DISPENSER) {
+        if (evt.getBlock().getBlockData() instanceof Directional) {
             ItemStack stk = evt.getItem();
             if (stk != null) {
                 int level = CustomEnchantment.getEnchantLevel(config, stk,  BaseEnchantments.LASER);
@@ -59,7 +60,7 @@ public class Watcher implements Listener {
                     evt.setCancelled(true);
                     int range = 6 + (int) Math.round(level * 3); // TODO also calculate with the power of the enchantment
                     Block blk = evt.getBlock()
-                            .getRelative(((Directional) evt.getBlock().getState().getData()).getFacing(), range);
+                            .getRelative(((Directional) evt.getBlock().getBlockData()).getFacing(), range);
                     Location play = Utilities.getCenter(evt.getBlock());
                     Location target = Utilities.getCenter(blk);
                     play.setY(play.getY() - .5);
