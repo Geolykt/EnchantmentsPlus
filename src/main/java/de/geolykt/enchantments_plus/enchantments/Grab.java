@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 public class Grab extends CustomEnchantment {
 
     // Locations where Grab has been used on a block and are waiting for the Watcher to handle their teleportation
-    public static final Map<Block, Player> grabLocs     = new HashMap<>();
+    public static final Map<Location, Player> grabLocs     = new HashMap<>();
     public static final int                  ID           = 23;
 
     @Override
@@ -37,11 +37,11 @@ public class Grab extends CustomEnchantment {
 
     @Override
     public boolean onBlockBreak(final BlockBreakEvent evt, int level, boolean usedHand) {
-        grabLocs.put(evt.getBlock(), evt.getPlayer());
-        final Block block = evt.getBlock();
+        grabLocs.put(evt.getBlock().getLocation(), evt.getPlayer());
+        final Location loc = evt.getBlock().getLocation();
         //ADAPTER.breakBlockNMS(evt.getBlock(), evt.getPlayer());
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-            grabLocs.remove(block);
+            grabLocs.remove(loc);
         }, 3);
         return true;
     }

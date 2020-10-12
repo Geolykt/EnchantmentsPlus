@@ -114,7 +114,7 @@ public class Watcher implements Listener {
             evt.setCancelled(true);
         }
     }
-
+    
     // Teleports item stacks to a certain location as they are created from breaking
     // a block or killing an entity if
     // a Grab or Vortex enchantment was used
@@ -124,34 +124,31 @@ public class Watcher implements Listener {
             evt.setCancelled(true);
             return;
         }
-        Location loc = evt.getEntity().getLocation();
+        final Location loc = evt.getEntity().getLocation();
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-            for (Block block : Grab.grabLocs.keySet()) {
-                if (block.getLocation().getBlockX() == loc.getBlockX()
-                        && block.getLocation().getBlockY() == loc.getBlockY()
-                        && block.getLocation().getBlockZ() == loc.getBlockZ()) {
-                    evt.getEntity().teleport(Grab.grabLocs.get(block));
+            for (Location grabLoc : Grab.grabLocs.keySet()) {
+                if (grabLoc.getWorld().equals(loc.getWorld()) && grabLoc.distanceSquared(loc) < 2) {
+                    evt.getEntity().teleport(Grab.grabLocs.get(grabLoc));
                     evt.getEntity().setPickupDelay(0);
                     for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                         if (e instanceof ExperienceOrb) {
-                            Grab.grabLocs.get(block).giveExp(((ExperienceOrb) e).getExperience());
+                            Grab.grabLocs.get(grabLoc).giveExp(((ExperienceOrb) e).getExperience());
                             e.remove();
                         }
                     }
                 }
             }
-            for (Block block : Vortex.vortexLocs.keySet()) {
-                if (block.getLocation().getWorld().equals(loc.getWorld())) {
-                    if (block.getLocation().distance(loc) < 2) {
-                        evt.getEntity().teleport(Vortex.vortexLocs.get(block));
-                        evt.getEntity().setPickupDelay(0);
-                        for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
-                            if (e instanceof ExperienceOrb) {
-                                Vortex.vortexLocs.get(block).giveExp(((ExperienceOrb) e).getExperience());
-                                e.remove();
-                            }
+            for (Location vortexLoc : Vortex.vortexLocs.keySet()) {
+                if (loc.getWorld().equals(vortexLoc.getWorld()) && (vortexLoc.distanceSquared(loc) < 16)) {
+                    evt.getEntity().teleport(Vortex.vortexLocs.get(vortexLoc));
+                    evt.getEntity().setPickupDelay(0);
+                    for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
+                        if (e instanceof ExperienceOrb) {
+                            Vortex.vortexLocs.get(vortexLoc).giveExp(((ExperienceOrb) e).getExperience());
+                            e.remove();
                         }
                     }
+                    
                 }
             }
         }, 1);

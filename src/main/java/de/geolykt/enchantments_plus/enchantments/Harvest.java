@@ -78,10 +78,10 @@ public class Harvest extends CustomEnchantment {
 
                             if (blockAltered) {
                                 Utilities.damageTool(evt.getPlayer(), 1, usedHand);
-                                Grab.grabLocs.put(block, evt.getPlayer());
+                                Grab.grabLocs.put(block.getLocation(), evt.getPlayer());
                                 Bukkit.getServer().getScheduler()
                                         .scheduleSyncDelayedTask(Storage.plugin, () -> {
-                                            Grab.grabLocs.remove(block);
+                                            Grab.grabLocs.remove(block.getLocation());
                                         }, 3);
                                 success = true;
                             }

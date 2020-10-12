@@ -75,13 +75,13 @@ public class Switch extends CustomEnchantment {
             }
 
             // Breaking succeeded, begin invasive operations
-            Grab.grabLocs.put(clickedBlock, evt.getPlayer());
+            Grab.grabLocs.put(clickedBlock.getLocation(), evt.getPlayer());
             evt.setCancelled(true);
 
             Material mat = switchItem.getType();
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                Grab.grabLocs.remove(clickedBlock);
+                Grab.grabLocs.remove(clickedBlock.getLocation());
             }, 3);
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {

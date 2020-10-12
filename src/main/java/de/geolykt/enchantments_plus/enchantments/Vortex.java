@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class Vortex extends CustomEnchantment {
 
     // Locations where Vortex has been used on a block and are waiting for the Watcher to handle their teleportation
-    public static final Map<Block, Player> vortexLocs = new HashMap<>();
+    public static final Map<Location, Player> vortexLocs = new HashMap<>();
     public static final int ID = 66;
 
     @Override
@@ -41,7 +41,7 @@ public class Vortex extends CustomEnchantment {
 
     @Override
     public boolean onEntityKill(final EntityDeathEvent evt, int level, boolean usedHand) {
-        final Block deathBlock = evt.getEntity().getLocation().getBlock();
+        final Location deathBlock = evt.getEntity().getLocation();
         vortexLocs.put(deathBlock, evt.getEntity().getKiller());
         
         evt.getEntity().getKiller().giveExp(evt.getDroppedExp());

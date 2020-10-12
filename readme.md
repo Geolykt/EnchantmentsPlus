@@ -1,6 +1,6 @@
 Craftbukkit support (if you can talk about one) will be ditched rather soon. The plugin may no longer run on these Servers in the coming releases. We intend on continuing support with Spigot, Paper and any other Server that implement the Bukkit API
 <br>
-Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public, but It'S the best if at least someone knows exploits or bugs so they can be fixed.
+Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
 It also only intends to support 1.16.3 and newer versions when the time comes.
 
@@ -28,6 +28,7 @@ Compile this project like every other project out there. Note that you need to h
 
 ## Compatibility
 The current version of this plugin is fully compatible with Spigot version 1.16.1, 1.16.2 and 1.16.3. Any versions under 1.16.1, will **not** work without tinkering, versions above, may, although with a few issues.
+1.15.2 can work when changing around the magicCompat.yml file, however isn't technically fully supported
 
 ## Contribute
 Anyone is free to contribute to this repository via pull requests, issues or comments, however keep in mind that this repository uses 4 space indentation.
@@ -50,6 +51,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>The color of the laser can now be changed for purely costmetical reasons. Why? Don't ask</li>
    <li>Help and tab completion now handle permissions</li>
    <li>Mystery fish can now catch other water mobs such as cod, pufferfish and salmon and was buffed overall</li>
+   <li>Admins can now change which items are part of which tool</li>
   </ul>
  </li>
  <li>Patches:
@@ -59,8 +61,9 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Fixed potential bug with the vortex enchantment, the specifics are unknown</li>
    <li>Mitigated severe lag issues with the Spectral enchantment, also performed some optimisations. To get to the pervious way of how the enchantment worked, put the enchantment power to really high values</li>
    <li>Spectral now can use it's own Protection system nullifying the risk of McMMO/Jobs exploits</li>
-   <li>Spectral performance increased noticeably.</li>
-   <li>Lots of performance improvements for periodically running tasks.</li>
+   <li>Spectral performance increased noticeably</li>
+   <li>Lots of performance improvements for periodically running tasks</li>
+   <li>Dispensing laser items no longer temporarily freezes the Server</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):
