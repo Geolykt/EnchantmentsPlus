@@ -27,8 +27,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
-import static org.bukkit.entity.EntityType.*;
-
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import static org.bukkit.potion.PotionEffectType.*;
@@ -73,6 +71,7 @@ public class CompatibilityAdapter {
     private EnumSet<Biome> dryBiomes;
     
     private EnumMap<Material, Material> spectralMaterialConversion;
+    private EnumMap<EntityType, EntityType> transformationMap;
     
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
         EnumSet<Material> es = EnumSet.noneOf(Material.class);
@@ -118,6 +117,10 @@ public class CompatibilityAdapter {
         spectralMaterialConversion = new EnumMap<>(Material.class);
         for (String s : config.getStringList("spectralConversions")) {
             spectralMaterialConversion.put(Material.matchMaterial(s.split(":")[0]), Material.matchMaterial(s.split(":")[1]));
+        }
+        transformationMap = new EnumMap<>(EntityType.class);
+        for (String s : config.getStringList("transformation")) {
+            transformationMap.put(EntityType.valueOf(s.split(":")[0]), EntityType.valueOf(s.split(":")[1]));
         }
         
         Tool.ALL.setMaterials(getMaterialSet(config, "tools.all"));
@@ -174,32 +177,21 @@ public class CompatibilityAdapter {
         return terraformerAllowlist;
     }
 
-    public List<EntityType> transformationEntityTypesFrom() {
-        return Arrays.asList(
-                HUSK, WITCH, EntityType.COD, PHANTOM, HORSE, SKELETON, EntityType.CHICKEN, SQUID, OCELOT, POLAR_BEAR, COW, PIG,
-                SPIDER, SLIME, GUARDIAN, ENDERMITE, SKELETON_HORSE, EntityType.RABBIT, SHULKER, SNOWMAN, DROWNED, VINDICATOR,
-                EntityType.SALMON, BLAZE, DONKEY, STRAY, PARROT, DOLPHIN, WOLF, SHEEP, MUSHROOM_COW, ZOMBIFIED_PIGLIN, CAVE_SPIDER,
-                MAGMA_CUBE, ELDER_GUARDIAN, SILVERFISH, ZOMBIE_HORSE, EntityType.RABBIT, ENDERMAN, IRON_GOLEM, ZOMBIE, EVOKER,
-                PUFFERFISH, VEX, MULE, WITHER_SKELETON, BAT, TURTLE, ZOMBIE_VILLAGER, VILLAGER, EntityType.TROPICAL_FISH, GHAST,
-                LLAMA, CREEPER, EntityType.HOGLIN);
-    }
-
-    public List<EntityType> transformationEntityTypesTo() {
-        return Arrays.asList(
-                DROWNED, VINDICATOR, EntityType.SALMON, BLAZE, DONKEY, STRAY, PARROT, DOLPHIN, WOLF, SHEEP, MUSHROOM_COW,
-                ZOMBIFIED_PIGLIN, CAVE_SPIDER, MAGMA_CUBE, ELDER_GUARDIAN, SILVERFISH, ZOMBIE_HORSE, EntityType.RABBIT, ENDERMAN,
-                IRON_GOLEM, ZOMBIE, EVOKER, PUFFERFISH, VEX, MULE, WITHER_SKELETON, BAT, TURTLE, OCELOT, POLAR_BEAR, COW, PIG,
-                SPIDER, SLIME, GUARDIAN, ENDERMITE, SKELETON_HORSE, EntityType.RABBIT, SHULKER, SNOWMAN, ZOMBIE_VILLAGER,
-                VILLAGER, EntityType.TROPICAL_FISH, GHAST, LLAMA, SKELETON, EntityType.CHICKEN, SQUID, HUSK, WITCH,
-                EntityType.COD, PHANTOM, HORSE, CREEPER, EntityType.ZOGLIN);
+    /**
+     * Returns the Maps used for the Transformation enchantment, while ideally the key-value pairs will point towards each other directly
+     * or indirectly, this may not always guaranteed to be the case. Additionally, if both Key and Value is either CREEPER or RABBIT, then
+     * their charged/killer bunny state should be inverted.
+     * @return A mapping used by the transformation enchantment
+     * @since 2.1.0
+     */
+    public EnumMap<EntityType, EntityType> getTransformationMap() {
+        return transformationMap;
     }
 
     public LivingEntity transformationCycle(LivingEntity ent, Random rnd) {
-        int newTypeID = transformationEntityTypesFrom().indexOf(ent.getType());
-        if (newTypeID == -1) {
+        EntityType newType = transformationMap.get(ent.getType());
+        if (newType == null)
             return null;
-        }
-        EntityType newType = transformationEntityTypesTo().get(newTypeID);
         LivingEntity newEnt = (LivingEntity) ent.getWorld().spawnEntity(ent.getLocation(), newType);
 
         switch (newType) {
@@ -217,7 +209,6 @@ public class CompatibilityAdapter {
         case VILLAGER:
             Villager.Profession career = Villager.Profession.values()[rnd.nextInt(Villager.Profession.values().length)];
             ((Villager) newEnt).setProfession(career);
-            //((Villager) newEnt).setCareer(career);
             break;
         case LLAMA:
             ((Llama) newEnt).setColor(Llama.Color.values()[rnd.nextInt(Llama.Color.values().length)]);
@@ -234,7 +225,8 @@ public class CompatibilityAdapter {
             ((Sheep) newEnt).setColor(DyeColor.values()[rnd.nextInt(DyeColor.values().length)]);
             break;
         case CREEPER:
-            ((Creeper) newEnt).setPowered(!((Creeper) ent).isPowered());
+            if (ent.getType() == EntityType.CREEPER)
+                ((Creeper) newEnt).setPowered(!((Creeper) ent).isPowered());
             break;
         case MUSHROOM_COW:
             ((MushroomCow) newEnt).setVariant(MushroomCow.Variant.values()[rnd.nextInt(MushroomCow.Variant.values().length)]);
