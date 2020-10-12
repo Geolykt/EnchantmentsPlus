@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 /**
@@ -33,9 +34,10 @@ public class BasicLoreGetter implements IEnchGatherer {
         if (stk != null && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
             if (stk.hasItemMeta()) {
                 if (stk.getItemMeta().hasLore()) {
+                    Config cfg = Config.get(world);
                     List<String> lore = stk.getItemMeta().getLore();
                     for (String raw : lore) {
-                        Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, world);
+                        Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, cfg);
                         if (ench != null) {
                             map.put(ench.getKey(), ench.getValue());
                         } else {
@@ -49,24 +51,23 @@ public class BasicLoreGetter implements IEnchGatherer {
         }
         return map;
     }
-
-    // Returns the custom enchantment from the lore name. Since 2.0.0
-    private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, World world) {
+    
+    private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, Config cfg) {
         raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "").trim();
         switch (raw.split(" ").length) {
         case 0:
             return null; // Invalid length, don't tell me otherwise
         case 1:
-            CustomEnchantment enchant = Config.get(world).enchantFromString(raw);
+            CustomEnchantment enchant =cfg.enchantFromString(raw);
             if (enchant == null) {
                 return null; // Not able to map enchantment
             } else {
                 return new SimpleEntry<CustomEnchantment, Integer>(enchant, 1);
             }
         case 2:
-            CustomEnchantment ench = Config.get(world).enchantFromString(raw.split(" ")[0]);
+            CustomEnchantment ench = cfg.enchantFromString(raw.split(" ")[0]);
             if (ench == null) {
-                ench = Config.get(world).enchantFromString(raw.replace(" ", "")); // In case of nightvision
+                ench = cfg.enchantFromString(raw.replace(" ", "")); // In case of nightvision
                 if (ench == null)
                     return null; // Not able to map enchantment
                 else
@@ -79,7 +80,7 @@ public class BasicLoreGetter implements IEnchGatherer {
                 return null; // Invalid roman numeral
             }
         case 3:
-            CustomEnchantment ench2 = Config.get(world).enchantFromString(raw.split(" ")[0] + raw.split(" ")[1]);
+            CustomEnchantment ench2 = cfg.enchantFromString(raw.split(" ")[0] + raw.split(" ")[1]);
             if (ench2 == null) {
                 return null; // Not able to map enchantment
             }
@@ -104,8 +105,9 @@ public class BasicLoreGetter implements IEnchGatherer {
         List<String> normalLore = new LinkedList<>();
         boolean customEnch = false;
         if (meta.hasLore()) {
+            Config cfg = Config.get(world);
             for (String loreStr : meta.getLore()) {
-                Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, world);
+                Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, cfg);
                 if (enchEntry == null) {
                     normalLore.add(loreStr);
                 } else if (enchEntry != null && enchEntry.getKey() != ench) {
@@ -129,6 +131,19 @@ public class BasicLoreGetter implements IEnchGatherer {
         }
 
         CustomEnchantment.setGlow(stk, customEnch, world);
+    }
+
+    @Override
+    public int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments enchantment) {
+        if (stk != null && stk.hasItemMeta() && stk.getItemMeta().hasLore()) {
+            for (String raw : stk.getItemMeta().getLore()) {
+                Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, config);
+                if (ench != null && ench.getKey().asEnum() == enchantment) {
+                    return ench.getValue();
+                }
+            }
+        }
+        return 0;
     }
 
 }

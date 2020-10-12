@@ -288,6 +288,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return Enchantment_Adapter.getEnchants(stk, acceptBooks, world, outExtraLore);
     }
 
+    public static boolean hasEnchantment(Config config, ItemStack stk, BaseEnchantments ench) {
+        return Enchantment_Adapter.hasEnchantment(config, stk, ench);
+    }
+
+    public static int getEnchantLevel(Config config, ItemStack stk, BaseEnchantments ench) {
+        return Enchantment_Adapter.getEnchantmentLevel(config, stk, ench);
+    }
+
     /**
      * Determines if the material provided is enchantable with this enchantment.
      *

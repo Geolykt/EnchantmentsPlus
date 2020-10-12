@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 
 /**
  * The LeightweightPDCGetter, which is a more lightweight variant of the usual PDC getter, however lacks some important features 
@@ -93,6 +94,22 @@ public class LeightweightPDCGetter implements IEnchGatherer {
         }
 
         CustomEnchantment.setGlow(stk, true, world);
+    }
+
+    @Override
+    public boolean hasEnchantment(Config config, ItemStack stk, BaseEnchantments ench) {
+        if (stk != null && stk.getItemMeta() != null) {
+            return stk.getItemMeta().getPersistentDataContainer().has(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
+        }
+        return false;
+    }
+
+    @Override
+    public int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments ench) {
+        if (stk != null && stk.getItemMeta() != null) {
+            return stk.getItemMeta().getPersistentDataContainer().get(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
+        }
+        return 0;
     }
 
 }

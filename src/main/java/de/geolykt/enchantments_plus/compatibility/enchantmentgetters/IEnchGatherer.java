@@ -6,7 +6,9 @@ import java.util.List;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 
 public interface IEnchGatherer {
 
@@ -68,4 +70,29 @@ public interface IEnchGatherer {
      * @since 2.0.0
      */
     public abstract void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world);
+
+    /**
+     * Checks whether an Item has a given Enchantment. This should be used instead of a normal map.contains() as it can be
+     * Optimized by some getters to result in significantly better performance.
+     * @param config The configuration that should be used
+     * @param stk The stack that should be read
+     * @param clazz The Enchantment that should be searched for.
+     * @return True if the stack contained the given Enchantment, false otherwise
+     * @since 2.1.1
+     */
+    public default boolean hasEnchantment(Config config, ItemStack stk, BaseEnchantments ench) {
+        return getEnchantmentLevel(config, stk, ench) != 0;
+    }
+
+    /**
+     * Returns the level of a given enchantment. This should be used instead of a normal map.get() as it can be
+     * Optimized by some getters to result in significantly better performance. <br>
+     * In case the enchantment is not found, 0 should be returned.
+     * @param config The configuration that should be used
+     * @param stk The stack that should be read
+     * @param clazz The Enchantment that should be searched for.
+     * @return The level of the given enchantment on a given stack.
+     * @since 2.1.1
+     */
+    public abstract int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments ench);
 }

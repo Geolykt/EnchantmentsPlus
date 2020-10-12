@@ -13,6 +13,7 @@ import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGe
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.LeightweightPDCGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentDataGetter;
 import de.geolykt.enchantments_plus.enchantments.*;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 import de.geolykt.enchantments_plus.util.Tool;
 
@@ -43,6 +44,7 @@ public class Config {
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
     private final Map<Integer, CustomEnchantment> idToEnch;
+    private final Map<BaseEnchantments, CustomEnchantment> baseToEnch;
     private final double enchantRarity; // Overall rarity of obtaining enchantments
     private final int maxEnchants; // Max number of Custom Enchantments on a tool
     private final int shredDrops; // The setting (all, block, none) for shred drops
@@ -64,14 +66,14 @@ public class Config {
         this.explosionBlockBreak = explosionBlockBreak;
         this.world = world;
 
-        this.nameToEnch = new HashMap<>();
-        for (CustomEnchantment ench : this.worldEnchants) {
-            nameToEnch.put(ChatColor.stripColor(ench.getLoreName().toLowerCase().replace(" ", "")), ench);
-        }
+        this.nameToEnch = new HashMap<>(worldEnchants.size());
+        this.idToEnch = new HashMap<>(worldEnchants.size());
+        this.baseToEnch = new EnumMap<>(BaseEnchantments.class);
 
-        this.idToEnch = new HashMap<>();
         for (CustomEnchantment ench : this.worldEnchants) {
             idToEnch.put(ench.getId(), ench);
+            nameToEnch.put(ChatColor.stripColor(ench.getLoreName().toLowerCase().replace(" ", "")), ench);
+            baseToEnch.put(ench.asEnum(), ench);
         }
 
         this.enchantGlow = enchantGlow;
@@ -142,6 +144,10 @@ public class Config {
 
     public CustomEnchantment enchantFromID(int id) {
         return idToEnch.get(id);
+    }
+
+    public CustomEnchantment enchantFromEnum(BaseEnchantments ench) {
+        return baseToEnch.get(ench);
     }
 
     // Loads, parses, and auto updates the config file, creating a new config for
