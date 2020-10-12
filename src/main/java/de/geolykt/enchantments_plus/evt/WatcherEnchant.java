@@ -35,6 +35,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -238,12 +239,12 @@ public class WatcherEnchant implements Listener {
         }
     }
 
-    // FIXME this doesn't even check whether it's a bow -> extremely retarded method
     @EventHandler
     public void onEntityKill(EntityDeathEvent evt) {
         if (evt.getEntity().getKiller() != null) {
             Player player = evt.getEntity().getKiller();
-            boolean usedHand = Tool.BOW.contains(player.getInventory().getItemInMainHand().getType());
+            boolean usedHand = !(evt.getEntity().getLastDamageCause().getCause() == DamageCause.PROJECTILE 
+                    && Tool.BOW.contains(player.getInventory().getItemInOffHand().getType()));
             ItemStack usedStack = Utilities.usedStack(player, usedHand);
             CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> {
                 return ench.onEntityKill(evt, level, usedHand);
