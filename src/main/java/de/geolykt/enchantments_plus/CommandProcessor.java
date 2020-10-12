@@ -136,9 +136,10 @@ public class CommandProcessor {
             LinkedList<String> results = new LinkedList<>();
             if (args.length == 1) {
                 for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
-                    if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (stack.getType() == BOOK
-                            || stack.getType() == ENCHANTED_BOOK || ench.getValue().validMaterial(
-                            stack.getType())
+                    if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (
+                            stack.getType() == BOOK
+                            || stack.getType() == ENCHANTED_BOOK 
+                            || ench.getValue().validMaterial(stack.getType())
                             || stack.getType() == AIR)) {
                         results.add(ench.getKey());
                     }

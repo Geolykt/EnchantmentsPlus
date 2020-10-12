@@ -71,8 +71,11 @@ public class Tool {
             return SWORD;
         case "rod":
             return ROD;
-        case "shear":
+        case "shears":
             return SHEARS;
+        case "wings":
+        case "elytra":
+            return WINGS;
         case "all":
             return ALL;
         }
