@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import de.geolykt.enchantments_plus.annotations.AsyncSafe;
+
 
 /**
  *
@@ -43,6 +45,7 @@ public class HighFrequencyRunnableCache implements Runnable {
     }
 
     @Override
+    @AsyncSafe
     public void run() {
         Iterator<Supplier<Boolean>> it = cache0.iterator();
         while (it.hasNext()) {

@@ -441,8 +441,7 @@ public class CompatibilityAdapter {
     }
 
     public boolean attackEntity(LivingEntity target, Player attacker, double damage, boolean performEquipmentDamage) {
-        EntityDamageByEntityEvent damageEvent
-        = new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damage);
+        EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damage);
         Bukkit.getPluginManager().callEvent(damageEvent);
         if (damage == 0) {
             return !damageEvent.isCancelled();
@@ -460,7 +459,6 @@ public class CompatibilityAdapter {
 
     public boolean shearEntityNMS(Entity target, Player player, boolean mainHand) {
         if ((target instanceof Sheep && !((Sheep) target).isSheared()) || target instanceof MushroomCow) {
-            @SuppressWarnings("deprecation")
             PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target);
             Bukkit.getPluginManager().callEvent(evt);
             if (!evt.isCancelled()) {

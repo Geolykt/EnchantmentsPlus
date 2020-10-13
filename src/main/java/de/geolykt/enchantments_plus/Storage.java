@@ -52,6 +52,7 @@ public class Storage {
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     // Random object
+    @Deprecated
     public static final Random rnd = new Random();
 
     public static final BlockFace[] CARDINAL_BLOCK_FACES = {

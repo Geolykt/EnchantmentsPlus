@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import de.geolykt.enchantments_plus.annotations.AsyncSafe;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.IEnchGatherer;
@@ -136,6 +137,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return false;
     }
 
+    @AsyncSafe
     public boolean onFastScan(Player player, int level, boolean usedHand) {
         return false;
     }

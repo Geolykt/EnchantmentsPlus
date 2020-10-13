@@ -47,6 +47,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.HighFrequencyRunnableCache;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.annotations.AsyncSafe;
 import de.geolykt.enchantments_plus.enchantments.FrozenStep;
 import de.geolykt.enchantments_plus.enchantments.NetherStep;
 import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
@@ -377,6 +378,7 @@ public class WatcherEnchant implements Listener {
     }
 
     // Fast Scan of Player's Armor and their hand to register enchantments
+    @AsyncSafe
     public static void scanPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             EnchantPlayer enchPlayer = EnchantPlayer.matchPlayer(player);
@@ -390,6 +392,7 @@ public class WatcherEnchant implements Listener {
     }
 
     // Implicitly scheduled MEDIUM_HIGH due to being called by HighFrequencyEnchCache with interval 5
+    @AsyncSafe
     private static void feedEnchCache(Player player, Consumer<Supplier<Boolean>> consoomer) {
         for (ItemStack stk : player.getInventory().getArmorContents()) {
             CustomEnchantment.applyForTool(player, stk, (ench, level) -> {

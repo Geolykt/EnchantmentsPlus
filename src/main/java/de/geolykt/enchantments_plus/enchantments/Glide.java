@@ -13,15 +13,17 @@ import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.AIR;
 
 public class Glide extends CustomEnchantment {
 
     // The players using glide and their most recent Y coordinate
-    public static final Map<Player, Double> sneakGlide = new HashMap<>();
+    public static final Map<Player, Double> sneakGlide = Collections.synchronizedMap(new HashMap<>());
     public static final int ID = 20;
 
     @Override
@@ -41,6 +43,7 @@ public class Glide extends CustomEnchantment {
 
     @Override
     public boolean onFastScan(Player player, int level, boolean usedHand) {
+        // TODO is this even required?
         if (!sneakGlide.containsKey(player)) {
             sneakGlide.put(player, player.getLocation().getY());
         }
@@ -69,7 +72,7 @@ public class Glide extends CustomEnchantment {
             l.setY(l.getY() - 3);
             Utilities.spawnParticle(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
         }
-        if (Storage.rnd.nextInt(5 * level) == 5) { // Slowly damage all armor
+        if (ThreadLocalRandom.current().nextInt(5*level) == 5) { // Slowly damage all armor
             ItemStack[] s = player.getInventory().getArmorContents();
             for (int i = 0; i < 4; i++) {
                 if (s[i] != null) {
