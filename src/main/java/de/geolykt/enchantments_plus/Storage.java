@@ -48,7 +48,7 @@ public class Storage {
     // Current Enchantments_plus version
     public static String version = "";
 
-    public static final CompatibilityAdapter COMPATIBILITY_ADAPTER;
+    public static final CompatibilityAdapter COMPATIBILITY_ADAPTER = new CompatibilityAdapter();
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     // Random object
@@ -62,15 +62,4 @@ public class Storage {
         BlockFace.SOUTH,
         BlockFace.WEST
     };
-
-    static {
-        String versionString = Bukkit.getServer().getClass().getPackage().getName();
-        String nmsVersionString = versionString.substring(versionString.lastIndexOf('.') + 1);
-        System.out.println(BRAND + ": Detected NMS version \"" + nmsVersionString + "\"");
-        switch (nmsVersionString) {
-            default:
-                COMPATIBILITY_ADAPTER = new CompatibilityAdapter();
-                break;
-        }
-    }
 }
