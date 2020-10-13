@@ -376,8 +376,9 @@ public class Utilities {
         ent.addPotionEffect(new PotionEffect(type, length, intensity));
     }
 
-    public static void selfRemovingArea(Material fill, Material check, int radius, Block center, Player player,
+    public static boolean selfRemovingArea(Material fill, Material check, int radius, Block center, Player player,
             Map<Location, Long> placed) {
+        boolean manipulated = false;
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
 
@@ -395,11 +396,13 @@ public class Utilities {
                         }
                         if (Storage.COMPATIBILITY_ADAPTER.formBlock(possiblePlatformBlock, fill, player)) {
                             placed.put(possiblePlatformLoc, System.nanoTime());
+                            manipulated = true;
                         }
                     }
                 }
             }
         }
+        return manipulated;
     }
 
     /**

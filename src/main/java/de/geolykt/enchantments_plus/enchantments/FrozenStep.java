@@ -39,15 +39,10 @@ public class FrozenStep extends CustomEnchantment {
     public boolean onScan(Player player, int level, boolean usedHand) {
         if (player.isSneaking() && player.getLocation().getBlock().getType() == WATER &&
             !player.isFlying()) {
-
-
             player.setVelocity(player.getVelocity().setY(.4));
         }
         Block block = player.getLocation().getBlock();
         int radius = (int) Math.round(power * level + 2);
-
-
-        selfRemovingArea(PACKED_ICE, WATER, radius, block, player, frozenLocs);
-        return true;
+        return selfRemovingArea(PACKED_ICE, WATER, radius, block, player, frozenLocs);
     }
 }

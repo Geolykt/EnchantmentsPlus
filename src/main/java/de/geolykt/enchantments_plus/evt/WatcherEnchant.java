@@ -395,7 +395,7 @@ public class WatcherEnchant implements Listener {
     @AsyncSafe
     private static void feedEnchCache(Player player, Consumer<Supplier<Boolean>> consoomer) {
         for (ItemStack stk : player.getInventory().getArmorContents()) {
-            CustomEnchantment.applyForTool(player, stk, (ench, level) -> {
+            CustomEnchantment.applyForToolAsync(player, stk, (ench, level) -> {
                 consoomer.accept(() -> {
                     if (!player.isOnline()) {
                         return false;
@@ -408,7 +408,7 @@ public class WatcherEnchant implements Listener {
                 return ench.onScan(player, level, true);
             });
         }
-        CustomEnchantment.applyForTool(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
+        CustomEnchantment.applyForToolAsync(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
             consoomer.accept(() -> {
                 if (!player.isOnline()) {
                     return false;
@@ -420,7 +420,7 @@ public class WatcherEnchant implements Listener {
             });
             return ench.onScanHands(player, level, true);
         });
-        CustomEnchantment.applyForTool(player, player.getInventory().getItemInOffHand(), (ench, level) -> {
+        CustomEnchantment.applyForToolAsync(player, player.getInventory().getItemInOffHand(), (ench, level) -> {
             consoomer.accept(() -> {
                 if (!player.isOnline()) {
                     return false;

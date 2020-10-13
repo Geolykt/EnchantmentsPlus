@@ -24,6 +24,7 @@ import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGe
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.IEnchGatherer;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.evt.ench.AsyncZenchantmentUseEvent;
 import de.geolykt.enchantments_plus.evt.ench.ZenchantmentUseEvent;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -257,6 +258,33 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                     if (action.test(ench, level)) {
                         EnchantPlayer.matchPlayer(player).setCooldown(ench.id, ench.cooldown);
                         final ZenchantmentUseEvent evt = new ZenchantmentUseEvent(player, EquipmentSlot.HAND, ench, level);
+                        Bukkit.getPluginManager().callEvent(evt);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                ench.used = false;
+            }
+        });
+    }
+
+    /**
+     * Asynchronously applies the enchantments on a tool, please beware that the action should be also asynchronously, otherwise
+     * the asyncSafety is not provided
+     * @param player The player that is the target of the application of enchantment
+     * @param tool The item that is the target of the application of the enchantment
+     * @param action The action that should be performed
+     * @since 2.1.1@fast-async
+     */
+    @AsyncSafe
+    public static void applyForToolAsync(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {    
+        getEnchants(tool, player.getWorld()).forEach((CustomEnchantment ench, Integer level) -> {
+            if (!ench.used && Utilities.canUse(player, ench.id)) {
+                try {
+                    ench.used = true;
+                    if (action.test(ench, level)) {
+                        EnchantPlayer.matchPlayer(player).setCooldown(ench.id, ench.cooldown);
+                        final AsyncZenchantmentUseEvent evt = new AsyncZenchantmentUseEvent(player, EquipmentSlot.HAND, ench, level);
                         Bukkit.getPluginManager().callEvent(evt);
                     }
                 } catch (Exception ex) {
