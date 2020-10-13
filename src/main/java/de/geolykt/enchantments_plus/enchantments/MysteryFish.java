@@ -75,7 +75,9 @@ public class MysteryFish extends CustomEnchantment {
         Iterator<Entity> it = guardianMove.keySet().iterator();
         while (it.hasNext()) {
             Guardian g = (Guardian) it.next();
-            if (g.getLocation().distance(guardianMove.get(g).getLocation()) > 2 && g.getTicksLived() < 160) {
+            if (g.getLocation().getWorld().equals(guardianMove.get(g).getWorld())
+                    && g.getLocation().distanceSquared(guardianMove.get(g).getLocation()) > 4
+                    && g.getTicksLived() < 160) {
                 g.setVelocity(
                     guardianMove.get(g).getLocation().toVector().subtract(g.getLocation().toVector()));
             } else {
