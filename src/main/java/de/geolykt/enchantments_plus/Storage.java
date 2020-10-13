@@ -23,7 +23,7 @@ public class Storage {
      * It's currently only used by the `/ench version` command.
      * @since 1.0.0
      */
-    public static final String BRAND = "Enchantments+";
+    public static final String BRAND = "FastAsyncZenchantments";
 
     /**
      * Represents the way the plugin was obtained, the reason behind is purely for analytical purposes. <br>

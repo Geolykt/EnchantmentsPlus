@@ -173,18 +173,20 @@ public class Enchantments_plus extends JavaPlugin {
         Storage.ANTICHEAT_ADAPTER.onEnable();
         
         Laser.colorKey = new NamespacedKey(this, "laserCol");
-        
+
+        // This doesn't really work, but we'll get it working
+
         // Load runnables
         // High frequency runnable (every tick) -> Gotta run fast
-        getServer().getScheduler().runTaskTimer(this, () -> {
-            EnchantedArrow.doTick();
+        getServer().getScheduler().runTaskTimerAsynchronously(this, WatcherEnchant::scanPlayers, 1, 1);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, EnchantedArrow::doTick, 1, 1);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
             Anthropomorphism.entityPhysics();
             MysteryFish.guardian(); // TODO is this even needed?
-            WatcherEnchant.scanPlayers();
             Tracer.tracer();
             Singularity.blackholes();
         }, 1, 1);
-        
+
         // medium-high frequency runnable (every five ticks)
         getServer().getScheduler().runTaskTimer(this, () -> {
             EnchantedArrow.scanAndReap();
@@ -192,7 +194,7 @@ public class Enchantments_plus extends JavaPlugin {
         }, 5, 5);
 
         // medium-high asynchronous frequency runnable (every five ticks)
-        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {Anthropomorphism.removeCheck();}, 5, 5);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, Anthropomorphism::removeCheck, 5, 5);
         w.stop();
         getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
     }
