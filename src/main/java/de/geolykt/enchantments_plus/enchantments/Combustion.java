@@ -45,9 +45,7 @@ public class Combustion extends CustomEnchantment {
     }
 
     public boolean onCombust(EntityCombustByEntityEvent evt, int level, boolean usedHand) {
-        if (ADAPTER.isZombie(evt.getCombuster())) {
-            evt.setDuration(0);
-        }
+        evt.setDuration(0);
         return false;
     }
 }

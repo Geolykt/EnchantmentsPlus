@@ -533,17 +533,26 @@ public class CompatibilityAdapter {
         return false;
     }
 
+    @Deprecated
     public Entity spawnGuardian(Location loc, boolean elderGuardian) {
         return loc.getWorld().spawnEntity(loc, elderGuardian ? EntityType.ELDER_GUARDIAN : EntityType.GUARDIAN);
     }
 
+    @Deprecated
     public boolean isZombie(Entity e) {
-        return e.getType() == EntityType.ZOMBIE || e.getType() == EntityType.ZOMBIE_VILLAGER || e.getType() == EntityType.HUSK;
+        switch (e.getType()) {
+        case ZOMBIE:
+        case ZOMBIE_VILLAGER:
+        case HUSK:
+            return true;
+        default:
+            return false;
+        }
     }
 
     public boolean isBlockSafeToBreak(Block b) {
         Material mat = b.getType();
-        return mat.isSolid() && !b.isLiquid() && !mat.isInteractable() && !unbreakableBlocks().contains(mat);
+        return mat.isSolid() && !mat.isInteractable() && !unbreakableBlocks().contains(mat);
     }
 
     public boolean grow(Block cropBlock, Player player) {
@@ -607,6 +616,13 @@ public class CompatibilityAdapter {
         return false;
     }
 
+    /**
+     * Resets the growth of a berry bush and drops the expected drops (doesn't drop the actual drops - only estimations) and calls the appropriate events.
+     * @param berryBlock The block that was broken. The material of the block is expected to be a berry bush, otherwise bad things may happen!
+     * @param player The player used for the Event feedback
+     * @return Whether the berry was picked successfully
+     * @since 1.0
+     */
     public boolean pickBerries(Block berryBlock, Player player) {
         BlockData data = berryBlock.getBlockData();
         Ageable a = (Ageable) data;
@@ -614,7 +630,7 @@ public class CompatibilityAdapter {
             PlayerInteractEvent pie = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, player.getInventory().getItemInMainHand(), berryBlock, player.getFacing());
             Bukkit.getPluginManager().callEvent(pie);
             if (pie.useInteractedBlock() != Result.DENY) {
-                int numDropped = (a.getAge() == 3 ? 2 : 1) + (RND.nextBoolean() ? 1 : 0); // Natural drop rate. Age 2 -> 1-2 berries, Age 3 -> 2-3 berries
+                int numDropped = a.getAge() + (RND.nextBoolean() ? 0 : -1); // Natural drop rate. Age 2 -> 1-2 berries, Age 3 -> 2-3 berries
                 a.setAge(1); // Picked adult berry bush
                 berryBlock.setBlockData(a);
                 berryBlock.getWorld().dropItem(berryBlock.getLocation(),
@@ -625,6 +641,7 @@ public class CompatibilityAdapter {
         return false;
     }
     
+    @Deprecated
     public Material getWoolCol (DyeColor col)  {
         switch (col) {
         case BLACK:

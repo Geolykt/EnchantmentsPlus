@@ -2,7 +2,6 @@ package de.geolykt.enchantments_plus;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 

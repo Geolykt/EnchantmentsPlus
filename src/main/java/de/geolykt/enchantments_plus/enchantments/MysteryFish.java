@@ -48,9 +48,12 @@ public class MysteryFish extends CustomEnchantment {
                     evt.getPlayer().getWorld().spawnEntity(location, EntityType.SQUID);
                     break;
                 case 1:
+                    final Entity guardian = evt.getPlayer().getWorld().spawnEntity(location, EntityType.GUARDIAN);
+                    guardianMove.put(guardian, evt.getPlayer());
+                    break;
                 case 2:
-                    final Entity g = Storage.COMPATIBILITY_ADAPTER.spawnGuardian(location, Storage.rnd.nextBoolean());
-                    guardianMove.put(g, evt.getPlayer());
+                    final Entity elderGuardian = evt.getPlayer().getWorld().spawnEntity(location, EntityType.ELDER_GUARDIAN);
+                    guardianMove.put(elderGuardian, evt.getPlayer());
                     break;
                 case 3:
                     evt.getPlayer().getWorld().spawnEntity(location, EntityType.COD);
