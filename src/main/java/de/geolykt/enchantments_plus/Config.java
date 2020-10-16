@@ -32,7 +32,7 @@ public class Config {
 
     public static final Map<World, Config> CONFIGS = new HashMap<>(); // Map of all world configs on the current server
     public static final Set<CustomEnchantment> allEnchants = new HashSet<>(72); // Set of all active Custom enchantments in form of instances.
-    
+
     /**
      * This variable holds the classes of every registered enchantment in the plugin, please do not modify the variable, as it may have some
      * Unforeseen consequences.
@@ -105,7 +105,7 @@ public class Config {
     }
 
     // Returns if certain enchantments can break blocks with the explosions they
-    // create
+    // create - only used by enchanted arrows as of yet (as they are the only ones to create explosions)
     public boolean explosionBlockBreak() {
         return explosionBlockBreak;
     }
@@ -261,13 +261,12 @@ public class Config {
             final int shredDrops;
             yamlConfig.save(file);
             // Load Variables
-            double rarity = (double) (yamlConfig.get("enchant_rarity"));
-            double enchantRarity = (rarity / 100.0);
-            int maxEnchants = (int) yamlConfig.get("max_enchants");
-            boolean explosionBlockBreak = (boolean) yamlConfig.get("explosion_block_break");
-            boolean enchantGlow = (boolean) yamlConfig.get("enchantment_glow");
-            ChatColor enchantColor = ChatColor.getByChar("" + yamlConfig.get("enchantment_color"));
-            ChatColor curseColor = ChatColor.getByChar("" + yamlConfig.get("curse_color"));
+            double enchantRarity = yamlConfig.getDouble("enchant_rarity", 25.0) / 100;
+            int maxEnchants = yamlConfig.getInt("max_enchants", 4);
+            boolean explosionBlockBreak = yamlConfig.getBoolean("explosion_block_break", true);
+            boolean enchantGlow = yamlConfig.getBoolean("enchantment_glow", false);
+            ChatColor enchantColor = ChatColor.getByChar(yamlConfig.getString("enchantment_color", "7"));
+            ChatColor curseColor = ChatColor.getByChar(yamlConfig.getString("curse_color", "c"));
 
             enchantColor = enchantColor != null ? enchantColor : ChatColor.GRAY;
             curseColor = curseColor != null ? curseColor : ChatColor.RED;

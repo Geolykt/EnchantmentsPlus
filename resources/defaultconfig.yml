@@ -547,6 +547,7 @@ max_enchants: 4
 shred_drops: all
 
 #  Determines if the certain enchantments can break blocks
+# Currently only used for Arrows, other enchantments are prone to use bukkit's protection system.
 explosion_block_break: true
 
 #  Determines if enchantment glow is added by default even without vanilla enchantments.

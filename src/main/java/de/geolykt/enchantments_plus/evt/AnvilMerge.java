@@ -27,6 +27,15 @@ import static org.bukkit.event.EventPriority.MONITOR;
 //      so that the player can find the combination they desire when there are conflicting or too many enchantment
 public class AnvilMerge implements Listener {
 
+    /**
+     * Simulates an anvil merge which runs similar to {@link #doMerge(ItemStack, ItemStack, ItemStack, Config)} but can run without an output
+     * item, at the expense of lesser compatibility.
+     * @param leftItem The left input item
+     * @param rightItem The right input item
+     * @param config The WorldConfiguration that should be used
+     * @return The expected output item
+     * @since 2.0.0
+     */
     public ItemStack simulateMerge(ItemStack leftItem, ItemStack rightItem, Config config) {
         if (leftItem == null || rightItem == null) {
             return null;
@@ -83,7 +92,16 @@ public class AnvilMerge implements Listener {
         return newOutItem;
         
     }
-    
+
+    /**
+     * Applies the enchantment of the input Items on the output Item.
+     * @param leftItem The left input item
+     * @param rightItem The right input item
+     * @param oldOutItem The item that should be the base of the output item
+     * @param config The WorldConfiguration that should be used
+     * @return The expected output item
+     * @since 1.0
+     */
     public ItemStack doMerge(ItemStack leftItem, ItemStack rightItem, ItemStack oldOutItem, Config config) {
         if (leftItem == null || rightItem == null || oldOutItem == null) {
             return null;
