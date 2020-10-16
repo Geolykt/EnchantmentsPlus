@@ -16,6 +16,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -317,9 +318,16 @@ public class CompatibilityAdapter {
         return spectralMaterialConversion;
     }
 
-    // Removes the given ItemStack's durability by the given 'damage' and then sets the item direction the given
-    // players hand.
-    //      This also takes into account the unbreaking enchantment
+    /**
+     * Damages the tool that is stored in a given index of a player's inventory with 
+     * a given amount of damage (deducting the amount of unbreaking).
+     * If the durability of the result item is below 0, then the item will break.
+     * This has the side effect that items that do not have durability will break instantly.
+     * @param player The player that should be targeted
+     * @param damage The amount of damage that should be applied
+     * @param slotIndex The index of the item within the inventory
+     * @since 1.0
+     */
     public static void damageTool(Player player, int damage, boolean handUsed) {
         if (handUsed) {
             damageToolInSlot(player, damage, player.getInventory().getHeldItemSlot());
@@ -328,6 +336,16 @@ public class CompatibilityAdapter {
         }
     }
 
+    /**
+     * Damages the tool that is stored in a given index of a player's inventory with 
+     * a given amount of damage (deducting the amount of unbreaking).
+     * If the durability of the result item is below 0, then the item will break.
+     * This has the side effect that items that do not have durability will break instantly.
+     * @param player The player that should be targeted
+     * @param damage The amount of damage that should be applied
+     * @param slotIndex The index of the item within the inventory
+     * @since 1.0
+     */
     public static void damageToolInSlot(Player player, int damage, int slotIndex) {
         ItemStack stack = damageItem(player.getInventory().getItem(slotIndex), damage);
         if (getDamage(stack) < 0) {
@@ -337,14 +355,22 @@ public class CompatibilityAdapter {
         }
     }
 
-    public static ItemStack damageItem(ItemStack stack, int damage) {
+    /**
+     * Damages a given itemstack with a given amount of damage (deducting the amount of unbreaking) and returns that itemstack.
+     * The item may have a durability below 0 afterwards.
+     * @param stack The stack that should be targeted
+     * @param damage The amount of damage that should be applied
+     * @return The new damaged item or Air if the input stack is null or air
+     * @since 1.0
+     */
+    public static @NotNull ItemStack damageItem(@Nullable ItemStack stack, int damage) {
         if (stack == null || stack.getType() == Material.AIR)
             return new ItemStack(Material.AIR);
         if (!stack.getItemMeta().isUnbreakable()) {
-            for (int i = 0; i < damage; i++) {
-                if (RND.nextInt(100) <= (100 / (stack.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
-                    setDamage(stack, getDamage(stack) + 1);
-                }
+            // chance that the item is broken is 1/(level+1)
+            // So at level = 2 it's 33%, at level = 0 it's 100%, at level 1 it's 50%, at level = 3 it's 25%
+            if (RND.nextInt(1000) <= (1000/(stack.getEnchantmentLevel(Enchantment.DURABILITY)+1))) {
+                setDamage(stack, getDamage(stack) + damage);
             }
         }
         return stack;
@@ -357,8 +383,17 @@ public class CompatibilityAdapter {
                 (float) zO, (float) speed);
     }
 
-    // Removes the given ItemStack's durability by the given 'damage'
-    //      This also takes into account the unbreaking enchantment
+    /**
+     * @deprecated Duplicate method. Use {@link #damageItem(ItemStack, int)} instead.
+     * Damages a given itemstack with a given amount of damage (deducting the amount of unbreaking). Also checks for the appropriate GameMode
+     * of the player. <br>
+     * The item may have a durability below 0 afterwards, so caution is advised. <br>
+     * This uses the old unoptimized method for strange backwards compatibility.
+     * @param player The player whose GameMode should be checked
+     * @param is The stack that should be targeted
+     * @param damage The amount of damage that should be applied
+     * @since 1.0
+     */
     public static void addUnbreaking(Player player, ItemStack is, int damage) {
         if (!player.getGameMode().equals(GameMode.CREATIVE)) {
             for (int i = 0; i < damage; i++) {
@@ -369,6 +404,14 @@ public class CompatibilityAdapter {
         }
     }
 
+    /**
+     * Sets the amount of Damage that a given ItemStack has (which is the inverse of the remaining durability). <br>
+     * Does not perform anything if the ItemMeta is not a {@link org.bukkit.inventory.meta.Damageable} instance. <br>
+     * Does not check whether the itemstack has the unbreakable flag set, caution is advised.
+     * @param is The target itemstack
+     * @param damage The value that the damage should now have
+     * @since 1.0
+     */
     public static void setDamage(ItemStack is, int damage) {
         if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
             org.bukkit.inventory.meta.Damageable dm = ((org.bukkit.inventory.meta.Damageable) is.getItemMeta());
@@ -377,6 +420,14 @@ public class CompatibilityAdapter {
         }
     }
 
+    /**
+     * Sets the amount of Damage that a given ItemStack has (which is the inverse of the remaining durability). <br>
+     * Does not perform anything if the ItemMeta is not a {@link org.bukkit.inventory.meta.Damageable} instance. <br>
+     * Does not check whether the itemstack has the unbreakable flag set, caution is advised.
+     * @param is The target itemstack
+     * @param damage The value that the damage should now have
+     * @since 1.0
+     */
     public static int getDamage(ItemStack is) {
         if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
             org.bukkit.inventory.meta.Damageable dm = ((org.bukkit.inventory.meta.Damageable) is.getItemMeta());
@@ -385,6 +436,13 @@ public class CompatibilityAdapter {
         return 0;
     }
 
+    /**
+     * Calls the appropriate event, breaks the block naturally (particles are emitted) and damages the tool in hand.
+     * @param block The targeted block
+     * @param player The player that breaks the block.
+     * @return Whether the operation was performed successfully.
+     * @since 1.0
+     */
     public boolean breakBlockNMS(Block block, Player player) {
         BlockBreakEvent evt = new BlockBreakEvent(block, player);
         Bukkit.getPluginManager().callEvent(evt);
@@ -400,7 +458,9 @@ public class CompatibilityAdapter {
      * Places a block on the given player's behalf. Fires a BlockPlaceEvent with
      * (nearly) appropriate parameters to probe the legitimacy (permissions etc)
      * of the action and to communicate to other plugins where the block is
-     * coming from.
+     * coming from. <br>
+     * The method always assumes that the block is placed against the lower block, 
+     * unless it's not possible otherwise.
      *
      * @param blockPlaced the block to be changed
      * @param player the player whose identity to use
@@ -408,6 +468,7 @@ public class CompatibilityAdapter {
      * @param data the block data to set for the block, if allowed
      *
      * @return true if the block placement has been successful
+     * @since 1.0
      */
     public boolean placeBlock(Block blockPlaced, Player player, Material mat, BlockData data) {
         Block blockAgainst = blockPlaced.getRelative((blockPlaced.getY() == 0) ? BlockFace.UP : BlockFace.DOWN);
@@ -427,14 +488,29 @@ public class CompatibilityAdapter {
         return false;
     }
 
+    /**
+     * Places a block on the given player's behalf. Fires a BlockPlaceEvent with
+     * (nearly) appropriate parameters to probe the legitimacy (permissions etc)
+     * of the action and to communicate to other plugins where the block is
+     * coming from. <br>
+     * The method always assumes that the block is placed against the lower block, 
+     * unless it's not possible otherwise.
+     * 
+     * @deprecated Probably doesn't even work. Unused internally
+     * @param blockPlaced the block to be changed
+     * @param player the player whose identity to use
+     * @param is The itemstack that is used to get which block data should be used and of which material the block should be.
+     * @return true if the block placement has been successful
+     * @since 1.0
+     */
     public boolean placeBlock(Block blockPlaced, Player player, ItemStack is) {
         return placeBlock(blockPlaced, player, is.getType(), (BlockData) is.getData());
     }
 
-
     /**
      * 
      * @return True if damaged, false otherwise
+     * @since 1.0
      */
     public boolean attackEntity(LivingEntity target, Player attacker, double damage) {
         return attackEntity(target, attacker, damage, true);

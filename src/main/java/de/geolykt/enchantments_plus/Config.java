@@ -30,15 +30,15 @@ import java.util.*;
 //      to automatically update the config files if they are old
 public class Config {
 
-    public static final Map<World, Config> CONFIGS = new HashMap<>(); // Map of all world configs on the current server
-    public static final Set<CustomEnchantment> allEnchants = new HashSet<>(72); // Set of all active Custom enchantments in form of instances.
+    public static final Map<World, Config> CONFIGS = new HashMap<>(3, 1); // Map of all world configs on the current server
+    public static final Set<CustomEnchantment> allEnchants = new HashSet<>(72, 1); // Set of all active Custom enchantments in form of instances.
 
     /**
      * This variable holds the classes of every registered enchantment in the plugin, please do not modify the variable, as it may have some
      * Unforeseen consequences.
      * @since 1.2.2
      */
-    public static final Set<Class<? extends CustomEnchantment>> REGISTERED_ENCHANTMENTS = new HashSet<>(72);
+    public static final Set<Class<? extends CustomEnchantment>> REGISTERED_ENCHANTMENTS = new HashSet<>(72, 1);
 
     private static final int CONFIG_BUFFER_SIZE = 16 * 1024;
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
