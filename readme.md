@@ -1,13 +1,20 @@
-Craftbukkit support (if you can talk about one) will be ditched rather soon. The plugin may no longer run on these Servers in the coming releases. We intend on continuing support with Spigot, Paper and any other Server that implement the Bukkit API
-<br>
 Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
-It also only intends to support 1.16.3 and newer versions when the time comes.
+The plugin only intends to support 1.16.3 and newer versions when the time comes.
 
 # Enchantments+
 ## Description
 Zenchantments is a custom enchantment plugin that adds 70+ new enchantments (it doesn't feel like much, to be honest) to the game, covering a multitude of different uses. These include target-tracing arrows, lumber axes, block-breaking lasers, and much more. These custom enchantments are obtained through the normal enchantment process and act like regular enchantments, capable of being combined and merged. The plugin requires no client-side mods or resource packs. A comprehensive configuration file enables fine-tuning of individual enchantments to tailor them to every server's gameplay. 
 <br> While we currently don't add or remove any Enchantments, we will attempt to rebalance them and make them futureproof. In essence, we attempt to make this Fork as stable as possible to support Production-grade Servers.
+
+## Enchantments+ vs other Zenchantments forks
+  - This fork is highly actively maintained and has persisted since May of 2020, which is the longer than any other fork which otherwise is more shortlived.
+  - This fork is fast. During the last months the fork accumulated lots of revisions that aim at improving performance as well as general code quality.
+  - Enchantments+ doesn't use NMS. This means that newer versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support, this may no longer be full selling point.
+  - Zenchantments supports (at some scale) 1.12 and other versions, Enchantments+ doesn't
+  - The fork compiles, Zenchantments doesn't.
+  - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me.
+
 
 ## Permissions
 <b>enchplus.enchant.get</b> - On player enchant event, allow player to have a chance at the enabled custom enchantments<br>
