@@ -1,10 +1,13 @@
 package de.geolykt.enchantments_plus.enchantments;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
@@ -13,11 +16,16 @@ import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static org.bukkit.potion.PotionEffectType.INCREASE_DAMAGE;
-
 public class Weight extends CustomEnchantment {
 
     public static final int ID = 67;
+    
+    /**
+     * Is put on the PDC of a player to mark that the player has the Enchantment active (the slowness was made by the plugin).
+     * Used to prevent abuse so players cannot remove permanent slowness effects.
+     * @since 2.1.3
+     */
+    public static final NamespacedKey ACTIVE = new NamespacedKey(Storage.plugin, "weight_active");
 
     @Override
     public Builder<Weight> defaults() {
@@ -66,11 +74,21 @@ public class Weight extends CustomEnchantment {
     }
 
     @Override
-    public boolean onScan(Player player, int level, boolean usedHand
-    ) {
-        player.setWalkSpeed((float) (.164f - level * power * .014f));
-        Utilities.addPotion(player, INCREASE_DAMAGE, 610, (int) Math.round(power * level));
-        player.setMetadata("ze.speed", new FixedMetadataValue(Storage.plugin, System.currentTimeMillis()));
+    public boolean onPlayerDeath(PlayerDeathEvent evt, int level, boolean usedHand) {
+        evt.getEntity().getPersistentDataContainer().remove(ACTIVE);
         return true;
+    }
+
+    @Override
+    public boolean onScan(Player player, int level, boolean usedHand) {
+        player.setWalkSpeed((float) (.164f - level * power * .014f));
+        if (player.hasPotionEffect(PotionEffectType.SLOW)) {
+            return false;
+        } else {
+            player.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, (int) (level*power)));
+            player.addPotionEffect(PotionEffectType.INCREASE_DAMAGE.createEffect(Integer.MAX_VALUE, (int) (level*power)));
+            player.getPersistentDataContainer().set(ACTIVE, PersistentDataType.BYTE, (byte) 1);
+            return true;
+        }
     }
 }

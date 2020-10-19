@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.Config;
@@ -286,7 +287,11 @@ public class Watcher implements Listener {
                                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                                 break;
                             case WEIGHT:
-                                player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                                if (player.getPersistentDataContainer().has(Weight.ACTIVE, PersistentDataType.BYTE)) {
+                                    player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                                    player.removePotionEffect(PotionEffectType.SLOW);
+                                    player.getPersistentDataContainer().remove(Weight.ACTIVE);
+                                }
                                 break;
                             default:
                                 break;
