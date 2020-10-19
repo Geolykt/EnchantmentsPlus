@@ -18,16 +18,16 @@ public class Blizzard extends CustomEnchantment {
     @Override
     public Builder<Blizzard> defaults() {
         return new Builder<>(Blizzard::new, ID)
-            .maxLevel(3)
-            .loreName("Blizzard")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting(Firestorm.class)
-            .description("Spawns a blizzard where the arrow strikes freezing nearby entities")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.BLIZZARD);
+                .probability(0)
+                .all(BaseEnchantments.BLIZZARD,
+                    0,
+                    "Spawns a blizzard where the arrow strikes freezing nearby entities",
+                    new Tool[]{Tool.BOW},
+                    "Blizzard",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.RIGHT,
+                    Firestorm.class);
     }
 
     @Override

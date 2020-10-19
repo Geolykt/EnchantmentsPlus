@@ -22,16 +22,15 @@ public class Bind extends CustomEnchantment {
     @Override
     public Builder<Bind> defaults() {
         return new Builder<>(Bind::new, ID)
-            .maxLevel(1)
-            .loreName("Bind")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.ALL})
-            .conflicting()
-            .description("Keeps items with this enchantment in your inventory after death")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.BIND);
+                .all(BaseEnchantments.BIND, // BASE
+                    0, // COOLDOWN
+                    "Keeps items with this enchantment in your inventory after death", // DESCRIPTION
+                    new Tool[]{Tool.ALL}, // APPLICABLE TOOLS
+                    "Bind", // NAME
+                    1, // MAX LEVEL
+                    -1.0, // POWER
+                    Hand.NONE // APPLICABLE HANDS
+                    ); // CONFLICTS
     }
 
     @Override

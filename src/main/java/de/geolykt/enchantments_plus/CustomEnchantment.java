@@ -445,6 +445,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return customEnchantment.getEnchantable();
         }
 
+        @Deprecated
         public Builder<T> conflicting(Set<Class<? extends CustomEnchantment>> conflicts) {
             customEnchantment.setConflicting(conflicts);
             return this;
@@ -506,6 +507,42 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
         public Builder<T> base(BaseEnchantments base) {
             customEnchantment.setBase(base);
+            return this;
+        }
+        
+        /**
+         * Calls all the setters with the supplied arguments
+         * @param base The base enchantment that should be used. (Usually the enchantment supplied as an Enum)
+         * @param cooldown The cooldown until the enchantment can be used again, used to prevent deadlocks and enchantment overusage
+         * @param description The description of the enchantment
+         * @param enchantable The tools on which the enchantment can be applied on
+         * @param lore The lore string (Usually the name of the enchantment)
+         * @param maxlevel The maximum level the enchantment can be leveled
+         * @param power The base power of the enchantment, usually 0
+         * @param handUse Which hands the enchantments can be applied on
+         * @param conflicts The Conflicting enchantments
+         * @return The builder instance
+         * @since 2.1.3
+         */
+        @SafeVarargs
+        public final Builder<T> all(BaseEnchantments base,
+                int cooldown,
+                String description,
+                Tool[] enchantable,
+                String lore,
+                int maxlevel,
+                double power,
+                Hand handUse,
+                Class<? extends CustomEnchantment>... conflicts) {
+            base(base);
+            conflicting(conflicts);
+            cooldown(cooldown);
+            description(description);
+            enchantable(enchantable);
+            loreName(lore);
+            maxLevel(maxlevel);
+            power(power);
+            handUse(handUse);
             return this;
         }
         

@@ -13,6 +13,7 @@ import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
+// TODO rework the enchantment to use XP points, not levels
 public class Conversion extends CustomEnchantment {
 
     public static final int ID = 10;
@@ -20,16 +21,14 @@ public class Conversion extends CustomEnchantment {
     @Override
     public Builder<Conversion> defaults() {
         return new Builder<>(Conversion::new, ID)
-            .maxLevel(4)
-            .loreName("Conversion")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SWORD})
-            .conflicting()
-            .description("Converts XP to health when right clicking and sneaking")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.CONVERSION);
+            .all(BaseEnchantments.CONVERSION,
+                0,
+                "Converts XP to health when right clicking and sneaking",
+                new Tool[]{Tool.SWORD},
+                "Conversion",
+                4, // MAX LVL
+                1.0,
+                Hand.RIGHT);
     }
 
     @Override

@@ -64,17 +64,15 @@ public class Anthropomorphism extends CustomEnchantment {
     @Override
     public Builder<Anthropomorphism> defaults() {
         return new Builder<>(Anthropomorphism::new, ID)
-                .maxLevel(1)
-                .loreName("Anthropomorphism")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.PICKAXE})
-                .conflicting(Pierce.class, Switch.class)
-                .description(
-                        "Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.BOTH)
-                .base(BaseEnchantments.ANTHROPOMORPHISM);
+                .all(BaseEnchantments.ANTHROPOMORPHISM, // BASE
+                        0, // COOLDOWN
+                        "Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking", // DESCRIPTION
+                        new Tool[]{Tool.PICKAXE}, // APPLICABLE TOOLS
+                        "Anthropomorphism", // NAME
+                        1, // MAX LEVEL
+                        1.0, // POWER
+                        Hand.BOTH, // APPLICABLE HANDS
+                        Pierce.class, Switch.class); // CONFLICTS
     }
 
     /**

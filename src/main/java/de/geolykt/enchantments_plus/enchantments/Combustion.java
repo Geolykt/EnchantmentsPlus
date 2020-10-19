@@ -16,16 +16,14 @@ public class Combustion extends CustomEnchantment {
     @Override
     public Builder<Combustion> defaults() {
         return new Builder<>(Combustion::new, ID)
-            .maxLevel(4)
-            .loreName("Combustion")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.CHESTPLATE})
-            .conflicting()
-            .description("Lights attacking entities on fire when player is attacked")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.COMBUSTION);
+                .all(BaseEnchantments.COMBUSTION,
+                    0,
+                    "Lights attacking entities on fire when player is attacked",
+                    new Tool[]{Tool.CHESTPLATE},
+                    "Combustion",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

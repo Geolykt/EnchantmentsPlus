@@ -25,16 +25,14 @@ public class Decapitation extends CustomEnchantment {
     @Override
     public Builder<Decapitation> defaults() {
         return new Builder<>(Decapitation::new, ID)
-            .maxLevel(4)
-            .loreName("Decapitation")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SWORD})
-            .conflicting()
-            .description("Increases the chance for dropping the enemies head on death")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.DECAPITATION);
+            .all(BaseEnchantments.DECAPITATION,
+                    0,
+                    "Increases the chance for dropping the enemies head on death",
+                    new Tool[]{Tool.SWORD},
+                    "Decapitation",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.LEFT);
     }
 
     private static EntityType[] entities = new EntityType[]{PLAYER, SKELETON, WITHER_SKULL, ZOMBIE, CREEPER};

@@ -19,16 +19,16 @@ public class Apocalypse extends CustomEnchantment {
     @Override
     public Builder<Apocalypse> defaults() {
         return new Builder<>(Apocalypse::new, ID)
-            .maxLevel(1)
-            .loreName("Apocalypse")
             .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Unleashes hell")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.APOCALYPSE);
+            .all(BaseEnchantments.APOCALYPSE, // BASE
+                0, // COOLDOWN
+                "Unleashes hell", // DESCRIPTION
+                new Tool[]{Tool.BOW}, // APPLICABLE TOOLS
+                "Anthropomorphism", // NAME
+                1, // MAX LEVEL
+                -1.0, // POWER
+                Hand.RIGHT // APPLICABLE HANDS
+                ); // CONFLICTS
     }
 
     @Override
