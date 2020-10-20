@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -194,7 +195,7 @@ public class Anthropomorphism extends CustomEnchantment {
                 }
                 if (counter < 64 && player.getInventory().contains(COBBLESTONE)) {
                     Utilities.removeItem(player, COBBLESTONE, 1);
-                    Utilities.damageTool(player, 2, usedHand);
+                    CompatibilityAdapter.damageTool(player, 2, usedHand);
                     Location loc = player.getLocation();
                     FallingBlock blockEntity
                             = loc.getWorld().spawnFallingBlock(loc, Bukkit.createBlockData(MAT[Storage.rnd.nextInt(4)]));

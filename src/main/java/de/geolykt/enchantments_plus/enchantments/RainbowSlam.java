@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -46,7 +47,7 @@ public class RainbowSlam extends CustomEnchantment {
             !ADAPTER.attackEntity((LivingEntity) evt.getRightClicked(), evt.getPlayer(), 0)) {
             return false;
         }
-        Utilities.damageTool(evt.getPlayer(), 9, usedHand);
+        CompatibilityAdapter.damageTool(evt.getPlayer(), 9, usedHand);
         final LivingEntity ent = (LivingEntity) evt.getRightClicked();
         final Location l = ent.getLocation().clone();
         ent.teleport(l);

@@ -8,10 +8,10 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.entity.EntityType.EXPERIENCE_ORB;
@@ -41,7 +41,7 @@ public class Extraction extends CustomEnchantment {
             return false;
         }
         if (evt.getBlock().getType() == GOLD_ORE || evt.getBlock().getType() == IRON_ORE) {
-            Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+            CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
             for (int x = 0; x < Storage.rnd.nextInt((int) Math.round(power * level + 1)) + 1; x++) {
                 evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(),
                     new ItemStack(evt.getBlock().getType() == GOLD_ORE ?
@@ -52,7 +52,7 @@ public class Extraction extends CustomEnchantment {
             o.setExperience(
                 evt.getBlock().getType() == IRON_ORE ? Storage.rnd.nextInt(5) + 1 : Storage.rnd.nextInt(5) + 3);
             evt.getBlock().setType(AIR);
-            Utilities.spawnParticle(evt.getBlock().getLocation(), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+            CompatibilityAdapter.display(evt.getBlock().getLocation(), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
             return true;
         }
         return false;

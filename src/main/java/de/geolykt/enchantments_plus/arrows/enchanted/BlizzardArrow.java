@@ -5,6 +5,7 @@ import org.bukkit.entity.*;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.potion.PotionEffectType.SLOW;
@@ -16,8 +17,8 @@ public class BlizzardArrow extends EnchantedArrow {
     }
 
     public void onImpact() {
-        Utilities.spawnParticle(Utilities.getCenter(arrow.getLocation()), Particle.CLOUD, 100 * getLevel(), 0.1f,
-                getLevel(), 1.5f, getLevel());
+        CompatibilityAdapter.display(Utilities.getCenter(arrow.getLocation()), Particle.CLOUD,
+                100 * getLevel(), .1f, getLevel(), 1.5f, getLevel());
         double radius = 1 + getLevel() * getPower();
         for (Entity e : arrow.getNearbyEntities(radius, radius, radius)) {
             if (e instanceof LivingEntity && !e.equals(arrow.getShooter())

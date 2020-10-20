@@ -15,6 +15,7 @@ import com.google.common.collect.Sets;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.evt.ench.BlockSpectralChangeEvent;
@@ -138,7 +139,7 @@ public class Spectral extends CustomEnchantment {
             }
         }
         
-        Utilities.damageTool(evt.getPlayer(), (int) Math.ceil(Math.log(blocksChanged + 1) / 0.30102999566), usedHand);
+        CompatibilityAdapter.damageTool(evt.getPlayer(), (int) Math.ceil(Math.log(blocksChanged + 1) / 0.30102999566), usedHand);
         evt.setCancelled(true);
         
         return blocksChanged != 0;

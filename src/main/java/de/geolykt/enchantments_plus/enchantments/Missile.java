@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.MissileArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -37,7 +38,7 @@ public class Missile extends CustomEnchantment {
         MissileArrow arrow = new MissileArrow((Arrow) evt.getProjectile());
         EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         evt.setCancelled(true);
-        Utilities.damageTool((Player) evt.getEntity(), 1, usedHand);
+        CompatibilityAdapter.damageTool((Player) evt.getEntity(), 1, usedHand);
         Utilities.removeItem(((Player) evt.getEntity()), Material.ARROW, 1);
         return true;
     }

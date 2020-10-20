@@ -11,10 +11,10 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.Material.AIR;
 
@@ -57,7 +57,7 @@ public class Transformation extends CustomEnchantment {
                     if (evt.getDamage() > ((LivingEntity) evt.getEntity()).getHealth()) {
                         evt.setCancelled(true);
                     }
-                    Utilities.spawnParticle(Utilities.getCenter(evt.getEntity().getLocation()), Particle.HEART, 70, .1f,
+                    CompatibilityAdapter.display(evt.getEntity().getLocation(), Particle.HEART, 70, .1f,
                             .5f, 2, .5f);
 
                     double originalHealth = ((LivingEntity) evt.getEntity()).getHealth();

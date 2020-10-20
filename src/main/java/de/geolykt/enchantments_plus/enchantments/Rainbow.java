@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -51,7 +52,7 @@ public class Rainbow extends CustomEnchantment {
             evt.getBlock().getRelative(DOWN).setType(AIR);
         }
         evt.getBlock().setType(AIR);
-        Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+        CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
         evt.getPlayer().getWorld().dropItem(Utilities.getCenter(evt.getBlock()), new ItemStack(dropMaterial, 1));
         return true;
     }
@@ -61,7 +62,7 @@ public class Rainbow extends CustomEnchantment {
         Sheep sheep = (Sheep) evt.getEntity();
         if (!sheep.isSheared()) {
             int count = Storage.rnd.nextInt(3) + 1;
-            Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+            CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
             evt.setCancelled(true);
             sheep.setSheared(true);
             evt.getEntity().getWorld().dropItemNaturally(evt.getEntity().getLocation(),

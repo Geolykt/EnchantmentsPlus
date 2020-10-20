@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.*;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
@@ -110,7 +111,7 @@ public class Shred extends CustomEnchantment {
                 relativeBlock.getLocation().getWorld().playSound(relativeBlock.getLocation(), sound, 1, 1);
             }
 
-            Utilities.damageTool(player, 1, usedHand);
+            CompatibilityAdapter.damageTool(player, 1, usedHand);
             used.add(relativeBlock);
             for (int i = 0; i < 3; i++) {
 

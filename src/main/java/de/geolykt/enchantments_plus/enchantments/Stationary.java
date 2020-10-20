@@ -9,10 +9,10 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.StationaryArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Stationary extends CustomEnchantment {
 
@@ -40,7 +40,7 @@ public class Stationary extends CustomEnchantment {
             LivingEntity ent = (LivingEntity) evt.getEntity();
             if (evt.getDamage() < ent.getHealth()) {
                 evt.setCancelled(true);
-                Utilities.damageTool(((Player) evt.getDamager()), 1, usedHand);
+                CompatibilityAdapter.damageTool(((Player) evt.getDamager()), 1, usedHand);
                 ent.damage(evt.getDamage());
             }
         }

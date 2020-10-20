@@ -8,8 +8,8 @@ import org.bukkit.entity.Arrow;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enchantments.Singularity;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 public class SingularityArrow extends EnchantedArrow {
 
@@ -28,7 +28,7 @@ public class SingularityArrow extends EnchantedArrow {
         }, 60);
         for (int i = 1; i <= 61; i++) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                Utilities.spawnParticle(l, Particle.SMOKE_LARGE, 50, .001f, .75f, .75f, .75f);
+                CompatibilityAdapter.display(l, Particle.SMOKE_LARGE, 50, .001f, .75f, .75f, .75f);
                 l.getWorld().playSound(l, Sound.ENTITY_ENDER_DRAGON_GROWL, 10f, .1f);
             }, i);
         }

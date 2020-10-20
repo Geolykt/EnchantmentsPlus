@@ -8,10 +8,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -47,7 +47,7 @@ public class Gust extends CustomEnchantment {
                 player.setFallDistance(-40);
                 ADAPTER.damagePlayer(player, 3, EntityDamageEvent.DamageCause.MAGIC);
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                    Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                 }, 1);
                 return true;
             }

@@ -11,10 +11,10 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Weight extends CustomEnchantment {
 
@@ -62,8 +62,8 @@ public class Weight extends CustomEnchantment {
             ItemStack[] s = player.getInventory().getArmorContents();
             for (int i = 0; i < 4; i++) {
                 if (s[i] != null) {
-                    Utilities.addUnbreaking(player, s[i], 1);
-                    if (Utilities.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
+                    CompatibilityAdapter.damageItem(s[i], 1);
+                    if (CompatibilityAdapter.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
                         s[i] = null;
                     }
                 }

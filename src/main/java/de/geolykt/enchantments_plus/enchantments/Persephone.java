@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -83,7 +84,7 @@ public class Persephone extends CustomEnchantment {
                                     continue;
                                 }
                                 if (Storage.rnd.nextBoolean()) {
-                                    Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+                                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 }
                             }
                         }

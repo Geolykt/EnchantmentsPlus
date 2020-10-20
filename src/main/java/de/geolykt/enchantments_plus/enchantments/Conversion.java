@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -42,9 +43,8 @@ public class Conversion extends CustomEnchantment {
                         player.setHealth(Math.min(20, player.getHealth() + 2 * power * level));
                         for (int i = 0; i < 3; i++) {
                             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                                Utilities
-                                    .spawnParticle(Utilities.getCenter(player.getLocation()), Particle.HEART, 10, .1f,
-                                        .5f, .5f, .5f);
+                                CompatibilityAdapter.display(Utilities.getCenter(player.getLocation()), Particle.HEART,
+                                        10, .1f, .5f, .5f, .5f);
                             }, ((i * 5) + 1));
                         }
                         return true;

@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -64,7 +65,7 @@ public class Terraformer extends CustomEnchantment {
                             if (Storage.COMPATIBILITY_ADAPTER.placeBlock(b, evt.getPlayer(), mat, null)) {
                                 Utilities.removeItem(evt.getPlayer(), mat, 1);
                                 if (Storage.rnd.nextInt(10) == 5) {
-                                    Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+                                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 }
                             }
                         }

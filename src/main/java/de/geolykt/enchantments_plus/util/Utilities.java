@@ -36,6 +36,7 @@ public class Utilities {
     // the item direction the given
     // players hand.
     // This also takes into account the unbreaking enchantment
+    @Deprecated
     public static void damageTool(Player player, int damage, boolean handUsed) {
         if (!player.getGameMode().equals(CREATIVE)) {
             ItemStack hand = handUsed ? player.getInventory().getItemInMainHand()
@@ -57,6 +58,7 @@ public class Utilities {
     }
 
     // Displays a particle with the given data
+    @Deprecated
     public static void spawnParticle(Location loc, Particle particle, int amount, double speed, double xO, double yO,
             double zO) {
         loc.getWorld().spawnParticle(particle, loc.getX(), loc.getY(), loc.getZ(), amount, (float) xO, (float) yO,
@@ -65,6 +67,7 @@ public class Utilities {
 
     // Removes the given ItemStack's durability by the given 'damage'
     // This also takes into account the unbreaking enchantment
+    @Deprecated
     public static void addUnbreaking(Player player, ItemStack is, int damage) {
         if (!player.getGameMode().equals(CREATIVE)) {
             for (int i = 0; i < damage; i++) {
@@ -76,6 +79,7 @@ public class Utilities {
         }
     }
 
+    @Deprecated
     public static void setDamage(ItemStack is, int damage) {
         if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
             org.bukkit.inventory.meta.Damageable dm = ((Damageable) is.getItemMeta());
@@ -84,6 +88,7 @@ public class Utilities {
         }
     }
 
+    @Deprecated
     public static int getDamage(ItemStack is) {
         if (is.getItemMeta() instanceof Damageable) {
             return ((Damageable)is.getItemMeta()).getDamage();
@@ -91,13 +96,20 @@ public class Utilities {
         return 0;
     }
 
-    // Returns the item stack direction the player's main or off hand, determined
-    // by 'handUsed'
-    public static ItemStack usedStack(Player player, boolean handUsed) {
-        return handUsed ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+    /**
+     * Returns the item stack direction the player's main or off hand, determined by 'mainHand'.
+     * Might be removed in the future if the hand boolean system is removed.
+     * @param player The player that is targeted
+     * @param mainHand True if the mainhand is requested, otherwise the offhand is requested
+     * @return The ItemStack in the mainhand/offhand
+     * @since 1.0
+     */
+    public static ItemStack usedStack(Player player, boolean mainHand) {
+        return mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
     }
 
     // Sets the hand the player to the given item stack, determined by 'handUsed'
+    @Deprecated
     public static void setHand(Player player, ItemStack stk, boolean handUsed) {
         if (handUsed) {
             player.getInventory().setItemInMainHand(stk);
@@ -107,11 +119,13 @@ public class Utilities {
     }
 
     // Removes an item stack of the given description from the players inventory
+    @Deprecated
     public static boolean removeItem(Player player, Material mat) {
         return removeItem(player, mat, 1);
     }
 
     // Removes an item stack of the given description from the players inventory
+    @Deprecated
     public static boolean removeItem(Player player, ItemStack is) {
         return removeItem(player, is.getType(), is.getAmount());
     }

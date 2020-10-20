@@ -10,10 +10,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -77,7 +77,7 @@ public class Harvest extends CustomEnchantment {
                             }
 
                             if (blockAltered) {
-                                Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+                                CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 Grab.grabLocs.put(block.getLocation(), evt.getPlayer());
                                 Bukkit.getServer().getScheduler()
                                         .scheduleSyncDelayedTask(Storage.plugin, () -> {

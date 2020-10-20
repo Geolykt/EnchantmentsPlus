@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -60,12 +61,11 @@ public class Germination extends CustomEnchantment {
                             ADAPTER.grow(relativeBlock, player);
                         }
 
-                        Utilities.spawnParticle(Utilities.getCenter(relativeBlock), Particle.VILLAGER_HAPPY, 30, 1f, .3f,
-                                .3f,
-                                .3f);
+                        CompatibilityAdapter.display(Utilities.getCenter(relativeBlock), Particle.VILLAGER_HAPPY,
+                                25, 1f, .3f, .3f, .3f);
 
                         if (Storage.rnd.nextInt(10) <= 3) {
-                            Utilities.damageTool(player, 1, usedHand);
+                            CompatibilityAdapter.damageTool(player, 1, usedHand);
                         }
                         Utilities.removeItem(player, Material.BONE_MEAL, 1);
                     }

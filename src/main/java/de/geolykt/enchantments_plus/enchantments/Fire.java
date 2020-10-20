@@ -12,6 +12,7 @@ import com.google.common.collect.Sets;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.RecipeUtil;
@@ -90,7 +91,7 @@ public class Fire extends CustomEnchantment {
                 newDrops.add(ns);
             }
             if (newDrops.size() != 0) {
-                Utilities.spawnParticle(Utilities.getCenter(evt.getBlock()), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+                CompatibilityAdapter.display(Utilities.getCenter(evt.getBlock()), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
                 for (ItemStack is: newDrops) {
                     evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(), is);
                 }
@@ -119,7 +120,7 @@ public class Fire extends CustomEnchantment {
             for (int i = bks.size() - 1; i >= 0; i--) {
                 Block block = bks.get(i);
 
-                Utilities.spawnParticle(Utilities.getCenter(block), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+                CompatibilityAdapter.display(Utilities.getCenter(block), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
 
                 evt.getBlock().getWorld().dropItemNaturally(Utilities.getCenter(block.getLocation()),
                         new ItemStack(Material.GREEN_DYE, 1));
@@ -141,7 +142,7 @@ public class Fire extends CustomEnchantment {
             for (int i = bks.size() - 1; i >= 0; i--) {
                 Block block = bks.get(i);
 
-                Utilities.spawnParticle(Utilities.getCenter(block), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+                CompatibilityAdapter.display(Utilities.getCenter(block), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
 
                 if (block.getType().equals(CHORUS_PLANT)) {
                     evt.getBlock().getWorld().dropItemNaturally(Utilities.getCenter(block.getLocation()),

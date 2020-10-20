@@ -7,10 +7,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -52,7 +52,7 @@ public class Plough extends CustomEnchantment {
                                 ADAPTER.placeBlock(block.getRelative(x, y, z), evt.getPlayer(), Material.FARMLAND,
                                     null);
                                 if (Storage.rnd.nextBoolean()) {
-                                    Utilities.damageTool(evt.getPlayer(), 1, usedHand);
+                                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 }
                             }
                         }

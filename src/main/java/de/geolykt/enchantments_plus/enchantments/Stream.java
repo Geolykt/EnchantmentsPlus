@@ -8,10 +8,10 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -112,12 +112,9 @@ public class Stream extends CustomEnchantment {
                                 Storage.rnd.nextInt(256)),
                             1.0f));
             }
-
-
-            Utilities.spawnParticle(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
+            CompatibilityAdapter.display(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
             return true;
         }
         return false;
     }
-
 }

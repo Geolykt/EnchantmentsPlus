@@ -15,6 +15,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.MultiArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -54,7 +55,6 @@ public class Burst extends CustomEnchantment {
                 if ((hand.containsEnchantment(Enchantment.ARROW_INFINITE) && Utilities.hasItem(player, Material.ARROW, 1))
                         || Utilities.removeItem(player, Material.ARROW, 1)) {
                     result = true;
-                    Utilities.setHand(player, hand, usedHand);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                         Arrow arrow = player.getWorld().spawnArrow(player.getEyeLocation(),
                                 player.getLocation().getDirection(), 1, 0);
@@ -74,7 +74,7 @@ public class Burst extends CustomEnchantment {
                             arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
                             arrow.setCritical(true);
                             EnchantedArrow.putArrow(arrow, new MultiArrow(arrow), player);
-                            Utilities.damageTool(player, 1, usedHand);
+                            CompatibilityAdapter.damageTool(player, 1, usedHand);
                         }
 
                     }, i * 2);

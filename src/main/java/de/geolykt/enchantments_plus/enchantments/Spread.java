@@ -16,6 +16,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.MultiArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -52,7 +53,7 @@ public class Spread extends CustomEnchantment {
             Storage.COMPATIBILITY_ADAPTER.ConstructEntityShootBowEvent(player, hand, null, originalArrow,
                     usedHand ? HAND : OFF_HAND, (float) originalArrow.getVelocity().length(), false));
 
-        Utilities.damageTool(player, (int) Math.round(level / 2.0 + 1), usedHand);
+        CompatibilityAdapter.damageTool(player, (int) Math.round(level / 2.0 + 1), usedHand);
 
         for (int i = 0; i < (int) Math.round(power * level * 4); i++) {
             Vector v = originalArrow.getVelocity();

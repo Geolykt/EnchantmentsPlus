@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
-import de.geolykt.enchantments_plus.util.Utilities;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 
 import static org.bukkit.Material.AIR;
 import static org.bukkit.Material.TNT;
@@ -54,7 +54,7 @@ public class FuseArrow extends EnchantedArrow {
             } else if (evt.getEntity().getType().equals(EntityType.MUSHROOM_COW)) {
                 MushroomCow c = (MushroomCow) evt.getEntity();
                 if (c.isAdult()) {
-                    Utilities.spawnParticle(l, Particle.EXPLOSION_LARGE, 1, 1f, 0, 0, 0);
+                    CompatibilityAdapter.display(l, Particle.EXPLOSION_LARGE, 1, 1f, 0, 0, 0);
                     evt.getEntity().remove();
                     l.getWorld().spawnEntity(l, EntityType.COW);
                     l.getWorld().dropItemNaturally(l, new ItemStack(Material.RED_MUSHROOM, 5));

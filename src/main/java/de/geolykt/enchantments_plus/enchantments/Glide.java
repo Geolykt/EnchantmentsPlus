@@ -8,10 +8,10 @@ import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
-import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +67,7 @@ public class Glide extends CustomEnchantment {
             player.setFallDistance((float) (6 - level * power) - 4);
             Location l = player.getLocation().clone();
             l.setY(l.getY() - 3);
-            Utilities.spawnParticle(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
+            CompatibilityAdapter.display(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
         }
         if (Storage.rnd.nextInt(5 * level) == 5) { // Slowly damage all armor
             ItemStack[] s = player.getInventory().getArmorContents();
@@ -75,9 +75,9 @@ public class Glide extends CustomEnchantment {
                 if (s[i] != null) {
                     Map<CustomEnchantment, Integer> map = CustomEnchantment.getEnchants(s[i], player.getWorld());
                     if (map.containsKey(this)) {
-                        Utilities.addUnbreaking(player, s[i], 1);
+                        CompatibilityAdapter.damageItem(s[i], 1);
                     }
-                    if (Utilities.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
+                    if (CompatibilityAdapter.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
                         s[i] = null;
                     }
                 }

@@ -5,6 +5,7 @@ import org.bukkit.entity.*;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 public class FirestormArrow extends EnchantedArrow {
@@ -14,7 +15,7 @@ public class FirestormArrow extends EnchantedArrow {
     }
 
     public void onImpact() {
-        Utilities.spawnParticle(Utilities.getCenter(arrow.getLocation()), Particle.FLAME, 100 * getLevel(), 0.1f,
+        CompatibilityAdapter.display(Utilities.getCenter(arrow.getLocation()), Particle.FLAME, 100 * getLevel(), 0.1f,
                 getLevel(), 1.5f, getLevel());
         double radius = 1 + getLevel() * getPower();
         for (Entity e : arrow.getNearbyEntities(radius, radius, radius)) {

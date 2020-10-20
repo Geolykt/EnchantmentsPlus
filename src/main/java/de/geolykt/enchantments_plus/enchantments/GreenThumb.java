@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -77,7 +78,7 @@ public class GreenThumb extends CustomEnchantment {
                                 break;
                         }
                         if (applied) { // Display particles and damage armor
-                            Utilities.spawnParticle(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
+                            CompatibilityAdapter.display(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
                                 Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
                             int chc = Storage.rnd.nextInt(50);
                             if (chc > 42 && level != 10) {
@@ -87,9 +88,9 @@ public class GreenThumb extends CustomEnchantment {
                                         Map<CustomEnchantment, Integer> map =
                                             CustomEnchantment.getEnchants(s[i], player.getWorld());
                                         if (map.containsKey(this)) {
-                                            Utilities.addUnbreaking(player, s[i], 1);
+                                            CompatibilityAdapter.damageItem(s[i], 1);
                                         }
-                                        if (Utilities.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
+                                        if (CompatibilityAdapter.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
                                             s[i] = null;
                                         }
                                     }
