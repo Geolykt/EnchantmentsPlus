@@ -407,6 +407,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             customEnchantment = sup.get();
             customEnchantment.setId(id);
             customEnchantment.key = new NamespacedKey(Storage.plugin, "ench." + id);
+            conflicting();
         }
 
         public Builder<T> maxLevel(int maxLevel) {
