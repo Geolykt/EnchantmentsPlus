@@ -23,14 +23,11 @@ public class Bind extends CustomEnchantment {
     public Builder<Bind> defaults() {
         return new Builder<>(Bind::new, ID)
                 .all(BaseEnchantments.BIND, // BASE
-                    0, // COOLDOWN
                     "Keeps items with this enchantment in your inventory after death", // DESCRIPTION
                     new Tool[]{Tool.ALL}, // APPLICABLE TOOLS
                     "Bind", // NAME
                     1, // MAX LEVEL
-                    -1.0, // POWER
-                    Hand.NONE // APPLICABLE HANDS
-                    ); // CONFLICTS
+                    Hand.NONE);
     }
 
     @Override

@@ -22,12 +22,10 @@ public class Stationary extends CustomEnchantment {
     public Builder<Stationary> defaults() {
         return new Builder<>(Stationary::new, ID)
                 .all(BaseEnchantments.STATIONARY,
-                        0,
                         "Negates any knockback when attacking mobs, leaving them clueless as to who is attacking",
                         new Tool[]{Tool.BOW, Tool.SWORD},
                         "Stationary",
-                        1, // MAX LVL
-                        1.0,
+                        1,
                         Hand.BOTH);
     }
 

@@ -20,12 +20,10 @@ public class Ethereal extends CustomEnchantment {
     public Builder<Ethereal> defaults() {
         return new Builder<>(Ethereal::new, ID)
             .all(BaseEnchantments.ETHERAL,
-                    0,
                     "Prevents tools from breaking",
                     new Tool[]{Tool.ALL},
                     "Ethereal",
                     1, // MAX LVL
-                    1.0,
                     Hand.NONE);
     }
 

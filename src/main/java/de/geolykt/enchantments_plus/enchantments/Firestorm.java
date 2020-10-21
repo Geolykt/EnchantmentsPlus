@@ -19,12 +19,10 @@ public class Firestorm extends CustomEnchantment {
     public Builder<Firestorm> defaults() {
         return new Builder<>(Firestorm::new, ID)
             .all(BaseEnchantments.FIRESTORM,
-                    0,
                     "Spawns a firestorm where the arrow strikes burning nearby entities",
                     new Tool[]{Tool.BOW},
                     "Firestorm",
                     3, // MAX LVL
-                    1.0,
                     Hand.RIGHT,
                     Blizzard.class);
     }

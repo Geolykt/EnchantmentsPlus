@@ -22,12 +22,10 @@ public class Missile extends CustomEnchantment {
     public Builder<Missile> defaults() {
         return new Builder<>(Missile::new, ID)
             .all(BaseEnchantments.MISSILE,
-                    0,
                     "Shoots a missile from the bow",
                     new Tool[]{Tool.BOW},
                     "Missile",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.RIGHT);
     }
 

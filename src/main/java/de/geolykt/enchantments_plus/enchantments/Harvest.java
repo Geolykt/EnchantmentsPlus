@@ -25,12 +25,10 @@ public class Harvest extends CustomEnchantment {
     public Builder<Harvest> defaults() {
         return new Builder<>(Harvest::new, ID)
                 .all(BaseEnchantments.HARVEST,
-                        0,
                         "Harvests fully grown crops within a radius when clicked",
                         new Tool[]{Tool.HOE},
                         "Harvest",
                         3, // MAX LVL
-                        1.0,
                         Hand.RIGHT);
     }
 

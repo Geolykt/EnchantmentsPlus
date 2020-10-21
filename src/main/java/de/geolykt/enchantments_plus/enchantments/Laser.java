@@ -38,12 +38,10 @@ public class Laser extends CustomEnchantment {
     public Builder<Laser> defaults() {
         return new Builder<>(Laser::new, ID)
                 .all(BaseEnchantments.LASER,
-                        0,
                         "Breaks blocks and damages mobs using a powerful beam of light",
                         new Tool[]{Tool.PICKAXE, Tool.AXE},
                         "Laser",
-                        3, // MAX LVL
-                        1.0,
+                        3,
                         Hand.RIGHT);
     }
 

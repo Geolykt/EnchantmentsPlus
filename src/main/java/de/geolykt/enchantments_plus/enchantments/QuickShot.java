@@ -19,12 +19,10 @@ public class QuickShot extends CustomEnchantment {
     public Builder<QuickShot> defaults() {
         return new Builder<>(QuickShot::new, ID)
             .all(BaseEnchantments.QUICK_SHOT,
-                    0,
                     "Shoots arrows at full speed, instantly",
                     new Tool[]{Tool.BOW},
                     "Quick Shot",
                     1, // MAX LVL
-                    1.0,
                     Hand.RIGHT);
     }
 

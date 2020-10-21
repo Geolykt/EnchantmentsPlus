@@ -18,12 +18,10 @@ public class Magnetism extends CustomEnchantment {
     public Builder<Magnetism> defaults() {
         return new Builder<>(Magnetism::new, ID)
             .all(BaseEnchantments.MAGNETISM,
-                    0,
                     "Slowly attracts nearby items to the players inventory",
                     new Tool[]{Tool.LEGGINGS},
                     "Magnetism",
-                    3, // MAX LVL
-                    1.0,
+                    3,
                     Hand.NONE);
     }
 

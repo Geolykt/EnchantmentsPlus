@@ -13,12 +13,10 @@ public class Unrepairable extends CustomEnchantment {
     public Builder<Unrepairable> defaults() {
         return new Builder<>(Unrepairable::new, ID)
             .all(BaseEnchantments.UNREPAIRABLE,
-                    0,
                     "Prevents an item from being repaired",
                     new Tool[]{Tool.ALL},
                     "Unrepairable",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.NONE);
     }
 }

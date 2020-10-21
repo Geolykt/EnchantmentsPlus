@@ -17,12 +17,10 @@ public class Saturation extends CustomEnchantment {
     public Builder<Saturation> defaults() {
         return new Builder<>(Saturation::new, ID)
             .all(BaseEnchantments.SATURATION,
-                    0,
                     "Uses less of the player's hunger",
                     new Tool[]{Tool.LEGGINGS},
                     "Saturation",
                     3, // MAX LVL
-                    1.0,
                     Hand.NONE);
     }
 

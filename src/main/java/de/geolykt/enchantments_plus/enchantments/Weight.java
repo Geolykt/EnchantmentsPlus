@@ -31,12 +31,10 @@ public class Weight extends CustomEnchantment {
     public Builder<Weight> defaults() {
         return new Builder<>(Weight::new, ID)
             .all(BaseEnchantments.WEIGHT,
-                    0,
                     "Slows the player down but makes them stronger and more resistant to knockback",
                     new Tool[]{Tool.BOOTS},
                     "Weight",
-                    4, // MAX LVL
-                    1.0,
+                    4,
                     Hand.NONE,
                     Meador.class, Speed.class);
     }

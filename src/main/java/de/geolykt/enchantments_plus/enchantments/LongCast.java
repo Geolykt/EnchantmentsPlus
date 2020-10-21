@@ -16,12 +16,10 @@ public class LongCast extends CustomEnchantment {
     public Builder<LongCast> defaults() {
         return new Builder<>(LongCast::new, ID)
             .all(BaseEnchantments.LONG_CAST,
-                    0,
                     "Launches fishing hooks farther out when casting",
                     new Tool[]{Tool.ROD},
                     "Long Cast",
                     2, // MAX LVL
-                    1.0,
                     Hand.RIGHT,
                     ShortCast.class);
     }

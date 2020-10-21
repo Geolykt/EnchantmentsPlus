@@ -21,12 +21,10 @@ public class Stock extends CustomEnchantment {
     public Builder<Stock> defaults() {
         return new Builder<>(Stock::new, ID)
             .all(BaseEnchantments.STOCK,
-                    0,
                     "Refills the player's item in hand when they run out",
                     new Tool[]{Tool.CHESTPLATE},
                     "Stock",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.NONE);
     }
 

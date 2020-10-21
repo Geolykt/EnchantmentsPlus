@@ -26,28 +26,26 @@ public class Decapitation extends CustomEnchantment {
     public Builder<Decapitation> defaults() {
         return new Builder<>(Decapitation::new, ID)
             .all(BaseEnchantments.DECAPITATION,
-                    0,
                     "Increases the chance for dropping the enemies head on death",
                     new Tool[]{Tool.SWORD},
                     "Decapitation",
                     4, // MAX LVL
-                    1.0,
                     Hand.LEFT);
     }
 
-    private static EntityType[] entities = new EntityType[]{PLAYER, SKELETON, WITHER_SKULL, ZOMBIE, CREEPER};
-    private static Material[]   skulls   =
+    private static final EntityType[] ENTITIES = new EntityType[]{PLAYER, SKELETON, WITHER_SKULL, ZOMBIE, CREEPER};
+    private static final Material[]   SKULLS   =
         new Material[]{Material.PLAYER_HEAD, Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL,
             Material.ZOMBIE_HEAD, Material.CREEPER_HEAD};
 
     @Override
     public boolean onEntityKill(EntityDeathEvent evt, int level, boolean usedHand) {
-
-        short id = (short) ArrayUtils.indexOf(entities, evt.getEntityType());
+        // TODO refractor
+        short id = (short) ArrayUtils.indexOf(ENTITIES, evt.getEntityType());
         if (id == -1) {
             return false;
         }
-        ItemStack stk = new ItemStack(skulls[id], 1);
+        ItemStack stk = new ItemStack(SKULLS[id], 1);
         if (id == 0) {
             if (Storage.rnd.nextInt(Math.max((int) Math.round(BASE_PLAYER_DROP_CHANCE / (level * power)), 1)) == 0) {
 

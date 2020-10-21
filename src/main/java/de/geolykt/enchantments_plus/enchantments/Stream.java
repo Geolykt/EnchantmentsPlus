@@ -30,12 +30,10 @@ public class Stream extends CustomEnchantment {
     public Builder<Stream> defaults() {
         return new Builder<>(Stream::new, ID)
             .all(BaseEnchantments.STREAM,
-                    0,
                     "Creates a trail of particles when in flight",
                     new Tool[]{Tool.WINGS},
                     "Stream",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.NONE);
     }
 

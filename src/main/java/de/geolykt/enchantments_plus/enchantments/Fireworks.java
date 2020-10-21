@@ -19,12 +19,10 @@ public class Fireworks extends CustomEnchantment {
     public Builder<Fireworks> defaults() {
         return new Builder<>(Fireworks::new, ID)
             .all(BaseEnchantments.FIREWORKS,
-                    0,
                     "Shoots arrows that burst into fireworks upon impact",
                     new Tool[]{Tool.BOW},
                     "Fireworks",
                     4, // MAX LVL
-                    1.0,
                     Hand.RIGHT);
     }
 

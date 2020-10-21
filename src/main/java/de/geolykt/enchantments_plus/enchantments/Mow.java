@@ -24,12 +24,10 @@ public class Mow extends CustomEnchantment {
     public Builder<Mow> defaults() {
         return new Builder<>(Mow::new, ID)
             .all(BaseEnchantments.MOW,
-                    0,
                     "Shears all nearby sheep",
                     new Tool[]{Tool.SHEARS},
                     "Mow",
-                    3, // MAX LVL
-                    1.0,
+                    3,
                     Hand.RIGHT);
     }
 

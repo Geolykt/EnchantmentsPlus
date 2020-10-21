@@ -66,12 +66,10 @@ public class Anthropomorphism extends CustomEnchantment {
     public Builder<Anthropomorphism> defaults() {
         return new Builder<>(Anthropomorphism::new, ID)
                 .all(BaseEnchantments.ANTHROPOMORPHISM, // BASE
-                        0, // COOLDOWN
                         "Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking", // DESCRIPTION
                         new Tool[]{Tool.PICKAXE}, // APPLICABLE TOOLS
                         "Anthropomorphism", // NAME
                         1, // MAX LEVEL
-                        1.0, // POWER
                         Hand.BOTH, // APPLICABLE HANDS
                         Pierce.class, Switch.class); // CONFLICTS
     }

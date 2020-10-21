@@ -18,12 +18,10 @@ public class NightVision extends CustomEnchantment {
     public Builder<NightVision> defaults() {
         return new Builder<>(NightVision::new, ID)
             .all(BaseEnchantments.NIGHT_VISION,
-                    0,
                     "Lets the player see in the darkness",
                     new Tool[]{Tool.HELMET},
                     "Night Vision",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.NONE);
     }
 

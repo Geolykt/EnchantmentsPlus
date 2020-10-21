@@ -18,12 +18,10 @@ public class SonicShock extends CustomEnchantment {
     public Builder<SonicShock> defaults() {
         return new Builder<>(SonicShock::new, ID)
             .all(BaseEnchantments.SONIC_SHOCK,
-                    0,
                     "Damages mobs when flying past at high speed",
                     new Tool[]{Tool.WINGS},
                     "Sonic Shock",
-                    3, // MAX LVL
-                    1.0,
+                    3,
                     Hand.NONE);
     }
 

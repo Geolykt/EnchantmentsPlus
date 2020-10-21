@@ -29,12 +29,10 @@ public class Terraformer extends CustomEnchantment {
     public Builder<Terraformer> defaults() {
         return new Builder<>(Terraformer::new, ID)
             .all(BaseEnchantments.TERRAFORMER,
-                    0,
                     "Places the leftmost blocks in the players inventory within a 7 block radius",
                     new Tool[]{Tool.SHOVEL},
                     "Terraformer",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.RIGHT);
     }
 

@@ -24,12 +24,10 @@ public class Tracer extends CustomEnchantment {
     public Builder<Tracer> defaults() {
         return new Builder<>(Tracer::new, ID)
             .all(BaseEnchantments.TRACER,
-                    0,
                     "Guides the arrow to targets and then attacks",
                     new Tool[]{Tool.BOW},
                     "Tracer",
-                    4, // MAX LVL
-                    1.0,
+                    4,
                     Hand.RIGHT);
     }
 

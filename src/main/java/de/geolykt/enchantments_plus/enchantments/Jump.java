@@ -18,12 +18,10 @@ public class Jump extends CustomEnchantment {
     public Builder<Jump> defaults() {
         return new Builder<>(Jump::new, ID)
             .all(BaseEnchantments.JUMP,
-                    0,
                     "Gives the player a jump boost",
                     new Tool[]{Tool.BOOTS},
                     "Jump",
                     4, // MAX LVL
-                    1.0,
                     Hand.NONE,
                     Meador.class);
     }

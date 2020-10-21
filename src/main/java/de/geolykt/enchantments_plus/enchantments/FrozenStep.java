@@ -25,12 +25,10 @@ public class FrozenStep extends CustomEnchantment {
     public Builder<FrozenStep> defaults() {
         return new Builder<>(FrozenStep::new, ID)
             .all(BaseEnchantments.FROZEN_STEP,
-                    0,
                     "Allows the player to walk on water and safely emerge from it when sneaking",
                     new Tool[]{Tool.BOOTS},
                     "Frozen Step",
                     3, // MAX LVL
-                    1.0,
                     Hand.NONE,
                     NetherStep.class);
     }

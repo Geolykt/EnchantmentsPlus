@@ -23,12 +23,10 @@ public class Plough extends CustomEnchantment {
     public Builder<Plough> defaults() {
         return new Builder<>(Plough::new, ID)
             .all(BaseEnchantments.PLOUGH,
-                    0,
                     "Tills all soil within a radius",
                     new Tool[]{Tool.HOE},
                     "Plough",
-                    3, // MAX LVL
-                    1.0,
+                    3,
                     Hand.RIGHT);
     }
 

@@ -20,12 +20,10 @@ public class Gluttony extends CustomEnchantment {
     public Builder<Gluttony> defaults() {
         return new Builder<>(Gluttony::new, ID)
             .all(BaseEnchantments.GLUTTONY,
-                    0,
                     "Automatically eats for the player",
                     new Tool[]{Tool.HELMET},
                     "Gluttony",
                     1, // MAX LVL
-                    1.0,
                     Hand.NONE);
     }
 

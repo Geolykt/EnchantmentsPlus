@@ -17,12 +17,10 @@ public class Meador extends CustomEnchantment {
     public Builder<Meador> defaults() {
         return new Builder<>(Meador::new, ID)
             .all(BaseEnchantments.MEADOR,
-                    0,
                     "Gives the player a speed and jump boost",
                     new Tool[]{Tool.BOOTS},
                     "Meador",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.NONE,
                     Speed.class, Weight.class, Jump.class);
     }

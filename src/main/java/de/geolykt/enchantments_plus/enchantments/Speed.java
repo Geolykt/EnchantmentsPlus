@@ -17,12 +17,10 @@ public class Speed extends CustomEnchantment {
     public Builder<Speed> defaults() {
         return new Builder<>(Speed::new, ID)
             .all(BaseEnchantments.SPEED,
-                    0,
                     "Gives the player a speed boost",
                     new Tool[]{Tool.BOOTS},
                     "Speed",
-                    4, // MAX LVL
-                    1.0,
+                    4,
                     Hand.NONE,
                     Meador.class, Weight.class);
     }

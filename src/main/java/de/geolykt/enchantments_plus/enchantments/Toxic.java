@@ -33,12 +33,10 @@ public class Toxic extends CustomEnchantment {
     public Builder<Toxic> defaults() {
         return new Builder<>(Toxic::new, ID)
             .all(BaseEnchantments.TOXIC,
-                    0,
                     "Sickens the target, making them nauseous and unable to eat",
                     new Tool[]{Tool.BOW, Tool.SWORD},
                     "Toxic",
-                    4, // MAX LVL
-                    1.0,
+                    4,
                     Hand.BOTH);
     }
 

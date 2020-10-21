@@ -28,12 +28,10 @@ public class Glide extends CustomEnchantment {
     public Builder<Glide> defaults() {
         return new Builder<>(Glide::new, ID)
                 .all(BaseEnchantments.GLIDE,
-                        0,
                         "Gently brings the player back to the ground when sneaking",
                         new Tool[]{Tool.LEGGINGS},
                         "Glide",
                         3, // MAX LVL
-                        1.0,
                         Hand.NONE);
     }
 

@@ -21,12 +21,10 @@ public class Apocalypse extends CustomEnchantment {
         return new Builder<>(Apocalypse::new, ID)
             .probability(0)
             .all(BaseEnchantments.APOCALYPSE, // BASE
-                0, // COOLDOWN
                 "Unleashes hell", // DESCRIPTION
                 new Tool[]{Tool.BOW}, // APPLICABLE TOOLS
                 "Anthropomorphism", // NAME
                 1, // MAX LEVEL
-                -1.0, // POWER
                 Hand.RIGHT // APPLICABLE HANDS
                 ); // CONFLICTS
     }

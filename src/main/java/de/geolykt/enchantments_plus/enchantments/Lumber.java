@@ -24,12 +24,10 @@ public class Lumber extends CustomEnchantment {
     public Builder<Lumber> defaults() {
         return new Builder<>(Lumber::new, ID)
             .all(BaseEnchantments.LUMBER,
-                    0,
                     "Breaks the entire tree at once",
                     new Tool[]{Tool.AXE},
                     "Lumber",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.LEFT);
     }
 

@@ -21,12 +21,10 @@ public class IceAspect extends CustomEnchantment {
     public Builder<IceAspect> defaults() {
         return new Builder<>(IceAspect::new, ID)
             .all(BaseEnchantments.ICE_ASPECT,
-                    0,
                     "Temporarily freezes the target",
                     new Tool[]{Tool.SWORD},
                     "Ice Aspect",
                     2, // MAX LVL
-                    1.0,
                     Hand.LEFT);
     }
 

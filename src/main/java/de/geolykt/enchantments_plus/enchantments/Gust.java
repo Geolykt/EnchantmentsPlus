@@ -24,12 +24,10 @@ public class Gust extends CustomEnchantment {
     public Builder<Gust> defaults() {
         return new Builder<>(Gust::new, ID)
             .all(BaseEnchantments.GUST,
-                    0,
                     "Pushes the user through the air at the cost of their health",
                     new Tool[]{Tool.SWORD},
                     "Gust",
                     1, // MAX LVL
-                    1.0,
                     Hand.RIGHT,
                     RainbowSlam.class, Force.class);
     }

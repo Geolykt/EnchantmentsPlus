@@ -43,12 +43,10 @@ public class Fire extends CustomEnchantment {
     public Builder<Fire> defaults() {
         return new Builder<>(Fire::new, ID)
                 .all(BaseEnchantments.FIRE,
-                        0,
                         "Drops the smelted version of the block broken",
                         new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL},
                         "Fire",
                         1, // MAX LVL
-                        1.0,
                         Hand.LEFT,
                         Switch.class, Variety.class);
     }

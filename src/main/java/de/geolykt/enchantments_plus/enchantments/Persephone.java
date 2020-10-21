@@ -24,12 +24,10 @@ public class Persephone extends CustomEnchantment {
     public Builder<Persephone> defaults() {
         return new Builder<>(Persephone::new, ID)
                 .all(BaseEnchantments.PERSEPHONE,
-                        0,
                         "Plants seeds from the player's inventory around them",
                         new Tool[]{Tool.HOE},
                         "Persephone",
                         3, // MAX LVL
-                        1.0,
                         Hand.RIGHT);
     }
 

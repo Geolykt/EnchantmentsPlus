@@ -20,12 +20,10 @@ public class Blizzard extends CustomEnchantment {
         return new Builder<>(Blizzard::new, ID)
                 .probability(0)
                 .all(BaseEnchantments.BLIZZARD,
-                    0,
                     "Spawns a blizzard where the arrow strikes freezing nearby entities",
                     new Tool[]{Tool.BOW},
                     "Blizzard",
                     3, // MAX LVL
-                    1.0,
                     Hand.RIGHT,
                     Firestorm.class);
     }

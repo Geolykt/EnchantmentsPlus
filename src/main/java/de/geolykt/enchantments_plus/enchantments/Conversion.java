@@ -23,12 +23,10 @@ public class Conversion extends CustomEnchantment {
     public Builder<Conversion> defaults() {
         return new Builder<>(Conversion::new, ID)
             .all(BaseEnchantments.CONVERSION,
-                0,
                 "Converts XP to health when right clicking and sneaking",
                 new Tool[]{Tool.SWORD},
                 "Conversion",
                 4, // MAX LVL
-                1.0,
                 Hand.RIGHT);
     }
 

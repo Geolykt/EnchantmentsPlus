@@ -16,12 +16,10 @@ public class ShortCast extends CustomEnchantment {
     public Builder<ShortCast> defaults() {
         return new Builder<>(ShortCast::new, ID)
             .all(BaseEnchantments.SHORT_CAST,
-                    0,
                     "Launches fishing hooks closer in when casting",
                     new Tool[]{Tool.ROD},
                     "Short Cast",
                     2, // MAX LVL
-                    1.0,
                     Hand.RIGHT,
                     LongCast.class);
     }

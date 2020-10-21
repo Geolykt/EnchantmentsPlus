@@ -30,12 +30,10 @@ public class Spread extends CustomEnchantment {
     public Builder<Spread> defaults() {
         return new Builder<>(Spread::new, ID)
             .all(BaseEnchantments.SPREAD,
-                    0,
                     "Fires an array of arrows simultaneously",
                     new Tool[]{Tool.BOW},
                     "Spread",
-                    5, // MAX LVL
-                    1.0,
+                    5,
                     Hand.RIGHT,
                     Burst.class);
     }

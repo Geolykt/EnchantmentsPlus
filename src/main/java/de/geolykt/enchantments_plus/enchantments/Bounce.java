@@ -18,12 +18,10 @@ public class Bounce extends CustomEnchantment {
         return new Builder<>(Bounce::new, ID)
                 .probability(0)
                 .all(BaseEnchantments.BOUNCE,
-                    0,
                     "Shoots you in the air if you jump on slime blocks",
                     new Tool[]{Tool.BOOTS},
                     "Bounce",
                     5, // MAX LVL
-                    1.0,
                     Hand.NONE);
     }
 

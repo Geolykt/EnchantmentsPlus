@@ -20,12 +20,10 @@ public class PotionResistance extends CustomEnchantment {
     public Builder<PotionResistance> defaults() {
         return new Builder<>(PotionResistance::new, ID)
             .all(BaseEnchantments.POTION_RESISTANCE,
-                    0,
                     "Lessens the effects of all potions on players, even the good ones",
                     new Tool[]{Tool.HELMET, Tool.CHESTPLATE, Tool.LEGGINGS, Tool.BOOTS},
                     "Potion Resistance",
-                    4, // MAX LVL
-                    1.0,
+                    4,
                     Hand.NONE);
     }
 

@@ -27,12 +27,10 @@ public class GreenThumb extends CustomEnchantment {
     public Builder<GreenThumb> defaults() {
         return new Builder<>(GreenThumb::new, ID)
             .all(BaseEnchantments.GREEN_THUMB,
-                    0,
                     "Grows the foliage around the player",
                     new Tool[]{Tool.LEGGINGS},
                     "Green Thumb",
                     3, // MAX LVL
-                    1.0,
                     Hand.NONE);
     }
 

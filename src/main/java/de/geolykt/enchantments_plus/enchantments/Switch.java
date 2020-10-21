@@ -26,12 +26,10 @@ public class Switch extends CustomEnchantment {
     public Builder<Switch> defaults() {
         return new Builder<>(Switch::new, ID)
                 .all(BaseEnchantments.SWITCH,
-                        0,
                         "Replaces the clicked block with the leftmost block in your hotbar when sneaking",
                         new Tool[]{Tool.PICKAXE},
                         "Switch",
-                        1, // MAX LVL
-                        1.0,
+                        1,
                         Hand.RIGHT,
                         Shred.class, Anthropomorphism.class, Fire.class, Extraction.class, Pierce.class, Reveal.class);
     }

@@ -35,12 +35,10 @@ public class Burst extends CustomEnchantment {
         return new Builder<>(Burst::new, ID)
                     .probability(0)
                     .all(BaseEnchantments.BURST,
-                        0,
                         "Rapidly fires arrows in series",
                         new Tool[]{Tool.BOW},
                         "Burst",
                         3, // MAX LVL
-                        1.0,
                         Hand.RIGHT,
                         Spread.class);
     }

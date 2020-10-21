@@ -24,12 +24,10 @@ public class Extraction extends CustomEnchantment {
     public Builder<Extraction> defaults() {
         return new Builder<>(Extraction::new, ID)
             .all(BaseEnchantments.EXTRACTION,
-                0,
                 "Smelts and yields more product from ores",
                 new Tool[]{Tool.PICKAXE},
                 "Extraction",
                 3, // MAX LVL
-                1.0,
                 Hand.LEFT,
                 Switch.class);
     }

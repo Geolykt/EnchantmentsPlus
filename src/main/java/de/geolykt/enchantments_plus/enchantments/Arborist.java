@@ -24,12 +24,10 @@ public class Arborist extends CustomEnchantment {
     public Builder<Arborist> defaults() {
         return new Builder<>(Arborist::new, ID)
                 .all(BaseEnchantments.ARBORIST, // BASE
-                    0, // COOLDOWN
                     "Drops more apples, sticks, and saplings when used on leaves", // DESCRIPTION
                     new Tool[]{Tool.AXE}, // APPLICABLE TOOLS
                     "Arborist", // NAME
                     3, // MAX LEVEL
-                    1.0, // POWER
                     Hand.LEFT); // APPLICABLE HANDS
     }
 

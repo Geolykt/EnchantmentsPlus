@@ -30,12 +30,10 @@ public class Shred extends CustomEnchantment {
     public Builder<Shred> defaults() {
         return new Builder<>(Shred::new, ID)
                 .all(BaseEnchantments.SHRED,
-                        0,
                         "Breaks the blocks within a radius of the original block mined",
                         new Tool[]{Tool.PICKAXE, Tool.SHOVEL},
                         "Shred",
-                        5, // MAX LVL
-                        1.0,
+                        5,
                         Hand.LEFT,
                         Pierce.class, Switch.class);
     }

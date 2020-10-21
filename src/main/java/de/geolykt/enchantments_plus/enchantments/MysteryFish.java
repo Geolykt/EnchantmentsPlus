@@ -27,12 +27,10 @@ public class MysteryFish extends CustomEnchantment {
     public Builder<MysteryFish> defaults() {
         return new Builder<>(MysteryFish::new, ID)
             .all(BaseEnchantments.MYSTERY_FISH,
-                    0,
                     "Catches water mobs and fishes",
                     new Tool[]{Tool.ROD},
                     "Mystery Fish",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.RIGHT);
     }
 

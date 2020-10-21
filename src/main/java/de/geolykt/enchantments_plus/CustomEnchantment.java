@@ -512,6 +512,38 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         }
         
         /**
+         * Calls all the setters with the supplied arguments, this method also implies the power to be 1, so the power should be set afterwards
+         * if needed.
+         * @param base The base enchantment that should be used. (Usually the enchantment supplied as an Enum)
+         * @param description The description of the enchantment
+         * @param enchantable The tools on which the enchantment can be applied on
+         * @param lore The lore string (Usually the name of the enchantment)
+         * @param maxlevel The maximum level the enchantment can be leveled
+         * @param handUse Which hands the enchantments can be applied on
+         * @param conflicts The Conflicting enchantments
+         * @return The builder instance
+         * @since 2.1.5
+         */
+        @SafeVarargs
+        public final Builder<T> all(BaseEnchantments base,
+                String description,
+                Tool[] enchantable,
+                String lore,
+                int maxlevel,
+                Hand handUse,
+                Class<? extends CustomEnchantment>... conflicts) {
+            base(base);
+            conflicting(conflicts);
+            description(description);
+            enchantable(enchantable);
+            loreName(lore);
+            maxLevel(maxlevel);
+            handUse(handUse);
+            power(1.0);
+            return this;
+        }
+        
+        /**
          * Calls all the setters with the supplied arguments
          * @param base The base enchantment that should be used. (Usually the enchantment supplied as an Enum)
          * @param cooldown The cooldown until the enchantment can be used again, used to prevent deadlocks and enchantment overusage
@@ -524,6 +556,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
          * @param conflicts The Conflicting enchantments
          * @return The builder instance
          * @since 2.1.3
+         * //@deprecated Since 2.1.5 as it's not used internally anymore
          */
         @SafeVarargs
         public final Builder<T> all(BaseEnchantments base,
@@ -535,15 +568,9 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 double power,
                 Hand handUse,
                 Class<? extends CustomEnchantment>... conflicts) {
-            base(base);
-            conflicting(conflicts);
+            all(base, description, enchantable, lore, maxlevel, handUse, conflicts);
             cooldown(cooldown);
-            description(description);
-            enchantable(enchantable);
-            loreName(lore);
-            maxLevel(maxlevel);
             power(power);
-            handUse(handUse);
             return this;
         }
         

@@ -26,12 +26,10 @@ public class Transformation extends CustomEnchantment {
     public Builder<Transformation> defaults() {
         return new Builder<>(Transformation::new, ID)
                 .all(BaseEnchantments.TRANSFORMATION,
-                        0,
                         "Occasionally causes the attacked mob to be transformed into its \"similar\" cousin",
                         new Tool[]{Tool.SWORD},
                         "Transformation",
-                        3, // MAX LVL
-                        1.0,
+                        3,
                         Hand.LEFT);
     }
 

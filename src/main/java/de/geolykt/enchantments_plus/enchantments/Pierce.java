@@ -37,12 +37,10 @@ public class Pierce extends CustomEnchantment {
     public Builder<Pierce> defaults() {
         return new Builder<>(Pierce::new, ID)
             .all(BaseEnchantments.PIERCE,
-                    0,
                     "Lets the player mine in several modes which can be changed through shift clicking",
                     new Tool[]{Tool.PICKAXE},
                     "Pierce",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.BOTH,
                     Anthropomorphism.class, Switch.class, Shred.class, Reveal.class);
     }

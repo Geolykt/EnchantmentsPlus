@@ -19,12 +19,10 @@ public class Fuse extends CustomEnchantment {
     public Builder<Fuse> defaults() {
         return new Builder<>(Fuse::new, ID)
             .all(BaseEnchantments.FUSE,
-                    0,
                     "Instantly ignites anything explosive",
                     new Tool[]{Tool.BOW},
                     "Fuse",
                     1, // MAX LVL
-                    1.0,
                     Hand.RIGHT);
     }
 

@@ -22,12 +22,10 @@ public class Variety extends CustomEnchantment {
     public Builder<Variety> defaults() {
         return new Builder<>(Variety::new, ID)
             .all(BaseEnchantments.VARIETY,
-                    0,
                     "Drops random types of wood or leaves",
                     new Tool[]{Tool.AXE},
                     "Variety",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.LEFT,
                     Fire.class);
     }

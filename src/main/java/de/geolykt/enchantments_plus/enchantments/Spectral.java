@@ -58,12 +58,10 @@ public class Spectral extends CustomEnchantment {
     public Builder<Spectral> defaults() {
         return new Builder<>(Spectral::new, ID)
                 .all(BaseEnchantments.SPECTRAL,
-                        0,
                         "Allows for cycling through a block's types",
                         new Tool[]{Tool.SHOVEL},
                         "Spectral",
-                        3, // MAX LVL
-                        1.0,
+                        3,
                         Hand.RIGHT);
     }
 

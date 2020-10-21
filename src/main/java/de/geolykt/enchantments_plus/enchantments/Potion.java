@@ -21,12 +21,10 @@ public class Potion extends CustomEnchantment {
     public Builder<Potion> defaults() {
         return new Builder<>(Potion::new, ID)
             .all(BaseEnchantments.POTION,
-                    0,
                     "Gives the shooter random positive potion effects when attacking",
                     new Tool[]{Tool.BOW},
                     "Potion",
-                    3, // MAX LVL
-                    1.0,
+                    3,
                     Hand.RIGHT);
     }
 

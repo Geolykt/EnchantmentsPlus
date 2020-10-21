@@ -30,12 +30,10 @@ public class Singularity extends CustomEnchantment {
     public Builder<Singularity> defaults() {
         return new Builder<>(Singularity::new, ID)
             .all(BaseEnchantments.SINGULARITY,
-                    0,
                     "Creates a black hole that attracts nearby entities and then discharges them",
                     new Tool[]{Tool.BOW},
                     "Singularity",
-                    1, // MAX LVL
-                    1.0,
+                    1,
                     Hand.RIGHT);
     }
 
