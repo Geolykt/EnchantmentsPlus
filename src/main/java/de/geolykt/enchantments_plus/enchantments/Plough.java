@@ -22,16 +22,14 @@ public class Plough extends CustomEnchantment {
     @Override
     public Builder<Plough> defaults() {
         return new Builder<>(Plough::new, ID)
-            .maxLevel(3)
-            .loreName("Plough")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.HOE})
-            .conflicting()
-            .description("Tills all soil within a radius")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.PLOUGH);
+            .all(BaseEnchantments.PLOUGH,
+                    0,
+                    "Tills all soil within a radius",
+                    new Tool[]{Tool.HOE},
+                    "Plough",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

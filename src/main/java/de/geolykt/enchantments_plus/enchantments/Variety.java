@@ -21,16 +21,15 @@ public class Variety extends CustomEnchantment {
     @Override
     public Builder<Variety> defaults() {
         return new Builder<>(Variety::new, ID)
-            .maxLevel(1)
-            .loreName("Variety")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.AXE})
-            .conflicting(Fire.class)
-            .description("Drops random types of wood or leaves")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.VARIETY);
+            .all(BaseEnchantments.VARIETY,
+                    0,
+                    "Drops random types of wood or leaves",
+                    new Tool[]{Tool.AXE},
+                    "Variety",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.LEFT,
+                    Fire.class);
     }
 
     @Override

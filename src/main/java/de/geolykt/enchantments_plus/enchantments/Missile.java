@@ -21,16 +21,14 @@ public class Missile extends CustomEnchantment {
     @Override
     public Builder<Missile> defaults() {
         return new Builder<>(Missile::new, ID)
-            .maxLevel(1)
-            .loreName("Missile")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Shoots a missile from the bow")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.MISSILE);
+            .all(BaseEnchantments.MISSILE,
+                    0,
+                    "Shoots a missile from the bow",
+                    new Tool[]{Tool.BOW},
+                    "Missile",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

@@ -27,27 +27,24 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
 public class Laser extends CustomEnchantment {
 
-    // Time at which a later enchantment was fired; this is used to prevent double firing when clicking an entity
-    // public static final Map<Player, Long> laserTimes = new HashMap<>();
     public static final int ID = 31;
     
     public static NamespacedKey colorKey;
 
     public static boolean doShredCooldown = true;
+    // TODO look if it can allow swords as the tool in the future
 
     @Override
     public Builder<Laser> defaults() {
         return new Builder<>(Laser::new, ID)
-                .maxLevel(3)
-                .loreName("Laser")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE})
-                .conflicting()
-                .description("Breaks blocks and damages mobs using a powerful beam of light")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.RIGHT)
-                .base(BaseEnchantments.LASER);
+                .all(BaseEnchantments.LASER,
+                        0,
+                        "Breaks blocks and damages mobs using a powerful beam of light",
+                        new Tool[]{Tool.PICKAXE, Tool.AXE},
+                        "Laser",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.RIGHT);
     }
 
     public void shoot(Player player, int level, boolean usedHand) {

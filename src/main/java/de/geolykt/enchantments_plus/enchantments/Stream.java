@@ -29,16 +29,14 @@ public class Stream extends CustomEnchantment {
     @Override
     public Builder<Stream> defaults() {
         return new Builder<>(Stream::new, ID)
-            .maxLevel(1)
-            .loreName("Stream")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.WINGS})
-            .conflicting()
-            .description("Creates a trail of particles when in flight")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.STREAM);
+            .all(BaseEnchantments.STREAM,
+                    0,
+                    "Creates a trail of particles when in flight",
+                    new Tool[]{Tool.WINGS},
+                    "Stream",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

@@ -25,27 +25,21 @@ public class Transformation extends CustomEnchantment {
     @Override
     public Builder<Transformation> defaults() {
         return new Builder<>(Transformation::new, ID)
-                .maxLevel(3)
-                .loreName("Transformation")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.SWORD})
-                .conflicting()
-                .description("Occasionally causes the attacked mob to be transformed into its similar cousin")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.LEFT)
-                .base(BaseEnchantments.TRANSFORMATION);
+                .all(BaseEnchantments.TRANSFORMATION,
+                        0,
+                        "Occasionally causes the attacked mob to be transformed into its \"similar\" cousin",
+                        new Tool[]{Tool.SWORD},
+                        "Transformation",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.LEFT);
     }
 
     @Override
     public boolean onEntityHit(EntityDamageByEntityEvent evt, int level, boolean usedHand) {
-        if (evt.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+        if (evt.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
+                || (evt.getEntity() instanceof Tameable && ((Tameable) evt.getEntity()).isTamed())) {
             return false;
-        }
-        if (evt.getEntity() instanceof Tameable) {
-            if (((Tameable) evt.getEntity()).isTamed()) {
-                return false;
-            }
         }
         if (evt.getEntity() instanceof LivingEntity
                 && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {

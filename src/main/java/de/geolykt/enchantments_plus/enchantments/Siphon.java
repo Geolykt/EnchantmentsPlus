@@ -23,16 +23,14 @@ public class Siphon extends CustomEnchantment {
     @Override
     public Builder<Siphon> defaults() {
         return new Builder<>(Siphon::new, ID)
-                .maxLevel(4)
-                .loreName("Siphon")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
-                .conflicting()
-                .description("Drains the health of the mob that you attack, giving it to you")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.BOTH)
-                .base(BaseEnchantments.SIPHON);
+                .all(BaseEnchantments.SIPHON,
+                        0,
+                        "Drains the health of the mob that you attack, giving it to you",
+                        new Tool[]{Tool.BOW, Tool.SWORD},
+                        "Siphon",
+                        4, // MAX LVL
+                        1.0,
+                        Hand.BOTH);
     }
 
     @Override

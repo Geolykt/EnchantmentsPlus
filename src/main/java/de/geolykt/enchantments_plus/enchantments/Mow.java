@@ -23,16 +23,14 @@ public class Mow extends CustomEnchantment {
     @Override
     public Builder<Mow> defaults() {
         return new Builder<>(Mow::new, ID)
-            .maxLevel(3)
-            .loreName("Mow")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SHEARS})
-            .conflicting()
-            .description("Shears all nearby sheep")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.MOW);
+            .all(BaseEnchantments.MOW,
+                    0,
+                    "Shears all nearby sheep",
+                    new Tool[]{Tool.SHEARS},
+                    "Mow",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     private boolean shear(PlayerEvent evt, int level, boolean usedHand) {

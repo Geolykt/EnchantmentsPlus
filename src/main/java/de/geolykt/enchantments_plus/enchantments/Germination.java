@@ -24,16 +24,14 @@ public class Germination extends CustomEnchantment {
     @Override
     public Builder<Germination> defaults() {
         return new Builder<>(Germination::new, ID)
-                .maxLevel(3)
-                .loreName("Germination")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.HOE})
-                .conflicting()
-                .description("Uses bonemeal from the player's inventory to grow nearby plants")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.RIGHT)
-                .base(BaseEnchantments.GERMINATION);
+                .all(BaseEnchantments.GERMINATION,
+                        0,
+                        "Uses bonemeal from the player's inventory to grow nearby plants",
+                        new Tool[]{Tool.HOE},
+                        "Germination",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.RIGHT);
     }
 
     @Override

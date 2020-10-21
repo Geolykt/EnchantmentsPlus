@@ -19,16 +19,14 @@ public class GoldRush extends CustomEnchantment {
     @Override
     public Builder<GoldRush> defaults() {
         return new Builder<>(GoldRush::new, ID)
-            .maxLevel(3)
-            .loreName("Gold Rush")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SHOVEL})
-            .conflicting()
-            .description("Randomly drops gold nuggets when mining sand")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.GOLD_RUSH);
+            .all(BaseEnchantments.GOLD_RUSH,
+                    0,
+                    "Randomly drops gold nuggets when mining sand",
+                    new Tool[]{Tool.SHOVEL},
+                    "Gold Rush",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.LEFT);
     }
 
     @Override

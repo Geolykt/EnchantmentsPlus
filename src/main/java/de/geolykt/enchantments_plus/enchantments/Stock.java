@@ -20,16 +20,14 @@ public class Stock extends CustomEnchantment {
     @Override
     public Builder<Stock> defaults() {
         return new Builder<>(Stock::new, ID)
-            .maxLevel(1)
-            .loreName("Stock")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.CHESTPLATE})
-            .conflicting()
-            .description("Refills the player's item in hand when they run out")
-            .cooldown(-1)
-            .power(-1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.STOCK);
+            .all(BaseEnchantments.STOCK,
+                    0,
+                    "Refills the player's item in hand when they run out",
+                    new Tool[]{Tool.CHESTPLATE},
+                    "Stock",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

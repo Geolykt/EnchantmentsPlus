@@ -27,16 +27,14 @@ public class Vortex extends CustomEnchantment {
     @Override
     public Builder<Vortex> defaults() {
         return new Builder<>(Vortex::new, ID)
-                .maxLevel(1)
-                .loreName("Vortex")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
-                .conflicting()
-                .description("Teleports mob loot and XP directly to the player")
-                .cooldown(0)
-                .power(-1.0)
-                .handUse(Hand.BOTH)
-                .base(BaseEnchantments.VORTEX);
+                .all(BaseEnchantments.VORTEX,
+                        0,
+                        "Teleports mob loot and XP directly to the player",
+                        new Tool[]{Tool.BOW, Tool.SWORD},
+                        "Vortex",
+                        1, // MAX LVL
+                        1.0,
+                        Hand.BOTH);
     }
 
     @Override

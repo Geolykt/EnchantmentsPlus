@@ -26,16 +26,14 @@ public class MysteryFish extends CustomEnchantment {
     @Override
     public Builder<MysteryFish> defaults() {
         return new Builder<>(MysteryFish::new, ID)
-            .maxLevel(1)
-            .loreName("Mystery Fish")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.ROD})
-            .conflicting()
-            .description("Catches water mobs and fishes")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.MYSTERY_FISH);
+            .all(BaseEnchantments.MYSTERY_FISH,
+                    0,
+                    "Catches water mobs and fishes",
+                    new Tool[]{Tool.ROD},
+                    "Mystery Fish",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

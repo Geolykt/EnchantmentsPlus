@@ -16,16 +16,14 @@ public class Spikes extends CustomEnchantment {
     @Override
     public Builder<Spikes> defaults() {
         return new Builder<>(Spikes::new, ID)
-            .maxLevel(3)
-            .loreName("Spikes")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOOTS})
-            .conflicting()
-            .description("Damages entities the player jumps onto")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.SPIKES);
+            .all(BaseEnchantments.SPIKES,
+                    0,
+                    "Damages entities the player jumps onto",
+                    new Tool[]{Tool.BOOTS},
+                    "Spikes",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

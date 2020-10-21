@@ -19,16 +19,14 @@ public class Ethereal extends CustomEnchantment {
     @Override
     public Builder<Ethereal> defaults() {
         return new Builder<>(Ethereal::new, ID)
-            .maxLevel(1)
-            .loreName("Ethereal")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.ALL})
-            .conflicting()
-            .description("Prevents tools from breaking")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.ETHERAL);
+            .all(BaseEnchantments.ETHERAL,
+                    0,
+                    "Prevents tools from breaking",
+                    new Tool[]{Tool.ALL},
+                    "Ethereal",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

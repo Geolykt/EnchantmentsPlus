@@ -23,16 +23,14 @@ public class Grab extends CustomEnchantment {
     @Override
     public Builder<Grab> defaults() {
         return new Builder<>(Grab::new, ID)
-            .maxLevel(1)
-            .loreName("Grab")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL})
-            .conflicting()
-            .description("Teleports mined items and XP directly to the player")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.GRAB);
+            .all(BaseEnchantments.GRAB,
+                    0,
+                    "Teleports mined items and XP directly to the player",
+                    new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL},
+                    "Grab",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.LEFT);
     }
 
     @Override

@@ -19,16 +19,14 @@ public class PotionResistance extends CustomEnchantment {
     @Override
     public Builder<PotionResistance> defaults() {
         return new Builder<>(PotionResistance::new, ID)
-            .maxLevel(4)
-            .loreName("Potion Resistance")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.HELMET, Tool.CHESTPLATE, Tool.LEGGINGS, Tool.BOOTS})
-            .conflicting()
-            .description("Lessens the effects of all potions on players, even the good ones")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.POTION_RESISTANCE);
+            .all(BaseEnchantments.POTION_RESISTANCE,
+                    0,
+                    "Lessens the effects of all potions on players, even the good ones",
+                    new Tool[]{Tool.HELMET, Tool.CHESTPLATE, Tool.LEGGINGS, Tool.BOOTS},
+                    "Potion Resistance",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

@@ -24,16 +24,15 @@ public class FrozenStep extends CustomEnchantment {
     @Override
     public Builder<FrozenStep> defaults() {
         return new Builder<>(FrozenStep::new, ID)
-            .maxLevel(3)
-            .loreName("Frozen Step")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOOTS})
-            .conflicting(NetherStep.class)
-            .description("Allows the player to walk on water and safely emerge from it when sneaking")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.FROZEN_STEP);
+            .all(BaseEnchantments.FROZEN_STEP,
+                    0,
+                    "Allows the player to walk on water and safely emerge from it when sneaking",
+                    new Tool[]{Tool.BOOTS},
+                    "Frozen Step",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.NONE,
+                    NetherStep.class);
     }
 
     public boolean onScan(Player player, int level, boolean usedHand) {

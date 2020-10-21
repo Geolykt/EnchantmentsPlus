@@ -27,16 +27,15 @@ public class Reveal extends CustomEnchantment {
     @Override
     public Builder<Reveal> defaults() {
         return new Builder<>(Reveal::new, ID)
-            .maxLevel(4)
-            .loreName("Reveal")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.PICKAXE})
-            .conflicting(Switch.class, Pierce.class, Spectral.class)
-            .description("Makes nearby ores glow white through the stone.")
-            .cooldown(100)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.REVEAL);
+            .all(BaseEnchantments.REVEAL,
+                    100,
+                    "Makes nearby ores glow white through the stone.",
+                    new Tool[]{Tool.PICKAXE},
+                    "Reveal",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.NONE,
+                    Switch.class, Pierce.class, Spectral.class);
     }
     @Override
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {

@@ -29,16 +29,15 @@ public class Spread extends CustomEnchantment {
     @Override
     public Builder<Spread> defaults() {
         return new Builder<>(Spread::new, ID)
-            .maxLevel(5)
-            .loreName("Spread")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting(Burst.class)
-            .description("Fires an array of arrows simultaneously")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.SPREAD);
+            .all(BaseEnchantments.SPREAD,
+                    0,
+                    "Fires an array of arrows simultaneously",
+                    new Tool[]{Tool.BOW},
+                    "Spread",
+                    5, // MAX LVL
+                    1.0,
+                    Hand.RIGHT,
+                    Burst.class);
     }
 
     @Override

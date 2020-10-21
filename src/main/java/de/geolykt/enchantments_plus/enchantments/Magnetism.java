@@ -17,16 +17,14 @@ public class Magnetism extends CustomEnchantment {
     @Override
     public Builder<Magnetism> defaults() {
         return new Builder<>(Magnetism::new, ID)
-            .maxLevel(3)
-            .loreName("Magnetism")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.LEGGINGS})
-            .conflicting()
-            .description("Slowly attracts nearby items to the players inventory")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.MAGNETISM);
+            .all(BaseEnchantments.MAGNETISM,
+                    0,
+                    "Slowly attracts nearby items to the players inventory",
+                    new Tool[]{Tool.LEGGINGS},
+                    "Magnetism",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

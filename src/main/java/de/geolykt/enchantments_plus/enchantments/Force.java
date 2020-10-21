@@ -30,16 +30,15 @@ public class Force extends CustomEnchantment {
     @Override
     public Builder<Force> defaults() {
         return new Builder<>(Force::new, ID)
-            .maxLevel(3)
-            .loreName("Force")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SWORD})
-            .conflicting(RainbowSlam.class, Gust.class)
-            .description("Pushes and pulls nearby mobs, configurable through shift clicking")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.BOTH)
-            .base(BaseEnchantments.FORCE);
+            .all(BaseEnchantments.FORCE,
+                    0,
+                    "Pushes and pulls nearby mobs, configurable through shift clicking",
+                    new Tool[]{Tool.SWORD},
+                    "Force",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.RIGHT,
+                    RainbowSlam.class, Gust.class);
     }
 
     @Override

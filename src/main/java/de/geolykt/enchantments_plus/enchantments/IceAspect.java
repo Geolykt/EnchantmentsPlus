@@ -20,16 +20,14 @@ public class IceAspect extends CustomEnchantment {
     @Override
     public Builder<IceAspect> defaults() {
         return new Builder<>(IceAspect::new, ID)
-            .maxLevel(2)
-            .loreName("Ice Aspect")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SWORD})
-            .conflicting()
-            .description("Temporarily freezes the target")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.ICE_ASPECT);
+            .all(BaseEnchantments.ICE_ASPECT,
+                    0,
+                    "Temporarily freezes the target",
+                    new Tool[]{Tool.SWORD},
+                    "Ice Aspect",
+                    2, // MAX LVL
+                    1.0,
+                    Hand.LEFT);
     }
 
     @Override

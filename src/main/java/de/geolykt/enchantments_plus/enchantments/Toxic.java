@@ -32,22 +32,23 @@ public class Toxic extends CustomEnchantment {
     @Override
     public Builder<Toxic> defaults() {
         return new Builder<>(Toxic::new, ID)
-            .maxLevel(4)
-            .loreName("Toxic")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
-            .conflicting()
-            .description("Sickens the target, making them nauseous and unable to eat")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.BOTH)
-            .base(BaseEnchantments.TOXIC);
+            .all(BaseEnchantments.TOXIC,
+                    0,
+                    "Sickens the target, making them nauseous and unable to eat",
+                    new Tool[]{Tool.BOW, Tool.SWORD},
+                    "Toxic",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.BOTH);
     }
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        ToxicArrow arrow = new ToxicArrow((Arrow) evt.getProjectile(), level, power);
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        if (evt.getProjectile() instanceof Arrow) {
+            EnchantedArrow.putArrow((Arrow) evt.getProjectile(),
+                    new ToxicArrow((Arrow) evt.getProjectile(), level, power),
+                    (Player) evt.getEntity());
+        }
         return true;
     }
 

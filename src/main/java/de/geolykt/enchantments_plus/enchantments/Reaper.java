@@ -24,16 +24,14 @@ public class Reaper extends CustomEnchantment {
     @Override
     public Builder<Reaper> defaults() {
         return new Builder<>(Reaper::new, ID)
-            .maxLevel(4)
-            .loreName("Reaper")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
-            .conflicting()
-            .description("Gives the target temporary wither effect and blindness")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.BOTH)
-            .base(BaseEnchantments.REAPER);
+            .all(BaseEnchantments.REAPER,
+                    0,
+                    "Gives the target temporary wither effect and blindness",
+                    new Tool[]{Tool.SWORD, Tool.BOW},
+                    "Reaper",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.BOTH);
     }
 
     @Override

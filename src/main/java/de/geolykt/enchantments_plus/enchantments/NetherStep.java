@@ -25,16 +25,15 @@ public class NetherStep extends CustomEnchantment {
     @Override
     public Builder<NetherStep> defaults() {
         return new Builder<>(NetherStep::new, ID)
-            .maxLevel(3)
-            .loreName("Nether Step")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOOTS})
-            .conflicting(FrozenStep.class)
-            .description("Allows the player to slowly but safely walk on lava")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.NETHER_STEP);
+            .all(BaseEnchantments.NETHER_STEP,
+                    0,
+                    "Allows the player to slowly but safely walk on lava",
+                    new Tool[]{Tool.BOOTS},
+                    "Nether Step",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.NONE,
+                    FrozenStep.class);
     }
 
     @Override

@@ -20,16 +20,14 @@ public class Potion extends CustomEnchantment {
     @Override
     public Builder<Potion> defaults() {
         return new Builder<>(Potion::new, ID)
-            .maxLevel(3)
-            .loreName("Potion")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Gives the shooter random positive potion effects when attacking")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.POTION);
+            .all(BaseEnchantments.POTION,
+                    0,
+                    "Gives the shooter random positive potion effects when attacking",
+                    new Tool[]{Tool.BOW},
+                    "Potion",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

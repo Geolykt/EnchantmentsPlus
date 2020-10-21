@@ -29,16 +29,15 @@ public class RainbowSlam extends CustomEnchantment {
     @Override
     public Builder<RainbowSlam> defaults() {
         return new Builder<>(RainbowSlam::new, ID)
-            .maxLevel(4)
-            .loreName("Rainbow Slam")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SWORD})
-            .conflicting(Force.class, Gust.class)
-            .description("Attacks enemy mobs with a powerful swirling slam")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.RAINBOW_SLAM);
+            .all(BaseEnchantments.RAINBOW_SLAM,
+                    0,
+                    "Attacks enemy mobs with a powerful swirling slam",
+                    new Tool[]{Tool.SWORD},
+                    "Rainbow Slam",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.RIGHT,
+                    Gust.class, Force.class);
     }
 
     @Override

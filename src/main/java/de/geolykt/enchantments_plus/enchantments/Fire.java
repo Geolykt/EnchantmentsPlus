@@ -42,16 +42,15 @@ public class Fire extends CustomEnchantment {
     @Override
     public Builder<Fire> defaults() {
         return new Builder<>(Fire::new, ID)
-                .maxLevel(1)
-                .loreName("Fire")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL})
-                .conflicting(Switch.class, Variety.class)
-                .description("Drops the smelted version of the block broken")
-                .cooldown(0)
-                .power(-1.0)
-                .handUse(Hand.LEFT)
-                .base(BaseEnchantments.FIRE);
+                .all(BaseEnchantments.FIRE,
+                        0,
+                        "Drops the smelted version of the block broken",
+                        new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL},
+                        "Fire",
+                        1, // MAX LVL
+                        1.0,
+                        Hand.LEFT,
+                        Switch.class, Variety.class);
     }
 
     @Override

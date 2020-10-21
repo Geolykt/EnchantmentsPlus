@@ -19,16 +19,14 @@ public class Gluttony extends CustomEnchantment {
     @Override
     public Builder<Gluttony> defaults() {
         return new Builder<>(Gluttony::new, ID)
-            .maxLevel(1)
-            .loreName("Gluttony")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.HELMET})
-            .conflicting()
-            .description("Automatically eats for the player")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.GLUTTONY);
+            .all(BaseEnchantments.GLUTTONY,
+                    0,
+                    "Automatically eats for the player",
+                    new Tool[]{Tool.HELMET},
+                    "Gluttony",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

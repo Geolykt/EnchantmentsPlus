@@ -19,16 +19,14 @@ public class Haste extends CustomEnchantment {
     @Override
     public Builder<Haste> defaults() {
         return new Builder<>(Haste::new, ID)
-            .maxLevel(4)
-            .loreName("Haste")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL})
-            .conflicting()
-            .description("Gives the player a mining boost")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.HASTE);
+            .all(BaseEnchantments.HASTE,
+                    0,
+                    "Gives the player a mining boost",
+                    new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL},
+                    "Haste",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

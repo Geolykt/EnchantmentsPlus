@@ -24,16 +24,14 @@ public class Harvest extends CustomEnchantment {
     @Override
     public Builder<Harvest> defaults() {
         return new Builder<>(Harvest::new, ID)
-                .maxLevel(3)
-                .loreName("Harvest")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.HOE})
-                .conflicting()
-                .description("Harvests fully grown crops within a radius when clicked")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.RIGHT)
-                .base(BaseEnchantments.HARVEST);
+                .all(BaseEnchantments.HARVEST,
+                        0,
+                        "Harvests fully grown crops within a radius when clicked",
+                        new Tool[]{Tool.HOE},
+                        "Harvest",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.RIGHT);
     }
 
     @Override

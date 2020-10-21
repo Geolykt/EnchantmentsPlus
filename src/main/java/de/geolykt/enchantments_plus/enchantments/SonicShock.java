@@ -17,16 +17,14 @@ public class SonicShock extends CustomEnchantment {
     @Override
     public Builder<SonicShock> defaults() {
         return new Builder<>(SonicShock::new, ID)
-            .maxLevel(3)
-            .loreName("Sonic Shock")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.WINGS})
-            .conflicting()
-            .description("Damages mobs when flying past at high speed")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.SONIC_SHOCK);
+            .all(BaseEnchantments.SONIC_SHOCK,
+                    0,
+                    "Damages mobs when flying past at high speed",
+                    new Tool[]{Tool.WINGS},
+                    "Sonic Shock",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

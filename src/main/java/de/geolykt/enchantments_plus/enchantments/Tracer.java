@@ -23,16 +23,14 @@ public class Tracer extends CustomEnchantment {
     @Override
     public Builder<Tracer> defaults() {
         return new Builder<>(Tracer::new, ID)
-            .maxLevel(4)
-            .loreName("Tracer")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Guides the arrow to targets and then attacks")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.TRACER);
+            .all(BaseEnchantments.TRACER,
+                    0,
+                    "Guides the arrow to targets and then attacks",
+                    new Tool[]{Tool.BOW},
+                    "Tracer",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

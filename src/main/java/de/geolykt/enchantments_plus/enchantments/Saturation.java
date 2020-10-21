@@ -16,16 +16,14 @@ public class Saturation extends CustomEnchantment {
     @Override
     public Builder<Saturation> defaults() {
         return new Builder<>(Saturation::new, ID)
-            .maxLevel(3)
-            .loreName("Saturation")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.LEGGINGS})
-            .conflicting()
-            .description("Uses less of the player's hunger")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.SATURATION);
+            .all(BaseEnchantments.SATURATION,
+                    0,
+                    "Uses less of the player's hunger",
+                    new Tool[]{Tool.LEGGINGS},
+                    "Saturation",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.NONE);
     }
 
     @Override

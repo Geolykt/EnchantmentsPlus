@@ -18,16 +18,14 @@ public class QuickShot extends CustomEnchantment {
     @Override
     public Builder<QuickShot> defaults() {
         return new Builder<>(QuickShot::new, ID)
-            .maxLevel(1)
-            .loreName("Quick Shot")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Shoots arrows at full speed, instantly")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.QUICK_SHOT);
+            .all(BaseEnchantments.QUICK_SHOT,
+                    0,
+                    "Shoots arrows at full speed, instantly",
+                    new Tool[]{Tool.BOW},
+                    "Quick Shot",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

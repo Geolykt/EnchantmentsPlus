@@ -29,16 +29,14 @@ public class Singularity extends CustomEnchantment {
     @Override
     public Builder<Singularity> defaults() {
         return new Builder<>(Singularity::new, ID)
-            .maxLevel(1)
-            .loreName("Singularity")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Creates a black hole that attracts nearby entities and then discharges them")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.SINGULARITY);
+            .all(BaseEnchantments.SINGULARITY,
+                    0,
+                    "Creates a black hole that attracts nearby entities and then discharges them",
+                    new Tool[]{Tool.BOW},
+                    "Singularity",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

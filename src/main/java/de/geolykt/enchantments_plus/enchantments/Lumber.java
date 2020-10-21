@@ -23,16 +23,14 @@ public class Lumber extends CustomEnchantment {
     @Override
     public Builder<Lumber> defaults() {
         return new Builder<>(Lumber::new, ID)
-            .maxLevel(1)
-            .loreName("Lumber")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.AXE})
-            .conflicting()
-            .description("Breaks the entire tree at once")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.LUMBER);
+            .all(BaseEnchantments.LUMBER,
+                    0,
+                    "Breaks the entire tree at once",
+                    new Tool[]{Tool.AXE},
+                    "Lumber",
+                    1, // MAX LVL
+                    1.0,
+                    Hand.LEFT);
     }
 
     @Override

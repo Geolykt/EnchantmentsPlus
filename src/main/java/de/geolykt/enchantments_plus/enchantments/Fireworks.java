@@ -18,16 +18,14 @@ public class Fireworks extends CustomEnchantment {
     @Override
     public Builder<Fireworks> defaults() {
         return new Builder<>(Fireworks::new, ID)
-            .maxLevel(4)
-            .loreName("Fireworks")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOW})
-            .conflicting()
-            .description("Shoots arrows that burst into fireworks upon impact")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.RIGHT)
-            .base(BaseEnchantments.FIREWORKS);
+            .all(BaseEnchantments.FIREWORKS,
+                    0,
+                    "Shoots arrows that burst into fireworks upon impact",
+                    new Tool[]{Tool.BOW},
+                    "Fireworks",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.RIGHT);
     }
 
     @Override

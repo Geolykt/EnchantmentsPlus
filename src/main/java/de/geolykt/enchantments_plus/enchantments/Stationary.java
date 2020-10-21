@@ -21,16 +21,14 @@ public class Stationary extends CustomEnchantment {
     @Override
     public Builder<Stationary> defaults() {
         return new Builder<>(Stationary::new, ID)
-                .maxLevel(1)
-                .loreName("Stationary")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD})
-                .conflicting()
-                .description("Negates any knockback when attacking mobs, leaving them clueless as to who is attacking")
-                .cooldown(0)
-                .power(-1.0)
-                .handUse(Hand.BOTH)
-                .base(BaseEnchantments.STATIONARY);
+                .all(BaseEnchantments.STATIONARY,
+                        0,
+                        "Negates any knockback when attacking mobs, leaving them clueless as to who is attacking",
+                        new Tool[]{Tool.BOW, Tool.SWORD},
+                        "Stationary",
+                        1, // MAX LVL
+                        1.0,
+                        Hand.BOTH);
     }
 
     @Override

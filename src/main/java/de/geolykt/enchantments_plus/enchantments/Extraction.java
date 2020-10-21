@@ -23,16 +23,15 @@ public class Extraction extends CustomEnchantment {
     @Override
     public Builder<Extraction> defaults() {
         return new Builder<>(Extraction::new, ID)
-            .maxLevel(3)
-            .loreName("Extraction")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.PICKAXE})
-            .conflicting(Switch.class)
-            .description("Smelts and yields more product from ores")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.LEFT)
-            .base(BaseEnchantments.EXTRACTION);
+            .all(BaseEnchantments.EXTRACTION,
+                0,
+                "Smelts and yields more product from ores",
+                new Tool[]{Tool.PICKAXE},
+                "Extraction",
+                3, // MAX LVL
+                1.0,
+                Hand.LEFT,
+                Switch.class);
     }
 
     @Override

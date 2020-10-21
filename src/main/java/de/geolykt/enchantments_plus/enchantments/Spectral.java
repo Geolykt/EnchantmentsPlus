@@ -29,6 +29,7 @@ public class Spectral extends CustomEnchantment {
 
     /**
      * A hard maximum on the amount of blocks that can be changed while shift + right-clicking.
+     * @since 1.0
      */
     private static final int MAX_BLOCKS = 1024;
 
@@ -56,16 +57,14 @@ public class Spectral extends CustomEnchantment {
     @Override
     public Builder<Spectral> defaults() {
         return new Builder<>(Spectral::new, ID)
-                .maxLevel(3)
-                .loreName("Spectral")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.SHOVEL})
-                .conflicting()
-                .description("Allows for cycling through a block's types")
-                .cooldown(0)
-                .power(1)
-                .handUse(Hand.RIGHT)
-                .base(BaseEnchantments.SPECTRAL);
+                .all(BaseEnchantments.SPECTRAL,
+                        0,
+                        "Allows for cycling through a block's types",
+                        new Tool[]{Tool.SHOVEL},
+                        "Spectral",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.RIGHT);
     }
 
     /**

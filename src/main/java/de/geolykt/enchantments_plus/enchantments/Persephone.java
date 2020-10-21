@@ -23,16 +23,14 @@ public class Persephone extends CustomEnchantment {
     @Override
     public Builder<Persephone> defaults() {
         return new Builder<>(Persephone::new, ID)
-                .maxLevel(3)
-                .loreName("Persephone")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.HOE})
-                .conflicting()
-                .description("Plants seeds from the player's inventory around them")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.RIGHT)
-                .base(BaseEnchantments.PERSEPHONE);
+                .all(BaseEnchantments.PERSEPHONE,
+                        0,
+                        "Plants seeds from the player's inventory around them",
+                        new Tool[]{Tool.HOE},
+                        "Persephone",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.RIGHT);
     }
 
     @Override

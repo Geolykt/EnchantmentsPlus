@@ -17,16 +17,15 @@ public class Jump extends CustomEnchantment {
     @Override
     public Builder<Jump> defaults() {
         return new Builder<>(Jump::new, ID)
-            .maxLevel(4)
-            .loreName("Jump")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.BOOTS})
-            .conflicting()
-            .description("Gives the player a jump boost")
-            .cooldown(0)
-            .power(1.0)
-            .handUse(Hand.NONE)
-            .base(BaseEnchantments.JUMP);
+            .all(BaseEnchantments.JUMP,
+                    0,
+                    "Gives the player a jump boost",
+                    new Tool[]{Tool.BOOTS},
+                    "Jump",
+                    4, // MAX LVL
+                    1.0,
+                    Hand.NONE,
+                    Meador.class);
     }
 
     @Override

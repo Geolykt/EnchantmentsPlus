@@ -21,16 +21,14 @@ public class Level extends CustomEnchantment {
     @Override
     public Builder<Level> defaults() {
         return new Builder<>(Level::new, ID)
-                .maxLevel(3)
-                .loreName("Level")
-                .probability(0)
-                .enchantable(new Tool[]{Tool.BOW, Tool.SWORD, Tool.BOW})
-                .conflicting()
-                .description("Drops more XP when killing mobs or mining ores")
-                .cooldown(0)
-                .power(1.0)
-                .handUse(Hand.BOTH)
-                .base(BaseEnchantments.LEVEL);
+                .all(BaseEnchantments.LEVEL,
+                        0,
+                        "Drops more XP when killing mobs or mining ores",
+                        new Tool[]{Tool.BOW, Tool.SWORD},
+                        "Level",
+                        3, // MAX LVL
+                        1.0,
+                        Hand.BOTH);
     }
 
     @Override

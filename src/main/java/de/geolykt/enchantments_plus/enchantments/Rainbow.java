@@ -25,16 +25,14 @@ public class Rainbow extends CustomEnchantment {
     @Override
     public Builder<Rainbow> defaults() {
         return new Builder<>(Rainbow::new, ID)
-            .maxLevel(1)
-            .loreName("Rainbow")
-            .probability(0)
-            .enchantable(new Tool[]{Tool.SHEARS})
-            .conflicting()
-            .description("Drops random flowers and wool colors when used")
-            .cooldown(0)
-            .power(-1.0)
-            .handUse(Hand.BOTH)
-            .base(BaseEnchantments.RAINBOW);
+            .all(BaseEnchantments.RAINBOW,
+                    0,
+                    "Drops random flowers and wool colors when used",
+                    new Tool[]{Tool.SHEARS},
+                    "Rainbow",
+                    3, // MAX LVL
+                    1.0,
+                    Hand.BOTH);
     }
 
     @Override
