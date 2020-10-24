@@ -37,7 +37,7 @@ public class NewAnvilMerger implements Listener {
      * @since 2.1.5
      */
     public static Integer enchantmentLevelRemappingFunction(CustomEnchantment ench, Integer inputA, Integer inputB) {
-        if (inputA != 0 && inputA == inputB) {
+        if (inputA != 0 && inputB != 0 && inputA == inputB) {
             return Math.min(inputA + 1, ench.getMaxLevel());
         } else {
             return Math.min(Math.max(inputA, inputB), ench.getMaxLevel());
@@ -92,12 +92,12 @@ public class NewAnvilMerger implements Listener {
     @EventHandler
     public void prepareEvent(PrepareAnvilEvent evt) {
         AnvilInventory inv = evt.getInventory();
-        if (inv.getSize() < 3 || evt.getViewers().size() == 0)
+        if (inv.getSize() < 3 || evt.getViewers().size() == 0 || inv.getItem(0) == null)
             return;
         List<String> nleftLore = new ArrayList<String>();
         if (evt.getResult() == null) {
             // Best guess merge
-            ItemStack stackA = inv.getItem(0);
+            ItemStack stackA = inv.getItem(0).clone();
             ItemStack stackB = inv.getItem(1);
             if (stackA != null
                     && stackB != null
@@ -126,7 +126,7 @@ public class NewAnvilMerger implements Listener {
                 }
             }
         } else {
-            final ItemStack result = evt.getResult();
+            final ItemStack result = evt.getResult().clone();
             World world = evt.getViewers().get(0).getWorld();
             Map<CustomEnchantment, Integer> out = mergeEnchantments(
                     CustomEnchantment.getEnchants(inv.getItem(0), true, world, nleftLore),
