@@ -6,7 +6,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -14,6 +13,7 @@ import de.geolykt.enchantments_plus.util.Tool;
 import static org.bukkit.Material.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Arborist extends CustomEnchantment {
 
@@ -40,7 +40,7 @@ public class Arborist extends CustomEnchantment {
                 drops.addAll(blk.getDrops());
             }
             if (doGoldenAppleDrop && 
-                    (Storage.rnd.nextInt(10000) <= (15 * (level+1) * power))) {
+                    (ThreadLocalRandom.current().nextInt(10000) <= (15 * (level+1) * power))) {
                 drops.add(new ItemStack(GOLDEN_APPLE, 1));
             }
             boolean bol = false;

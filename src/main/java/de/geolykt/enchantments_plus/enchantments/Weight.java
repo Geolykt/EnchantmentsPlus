@@ -78,7 +78,6 @@ public class Weight extends CustomEnchantment {
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
-        player.setWalkSpeed((float) (.164f - level * power * .014f));
         if (player.hasPotionEffect(PotionEffectType.SLOW)) {
             return false;
         } else {

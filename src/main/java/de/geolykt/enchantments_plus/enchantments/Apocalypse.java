@@ -23,7 +23,7 @@ public class Apocalypse extends CustomEnchantment {
             .all(BaseEnchantments.APOCALYPSE, // BASE
                 "Unleashes hell", // DESCRIPTION
                 new Tool[]{Tool.BOW}, // APPLICABLE TOOLS
-                "Anthropomorphism", // NAME
+                "Apocalypse", // NAME
                 1, // MAX LEVEL
                 Hand.RIGHT // APPLICABLE HANDS
                 ); // CONFLICTS

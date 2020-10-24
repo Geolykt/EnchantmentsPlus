@@ -21,6 +21,7 @@ import de.geolykt.enchantments_plus.util.Utilities;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.*;
@@ -196,7 +197,7 @@ public class Anthropomorphism extends CustomEnchantment {
                     CompatibilityAdapter.damageTool(player, 2, usedHand);
                     Location loc = player.getLocation();
                     FallingBlock blockEntity
-                            = loc.getWorld().spawnFallingBlock(loc, Bukkit.createBlockData(MAT[Storage.rnd.nextInt(4)]));
+                            = loc.getWorld().spawnFallingBlock(loc, Bukkit.createBlockData(MAT[ThreadLocalRandom.current().nextInt(4)]));
                     blockEntity.setDropItem(false);
                     blockEntity.setGravity(false);
                     blockEntity
@@ -224,7 +225,7 @@ public class Anthropomorphism extends CustomEnchantment {
                 }
             }
             // This is done because of concurrency issues
-            toRemove.forEach((FallingBlock blk) -> {idleBlocks.remove(blk);});
+            toRemove.forEach(idleBlocks::remove);
         }
         return false;
     }
