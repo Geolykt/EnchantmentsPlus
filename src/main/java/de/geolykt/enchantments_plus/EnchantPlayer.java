@@ -11,7 +11,9 @@ import java.util.UUID;
 //      and for adding cooldowns for different enchantments as they are used
 public class EnchantPlayer {
 
-    protected static final Map<UUID, EnchantPlayer> PLAYERS = new HashMap<>();   // Collection of all players on the server
+    // FIXME this class is a memory leak in itself
+
+    private static final Map<UUID, EnchantPlayer> PLAYERS = new HashMap<>();   // Collection of all players on the server
 
     private final Player                player;            // Reference to the actual player object
     private final Map<Integer, Integer> enchantCooldown;   // Enchantment names mapped to their remaining cooldown
@@ -31,6 +33,7 @@ public class EnchantPlayer {
     }
 
     // Returns true if the given enchantment name is disabled for the player, otherwise false
+    @Deprecated
     public boolean isDisabled(int enchantmentID) {
         if (player.hasMetadata("ze." + enchantmentID)) {
             return player.getMetadata("ze." + enchantmentID).get(0).asBoolean();
@@ -51,16 +54,19 @@ public class EnchantPlayer {
     }
 
     // Disables the given enchantment for the player
+    @Deprecated
     public void disable(int enchantmentID) {
         player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.plugin, true));
     }
 
     // Enables the given enchantment for the player
+    @Deprecated
     public void enable(int enchantmentID) {
         player.setMetadata("ze." + enchantmentID, new FixedMetadataValue(Storage.plugin, false));
     }
 
     // Disables all enchantments for the player
+    @Deprecated
     public void disableAll() {
         for (CustomEnchantment enchant : Config.get(player.getWorld()).getEnchants()) {
             player.setMetadata("ze." + enchant.getId(), new FixedMetadataValue(Storage.plugin, true));
@@ -68,6 +74,7 @@ public class EnchantPlayer {
     }
 
     // Enables all enchantments for the player
+    @Deprecated
     public void enableAll() {
         for (CustomEnchantment enchant : Config.get(player.getWorld()).getEnchants()) {
             player.setMetadata("ze." + enchant.getId(), new FixedMetadataValue(Storage.plugin, false));
@@ -76,7 +83,12 @@ public class EnchantPlayer {
 
     // Returns the EnchantPlayer object associated with the given Player
     public static EnchantPlayer matchPlayer(Player player) {
-        return PLAYERS.getOrDefault(player.getUniqueId(), new EnchantPlayer(player));
+        EnchantPlayer enchPlayer = PLAYERS.get(player.getUniqueId());
+        if (enchPlayer == null) {
+            return new EnchantPlayer(player);
+        } else {
+            return enchPlayer;
+        }
     }
 
 }

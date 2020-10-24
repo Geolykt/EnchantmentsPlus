@@ -16,6 +16,7 @@ import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.*;
 
@@ -44,7 +45,7 @@ public class GreenThumb extends CustomEnchantment {
                 for (int z = -(radius); z <= radius; z++) {
                     Block relativeBlock = centerBlock.getRelative(x, y, z);
                     if (relativeBlock.getLocation().distance(loc) < radius) {
-                        if (level != 10 && Storage.rnd.nextInt((int) (300 / (power * level / 2))) != 0) {
+                        if (level != 10 && ThreadLocalRandom.current().nextInt((int) (300 / (power * level / 2))) != 0) {
                             continue;
                         }
                         boolean applied = false;
@@ -76,7 +77,7 @@ public class GreenThumb extends CustomEnchantment {
                         if (applied) { // Display particles and damage armor
                             CompatibilityAdapter.display(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
                                 Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
-                            int chc = Storage.rnd.nextInt(50);
+                            int chc = ThreadLocalRandom.current().nextInt(50);
                             if (chc > 42 && level != 10) {
                                 ItemStack[] s = player.getInventory().getArmorContents();
                                 for (int i = 0; i < 4; i++) {
