@@ -556,7 +556,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
          * @param conflicts The Conflicting enchantments
          * @return The builder instance
          * @since 2.1.3
-         * //@deprecated Since 2.1.5 as it's not used internally anymore
+         * @deprecated Since 2.1.5 as it's not used internally anymore
          */
         @SafeVarargs
         public final Builder<T> all(BaseEnchantments base,

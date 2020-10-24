@@ -39,6 +39,7 @@ getterAllow:
   - "BOW"
   - "ELYTRA"
   - "FLINT_AND_STEEL"
+  - "BOOK"
 denyPartial: true # whether even partial matches shall be denied (dangerous for some things, such as GRASS (You could also mean GRASS_PATH and GRASS_BLOCK)!), requires longer startup times, but sleaker configuration.
 isAllowlist: true # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found

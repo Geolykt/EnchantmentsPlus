@@ -17,8 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.enchantments.*;
-import de.geolykt.enchantments_plus.evt.AnvilMerge;
 import de.geolykt.enchantments_plus.evt.GrindstoneMerge;
+import de.geolykt.enchantments_plus.evt.NewAnvilMerger;
 import de.geolykt.enchantments_plus.evt.Watcher;
 import de.geolykt.enchantments_plus.evt.WatcherArrow;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
@@ -150,12 +150,11 @@ public class Enchantments_plus extends JavaPlugin {
         Storage.version = this.getDescription().getVersion();
         loadConfigs();
         getCommand("ench").setTabCompleter(new CommandProcessor.TabCompletion());
-        getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
+        getServer().getPluginManager().registerEvents(new NewAnvilMerger(), this);
         getServer().getPluginManager().registerEvents(new GrindstoneMerge(), this);
         getServer().getPluginManager().registerEvents(new WatcherArrow(), this);
         getServer().getPluginManager().registerEvents(WatcherEnchant.instance(), this);
         getServer().getPluginManager().registerEvents(new Watcher(), this);
-
 
         int[][] ALL_SEARCH_FACES = new int[27][3];
         int i = 0;

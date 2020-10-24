@@ -422,7 +422,7 @@ public class CompatibilityAdapter {
 
     /**
      * Sets the amount of Damage that a given ItemStack has (which is the inverse of the remaining durability). <br>
-     * Does not perform anything if the ItemMeta is not a {@link org.bukkit.inventory.meta.Damageable} instance. <br>
+     * If the ItemMeta of the ItemStack is not a {@link org.bukkit.inventory.meta.Damageable} instance then 0 will be returned. <br>
      * Does not check whether the itemstack has the unbreakable flag set, caution is advised.
      * @param is The target itemstack
      * @param damage The value that the damage should now have

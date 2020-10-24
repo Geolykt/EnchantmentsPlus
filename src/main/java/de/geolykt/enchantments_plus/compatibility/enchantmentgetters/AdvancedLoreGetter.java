@@ -44,11 +44,9 @@ public class AdvancedLoreGetter extends BasicLoreGetter {
                 if (getterAllowlist.contains(stk.getType())) {
                     return new LinkedHashMap<>();
                 }
-            } else {
+            } else if (!getterAllowlist.contains(stk.getType())) {
                 // if item is in the denylist, then return nothing
-                if (!getterAllowlist.contains(stk.getType())) {
-                    return new LinkedHashMap<>();
-                }
+                return new LinkedHashMap<>();
             }
             return super.getEnchants(stk, acceptBooks, world, outExtraLore);
         } else {

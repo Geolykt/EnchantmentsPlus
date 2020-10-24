@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -20,7 +21,7 @@ public interface IEnchGatherer {
      * @return A map of the Enchantments mapped to their level
      * @since 2.0.0
      */
-    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world, final List<String> outExtraLore) {
+    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, World world, final List<String> outExtraLore) {
         return getEnchants(stk, false, world, outExtraLore);
     }
 
@@ -32,7 +33,7 @@ public interface IEnchGatherer {
      * @return A map of the Enchantments mapped to their level
      * @since 2.0.0
      */
-    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world) {
+    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, boolean acceptBooks, World world) {
         return getEnchants(stk, acceptBooks, world, null);
     }
 
@@ -43,7 +44,7 @@ public interface IEnchGatherer {
      * @return A map of the Enchantments mapped to their level
      * @since 2.0.0
      */
-    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world) {
+    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, World world) {
         return getEnchants(stk, false, world, null);
     }
 
@@ -56,7 +57,7 @@ public interface IEnchGatherer {
      * @return Returns a mapping of custom enchantments and their level on a given tool
      * @since 2.0.0
      */
-    public abstract LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk,
+    public abstract LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk,
             boolean acceptBooks,
             World world,
             final List<String> outExtraLore);
@@ -69,7 +70,7 @@ public interface IEnchGatherer {
      * @param world The World where the Itemstack is located. Used for Configurations and similar
      * @since 2.0.0
      */
-    public abstract void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world);
+    public abstract void setEnchantment(@Nullable ItemStack stk, CustomEnchantment ench, int level, World world);
 
     /**
      * Checks whether an Item has a given Enchantment. This should be used instead of a normal map.contains() as it can be

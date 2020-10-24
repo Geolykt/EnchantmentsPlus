@@ -22,9 +22,14 @@ import java.util.Map.Entry;
 import static org.bukkit.Material.ENCHANTED_BOOK;
 import static org.bukkit.event.EventPriority.MONITOR;
 
-// This class manages the combination of enchantments in an anvil. It takes into account conflicting enchantments, 
-//      the max number of enchantments per tool, and the enchantment's max level. It shuffles the results every time
-//      so that the player can find the combination they desire when there are conflicting or too many enchantment
+/**
+ * This class manages the combination of enchantments in an anvil. It takes into account conflicting enchantments, 
+ *  the max number of enchantments per tool, and the enchantment's max level. It shuffles the results every time
+ *  so that the player can find the combination they desire when there are conflicting or too many enchantment
+ * @deprecated The second generation of the class is now used and this generation will be removed in the v3.0.0 refractor.
+ * @since 1.0.0
+ */
+@Deprecated
 public class AnvilMerge implements Listener {
 
     /**
