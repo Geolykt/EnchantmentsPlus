@@ -1,7 +1,6 @@
 package de.geolykt.enchantments_plus.evt;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,14 +57,12 @@ public class NewAnvilMerger implements Listener {
      * @since 2.1.5
      */
     public static Map<CustomEnchantment, Integer> mergeEnchantments(Map<CustomEnchantment, Integer> inA, Map<CustomEnchantment, Integer> inB) {
-        // TODO revisit this code in the v3.0.0 refractor (great things can be changed)
+        // TODO revisit this code in the v3.0.0 refractor (great things can be changed when we use Enums instead of CE instances)
         LinkedHashMap<CustomEnchantment, Integer> out = new LinkedHashMap<>();
         out.putAll(inA);
 
         // pretty sure I'm overcomplicating things again
-        List<CustomEnchantment> primaryIndexes = new ArrayList<>(out.keySet());
-        Collections.shuffle(primaryIndexes);
-        primaryIndexes.forEach((ench) -> {
+        out.keySet().forEach((ench) -> {
             inB.keySet().removeIf((newEnch) -> {
                 for (Class<? extends CustomEnchantment> conflict : ench.getConflicting()) {
                     if (newEnch.getClass().equals(conflict)) {
@@ -76,8 +73,6 @@ public class NewAnvilMerger implements Listener {
             });
         });
         inB.forEach((ench, newLevel) -> out.merge(ench, newLevel, (oench, olevel) -> enchantmentLevelRemappingFunction(ench, olevel, newLevel)));
-//        inB.forEach((ench, newLevel) -> out.compute(ench, (oldEnch, oldLevel) -> enchantmentLevelRemappingFunction(ench, oldLevel, newLevel)));
-//        inB.forEach((ench, level) -> out.put(ench, level == out.get(ench) ? level + 1 : Math.max(level, out.get(ench))));
         return out;
     }
 
