@@ -479,6 +479,12 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return customEnchantment.getDescription();
         }
 
+        /**
+         * The inserted cooldown is in ticks
+         * @param cooldown The amount of cooldown to use
+         * @return The current build instance
+         * @since 1.0.0
+         */
         public Builder<T> cooldown(int cooldown) {
             customEnchantment.setCooldown(cooldown);
             return this;

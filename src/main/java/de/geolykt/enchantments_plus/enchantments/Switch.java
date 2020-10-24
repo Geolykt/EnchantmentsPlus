@@ -16,8 +16,6 @@ import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import static org.bukkit.Material.*;
-
 public class Switch extends CustomEnchantment {
 
     public static final int ID = 60;
@@ -31,7 +29,8 @@ public class Switch extends CustomEnchantment {
                         "Switch",
                         1,
                         Hand.RIGHT,
-                        Shred.class, Anthropomorphism.class, Fire.class, Extraction.class, Pierce.class, Reveal.class);
+                        Shred.class, Anthropomorphism.class, Fire.class, Extraction.class, Pierce.class, Reveal.class)
+                .cooldown(2);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class Switch extends CustomEnchantment {
             for (int i = 0; i < 9; i++) { // Find a suitable block in hotbar
                 switchItem = player.getInventory().getItem(i);
                 if (switchItem != null
-                        && switchItem.getType() != AIR
+                        && switchItem.getType() != Material.AIR
                         && switchItem.getType().isSolid()
                         && !Storage.COMPATIBILITY_ADAPTER.unbreakableBlocks().contains(switchItem.getType())
                         && !switchItem.getType().isInteractable()) {
