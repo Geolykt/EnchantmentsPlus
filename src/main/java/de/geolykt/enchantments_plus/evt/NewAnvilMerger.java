@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 
 /**
  * The second generation of the Anvil merger, the class that handles merging of enchantments on two Items within the Anvil.
@@ -109,9 +110,19 @@ public class NewAnvilMerger implements Listener {
                         CustomEnchantment.getEnchants(stackA, true, world, nleftLore),
                         CustomEnchantment.getEnchants(stackB, true, world));
                 if (out.size() > 0) {
-                    out.forEach((ench, level) -> CustomEnchantment.setEnchantment(stackA, ench, level, world));
-                    inv.setRepairCost(out.size()*7+inv.getRepairCost());
-                    evt.setResult(stackA);
+                    boolean unrepairable = false;
+                    for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
+                        if (ench.getKey().asEnum() == BaseEnchantments.UNREPAIRABLE && ench.getValue() != 0) {
+                            unrepairable = true;
+                        }
+                    }
+                    if (unrepairable) {
+                        evt.setResult(null);
+                    } else {
+                        out.forEach((ench, level) -> CustomEnchantment.setEnchantment(stackA, ench, level, world));
+                        inv.setRepairCost(out.size()*7+inv.getRepairCost());
+                        evt.setResult(stackA);
+                    }
                 }
             }
         } else {
@@ -120,9 +131,21 @@ public class NewAnvilMerger implements Listener {
             Map<CustomEnchantment, Integer> out = mergeEnchantments(
                     CustomEnchantment.getEnchants(inv.getItem(0), true, world, nleftLore),
                     CustomEnchantment.getEnchants(inv.getItem(1), true, world));
-            out.forEach((ench, level) -> CustomEnchantment.setEnchantment(result, ench, level, world));
-            inv.setRepairCost(out.size()*7+inv.getRepairCost());
-            evt.setResult(result);
+            if (out.size() > 0) {
+                boolean unrepairable = false;
+                for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
+                    if (ench.getKey().asEnum() == BaseEnchantments.UNREPAIRABLE && ench.getValue() != 0) {
+                        unrepairable = true;
+                    }
+                }
+                if (unrepairable) {
+                    evt.setResult(null);
+                } else {
+                    out.forEach((ench, level) -> CustomEnchantment.setEnchantment(result, ench, level, world));
+                    inv.setRepairCost(out.size()*7+inv.getRepairCost());
+                    evt.setResult(result);
+                }
+            }
         }
     }
 }
