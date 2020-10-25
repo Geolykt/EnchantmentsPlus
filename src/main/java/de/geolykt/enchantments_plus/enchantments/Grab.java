@@ -36,9 +36,7 @@ public class Grab extends CustomEnchantment {
         grabLocs.put(evt.getBlock().getLocation(), evt.getPlayer());
         final Location loc = evt.getBlock().getLocation();
         //ADAPTER.breakBlockNMS(evt.getBlock(), evt.getPlayer());
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-            grabLocs.remove(loc);
-        }, 3);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> grabLocs.remove(loc), 3);
         return true;
     }
 }

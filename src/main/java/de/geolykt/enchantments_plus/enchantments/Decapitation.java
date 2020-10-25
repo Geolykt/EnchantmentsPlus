@@ -9,12 +9,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import static org.bukkit.entity.EntityType.*;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Decapitation extends CustomEnchantment {
 
@@ -47,7 +48,7 @@ public class Decapitation extends CustomEnchantment {
         }
         ItemStack stk = new ItemStack(SKULLS[id], 1);
         if (id == 0) {
-            if (Storage.rnd.nextInt(Math.max((int) Math.round(BASE_PLAYER_DROP_CHANCE / (level * power)), 1)) == 0) {
+            if (ThreadLocalRandom.current().nextInt(Math.max((int) Math.round(BASE_PLAYER_DROP_CHANCE / (level * power)), 1)) == 0) {
 
                 SkullMeta meta = (SkullMeta) stk.getItemMeta();
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer(evt.getEntity().getUniqueId()));
@@ -55,7 +56,7 @@ public class Decapitation extends CustomEnchantment {
                 evt.getEntity().getWorld().dropItemNaturally(evt.getEntity().getLocation(), stk);
                 return true;
             }
-        } else if (Storage.rnd.nextInt(Math.max((int) Math.round(BASE_MOB_DROP_CHANCE / (level * power)), 1)) == 0) {
+        } else if (ThreadLocalRandom.current().nextInt(Math.max((int) Math.round(BASE_MOB_DROP_CHANCE / (level * power)), 1)) == 0) {
             evt.getEntity().getWorld().dropItemNaturally(evt.getEntity().getLocation(), stk);
             return true;
         }

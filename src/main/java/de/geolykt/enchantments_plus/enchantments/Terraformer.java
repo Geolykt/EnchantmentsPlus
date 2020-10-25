@@ -16,6 +16,7 @@ import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
 import java.util.HashSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Terraformer extends CustomEnchantment {
 
@@ -60,7 +61,7 @@ public class Terraformer extends CustomEnchantment {
                         if (Utilities.hasItem(evt.getPlayer(), mat, 1)) {
                             if (Storage.COMPATIBILITY_ADAPTER.placeBlock(b, evt.getPlayer(), mat, null)) {
                                 Utilities.removeItem(evt.getPlayer(), mat, 1);
-                                if (Storage.rnd.nextInt(10) == 5) {
+                                if (ThreadLocalRandom.current().nextInt(10) == 5) {
                                     CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 }
                             }

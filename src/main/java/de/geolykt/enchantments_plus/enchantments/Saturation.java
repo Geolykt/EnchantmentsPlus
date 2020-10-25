@@ -1,10 +1,11 @@
 package de.geolykt.enchantments_plus.enchantments;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -27,7 +28,7 @@ public class Saturation extends CustomEnchantment {
     @Override
     public boolean onHungerChange(FoodLevelChangeEvent evt, int level, boolean usedHand) {
         if (evt.getFoodLevel() < ((Player) evt.getEntity()).getFoodLevel() &&
-            Storage.rnd.nextInt(10) > 10 - 2 * level * power) {
+            ThreadLocalRandom.current().nextInt(10) > 10 - 2 * level * power) {
             evt.setCancelled(true);
         }
         return true;

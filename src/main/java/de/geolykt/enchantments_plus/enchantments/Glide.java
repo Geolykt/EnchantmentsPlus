@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
@@ -15,6 +14,7 @@ import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.AIR;
 
@@ -65,7 +65,7 @@ public class Glide extends CustomEnchantment {
             l.setY(l.getY() - 3);
             CompatibilityAdapter.display(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
         }
-        if (Storage.rnd.nextInt(5 * level) == 5) { // Slowly damage all armor
+        if (ThreadLocalRandom.current().nextInt(5 * level) == 5) { // Slowly damage all armor
             ItemStack[] s = player.getInventory().getArmorContents();
             for (int i = 0; i < 4; i++) {
                 if (s[i] != null) {

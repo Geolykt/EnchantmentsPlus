@@ -191,6 +191,8 @@ public class Spectral extends CustomEnchantment {
 
         }
 
+        // TODO probably could be simplified even further
+        // Optimizations would be like first checking the Openable, Powerable etc. instances, then the Door and Gate instances.
         if (blockData instanceof Gate) {
             Gate newBlockData = (Gate) block.getBlockData();
             newBlockData.setInWall(((Gate) blockData).isInWall());

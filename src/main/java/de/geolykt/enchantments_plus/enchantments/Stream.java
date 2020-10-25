@@ -16,6 +16,8 @@ import de.geolykt.enchantments_plus.util.Tool;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Stream extends CustomEnchantment {
 
     private static final Particle[] trailTypes = {
@@ -102,11 +104,9 @@ public class Stream extends CustomEnchantment {
                     player.getWorld().spawnParticle(trailTypes[b], player.getLocation(), 3);
                     break;
                 case 3:
+                    ThreadLocalRandom rand = ThreadLocalRandom.current();
                     player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 1,
-                        new Particle.DustOptions(
-                            Color.fromRGB(Storage.rnd.nextInt(256), Storage.rnd.nextInt(256),
-                                Storage.rnd.nextInt(256)),
-                            1.0f));
+                        new Particle.DustOptions(Color.fromRGB(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)), 1.0f));
             }
             CompatibilityAdapter.display(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
             return true;

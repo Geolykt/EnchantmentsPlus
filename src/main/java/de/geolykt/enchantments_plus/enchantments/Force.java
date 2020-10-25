@@ -19,6 +19,7 @@ import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -56,7 +57,7 @@ public class Force extends CustomEnchantment {
             List<Entity> nearEnts = player.getNearbyEntities(5, 5, 5);
             if (!nearEnts.isEmpty()) {
                 if (player.getFoodLevel() >= 2) {
-                    if (Storage.rnd.nextInt(10) == 5) {
+                    if (ThreadLocalRandom.current().nextInt(10) == 5) {
                         FoodLevelChangeEvent event = new FoodLevelChangeEvent(player, 2);
                         Bukkit.getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {

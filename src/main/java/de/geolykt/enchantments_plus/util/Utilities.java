@@ -18,6 +18,7 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.GameMode.CREATIVE;
 import static org.bukkit.Material.AIR;
@@ -191,7 +192,7 @@ public class Utilities {
         int sectionsize = 32 / (maxlevel - 1);
         int position = levels / sectionsize;
         int mod = levels - position * sectionsize;
-        if (Storage.rnd.nextInt(2 * sectionsize) >= mod) {
+        if (ThreadLocalRandom.current().nextInt(2 * sectionsize) >= mod) {
             return position + 1;
         } else {
             return position + 2;

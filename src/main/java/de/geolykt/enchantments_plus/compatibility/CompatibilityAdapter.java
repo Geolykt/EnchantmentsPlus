@@ -503,6 +503,7 @@ public class CompatibilityAdapter {
      * @return true if the block placement has been successful
      * @since 1.0
      */
+    @Deprecated
     public boolean placeBlock(Block blockPlaced, Player player, ItemStack is) {
         return placeBlock(blockPlaced, player, is.getType(), (BlockData) is.getData());
     }
@@ -535,8 +536,8 @@ public class CompatibilityAdapter {
     }
 
     public boolean shearEntityNMS(Entity target, Player player, boolean mainHand) {
+        // FIXME this method desperately requires a refractor
         if ((target instanceof Sheep && !((Sheep) target).isSheared()) || target instanceof MushroomCow) {
-            @SuppressWarnings("deprecation")
             PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target);
             Bukkit.getPluginManager().callEvent(evt);
             if (!evt.isCancelled()) {

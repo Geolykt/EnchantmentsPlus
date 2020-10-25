@@ -8,7 +8,6 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.admin.SingularityArrow;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
@@ -17,6 +16,7 @@ import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.GameMode.CREATIVE;
 
@@ -54,18 +54,19 @@ public class Singularity extends CustomEnchantment {
                         continue;
                     }
                 }
+                ThreadLocalRandom rand = ThreadLocalRandom.current();
                 if (blackholes.get(l)) {
                     Vector v = l.clone().subtract(e.getLocation()).toVector();
-                    v.setX(v.getX() + (-.5f + Storage.rnd.nextFloat()) * 10); // TODO lots of math that could likely be simplified
-                    v.setY(v.getY() + (-.5f + Storage.rnd.nextFloat()) * 10);
-                    v.setZ(v.getZ() + (-.5f + Storage.rnd.nextFloat()) * 10);
+                    v.setX(v.getX() + (-.5f + rand.nextFloat()) * 10); // TODO lots of math that could likely be simplified
+                    v.setY(v.getY() + (-.5f + rand.nextFloat()) * 10);
+                    v.setZ(v.getZ() + (-.5f + rand.nextFloat()) * 10);
                     e.setVelocity(v.multiply(.35f));
                     e.setFallDistance(0);
                 } else {
                     Vector v = e.getLocation().subtract(l.clone()).toVector();
-                    v.setX(v.getX() + (-.5f + Storage.rnd.nextFloat()) * 2);
-                    v.setY(v.getY() + Storage.rnd.nextFloat());
-                    v.setZ(v.getZ() + (-.5f + Storage.rnd.nextFloat()) * 2);
+                    v.setX(v.getX() + (-.5f + rand.nextFloat()) * 2);
+                    v.setY(v.getY() + rand.nextFloat());
+                    v.setZ(v.getZ() + (-.5f + rand.nextFloat()) * 2);
                     e.setVelocity(v.multiply(.35f));
                 }
             }

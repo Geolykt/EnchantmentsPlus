@@ -6,13 +6,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import static org.bukkit.Material.*;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Variety extends CustomEnchantment {
 
@@ -37,13 +38,13 @@ public class Variety extends CustomEnchantment {
             evt.getBlock().setType(AIR);
             evt.getBlock().getWorld()
                .dropItemNaturally(evt.getBlock().getLocation(),
-                   new ItemStack(Tag.LOGS.getValues().toArray(new Material[0])[Storage.rnd.nextInt(Tag.LOGS.getValues().size())]));
+                   new ItemStack(Tag.LOGS.getValues().toArray(new Material[0])[ThreadLocalRandom.current().nextInt(Tag.LOGS.getValues().size())]));
             CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
         } else if (Tag.LEAVES.isTagged(mat)) {
             evt.getBlock().setType(AIR);
             evt.getBlock().getWorld()
                .dropItemNaturally(evt.getBlock().getLocation(),
-                   new ItemStack(Tag.LEAVES.getValues().toArray(new Material[0])[Storage.rnd.nextInt(Tag.LEAVES.getValues().size())]));
+                   new ItemStack(Tag.LEAVES.getValues().toArray(new Material[0])[ThreadLocalRandom.current().nextInt(Tag.LEAVES.getValues().size())]));
             CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
         }
         return true;

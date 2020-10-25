@@ -18,6 +18,8 @@ import de.geolykt.enchantments_plus.util.Tool;
 
 import static org.bukkit.Material.AIR;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Transformation extends CustomEnchantment {
 
     public static final int ID = 64;
@@ -41,9 +43,9 @@ public class Transformation extends CustomEnchantment {
         }
         if (evt.getEntity() instanceof LivingEntity
                 && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
-            if (Storage.rnd.nextInt(100) > (100 - (level * power * 8))) {
+            if (ThreadLocalRandom.current().nextInt(100) > (100 - (level * power * 8))) {
                 LivingEntity newEnt = Storage.COMPATIBILITY_ADAPTER.transformationCycle((LivingEntity) evt.getEntity(),
-                        Storage.rnd);
+                        ThreadLocalRandom.current());
 
                 if (newEnt != null) {
                     if (evt.getDamage() > ((LivingEntity) evt.getEntity()).getHealth()) {

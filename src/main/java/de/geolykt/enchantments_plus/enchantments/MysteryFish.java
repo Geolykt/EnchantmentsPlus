@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -16,6 +15,7 @@ import de.geolykt.enchantments_plus.util.Tool;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MysteryFish extends CustomEnchantment {
 
@@ -36,10 +36,10 @@ public class MysteryFish extends CustomEnchantment {
 
     @Override
     public boolean onPlayerFish(final PlayerFishEvent evt, int level, boolean usedHand) {
-        if (Storage.rnd.nextInt((int) (6-power)) < level) {
+        if (ThreadLocalRandom.current().nextInt((int) (6-power)) < level) {
             if (evt.getCaught() != null) {
                 Location location = evt.getCaught().getLocation();
-                switch (Storage.rnd.nextInt(7)) {
+                switch (ThreadLocalRandom.current().nextInt(7)) {
                 case 0:
                     evt.getPlayer().getWorld().spawnEntity(location, EntityType.SQUID);
                     break;

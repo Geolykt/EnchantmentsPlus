@@ -37,6 +37,7 @@ import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
@@ -230,7 +231,7 @@ public class Watcher implements Listener {
                 }
             }
 
-            double decision = (Storage.rnd.nextFloat() * totalChance) / Math.pow(config.getEnchantRarity(), l);
+            double decision = (ThreadLocalRandom.current().nextFloat() * totalChance) / Math.pow(config.getEnchantRarity(), l);
             float running = 0;
             for (CustomEnchantment ench : validPool) {
                 running += ench.getProbability();

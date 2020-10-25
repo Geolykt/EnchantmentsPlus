@@ -18,6 +18,7 @@ import de.geolykt.enchantments_plus.util.Utilities;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RainbowSlam extends CustomEnchantment {
@@ -61,11 +62,9 @@ public class RainbowSlam extends CustomEnchantment {
                     loc.setX(loc.getX() + Math.sin(Math.toRadians(t)) * t / 330);
                     loc.setZ(loc.getZ() + Math.cos(Math.toRadians(t)) * t / 330);
 
+                    ThreadLocalRandom rand = ThreadLocalRandom.current();
                     ent.getWorld().spawnParticle(Particle.REDSTONE, loc, 1,
-                        new Particle.DustOptions(
-                            Color.fromRGB(Storage.rnd.nextInt(256), Storage.rnd.nextInt(256),
-                                Storage.rnd.nextInt(256)),
-                            1.0f));
+                        new Particle.DustOptions(Color.fromRGB(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)), 1.0f));
                     loc.setY(loc.getY() + 1.3);
                     ent.setVelocity(loc.toVector().subtract(ent.getLocation().toVector()));
                 }
