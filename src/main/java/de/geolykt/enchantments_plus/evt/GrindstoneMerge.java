@@ -42,13 +42,18 @@ public class GrindstoneMerge implements Listener {
     }
 
     private void removeOutputEnchants(GrindstoneInventory gi, World world) {
+        ItemStack stk;
         if (gi.getItem(2) != null && gi.getItem(2).getType() != Material.AIR) { // Get the output item
-            ItemStack stk = gi.getItem(2);
-            Map<CustomEnchantment, Integer> enchants = CustomEnchantment.getEnchants(stk, world);
-            for (CustomEnchantment ench : enchants.keySet()) {
-                CustomEnchantment.setEnchantment(stk, ench, 0, world);
-            }
-            gi.setItem(2, stk);
+            stk = gi.getItem(2);
+        } else if (gi.getItem(0) != null && gi.getItem(0).getType() != Material.AIR) {
+            stk = gi.getItem(0).clone();
+        } else {
+            return;
         }
+        Map<CustomEnchantment, Integer> enchants = CustomEnchantment.getEnchants(stk, world);
+        for (CustomEnchantment ench : enchants.keySet()) {
+            CustomEnchantment.setEnchantment(stk, ench, 0, world);
+        }
+        gi.setItem(2, stk);
     }
 }

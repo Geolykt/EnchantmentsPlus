@@ -379,12 +379,11 @@ public class Utilities {
     public static void addPotion(LivingEntity ent, PotionEffectType type, int length, int intensity) {
         for (PotionEffect eff : ent.getActivePotionEffects()) {
             if (eff.getType().equals(type)) {
-                if (eff.getAmplifier() > intensity) {
-                    return;
-                } else if (eff.getDuration() > length) {
+                if (eff.getAmplifier() > intensity || eff.getDuration() > length) {
                     return;
                 } else {
                     ent.removePotionEffect(type);
+                    break;
                 }
             }
         }
