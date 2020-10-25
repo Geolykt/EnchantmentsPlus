@@ -97,7 +97,7 @@ public class BasicLoreGetter implements IEnchGatherer {
 
     @Override
     public void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world) {
-        if (stk == null) {
+        if (stk == null || stk.getItemMeta() == null) {
             return;
         }
         ItemMeta meta = stk.getItemMeta();
