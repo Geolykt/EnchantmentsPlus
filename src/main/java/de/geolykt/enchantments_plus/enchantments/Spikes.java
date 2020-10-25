@@ -60,7 +60,7 @@ public class Spikes extends CustomEnchantment implements AreaOfEffectable {
      * Sets the multiplier used for the area of effect size calculation, the multiplier should have in most cases a linear impact,
      * however it's not guaranteed that the AOE Size is linear to the multiplier as some other effects may play a role.<br>
      * <br>
-     * Impact formula: <b>2 + AOE + level*2</b>
+     * Impact formula: <b>AOE</b>
      * @param newValue The new value of the multiplier
      * @since 2.1.6
      */

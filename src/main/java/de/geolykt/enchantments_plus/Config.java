@@ -15,6 +15,7 @@ import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentD
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
+import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import java.io.ByteArrayOutputStream;
@@ -304,8 +305,12 @@ public class Config {
                         ench.maxLevel(getMaxLevel(data));
                         ench.power(getPower(data));
                         ench.enchantable(getTools(data));
+                        final CustomEnchantment builtEnch = ench.build();
+                        if (builtEnch instanceof AreaOfEffectable) {
+                            ((AreaOfEffectable) builtEnch).setAOEMultiplier(getAOEMod(data));
+                        }
                         if (ench.probability() != -1) {
-                            enchantments.add(ench.build());
+                            enchantments.add(builtEnch);
                         }
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
@@ -361,11 +366,14 @@ public class Config {
     }
 
     /**
-     * Defaulting to 0, as stated in CustomEnchantment
+     * Defaulting to 1, as stated in CustomEnchantment
      */
     private static double getPower(LinkedHashMap<String, Object> data) {
-        Object power = data.get(ConfigKeys.POWER.toString());
-        return power == null ? 0.0 : (double) power;
+        return (double) data.getOrDefault(ConfigKeys.POWER.toString(), 1.0);
+    }
+    
+    private static double getAOEMod(LinkedHashMap<String, Object> data) {
+        return (double) data.getOrDefault(ConfigKeys.AREA_OF_EFFECT.toString(), 1.0);
     }
 
     // Returns the config object associated with the given world
@@ -470,7 +478,14 @@ enum ConfigKeys {
     COOLDOWN("Cooldown"),
     POWER("Power"),
     MAX_LEVEL("Max Level"),
-    TOOLS("Tools");
+    TOOLS("Tools"),
+    
+    /**
+     * Denotes the Area of effect of an achievement, only applicable for enchantment that implements {@link AreaOfEffectable}.
+     *  If the key does not exist, but should then a value of 1 should be implied.
+     * @since 2.1.6
+     */
+    AREA_OF_EFFECT("Effect area modifier");
 
     private String key;
 
@@ -478,6 +493,7 @@ enum ConfigKeys {
         this.key = key;
     }
 
+    @Override
     public String toString() {
         return this.key;
     }

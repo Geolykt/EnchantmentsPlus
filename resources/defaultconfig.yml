@@ -1,5 +1,5 @@
-ConfigVersion: 1.0.0
-  
+ConfigVersion: 2.1.6
+
 # Probability: (Decimal) (0 = no probability, -1 = disabled)
 #    Chance of obtaining the enchantment when enchanting
 
@@ -15,12 +15,20 @@ ConfigVersion: 1.0.0
 
 # Cooldown (Integer) (In increments of 1/20th of a second)
 #    Determines how quickly a user can repeatedly use the enchantment
-  
+
 # Power (Decimal)
 #    Determines how powerful the enchantments is
-  
+#    Defaults to 1.0 if not set
+
+# Effect area modifier (Decimal)
+#    Linear modifier that controls the AOE of an enchantment, the formula that affects the AOE is commented elsewhere. (AOE in the formula references the modifier)
+#    The AOE usually has the player or arrow at it's center where as the size of the AOE is the distance between player and border of the AOE
+#    Defaults to 1.0 if not set
+
 # NOTICE: I do not actively test whether these configurations actually do anything.
 #  report the issues if you find any
+
+# Some comments are removed due to our library that we use, to see them all use https://github.com/Geolykt/EnchantmentsPlus/blob/main/resources/defaultconfig.yml
 
 enchantments:
 # Regular Enchantments
@@ -59,6 +67,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # AOE + level
   - Bounce:
       Probability: 1.0
       Tools: Boots
@@ -115,6 +124,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # AOE + level
   - Fireworks:
       Probability: 1.0
       Tools: Bow
@@ -136,6 +146,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Fuse:
       Probability: 1.0
       Tools: Bow
@@ -150,6 +161,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Glide:
       Probability: 1.0
       Tools: Leggings
@@ -185,6 +197,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Gust:
       Probability: 1.0
       Tools: Sword
@@ -199,6 +212,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Haste:
       Probability: 1.0
       Tools: Pickaxe, Shovel, Axe
@@ -255,6 +269,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 3 + AOE + (2 * level)
   - Meador:
       Probability: 1.0
       Tools: Boots
@@ -269,6 +284,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Mystery Fish:
       Probability: 1.0
       Tools: Rod
@@ -283,6 +299,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Night Vision:
       Probability: 1.0
       Tools: Helmet
@@ -297,6 +314,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 3 + AOE + (2 * level)
   - Pierce:
       Probability: 1.0
       Tools: Pickaxe
@@ -311,6 +329,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Potion:
       Probability: 1.0
       Tools: Bow
@@ -360,6 +379,7 @@ enchantments:
       Max Level: 4
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level
   - Saturation:
       Probability: 1.0
       Tools: Leggings
@@ -381,6 +401,7 @@ enchantments:
       Max Level: 5
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 4.4 + (level * .22) + (AOE * .22)
   - Siphon:
       Probability: 1.0
       Tools: Sword, Bow
@@ -395,6 +416,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # 2 + AOE + level*2
   - Spectral:
       Probability: 1.0
       Tools: Shovel
@@ -416,6 +438,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Effect area modifier: 1.0 # AOE
   - Spread:
       Probability: 1.0
       Tools: Bow
