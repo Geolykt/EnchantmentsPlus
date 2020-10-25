@@ -14,6 +14,7 @@ import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
+import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
@@ -22,7 +23,7 @@ import java.util.Set;
 
 import static org.bukkit.Material.*;
 
-public class Shred extends CustomEnchantment {
+public class Shred extends CustomEnchantment implements AreaOfEffectable {
 
     public static final int ID = 52;
 
@@ -37,6 +38,7 @@ public class Shred extends CustomEnchantment {
                         Hand.LEFT,
                         Pierce.class, Switch.class);
     }
+    // FIXME these methods may require a recode as they are not maintainable
 
     @Override
     public boolean onBlockBreak(BlockBreakEvent evt, int level, boolean usedHand) {
@@ -46,7 +48,7 @@ public class Shred extends CustomEnchantment {
         }
         ItemStack hand = Utilities.usedStack(evt.getPlayer(), usedHand);
         blocks(evt.getBlock(), evt.getBlock(), new int[]{level + 3, level + 3, level + 3}, 0,
-                4.6 + (level * .22), new HashSet<>(), evt.getPlayer(), Config.get(evt.getBlock().getWorld()),
+                getAOESize(level), new HashSet<>(), evt.getPlayer(), Config.get(evt.getBlock().getWorld()),
                 hand.getType(), usedHand);
         return true;
     }
@@ -130,5 +132,35 @@ public class Shred extends CustomEnchantment {
                 }
             }
         }
+    }
+
+    /**
+     * The Area of effect multiplier used by this enchantment.
+     * @since 2.1.6
+     * @see AreaOfEffectable
+     */
+    private double aoe = 1.0;
+    
+    @Override
+    public double getAOESize(int level) {
+        return 4.4 + (level * .22) + (aoe * .22);
+    }
+
+    @Override
+    public double getAOEMultiplier() {
+        return aoe;
+    }
+
+    /**
+     * Sets the multiplier used for the area of effect size calculation, the multiplier should have in most cases a linear impact,
+     * however it's not guaranteed that the AOE Size is linear to the multiplier as some other effects may play a role.<br>
+     * <br>
+     * Impact formula: <b>4.4 + (level * .22) + (AOE * .22)</b>
+     * @param newValue The new value of the multiplier
+     * @since 2.1.6
+     */
+    @Override
+    public void setAOEMultiplier(double newValue) {
+        aoe = newValue;
     }
 }

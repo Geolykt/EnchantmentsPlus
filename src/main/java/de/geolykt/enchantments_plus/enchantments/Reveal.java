@@ -15,11 +15,12 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
 
-public class Reveal extends CustomEnchantment {
+public class Reveal extends CustomEnchantment implements AreaOfEffectable {
 
     public static final HashMap<Location, Entity> GLOWING_BLOCKS = new HashMap<>();
     public static final int ID = 68;
@@ -40,7 +41,7 @@ public class Reveal extends CustomEnchantment {
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {
         if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (evt.getPlayer().isSneaking()) {
-                int radius = (int) Math.max(2, Math.round((2 + level) * power));
+                int radius = (int) getAOESize(level);
                 int found_blocks = 0;
                 for (int x = -radius; x <= radius; x++) {
                     for (int y = -radius; y <= radius; y++) {
@@ -65,6 +66,7 @@ public class Reveal extends CustomEnchantment {
                                 entity.setGlowing(true);
                                 entity.setGravity(false);
                                 entity.setInvulnerable(true);
+                                entity.setSilent(true);
                                 ((LivingEntity)entity).setAI(false);
                                 GLOWING_BLOCKS.put(loc, entity);
                                 
@@ -88,4 +90,33 @@ public class Reveal extends CustomEnchantment {
         return false;
     }
 
+    /**
+     * The Area of effect multiplier used by this enchantment.
+     * @since 2.1.6
+     * @see AreaOfEffectable
+     */
+    private double aoe = 1.0;
+    
+    @Override
+    public double getAOESize(int level) {
+        return 2 + aoe + level;
+    }
+
+    @Override
+    public double getAOEMultiplier() {
+        return aoe;
+    }
+
+    /**
+     * Sets the multiplier used for the area of effect size calculation, the multiplier should have in most cases a linear impact,
+     * however it's not guaranteed that the AOE Size is linear to the multiplier as some other effects may play a role.<br>
+     * <br>
+     * Impact formula: <b>2 + AOE + level</b>
+     * @param newValue The new value of the multiplier
+     * @since 2.1.6
+     */
+    @Override
+    public void setAOEMultiplier(double newValue) {
+        aoe = newValue;
+    }
 }

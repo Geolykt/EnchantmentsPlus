@@ -10,13 +10,16 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
-public class Persephone extends CustomEnchantment {
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Persephone extends CustomEnchantment implements AreaOfEffectable {
 
     public static final int ID = 41;
 
@@ -36,7 +39,7 @@ public class Persephone extends CustomEnchantment {
         if (evt.getAction() == RIGHT_CLICK_BLOCK) {
             Player player = evt.getPlayer();
             Location loc = evt.getClickedBlock().getLocation();
-            int radiusXZ = (int) Math.round(power * level + 2);
+            int radiusXZ = (int) getAOESize(level);
 
             if (Storage.COMPATIBILITY_ADAPTER.persephoneCrops().contains(evt.getClickedBlock().getType())) {
                 Block block = loc.getBlock();
@@ -79,7 +82,7 @@ public class Persephone extends CustomEnchantment {
                                 } else {
                                     continue;
                                 }
-                                if (Storage.rnd.nextBoolean()) {
+                                if (ThreadLocalRandom.current().nextBoolean()) {
                                     CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 }
                             }
@@ -91,4 +94,35 @@ public class Persephone extends CustomEnchantment {
         }
         return false;
     }
+
+    /**
+     * The Area of effect multiplier used by this enchantment.
+     * @since 2.1.6
+     * @see AreaOfEffectable
+     */
+    private double aoe = 1.0;
+    
+    @Override
+    public double getAOESize(int level) {
+        return 3 + aoe + level * 2;
+    }
+
+    @Override
+    public double getAOEMultiplier() {
+        return aoe;
+    }
+
+    /**
+     * Sets the multiplier used for the area of effect size calculation, the multiplier should have in most cases a linear impact,
+     * however it's not guaranteed that the AOE Size is linear to the multiplier as some other effects may play a role.<br>
+     * <br>
+     * Impact formula: <b>3 + AOE + (2 * level)</b>
+     * @param newValue The new value of the multiplier
+     * @since 2.1.6
+     */
+    @Override
+    public void setAOEMultiplier(double newValue) {
+        aoe = newValue;
+    }
+
 }

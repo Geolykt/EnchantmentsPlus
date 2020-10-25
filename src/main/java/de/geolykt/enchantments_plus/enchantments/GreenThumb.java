@@ -12,6 +12,7 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.*;
 
-public class GreenThumb extends CustomEnchantment {
+public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
 
     public static final int ID = 24;
 
@@ -39,13 +40,13 @@ public class GreenThumb extends CustomEnchantment {
     public boolean onScan(Player player, int level, boolean usedHand) {
         Location loc = player.getLocation().clone();
         Block centerBlock = loc.getBlock();
-        int radius = (int) Math.round(power * level + 2);
+        int radius = (int) getAOESize(level);
         for (int x = -(radius); x <= radius; x++) {
             for (int y = -(radius) - 1; y <= radius - 1; y++) {
                 for (int z = -(radius); z <= radius; z++) {
                     Block relativeBlock = centerBlock.getRelative(x, y, z);
                     if (relativeBlock.getLocation().distance(loc) < radius) {
-                        if (level != 10 && ThreadLocalRandom.current().nextInt((int) (300 / (power * level / 2))) != 0) {
+                        if (ThreadLocalRandom.current().nextInt((int) (300 / (power * level / 2))) != 0) {
                             continue;
                         }
                         boolean applied = false;
@@ -102,4 +103,35 @@ public class GreenThumb extends CustomEnchantment {
 
         return true;
     }
+
+    /**
+     * The Area of effect multiplier used by this enchantment.
+     * @since 2.1.6
+     * @see AreaOfEffectable
+     */
+    private double aoe = 1.0;
+    
+    @Override
+    public double getAOESize(int level) {
+        return 2 + aoe + level;
+    }
+
+    @Override
+    public double getAOEMultiplier() {
+        return aoe;
+    }
+
+    /**
+     * Sets the multiplier used for the area of effect size calculation, the multiplier should have in most cases a linear impact,
+     * however it's not guaranteed that the AOE Size is linear to the multiplier as some other effects may play a role.<br>
+     * <br>
+     * Impact formula: <b>2 + AOE + level</b>
+     * @param newValue The new value of the multiplier
+     * @since 2.1.6
+     */
+    @Override
+    public void setAOEMultiplier(double newValue) {
+        aoe = newValue;
+    }
+
 }
