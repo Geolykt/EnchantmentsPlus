@@ -2,7 +2,7 @@ package de.geolykt.enchantments_plus.enchantments;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -51,8 +51,8 @@ public class Level extends CustomEnchantment {
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
         if (ThreadLocalRandom.current().nextBoolean()) {
-            LevelArrow arrow = new LevelArrow((Arrow) evt.getProjectile(), level, power);
-            EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+            LevelArrow arrow = new LevelArrow((AbstractArrow) evt.getProjectile(), level, power);
+            EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
             return true;
         }
         return false;

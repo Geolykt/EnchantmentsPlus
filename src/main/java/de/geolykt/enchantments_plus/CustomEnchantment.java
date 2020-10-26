@@ -108,6 +108,15 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return false;
     }
 
+    /**
+     * Reports to the enchantment that the shooting entity was shooting with it's bow.
+     * The caller must make sure that evt.getProjectile() returns an instance of AbstractArrow
+     * @param evt The event that was fired
+     * @param level The level of the enchantment
+     * @param usedHand The hand used in the event (true = mainhand, false = offhand)
+     * @return True if the event was processed, false otherwise
+     * @since 1.0.0
+     */
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
         return false;
     }

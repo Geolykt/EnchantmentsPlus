@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
@@ -31,8 +31,8 @@ public class Missile extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        MissileArrow arrow = new MissileArrow((Arrow) evt.getProjectile());
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        MissileArrow arrow = new MissileArrow((AbstractArrow) evt.getProjectile());
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         evt.setCancelled(true);
         CompatibilityAdapter.damageTool((Player) evt.getEntity(), 1, usedHand);
         Utilities.removeItem(((Player) evt.getEntity()), Material.ARROW, 1);

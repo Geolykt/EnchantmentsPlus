@@ -2,7 +2,11 @@ package de.geolykt.enchantments_plus.arrows.admin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
@@ -17,7 +21,7 @@ import static org.bukkit.potion.PotionEffectType.HARM;
 
 public class ApocalypseArrow extends EnchantedArrow {
 
-    public ApocalypseArrow(Arrow entity) {
+    public ApocalypseArrow(AbstractArrow entity) {
         super(entity);
     }
 

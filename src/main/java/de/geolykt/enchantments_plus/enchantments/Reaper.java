@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -34,8 +34,8 @@ public class Reaper extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        ReaperArrow arrow = new ReaperArrow((Arrow) evt.getProjectile(), level, power);
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        ReaperArrow arrow = new ReaperArrow((AbstractArrow) evt.getProjectile(), level, power);
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 

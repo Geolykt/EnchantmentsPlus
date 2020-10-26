@@ -10,7 +10,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 
 public class StationaryArrow extends EnchantedArrow {
 
-    public StationaryArrow(Arrow entity) {
+    public StationaryArrow(AbstractArrow entity) {
         super(entity);
     }
 

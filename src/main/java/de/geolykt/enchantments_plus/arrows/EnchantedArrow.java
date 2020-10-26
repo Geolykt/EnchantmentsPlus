@@ -1,16 +1,23 @@
 package de.geolykt.enchantments_plus.arrows;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import de.geolykt.enchantments_plus.Storage;
 
-import java.util.*;
-
 /**
- * Proxy for {@link Arrow} which allows subclasses to define custom behavior
+ * Proxy for {@link AbstractArrow} which allows subclasses to define custom behavior
  * triggered on certain events.
  */
 public class EnchantedArrow {
@@ -18,8 +25,8 @@ public class EnchantedArrow {
 
     public static final Map<Entity, EnchantedArrow> killedEntities = new HashMap<>();
     // Arrows mapped to different advanced arrow effects, to be used by the Arrow Watcher to perform these effects
-    public static final Map<Arrow, Set<EnchantedArrow>> advancedProjectiles = new HashMap<>();
-    protected final Arrow arrow;
+    public static final Map<AbstractArrow, Set<EnchantedArrow>> advancedProjectiles = new HashMap<>();
+    protected final AbstractArrow arrow;
     protected final int level;
     protected final double power;
     private int tick;
@@ -34,7 +41,7 @@ public class EnchantedArrow {
      * @param level Level of enchantment on arrow.
      * @param power Power level of enchantment.
      */
-    public EnchantedArrow(Arrow arrow, int level, double power) {
+    public EnchantedArrow(AbstractArrow arrow, int level, double power) {
         this.arrow = arrow;
         this.level = level;
         this.power = power;
@@ -47,7 +54,7 @@ public class EnchantedArrow {
      * @param arrow Arrow entity from which to make the EnchantedArrow.
      * @param level Level of enchantment on arrow.
      */
-    public EnchantedArrow(Arrow arrow, int level) {
+    public EnchantedArrow(AbstractArrow arrow, int level) {
         this(arrow, level, 1);
     }
 
@@ -56,12 +63,12 @@ public class EnchantedArrow {
      *
      * @param arrow Arrow entity from which to make the EnchantedArrow.
      */
-    public EnchantedArrow(Arrow arrow) {
+    public EnchantedArrow(AbstractArrow arrow) {
         this(arrow, 0);
     }
 
     // Adds an arrow entity into the arrow storage variable calls its launch method
-    public static void putArrow(Arrow e, EnchantedArrow a, Player p) {
+    public static void putArrow(AbstractArrow e, EnchantedArrow a, Player p) {
         Set<EnchantedArrow> ars;
         if (advancedProjectiles.containsKey(e)) {
             ars = advancedProjectiles.get(e);
@@ -122,26 +129,6 @@ public class EnchantedArrow {
         return power;
     }
 
-//    /**
-//     * @return Current location of this arrow.
-//     */
-//    public Location getLocation() {
-//        return this.arrow.getLocation();
-//    }
-//
-//    /**
-//     * @return World that this arrow exists in.
-//     */
-//    public World getWorld() {
-//        return this.arrow.getWorld();
-//    }
-//
-//    /**
-//     * @return True iff this arrow is dead
-//     */
-//    public boolean isDead() {
-//        return this.arrow.isDead();
-//    }
     //endregion
     //region Events
     // Called when the player shoots an arrow of this type
@@ -196,7 +183,7 @@ public class EnchantedArrow {
     //endregion
     public static void scanAndReap() {
         synchronized (advancedProjectiles) {
-            for (Arrow a : advancedProjectiles.keySet()) {
+            for (AbstractArrow a : advancedProjectiles.keySet()) {
                 if (a.isDead()) {
                     dieQueue.addAll(advancedProjectiles.get(a));
                 }

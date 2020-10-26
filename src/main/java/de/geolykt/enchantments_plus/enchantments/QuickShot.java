@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
@@ -28,8 +28,8 @@ public class QuickShot extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        QuickArrow arrow = new QuickArrow((Arrow) evt.getProjectile());
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        QuickArrow arrow = new QuickArrow((AbstractArrow) evt.getProjectile());
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 }

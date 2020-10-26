@@ -1,5 +1,6 @@
 package de.geolykt.enchantments_plus.arrows.enchanted;
 
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -10,7 +11,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 
 public class MultiArrow extends EnchantedArrow {
 
-    public MultiArrow(Arrow entity) {
+    public MultiArrow(AbstractArrow entity) {
         super(entity);
     }
 

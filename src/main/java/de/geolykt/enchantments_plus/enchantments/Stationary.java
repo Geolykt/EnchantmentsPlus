@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -45,8 +45,8 @@ public class Stationary extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        StationaryArrow arrow = new StationaryArrow((Arrow) evt.getProjectile());
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        StationaryArrow arrow = new StationaryArrow((AbstractArrow) evt.getProjectile());
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 

@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.arrows.enchanted;
 
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -12,7 +12,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 
 public class SiphonArrow extends EnchantedArrow {
 
-    public SiphonArrow(Arrow entity, int level, double power) {
+    public SiphonArrow(AbstractArrow entity, int level, double power) {
         super(entity, level, power);
     }
 

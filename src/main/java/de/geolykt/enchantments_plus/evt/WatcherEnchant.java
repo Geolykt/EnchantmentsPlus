@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -319,7 +320,7 @@ public class WatcherEnchant implements Listener {
 
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent evt) {
-        if (evt.getEntity() instanceof Player) {
+        if (evt.getEntity() instanceof Player && evt.getProjectile() instanceof AbstractArrow) {
             Player player = (Player) evt.getEntity();
             ItemStack usedStack = Utilities.usedStack(player, Tool.BOW.contains(player.getInventory().getItemInMainHand().getType()));
             CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onEntityShootBow(evt, level, true));

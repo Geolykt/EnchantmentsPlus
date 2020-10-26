@@ -17,7 +17,7 @@ import java.util.Map;
 public class Tracer extends CustomEnchantment {
 
     // Map of tracer arrows to their expected accuracy
-    public static final Map<Arrow, Integer> tracer = new HashMap<>();
+    public static final Map<AbstractArrow, Integer> tracer = new HashMap<>();
     public static final int                 ID     = 63;
 
     @Override
@@ -33,14 +33,14 @@ public class Tracer extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        TracerArrow arrow = new TracerArrow((Arrow) evt.getProjectile(), level, power);
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        TracerArrow arrow = new TracerArrow((AbstractArrow) evt.getProjectile(), level, power);
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 
     // Moves Tracer arrows towards a target
     public static void tracer() {
-        for (Arrow e : tracer.keySet()) {
+        for (AbstractArrow e : tracer.keySet()) {
             Entity close = null;
             double distance = 100;
             int level = tracer.get(e);

@@ -18,7 +18,7 @@ public class FirestormArrow extends EnchantedArrow {
      */
     private double aoe;
 
-    public FirestormArrow(Arrow entity, int level, double power, double aoe) {
+    public FirestormArrow(AbstractArrow entity, int level, double power, double aoe) {
         super(entity, level, power);
         this.aoe = aoe;
     }

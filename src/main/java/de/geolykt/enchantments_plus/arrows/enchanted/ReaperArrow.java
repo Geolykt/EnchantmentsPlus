@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus.arrows.enchanted;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,7 +14,7 @@ import static org.bukkit.potion.PotionEffectType.BLINDNESS;
 
 public class ReaperArrow extends EnchantedArrow {
 
-    public ReaperArrow(Arrow entity, int level, double power) {
+    public ReaperArrow(AbstractArrow entity, int level, double power) {
         super(entity, level, power);
     }
 

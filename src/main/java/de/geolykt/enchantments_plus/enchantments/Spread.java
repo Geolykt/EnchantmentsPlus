@@ -6,7 +6,7 @@ import static org.bukkit.inventory.EquipmentSlot.OFF_HAND;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -42,7 +42,7 @@ public class Spread extends CustomEnchantment {
 
     @Override
     public boolean onProjectileLaunch(ProjectileLaunchEvent evt, int level, boolean usedHand) {
-        Arrow originalArrow = (Arrow) evt.getEntity();
+        AbstractArrow originalArrow = (AbstractArrow) evt.getEntity();
         Player player = (Player) originalArrow.getShooter();
         ItemStack hand = Utilities.usedStack(player, usedHand);
         MultiArrow ar = new MultiArrow(originalArrow);
@@ -58,7 +58,7 @@ public class Spread extends CustomEnchantment {
             Vector v = originalArrow.getVelocity();
             v.setX(v.getX() + Math.max(Math.min(ThreadLocalRandom.current().nextGaussian() / 8, 0.75), -0.75));
             v.setZ(v.getZ() + Math.max(Math.min(ThreadLocalRandom.current().nextGaussian() / 8, 0.75), -0.75));
-            Arrow arrow = player.getWorld().spawnArrow(
+            AbstractArrow arrow = player.getWorld().spawnArrow(
                 player.getEyeLocation().add(player.getLocation().getDirection().multiply(1.0)), v, 1, 0);
             arrow.setShooter(player);
             arrow.setVelocity(v.normalize().multiply(originalArrow.getVelocity().length()));

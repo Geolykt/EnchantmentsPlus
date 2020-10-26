@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
@@ -13,7 +13,7 @@ import de.geolykt.enchantments_plus.enchantments.Singularity;
 
 public class SingularityArrow extends EnchantedArrow {
 
-    public SingularityArrow(Arrow entity, int level) {
+    public SingularityArrow(AbstractArrow entity, int level) {
         super(entity, level);
     }
 

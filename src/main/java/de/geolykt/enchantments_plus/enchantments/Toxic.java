@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -42,11 +42,9 @@ public class Toxic extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        if (evt.getProjectile() instanceof Arrow) {
-            EnchantedArrow.putArrow((Arrow) evt.getProjectile(),
-                    new ToxicArrow((Arrow) evt.getProjectile(), level, power),
-                    (Player) evt.getEntity());
-        }
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), 
+                new ToxicArrow((AbstractArrow) evt.getProjectile(), level, power),
+                (Player) evt.getEntity());
         return true;
     }
 

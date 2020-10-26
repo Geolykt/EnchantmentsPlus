@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -30,8 +30,8 @@ public class Potion extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        PotionArrow arrow = new PotionArrow((Arrow) evt.getProjectile(), level, power);
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        PotionArrow arrow = new PotionArrow((AbstractArrow) evt.getProjectile(), level, power);
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 }

@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
@@ -31,8 +31,8 @@ public class Blizzard extends CustomEnchantment implements AreaOfEffectable {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        BlizzardArrow arrow = new BlizzardArrow((Arrow) evt.getProjectile(), level, power, getAOESize(level));
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        BlizzardArrow arrow = new BlizzardArrow((AbstractArrow) evt.getProjectile(), level, power, getAOESize(level));
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 

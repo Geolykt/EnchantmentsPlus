@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.arrows.enchanted;
 
 import org.bukkit.*;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -11,7 +11,7 @@ import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 
 public class FireworkArrow extends EnchantedArrow {
 
-    public FireworkArrow(Arrow entity, int level) {
+    public FireworkArrow(AbstractArrow entity, int level) {
         super(entity, level);
     }
 

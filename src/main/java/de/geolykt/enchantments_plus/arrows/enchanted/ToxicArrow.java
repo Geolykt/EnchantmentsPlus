@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.arrows.enchanted;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -16,7 +16,7 @@ import static org.bukkit.potion.PotionEffectType.HUNGER;
 
 public class ToxicArrow extends EnchantedArrow {
 
-    public ToxicArrow(Arrow entity, int level, double power) {
+    public ToxicArrow(AbstractArrow entity, int level, double power) {
         super(entity, level, power);
     }
 

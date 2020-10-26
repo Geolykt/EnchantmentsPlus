@@ -1,7 +1,8 @@
 package de.geolykt.enchantments_plus.enchantments;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -17,8 +18,6 @@ import de.geolykt.enchantments_plus.util.Tool;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.bukkit.GameMode.CREATIVE;
 
 public class Singularity extends CustomEnchantment {
 
@@ -39,8 +38,8 @@ public class Singularity extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        SingularityArrow arrow = new SingularityArrow((Arrow) evt.getProjectile(), level);
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        SingularityArrow arrow = new SingularityArrow((AbstractArrow) evt.getProjectile(), level);
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 
@@ -49,10 +48,8 @@ public class Singularity extends CustomEnchantment {
     public static void blackholes() {
         for (Location l : blackholes.keySet()) {
             for (Entity e : l.getWorld().getNearbyEntities(l, 10, 10, 10)) {
-                if (e instanceof Player) {
-                    if (((Player) e).getGameMode().equals(CREATIVE)) {
-                        continue;
-                    }
+                if (e instanceof Player && ((Player) e).getGameMode() == GameMode.CREATIVE) {
+                    continue;
                 }
                 ThreadLocalRandom rand = ThreadLocalRandom.current();
                 if (blackholes.get(l)) {

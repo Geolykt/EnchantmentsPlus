@@ -20,7 +20,7 @@ import static org.bukkit.Material.TNT;
 
 public class FuseArrow extends EnchantedArrow {
 
-    public FuseArrow(Arrow entity) {
+    public FuseArrow(AbstractArrow entity) {
         super(entity);
     }
 

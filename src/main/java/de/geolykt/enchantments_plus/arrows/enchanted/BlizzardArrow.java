@@ -20,7 +20,7 @@ public class BlizzardArrow extends EnchantedArrow {
      */
     private double aoe;
     
-    public BlizzardArrow(Arrow entity, int level, double power, double aoeSize) {
+    public BlizzardArrow(AbstractArrow entity, int level, double power, double aoeSize) {
         super(entity, level, power);
         aoe = aoeSize;
     }

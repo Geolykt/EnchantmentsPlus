@@ -1,7 +1,10 @@
 package de.geolykt.enchantments_plus.arrows.admin;
 
-import org.bukkit.*;
-import org.bukkit.entity.Arrow;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 
 import de.geolykt.enchantments_plus.Config;
@@ -16,7 +19,7 @@ import static org.bukkit.Material.AIR;
 
 public class MissileArrow extends EnchantedArrow {
 
-    public MissileArrow(Arrow entity) {
+    public MissileArrow(AbstractArrow entity) {
         super(entity);
     }
 

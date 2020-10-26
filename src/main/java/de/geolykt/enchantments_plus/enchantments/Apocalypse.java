@@ -1,8 +1,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.entity.Player;
-
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -20,19 +19,18 @@ public class Apocalypse extends CustomEnchantment {
     public Builder<Apocalypse> defaults() {
         return new Builder<>(Apocalypse::new, ID)
             .probability(0)
-            .all(BaseEnchantments.APOCALYPSE, // BASE
-                "Unleashes hell", // DESCRIPTION
-                new Tool[]{Tool.BOW}, // APPLICABLE TOOLS
-                "Apocalypse", // NAME
-                1, // MAX LEVEL
-                Hand.RIGHT // APPLICABLE HANDS
-                ); // CONFLICTS
+            .all(BaseEnchantments.APOCALYPSE,
+                "Unleashes hell",
+                new Tool[]{Tool.BOW},
+                "Apocalypse",
+                1,
+                Hand.RIGHT);
     }
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        ApocalypseArrow arrow = new ApocalypseArrow((Arrow) evt.getProjectile());
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        ApocalypseArrow arrow = new ApocalypseArrow((AbstractArrow) evt.getProjectile());
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 }

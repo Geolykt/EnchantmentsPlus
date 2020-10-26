@@ -1,7 +1,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -56,8 +56,8 @@ public class Siphon extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        SiphonArrow arrow = new SiphonArrow((Arrow) evt.getProjectile(), level, power);
-        EnchantedArrow.putArrow((Arrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
+        SiphonArrow arrow = new SiphonArrow((AbstractArrow) evt.getProjectile(), level, power);
+        EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }
 }
