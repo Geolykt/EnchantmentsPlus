@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
@@ -34,17 +35,17 @@ public class Mow extends CustomEnchantment implements AreaOfEffectable {
     }
 
     private boolean shear(PlayerEvent evt, int level, boolean usedHand) {
-        // TODO damage shear proportional to the amount of sheared entities 
-        boolean shearedEntity = false;
+        int amt = 0;
         int radius = (int) getAOESize(level);
         Player player = evt.getPlayer();
         for (Entity ent : evt.getPlayer().getNearbyEntities(radius, radius, radius)) {
             if (ent instanceof Sheep || ent instanceof MushroomCow && ((Ageable)ent).isAdult()) {
                 ADAPTER.shearEntityNMS(ent, player, usedHand);
-                shearedEntity = true;
+                amt++;
             }
         }
-        return shearedEntity;
+        CompatibilityAdapter.damageTool(player, (int) Math.ceil(amt * .75), usedHand);
+        return amt != 0;
     }
 
     @Override

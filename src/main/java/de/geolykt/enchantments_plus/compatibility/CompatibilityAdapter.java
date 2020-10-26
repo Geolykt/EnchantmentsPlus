@@ -329,6 +329,7 @@ public class CompatibilityAdapter {
      * @since 1.0
      */
     public static void damageTool(Player player, int damage, boolean handUsed) {
+        // TODO maybe make use of the fact that Itemstacks are immutable
         if (handUsed) {
             damageToolInSlot(player, damage, player.getInventory().getHeldItemSlot());
         } else {
