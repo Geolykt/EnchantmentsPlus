@@ -2,6 +2,7 @@ package de.geolykt.enchantments_plus;
 //For Bukkit & Spigot 1.16.X
 
 import org.apache.commons.lang.time.StopWatch;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -135,6 +136,12 @@ public class Enchantments_plus extends JavaPlugin {
         return false;
     }
 
+    /**
+     * The metric object used by the plugin. Internal use only.
+     * @since 2.1.6
+     */
+    private Metrics metric;
+
     // Loads configs and starts tasks
     public void onEnable() {
         StopWatch w = new StopWatch();
@@ -191,7 +198,14 @@ public class Enchantments_plus extends JavaPlugin {
         }, 5, 5);
 
         // medium-high asynchronous frequency runnable (every five ticks)
-        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {Anthropomorphism.removeCheck();}, 5, 5);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> Anthropomorphism.removeCheck(), 5, 5);
+        
+        // BSTATS metrics init
+        metric = new Metrics(this, 9211);
+        metric.addCustomChart(new Metrics.SimplePie("distribution_method", () -> Storage.DISTRIBUTION));
+        metric.addCustomChart(new Metrics.SimplePie("plugin_brand", () -> Storage.BRAND));
+        metric.addCustomChart(new Metrics.SimplePie("enchantment_getter", () -> CustomEnchantment.Enchantment_Adapter.getClass().getSimpleName()));
+        
         w.stop();
         getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
     }

@@ -1,4 +1,4 @@
-Got a question? Need help or want to discuss changes? Then feel free to DM me via discord: tristellar#9022. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
+Got a question? Need help or want to discuss changes? Then feel free to join our [discord server](https://discord.gg/DcceT53). Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
 The plugin only intends to support 1.16.3 and newer versions when the time comes.
 
@@ -8,13 +8,15 @@ Zenchantments is a custom enchantment plugin that adds 70+ new enchantments (it 
 <br> While we currently don't add or remove any Enchantments, we will attempt to rebalance them and make them futureproof. In essence, we attempt to make this Fork as stable as possible to support Production-grade Servers.
 
 ## Enchantments+ vs other Zenchantments forks
-  - This fork is highly actively maintained and has persisted since May of 2020, which is the longer than any other fork which otherwise is more shortlived.
-  - This fork is fast. During the last months the fork accumulated lots of revisions that aim at improving performance as well as general code quality.
+  - This fork is highly actively maintained and has persisted since May of 2020, which is the longer than any other fork who are otherwise more shortlived.
+  - This is fast. During the last months the fork accumulated lots of revisions that aim at improving performance as well as general code quality.
   - Enchantments+ doesn't use NMS. This means that newer versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support, this may no longer be full selling point.
-  - Zenchantments supports (at some scale) 1.12 and other versions, Enchantments+ doesn't
-  - The fork compiles, Zenchantments doesn't.
-  - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me.
+  - Zenchantments supports (at some scale) 1.12 and other versions, Enchantments+ doesn't.
+  - The fork compiles, Zenchantments doesn't (for 1.16.2+).
+  - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will often be fixed in under a day (especially on github).
 
+## Metrics
+As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the information is shown can be found [here](https://bstats.org/plugin/bukkit/EnchantmentsPlus/9211).
 
 ## Permissions
 <b>enchplus.enchant.get</b> - On player enchant event, allow player to have a chance at the enabled custom enchantments<br>
@@ -59,6 +61,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Help and tab completion now handle permissions</li>
    <li>Mystery fish can now catch other water mobs such as cod, pufferfish and salmon and was buffed overall</li>
    <li>Admins can now change which items are part of which tool</li>
+   <li>Added metrics system</li>
   </ul>
  </li>
  <li>Patches:
@@ -71,6 +74,8 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
    <li>Spectral performance increased noticeably</li>
    <li>Lots of performance improvements for periodically running tasks</li>
    <li>Dispensing laser items no longer temporarily freezes the Server</li>
+   <li>Grindstone works properly in a few more cases now</li>
+   <li>Spectral arrows can now be used!</li>
   </ul>
  </li>
  <li>Code changes (doesn't affect behaviour as much):

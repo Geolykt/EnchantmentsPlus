@@ -23,6 +23,10 @@
              <id>sk89q-repo</id>
              <url>https://maven.enginehub.org/repo/</url>
         </repository>
+        <repository>
+           <id>CodeMC</id> <!-- For BStats -->
+          <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -39,6 +43,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- BStats, our metrics system -->
+        <dependency>
+          <groupId>org.bstats</groupId>
+          <artifactId>bstats-bukkit</artifactId>
+          <version>1.7</version>
+          <scope>compile</scope>
+       </dependency>
+
         <!-- World protection plugins to integrate with -->
         <dependency>
             <groupId>com.github.TownyAdvanced</groupId>
@@ -52,7 +64,7 @@
             <version>7.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
     </dependencies>
 
@@ -77,6 +89,14 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                  <relocations>
+                    <relocation>
+                      <pattern>org.bstats</pattern>
+                      <shadedPattern>de.geolykt.enchantments_plus.bstats</shadedPattern>
+                    </relocation>
+                  </relocations>
+                </configuration>
             </plugin>
         </plugins>
     </build>
