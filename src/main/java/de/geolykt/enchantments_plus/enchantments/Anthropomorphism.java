@@ -143,7 +143,12 @@ public class Anthropomorphism extends CustomEnchantment {
         synchronized (idleBlocks) {
             for (FallingBlock b : idleBlocks.keySet()) {
                 if (anthVortex.contains(idleBlocks.get(b))) {
-                    Location loc = Bukkit.getPlayer(idleBlocks.get(b)).getLocation();
+                    Player player = Bukkit.getPlayer(idleBlocks.get(b));
+                    if (player == null) {
+                        b.remove();
+                        continue;
+                    }
+                    Location loc = player.getLocation();
                     Vector v;
                     if (b.getLocation().getWorld().equals(loc.getWorld())) { // Check world teleport
                         if (fallBool && b.getLocation().distance(loc) < 10) {
