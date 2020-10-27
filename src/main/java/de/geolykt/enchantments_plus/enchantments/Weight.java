@@ -1,14 +1,17 @@
 package de.geolykt.enchantments_plus.enchantments;
 
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
@@ -39,6 +42,9 @@ public class Weight extends CustomEnchantment {
                     Meador.class, Speed.class);
     }
 
+    private static final EquipmentSlot[] SLOTS = 
+            new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD};
+
     @Override
     public boolean onBeingHit(EntityDamageByEntityEvent evt, int level, boolean usedHand) {
         if (!(evt.getEntity() instanceof Player) || //check if victim is a player
@@ -56,16 +62,14 @@ public class Weight extends CustomEnchantment {
             player.damage(evt.getDamage());
             player.setVelocity(player.getLocation().subtract(evt.getDamager().getLocation()).toVector()
                                          .multiply((float) (1 / (level * power + 1.5))));
-            ItemStack[] s = player.getInventory().getArmorContents();
-            for (int i = 0; i < 4; i++) {
-                if (s[i] != null) {
-                    CompatibilityAdapter.damageItem(s[i], 1);
-                    if (CompatibilityAdapter.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
-                        s[i] = null;
-                    }
+            for (EquipmentSlot slot : SLOTS) {
+                final ItemStack s = player.getInventory().getItem(slot);
+                if (s != null
+                        && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.WEIGHT)
+                        && CompatibilityAdapter.damageItem2(s, level)) {
+                    player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                 }
             }
-            player.getInventory().setArmorContents(s);
         }
         return true;
     }

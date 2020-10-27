@@ -7,6 +7,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -37,6 +38,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -329,11 +331,10 @@ public class CompatibilityAdapter {
      * @since 1.0
      */
     public static void damageTool(Player player, int damage, boolean handUsed) {
-        // TODO maybe make use of the fact that Itemstacks are immutable
         if (handUsed) {
             damageToolInSlot(player, damage, player.getInventory().getHeldItemSlot());
-        } else {
-            player.getInventory().setItemInOffHand(damageItem(player.getInventory().getItemInOffHand(), damage));
+        } else if (damageItem2(player.getInventory().getItemInOffHand(), damage)) {
+            player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
         }
     }
 
@@ -348,12 +349,47 @@ public class CompatibilityAdapter {
      * @since 1.0
      */
     public static void damageToolInSlot(Player player, int damage, int slotIndex) {
-        ItemStack stack = damageItem(player.getInventory().getItem(slotIndex), damage);
-        if (getDamage(stack) < 0) {
+        if (damageItem2(player.getInventory().getItem(slotIndex), damage)) {
             player.getInventory().clear(slotIndex);
-        } else {
-            player.getInventory().setItem(slotIndex, stack);
         }
+    }
+
+    /**
+     * Returns the durability that is LEFT on an item. May be negative
+     * Returns 1 for items that are not damageable
+     * @param stack The input stack
+     * @return The remaining durability of the input stack.
+     * @since 2.1.6
+     */
+    public static int getRemaingDurabillity(@NotNull ItemStack stack) {
+        if (stack.getItemMeta() instanceof Damageable) {
+            return stack.getType().getMaxDurability() - ((Damageable) stack.getItemMeta()).getDamage();
+        } else {
+            return 1;
+        }
+    }
+    
+    /**
+     * Damages a given itemstack with a given amount of damage (deducting the amount of unbreaking).
+     * Optionally if the item is damageable and is not unbreakable but the durability is under 0, then item type is set to air.
+     * @param stack The stack that should be targeted
+     * @param damage The amount of damage that should be applied
+     * @since 2.1.6
+     * @return true if the item should be removed, false otherwise
+     */
+    public static boolean damageItem2(ItemStack stack, int damage) {
+        if (stack == null
+                || stack.getType() == Material.AIR
+                || stack.getItemMeta() == null
+                || !(stack.getItemMeta() instanceof Damageable)
+                || stack.getItemMeta().isUnbreakable()) {
+        }
+        // chance that the item is broken is 1/(level+1)
+        // So at level = 2 it's 33%, at level = 0 it's 100%, at level 1 it's 50%, at level = 3 it's 25%
+        if (ThreadLocalRandom.current().nextInt(1000) <= (1000/(stack.getEnchantmentLevel(Enchantment.DURABILITY)+1))) {
+            setDamage(stack, getDamage(stack) + damage);
+        }
+        return getRemaingDurabillity(stack) <= 0;
     }
 
     /**
@@ -363,7 +399,9 @@ public class CompatibilityAdapter {
      * @param damage The amount of damage that should be applied
      * @return The new damaged item or Air if the input stack is null or air
      * @since 1.0
+     * @deprecated This does not break the items correctly, use {@link #damageItem(ItemStack, int, boolean)} instead
      */
+    @Deprecated
     public static @NotNull ItemStack damageItem(@Nullable ItemStack stack, int damage) {
         if (stack == null || stack.getType() == Material.AIR)
             return new ItemStack(Material.AIR);
@@ -395,6 +433,7 @@ public class CompatibilityAdapter {
      * @param damage The amount of damage that should be applied
      * @since 1.0
      */
+    @Deprecated
     public static void addUnbreaking(Player player, ItemStack is, int damage) {
         if (!player.getGameMode().equals(GameMode.CREATIVE)) {
             for (int i = 0; i < damage; i++) {
@@ -519,8 +558,7 @@ public class CompatibilityAdapter {
     }
 
     public boolean attackEntity(LivingEntity target, Player attacker, double damage, boolean performEquipmentDamage) {
-        EntityDamageByEntityEvent damageEvent
-        = new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damage);
+        EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damage);
         Bukkit.getPluginManager().callEvent(damageEvent);
         if (damage == 0) {
             return !damageEvent.isCancelled();

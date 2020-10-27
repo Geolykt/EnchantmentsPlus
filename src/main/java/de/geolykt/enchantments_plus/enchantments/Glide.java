@@ -1,11 +1,14 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
@@ -35,6 +38,9 @@ public class Glide extends CustomEnchantment {
                         Hand.NONE);
     }
 
+    private static final EquipmentSlot[] SLOTS = 
+            new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD};
+    
     @Override
     public boolean onFastScan(Player player, int level, boolean usedHand) {
         if (!sneakGlide.containsKey(player)) {
@@ -66,19 +72,14 @@ public class Glide extends CustomEnchantment {
             CompatibilityAdapter.display(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
         }
         if (ThreadLocalRandom.current().nextInt(5 * level) == 5) { // Slowly damage all armor
-            ItemStack[] s = player.getInventory().getArmorContents();
-            for (int i = 0; i < 4; i++) {
-                if (s[i] != null) {
-                    Map<CustomEnchantment, Integer> map = CustomEnchantment.getEnchants(s[i], player.getWorld());
-                    if (map.containsKey(this)) {
-                        CompatibilityAdapter.damageItem(s[i], 1);
-                    }
-                    if (CompatibilityAdapter.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
-                        s[i] = null;
-                    }
+            for (EquipmentSlot slot : SLOTS) {
+                final ItemStack s = player.getInventory().getItem(slot);
+                if (s != null
+                        && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.GLIDE)
+                        && CompatibilityAdapter.damageItem2(s, level)) {
+                    player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                 }
             }
-            player.getInventory().setArmorContents(s);
         }
         sneakGlide.put(player, player.getLocation().getY());
         return true;

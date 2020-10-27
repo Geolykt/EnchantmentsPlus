@@ -77,7 +77,7 @@ public interface IEnchGatherer {
      * Optimized by some getters to result in significantly better performance.
      * @param config The configuration that should be used
      * @param stk The stack that should be read
-     * @param clazz The Enchantment that should be searched for.
+     * @param ench The Enchantment that should be searched for.
      * @return True if the stack contained the given Enchantment, false otherwise
      * @since 2.1.1
      */

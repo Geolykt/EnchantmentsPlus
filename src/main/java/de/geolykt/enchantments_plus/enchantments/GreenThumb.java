@@ -5,8 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
@@ -16,7 +18,6 @@ import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bukkit.Material.*;
@@ -35,6 +36,9 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                     3, // MAX LVL
                     Hand.NONE);
     }
+
+    private static final EquipmentSlot[] SLOTS = 
+            new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD};
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
@@ -80,20 +84,14 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                                 Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
                             int chc = ThreadLocalRandom.current().nextInt(50);
                             if (chc > 42 && level != 10) {
-                                ItemStack[] s = player.getInventory().getArmorContents();
-                                for (int i = 0; i < 4; i++) {
-                                    if (s[i] != null) {
-                                        Map<CustomEnchantment, Integer> map =
-                                            CustomEnchantment.getEnchants(s[i], player.getWorld());
-                                        if (map.containsKey(this)) {
-                                            CompatibilityAdapter.damageItem(s[i], 1);
-                                        }
-                                        if (CompatibilityAdapter.getDamage(s[i]) > s[i].getType().getMaxDurability()) {
-                                            s[i] = null;
-                                        }
+                                for (EquipmentSlot slot : SLOTS) {
+                                    final ItemStack s = player.getInventory().getItem(slot);
+                                    if (s != null
+                                            && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.GREEN_THUMB)
+                                            && CompatibilityAdapter.damageItem2(s, level)) {
+                                        player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                                     }
                                 }
-                                player.getInventory().setArmorContents(s);
                             }
                         }
                     }
