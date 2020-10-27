@@ -114,7 +114,9 @@ public class NewAnvilMerger implements Listener {
                     if (unrepairable) {
                         evt.setResult(null);
                     } else {
-                        out.forEach((ench, level) -> CustomEnchantment.setEnchantment(stackA, ench, level, world));
+                        out.forEach((ench, level) -> {
+                            CustomEnchantment.setEnchantment(stackA, ench, ench.validMaterial(stackA) ? level : 0, world);
+                        });
                         inv.setRepairCost(out.size()*7+inv.getRepairCost());
                         evt.setResult(stackA);
                     }
