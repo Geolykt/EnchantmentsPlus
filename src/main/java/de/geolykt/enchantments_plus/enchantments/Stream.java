@@ -41,7 +41,7 @@ public class Stream extends CustomEnchantment {
 
     @Override
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
-        if (evt.getItem() == null || evt.getItem().getType() != Material.ELYTRA) {
+        if (evt.getItem() == null) {
             return false;
         }
         Player player = evt.getPlayer();
@@ -105,10 +105,12 @@ public class Stream extends CustomEnchantment {
                     break;
                 case 3:
                     ThreadLocalRandom rand = ThreadLocalRandom.current();
-                    player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 1,
+                    player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 2,
                         new Particle.DustOptions(Color.fromRGB(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)), 1.0f));
             }
-            CompatibilityAdapter.display(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
+            if (b != 3) {
+                CompatibilityAdapter.display(player.getLocation(), trailTypes[b], 3, 0.1, 0, 0, 0);
+            }
             return true;
         }
         return false;

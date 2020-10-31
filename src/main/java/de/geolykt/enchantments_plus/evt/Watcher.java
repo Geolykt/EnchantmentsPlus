@@ -48,7 +48,7 @@ public class Watcher implements Listener {
 
     // Fires a laser effect from dispensers if a tool with the Laser enchantment is
     // dispensed
-    // TODO also break the blocks and not only look silly
+    // TODO This should be outsourced to a different (sub-) plugin
     @EventHandler
     public void onBlockDispense(BlockDispenseEvent evt) {
         Config config = Config.get(evt.getBlock().getWorld());
@@ -177,6 +177,7 @@ public class Watcher implements Listener {
         }
     }
 
+    // FIXME should probably be outsourced to a different plugin
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if (event.getMessage().startsWith("/enchant ")) {
@@ -194,6 +195,7 @@ public class Watcher implements Listener {
     // probability, enchantments' relative
     // probability, and the level at which the item is being enchanted if the player
     // has permission
+    // TODO maybe outsource this to a different plugin or make it toggleable as this may not be used by many professional servers.
     @EventHandler
     public void onEnchantItem(EnchantItemEvent evt) {
         if (!PermissionTypes.GET.hasPermission(evt.getEnchanter())
@@ -317,6 +319,7 @@ public class Watcher implements Listener {
 
     // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
     // by removing them
+    // FIXME is this even needed nowadays?
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onArrowPickup(PlayerPickupArrowEvent evt) {

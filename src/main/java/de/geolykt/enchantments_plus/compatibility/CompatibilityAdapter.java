@@ -574,10 +574,20 @@ public class CompatibilityAdapter {
         return false;
     }
 
+    /**
+     * Shears the target entity and performs the necessary checks beforehand.
+     * The method checks whether the entity can be sheared and calls an event to check for protection.
+     * @param target The target entity
+     * @param player The player that shears the entity, used for world protection
+     * @param mainHand True if the mainhand was used to shear the event, false otherwise. Used for the event construction.
+     * @return Returns true if the entity was sheared, false otherwise
+     * @since 1.0
+     */
     public boolean shearEntityNMS(Entity target, Player player, boolean mainHand) {
         // FIXME this method desperately requires a refractor
         if ((target instanceof Sheep && !((Sheep) target).isSheared()) || target instanceof MushroomCow) {
-            PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target);
+            EquipmentSlot slot = mainHand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
+            PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target, player.getInventory().getItem(slot), slot);
             Bukkit.getPluginManager().callEvent(evt);
             if (!evt.isCancelled()) {
                 if (target instanceof Sheep) {
@@ -757,6 +767,14 @@ public class CompatibilityAdapter {
         return false;
     }
     
+    /**
+     * @deprecated This method is a duplicate with another method within the ColUtils class.
+     * 
+     * Returns the dyed variant of the wool block based on the DyeColor.
+     * @param col The input dye color
+     * @return The output dyed material
+     * @since 1.0
+     */
     @Deprecated
     public Material getWoolCol (DyeColor col)  {
         switch (col) {
