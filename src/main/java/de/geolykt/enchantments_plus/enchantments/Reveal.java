@@ -68,7 +68,10 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
                                 entity.setInvulnerable(true);
                                 entity.setSilent(true);
                                 ((LivingEntity)entity).setAI(false);
-                                GLOWING_BLOCKS.put(loc, entity);
+                                Entity ent = GLOWING_BLOCKS.put(loc, entity);
+                                if (ent != null) {
+                                    ent.remove();
+                                }
                                 
                                 Bukkit.getServer().getScheduler()
                                     .scheduleSyncDelayedTask(Storage.plugin, () -> {
