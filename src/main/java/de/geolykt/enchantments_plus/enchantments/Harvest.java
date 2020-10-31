@@ -14,7 +14,6 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.util.AreaLocationIterator;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 
@@ -41,44 +40,47 @@ public class Harvest extends CustomEnchantment implements AreaOfEffectable {
         
         Location loc = evt.getClickedBlock().getLocation();
         int radiusXZ = (int) getAOESize(level);
-        AreaLocationIterator iter = new AreaLocationIterator(loc, radiusXZ * 2, 3, radiusXZ * 2, -radiusXZ, -2, -radiusXZ);
         boolean success = false;
 
-        while (iter.hasNext()) {
-            final Location nextLoc = iter.next();
-            if (nextLoc.distanceSquared(loc) < radiusXZ * radiusXZ) {
+        for (int x = -radiusXZ; x <= radiusXZ; x++) {
+            for (int y = -2; y <= 0; y++) {
+                for (int z = -radiusXZ; z <= radiusXZ; z++) {
 
-                final Block nextBlock = nextLoc.getBlock();
-                if (!Storage.COMPATIBILITY_ADAPTER.grownCrops().contains(nextBlock.getType())
-                        && !Storage.COMPATIBILITY_ADAPTER.grownMelon().contains(nextBlock.getType())) {
-                    continue;
-                }
+                    final Block block = loc.getBlock().getRelative(x, y, z);
+                    if (block.getLocation().distanceSquared(loc) < radiusXZ * radiusXZ) {
 
-                BlockData cropState = nextBlock.getBlockData();
-                boolean harvestReady = !(cropState instanceof Ageable); // Is this block the crop's mature form?
-                if (!harvestReady) { // Is the mature form not a separate Material but just a particular data value?
-                    harvestReady = ((Ageable) cropState).getAge() == ((Ageable) cropState).getMaximumAge();
-                    if (!harvestReady) {
-                        harvestReady = nextBlock.getType() == Material.SWEET_BERRY_BUSH;
-                    }
-                }
+                        if (!Storage.COMPATIBILITY_ADAPTER.grownCrops().contains(block.getType())
+                                && !Storage.COMPATIBILITY_ADAPTER.grownMelon().contains(block.getType())) {
+                            continue;
+                        }
 
-                if (harvestReady) {
-                    boolean blockAltered;
-                    if (nextBlock.getType() == Material.SWEET_BERRY_BUSH) {
-                        blockAltered = Storage.COMPATIBILITY_ADAPTER.pickBerries(nextBlock, evt.getPlayer());
-                    } else {
-                        blockAltered = ADAPTER.breakBlockNMS(nextBlock, evt.getPlayer());
-                    }
+                        BlockData cropState = block.getBlockData();
+                        boolean harvestReady = !(cropState instanceof Ageable); // Is this block the crop's mature form?
+                        if (!harvestReady) { // Is the mature form not a separate Material but just a particular data value?
+                            harvestReady = ((Ageable) cropState).getAge() == ((Ageable) cropState).getMaximumAge();
+                            if (!harvestReady) {
+                                harvestReady = block.getType() == Material.SWEET_BERRY_BUSH;
+                            }
+                        }
 
-                    if (blockAltered) {
-                        CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
-                        Grab.grabLocs.put(nextLoc, evt.getPlayer());
-                        Bukkit.getServer().getScheduler()
-                                .scheduleSyncDelayedTask(Storage.plugin, () -> {
-                                    Grab.grabLocs.remove(nextBlock.getLocation());
-                                }, 3);
-                        success = true;
+                        if (harvestReady) {
+                            boolean blockAltered;
+                            if (block.getType() == Material.SWEET_BERRY_BUSH) {
+                                blockAltered = Storage.COMPATIBILITY_ADAPTER.pickBerries(block, evt.getPlayer());
+                            } else {
+                                blockAltered = ADAPTER.breakBlockNMS(block, evt.getPlayer());
+                            }
+
+                            if (blockAltered) {
+                                CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
+                                Grab.grabLocs.put(block.getLocation(), evt.getPlayer());
+                                Bukkit.getServer().getScheduler()
+                                        .scheduleSyncDelayedTask(Storage.plugin, () -> {
+                                            Grab.grabLocs.remove(block.getLocation());
+                                        }, 3);
+                                success = true;
+                            }
+                        }
                     }
                 }
             }

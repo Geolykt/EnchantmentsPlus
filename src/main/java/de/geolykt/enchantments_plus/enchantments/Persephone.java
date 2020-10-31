@@ -2,7 +2,6 @@ package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -11,7 +10,6 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.util.AreaLocationIterator;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -40,48 +38,54 @@ public class Persephone extends CustomEnchantment implements AreaOfEffectable {
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
         if (evt.getAction() == RIGHT_CLICK_BLOCK) {
             Player player = evt.getPlayer();
-            Block clickedBlock = evt.getClickedBlock();
-            Location source = clickedBlock.getLocation();
+            Location loc = evt.getClickedBlock().getLocation();
             int radiusXZ = (int) getAOESize(level);
 
             if (Storage.COMPATIBILITY_ADAPTER.persephoneCrops().contains(evt.getClickedBlock().getType())) {
-                
-                AreaLocationIterator iter = new AreaLocationIterator(source, radiusXZ * 2, 2, radiusXZ * 2, -radiusXZ, -2, -radiusXZ);
-                while (iter.hasNext()) {
-                    Block blk = iter.next().getBlock();
-                    if (blk.getLocation().distanceSquared(source) < radiusXZ * radiusXZ) {
-                        if (blk.getType() == FARMLAND
-                                && Storage.COMPATIBILITY_ADAPTER.airs().contains(blk.getRelative(BlockFace.UP).getType())) {
-                            if (evt.getPlayer().getInventory().contains(CARROT)) {
-                                if (ADAPTER.placeBlock(blk.getRelative(BlockFace.UP), player, CARROTS,
-                                        null)) {
-                                    Utilities.removeItem(player, CARROT, 1);
+                Block block = loc.getBlock();
+                for (int x = -radiusXZ; x <= radiusXZ; x++) {
+                    for (int y = -2; y <= 0; y++) {
+                        for (int z = -radiusXZ; z <= radiusXZ; z++) {
+
+                            if (block.getRelative(x, y, z).getLocation().distanceSquared(loc)
+                                    < radiusXZ * radiusXZ) {
+                                if (block.getRelative(x, y, z).getType() == FARMLAND
+                                        && Storage.COMPATIBILITY_ADAPTER.airs().contains(block.getRelative(x, y + 1, z).getType())) {
+                                    if (evt.getPlayer().getInventory().contains(CARROT)) {
+                                        if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, CARROTS,
+                                                null)) {
+                                            Utilities.removeItem(player, CARROT, 1);
+                                        }
+                                    } else if (evt.getPlayer().getInventory().contains(POTATO)) {
+                                        if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, POTATOES,
+                                                null)) {
+                                            Utilities.removeItem(player, POTATO, 1);
+                                        }
+                                    } else if (evt.getPlayer().getInventory().contains(WHEAT_SEEDS)) {
+                                        if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, WHEAT, null)) {
+                                            Utilities.removeItem(player, WHEAT_SEEDS, 1);
+                                        }
+                                    } else if (evt.getPlayer().getInventory().contains(BEETROOT_SEEDS)) {
+                                        if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, BEETROOTS,
+                                                null)) {
+                                            Utilities.removeItem(player, BEETROOT_SEEDS, 1);
+                                        }
+                                    }
+                                } else if (block.getRelative(x, y, z).getType() == SOUL_SAND
+                                        && Storage.COMPATIBILITY_ADAPTER.airs().contains(block.getRelative(x, y + 1, z).getType())) {
+                                    if (evt.getPlayer().getInventory().contains(NETHER_WART)) {
+                                        if (ADAPTER.placeBlock(block.getRelative(x, y + 1, z), player, NETHER_WART,
+                                                null)) {
+                                            Utilities.removeItem(player, NETHER_WART, 1);
+                                        }
+                                    }
+                                } else {
+                                    continue;
                                 }
-                            } else if (evt.getPlayer().getInventory().contains(POTATO)) {
-                                if (ADAPTER.placeBlock(blk.getRelative(BlockFace.UP), player, POTATOES,
-                                        null)) {
-                                    Utilities.removeItem(player, POTATO, 1);
-                                }
-                            } else if (evt.getPlayer().getInventory().contains(WHEAT_SEEDS)) {
-                                if (ADAPTER.placeBlock(blk.getRelative(BlockFace.UP), player, WHEAT, null)) {
-                                    Utilities.removeItem(player, WHEAT_SEEDS, 1);
-                                }
-                            } else if (evt.getPlayer().getInventory().contains(BEETROOT_SEEDS)) {
-                                if (ADAPTER.placeBlock(blk.getRelative(BlockFace.UP), player, BEETROOTS, null)) {
-                                    Utilities.removeItem(player, BEETROOT_SEEDS, 1);
+                                if (ThreadLocalRandom.current().nextBoolean()) {
+                                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                                 }
                             }
-                        } else if (blk.getType() == SOUL_SAND
-                                && Storage.COMPATIBILITY_ADAPTER.airs().contains(blk.getRelative(BlockFace.UP).getType())) {
-                            if (evt.getPlayer().getInventory().contains(NETHER_WART) 
-                                    && ADAPTER.placeBlock(blk.getRelative(BlockFace.UP), player, NETHER_WART, null)) {
-                                Utilities.removeItem(player, NETHER_WART, 1);
-                            }
-                        } else {
-                            continue;
-                        }
-                        if (ThreadLocalRandom.current().nextBoolean()) {
-                            CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                         }
                     }
                 }

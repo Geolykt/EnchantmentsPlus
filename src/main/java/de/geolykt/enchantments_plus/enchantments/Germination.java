@@ -12,7 +12,6 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.util.AreaLocationIterator;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -41,27 +40,32 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
         }
         Player player = evt.getPlayer();
         Location loc = evt.getClickedBlock().getLocation();
+        Block clickedBlock = evt.getClickedBlock();
         int radiusXZ = (int) getAOESize(level);
         boolean applied = false;
-        AreaLocationIterator iter = new AreaLocationIterator(loc, radiusXZ * 2, 4, radiusXZ * 2, -radiusXZ, -3, -radiusXZ);
-        while (iter.hasNext()) {
-            Block blk = iter.next().getBlock();
-            if (blk.getLocation().distanceSquared(loc) < radiusXZ * radiusXZ
-                    && Utilities.hasItem(player, Material.BONE_MEAL, 1)
-                    && ADAPTER.grow(blk, player)) {
+        for (int x = -(radiusXZ); x <= radiusXZ; x++) {
+            for (int y = -3; y <= 1; y++) {
+                for (int z = -(radiusXZ); z <= radiusXZ; z++) {
 
-                applied = true;
-                if (ThreadLocalRandom.current().nextBoolean()) {
-                    ADAPTER.grow(blk, player);
+                    Block relativeBlock = clickedBlock.getRelative(x, y, z);
+                    if (relativeBlock.getLocation().distanceSquared(loc) < radiusXZ * radiusXZ
+                            && Utilities.hasItem(player, Material.BONE_MEAL, 1)
+                            && ADAPTER.grow(relativeBlock, player)) {
+
+                        applied = true;
+                        if (ThreadLocalRandom.current().nextBoolean()) {
+                            ADAPTER.grow(relativeBlock, player);
+                        }
+
+                        CompatibilityAdapter.display(Utilities.getCenter(relativeBlock), Particle.VILLAGER_HAPPY,
+                                25, 1f, .3f, .3f, .3f);
+
+                        if (ThreadLocalRandom.current().nextInt(10) <= 3) {
+                            CompatibilityAdapter.damageTool(player, 1, usedHand);
+                        }
+                        Utilities.removeItem(player, Material.BONE_MEAL, 1);
+                    }
                 }
-
-                CompatibilityAdapter.display(Utilities.getCenter(blk), Particle.VILLAGER_HAPPY,
-                        25, 1f, .3f, .3f, .3f);
-
-                if (ThreadLocalRandom.current().nextInt(10) <= 3) {
-                    CompatibilityAdapter.damageTool(player, 1, usedHand);
-                }
-                Utilities.removeItem(player, Material.BONE_MEAL, 1);
             }
         }
         return applied;

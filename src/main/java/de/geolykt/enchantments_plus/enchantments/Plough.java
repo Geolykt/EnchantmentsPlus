@@ -3,7 +3,6 @@ package de.geolykt.enchantments_plus.enchantments;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -11,7 +10,6 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.util.AreaLocationIterator;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 
@@ -40,19 +38,21 @@ public class Plough extends CustomEnchantment implements AreaOfEffectable {
         if (evt.getAction() == RIGHT_CLICK_BLOCK) {
             Location loc = evt.getClickedBlock().getLocation();
             int radiusXZ = (int) getAOESize(level);
-            AreaLocationIterator iter = new AreaLocationIterator(loc, radiusXZ * 2, 3, radiusXZ * 2, -radiusXZ, -2, -radiusXZ);
-            while (iter.hasNext()) {
-                Location iterLoc = iter.next();
-                Block iterBlock = iterLoc.getBlock();
-                if (iterLoc.distanceSquared(loc) < radiusXZ * radiusXZ) {
-                    if (((iterBlock.getType() == DIRT
-                        || iterBlock.getType() == GRASS_BLOCK
-                        || iterBlock.getType() == MYCELIUM))
-                        && Storage.COMPATIBILITY_ADAPTER.airs().contains(iterBlock.getRelative(BlockFace.UP).getType())) {
-                        // TODO maybe imitate a plough event or similar and damage the tool accordingly
-                        if (ADAPTER.placeBlock(iterBlock, evt.getPlayer(), Material.FARMLAND, null) 
-                                && ThreadLocalRandom.current().nextBoolean()) {
-                            CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
+            for (int x = -(radiusXZ); x <= radiusXZ; x++) {
+                for (int y = -2; y <= 0; y++) {
+                    for (int z = -(radiusXZ); z <= radiusXZ; z++) {
+                        Block block = loc.getBlock();
+                        if (block.getRelative(x, y, z).getLocation().distanceSquared(loc) < radiusXZ * radiusXZ) {
+                            if (((block.getRelative(x, y, z).getType() == DIRT
+                                || block.getRelative(x, y, z).getType() == GRASS_BLOCK
+                                || block.getRelative(x, y, z).getType() == MYCELIUM))
+                                && Storage.COMPATIBILITY_ADAPTER.airs().contains(block.getRelative(x, y + 1, z).getType())) {
+                                ADAPTER.placeBlock(block.getRelative(x, y, z), evt.getPlayer(), Material.FARMLAND,
+                                    null);
+                                if (ThreadLocalRandom.current().nextBoolean()) {
+                                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
+                                }
+                            }
                         }
                     }
                 }

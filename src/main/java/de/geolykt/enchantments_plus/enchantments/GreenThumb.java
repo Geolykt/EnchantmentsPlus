@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +14,6 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.util.AreaLocationIterator;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -47,55 +45,60 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
         Location loc = player.getLocation().clone();
         Block centerBlock = loc.getBlock();
         int radius = (int) getAOESize(level);
-        int radiusSquared = radius*radius;
-        AreaLocationIterator iter = new AreaLocationIterator(loc, radius * 2, radius * 2, radius * 2, -radius, -radius-1, -radius);
-
-        while (iter.hasNext()) {
-            Block relativeBlock = iter.next().getBlock();
-            if (relativeBlock.getLocation().distanceSquared(loc) < radiusSquared 
-                    && ThreadLocalRandom.current().nextInt((int) (150 / (power * level))) != 0) {
-                boolean applied = false;
-                switch (relativeBlock.getType()) {
-                    case DIRT:
-                        if (Storage.COMPATIBILITY_ADAPTER.airs().contains(relativeBlock.getRelative(0, 1, 0).getType())) {
-                            Material mat;
-                            switch (centerBlock.getBiome()) {
-                                case MUSHROOM_FIELD_SHORE:
-                                case MUSHROOM_FIELDS:
-                                    mat = MYCELIUM;
-                                    break;
-                                case GIANT_SPRUCE_TAIGA:
-                                case GIANT_TREE_TAIGA:
-                                case GIANT_SPRUCE_TAIGA_HILLS:
-                                case GIANT_TREE_TAIGA_HILLS:
-                                    mat = PODZOL;
-                                    break;
-                                default:
-                                    mat = GRASS_BLOCK;
-                            }
-                            applied = ADAPTER.placeBlock(relativeBlock, player, mat, null);
+        for (int x = -(radius); x <= radius; x++) {
+            for (int y = -(radius) - 1; y <= radius - 1; y++) {
+                for (int z = -(radius); z <= radius; z++) {
+                    Block relativeBlock = centerBlock.getRelative(x, y, z);
+                    if (relativeBlock.getLocation().distance(loc) < radius) {
+                        if (ThreadLocalRandom.current().nextInt((int) (300 / (power * level / 2))) != 0) {
+                            continue;
                         }
-                        break;
-                    default:
-                        applied = ADAPTER.grow(relativeBlock, player);
-                        break;
-                }
-                if (applied) { // Display particles and damage armor
-                    CompatibilityAdapter.display(Utilities.getCenter(relativeBlock.getRelative(BlockFace.UP)),
-                        Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
-                    if (ThreadLocalRandom.current().nextInt(50) > 42 && level != 10) {
-                        for (EquipmentSlot slot : SLOTS) {
-                            final ItemStack s = player.getInventory().getItem(slot);
-                            if (s != null
-                                    && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.GREEN_THUMB)
-                                    && CompatibilityAdapter.damageItem2(s, level)) {
-                                player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+                        boolean applied = false;
+                        switch (relativeBlock.getType()) {
+                            case DIRT:
+                                if (Storage.COMPATIBILITY_ADAPTER.airs().contains(relativeBlock.getRelative(0, 1, 0).getType())) {
+                                    Material mat;
+                                    switch (centerBlock.getBiome()) {
+                                        case MUSHROOM_FIELD_SHORE:
+                                        case MUSHROOM_FIELDS:
+                                            mat = MYCELIUM;
+                                            break;
+                                        case GIANT_SPRUCE_TAIGA:
+                                        case GIANT_TREE_TAIGA:
+                                        case GIANT_SPRUCE_TAIGA_HILLS:
+                                        case GIANT_TREE_TAIGA_HILLS:
+                                            mat = PODZOL;
+                                            break;
+                                        default:
+                                            mat = GRASS_BLOCK;
+                                    }
+                                    applied = ADAPTER.placeBlock(relativeBlock, player, mat, null);
+                                }
+                                break;
+                            default:
+                                applied = ADAPTER.grow(centerBlock.getRelative(x, y, z), player);
+                                break;
+                        }
+                        if (applied) { // Display particles and damage armor
+                            CompatibilityAdapter.display(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
+                                Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
+                            int chc = ThreadLocalRandom.current().nextInt(50);
+                            if (chc > 42 && level != 10) {
+                                for (EquipmentSlot slot : SLOTS) {
+                                    final ItemStack s = player.getInventory().getItem(slot);
+                                    if (s != null
+                                            && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.GREEN_THUMB)
+                                            && CompatibilityAdapter.damageItem2(s, level)) {
+                                        player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
         return true;
     }
 
