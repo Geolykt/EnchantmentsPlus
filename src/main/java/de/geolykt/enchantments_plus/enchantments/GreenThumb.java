@@ -42,14 +42,14 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
-        Location loc = player.getLocation().clone();
+        Location loc = player.getLocation();
         Block centerBlock = loc.getBlock();
         int radius = (int) getAOESize(level);
         for (int x = -(radius); x <= radius; x++) {
             for (int y = -(radius) - 1; y <= radius - 1; y++) {
                 for (int z = -(radius); z <= radius; z++) {
                     Block relativeBlock = centerBlock.getRelative(x, y, z);
-                    if (relativeBlock.getLocation().distance(loc) < radius) {
+                    if (relativeBlock.getLocation().distanceSquared(loc) < radius * radius) {
                         if (ThreadLocalRandom.current().nextInt((int) (300 / (power * level / 2))) != 0) {
                             continue;
                         }
@@ -82,8 +82,7 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                         if (applied) { // Display particles and damage armor
                             CompatibilityAdapter.display(Utilities.getCenter(centerBlock.getRelative(x, y + 1, z)),
                                 Particle.VILLAGER_HAPPY, 20, 1f, .3f, .3f, .3f);
-                            int chc = ThreadLocalRandom.current().nextInt(50);
-                            if (chc > 42 && level != 10) {
+                            if (ThreadLocalRandom.current().nextInt(50) > 42 && level != 10) {
                                 for (EquipmentSlot slot : SLOTS) {
                                     final ItemStack s = player.getInventory().getItem(slot);
                                     if (s != null

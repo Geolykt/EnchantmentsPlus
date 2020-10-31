@@ -36,7 +36,7 @@ public class Mow extends CustomEnchantment implements AreaOfEffectable {
 
     private boolean shear(PlayerEvent evt, int level, boolean usedHand) {
         int amt = 0;
-        int radius = (int) getAOESize(level);
+        double radius = getAOESize(level);
         Player player = evt.getPlayer();
         for (Entity ent : evt.getPlayer().getNearbyEntities(radius, radius, radius)) {
             if (ent instanceof Sheep || ent instanceof MushroomCow && ((Ageable)ent).isAdult()) {

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
@@ -46,13 +47,12 @@ public class Terraformer extends CustomEnchantment {
                 Material mat = Material.AIR;
 
                 for (int i = 0; i < 9; i++) {
-                    if (evt.getPlayer().getInventory().getItem(i) != null) {
-                        if (evt.getPlayer().getInventory().getItem(i).getType().isBlock() &&
-                            Storage.COMPATIBILITY_ADAPTER.terraformerMaterials().contains(
-                                evt.getPlayer().getInventory().getItem(i).getType())) {
-                            mat = evt.getPlayer().getInventory().getItem(i).getType();
-                            break;
-                        }
+                    ItemStack itemInHand = evt.getPlayer().getInventory().getItem(i);
+                    if (itemInHand != null
+                            && itemInHand.getType().isBlock()
+                            && Storage.COMPATIBILITY_ADAPTER.terraformerMaterials().contains(itemInHand.getType())) {
+                        mat = itemInHand.getType();
+                        break;
                     }
                 }
                 if (mat == Material.AIR) {
@@ -60,16 +60,13 @@ public class Terraformer extends CustomEnchantment {
                 }
 
                 for (Block b : Utilities.BFS(start, MAX_BLOCKS, false, 5.f, SEARCH_FACES,
-                    Storage.COMPATIBILITY_ADAPTER.airs(), new HashSet<Material>(), false, true)) {
-                    if (b.getType().equals(Material.AIR)) {
-                        if (Utilities.hasItem(evt.getPlayer(), mat, 1)) {
-                            if (Storage.COMPATIBILITY_ADAPTER.placeBlock(b, evt.getPlayer(), mat, null)) {
-                                Utilities.removeItem(evt.getPlayer(), mat, 1);
-                                if (ThreadLocalRandom.current().nextInt(10) == 5) {
-                                    CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
-                                }
-                            }
-                        }
+                        Storage.COMPATIBILITY_ADAPTER.airs(), new HashSet<Material>(), false, true)) {
+                    if (b.getType().equals(Material.AIR) 
+                            && Utilities.hasItem(evt.getPlayer(), mat, 1)
+                            && Storage.COMPATIBILITY_ADAPTER.placeBlock(b, evt.getPlayer(), mat, null)
+                            && Utilities.removeItem(evt.getPlayer(), mat, 1)
+                            && ThreadLocalRandom.current().nextInt(10) == 5) {
+                        CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
                     }
                 }
                 return true;
@@ -77,6 +74,5 @@ public class Terraformer extends CustomEnchantment {
         }
         return false;
     }
-
 
 }

@@ -42,7 +42,7 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
         Location loc = evt.getClickedBlock().getLocation();
         Block clickedBlock = evt.getClickedBlock();
         int radiusXZ = (int) getAOESize(level);
-        boolean applied = false;
+        int consumedBonemeal = 0;
         for (int x = -(radiusXZ); x <= radiusXZ; x++) {
             for (int y = -3; y <= 1; y++) {
                 for (int z = -(radiusXZ); z <= radiusXZ; z++) {
@@ -52,7 +52,6 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
                             && Utilities.hasItem(player, Material.BONE_MEAL, 1)
                             && ADAPTER.grow(relativeBlock, player)) {
 
-                        applied = true;
                         if (ThreadLocalRandom.current().nextBoolean()) {
                             ADAPTER.grow(relativeBlock, player);
                         }
@@ -63,12 +62,13 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
                         if (ThreadLocalRandom.current().nextInt(10) <= 3) {
                             CompatibilityAdapter.damageTool(player, 1, usedHand);
                         }
-                        Utilities.removeItem(player, Material.BONE_MEAL, 1);
+                        consumedBonemeal++;
                     }
                 }
             }
         }
-        return applied;
+        Utilities.removeItem(player, Material.BONE_MEAL, consumedBonemeal);
+        return consumedBonemeal != 0;
     }
 
     /**

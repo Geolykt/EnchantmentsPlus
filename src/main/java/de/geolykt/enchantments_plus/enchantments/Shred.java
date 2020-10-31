@@ -6,7 +6,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.*;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
@@ -46,10 +45,9 @@ public class Shred extends CustomEnchantment implements AreaOfEffectable {
                 && !Storage.COMPATIBILITY_ADAPTER.shredShovels().contains(evt.getBlock().getType())) {
             return false;
         }
-        ItemStack hand = Utilities.usedStack(evt.getPlayer(), usedHand);
         blocks(evt.getBlock(), evt.getBlock(), new int[]{level + 3, level + 3, level + 3}, 0,
                 getAOESize(level), new HashSet<>(), evt.getPlayer(), Config.get(evt.getBlock().getWorld()),
-                hand.getType(), usedHand);
+                Utilities.usedStack(evt.getPlayer(), usedHand).getType(), usedHand);
         return true;
     }
 

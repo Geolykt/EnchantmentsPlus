@@ -70,6 +70,7 @@ public class MysteryFish extends CustomEnchantment {
     }
 
     // Move Guardians from MysteryFish towards the player
+    // TODO refractor
     public static void guardian() {
         Iterator<Entity> it = guardianMove.keySet().iterator();
         while (it.hasNext()) {
