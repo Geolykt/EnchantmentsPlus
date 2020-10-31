@@ -4,14 +4,13 @@ package de.geolykt.enchantments_plus;
 import org.apache.commons.lang.time.StopWatch;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +27,6 @@ import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.bukkit.Material.*;
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
 public class Enchantments_plus extends JavaPlugin {
@@ -46,15 +44,10 @@ public class Enchantments_plus extends JavaPlugin {
     // Sets blocks to their natural states at shutdown
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
-        for (Location l : FrozenStep.frozenLocs.keySet()) {
-            l.getBlock().setType(WATER);
-        }
-        for (Location l : NetherStep.netherstepLocs.keySet()) {
-            l.getBlock().setType(LAVA);
-        }
-        for (Entity e : Anthropomorphism.idleBlocks.keySet()) {
-            e.remove();
-        }
+        FrozenStep.frozenLocs.keySet().forEach((location) -> location.getBlock().setType(Material.WATER));
+        NetherStep.netherstepLocs.keySet().forEach((location) -> location.getBlock().setType(Material.LAVA));
+        Anthropomorphism.idleBlocks.keySet().forEach((e) -> e.remove());
+        Reveal.GLOWING_BLOCKS.forEach((loc, ent) -> ent.remove());
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasMetadata("ze.haste")) {
                 player.removePotionEffect(FAST_DIGGING);
@@ -69,6 +62,7 @@ public class Enchantments_plus extends JavaPlugin {
     }
 
     // Returns true if the given item stack has a custom enchantment
+    @Deprecated
     public boolean hasEnchantment(ItemStack stack) {
         boolean has = false;
         for (Config c : Config.CONFIGS.values()) {
@@ -80,6 +74,7 @@ public class Enchantments_plus extends JavaPlugin {
     }
 
     // Returns enchantment names mapped to their level from the given item stack
+    @Deprecated
     public Map<String, Integer> getEnchantments(ItemStack stack) {
         Map<String, Integer> enchantments = new TreeMap<>();
         for (Map.Entry<CustomEnchantment, Integer> ench : 
@@ -89,6 +84,7 @@ public class Enchantments_plus extends JavaPlugin {
         return enchantments;
     }
 
+    @Deprecated
     public Map<String, Integer> getEnchantments(ItemStack stack, World world) {
         Map<String, Integer> enchantments = new TreeMap<>();
         for (Map.Entry<CustomEnchantment, Integer> ench : CustomEnchantment.getEnchants(stack, world).entrySet()) {
@@ -98,6 +94,7 @@ public class Enchantments_plus extends JavaPlugin {
     }
 
     // Returns true if the enchantment (given by the string) can be applied to the given item stack
+    @Deprecated
     public boolean isCompatible(String enchantmentName, ItemStack stack) {
         for (Config c : Config.CONFIGS.values()) {
             CustomEnchantment e;
@@ -112,6 +109,7 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Adds the enchantments (given by the string) of level 'level' to the given item stack, returning true if the
     //      action was successful
+    @Deprecated
     public boolean addEnchantment(ItemStack stk, String enchantmentName, int lvl) {
         for (Config c : Config.CONFIGS.values()) {
             CustomEnchantment e;
@@ -125,6 +123,7 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Removes the enchantment (given by the string) from the given item stack, returning true if the action was
     //      successful
+    @Deprecated
     public boolean removeEnchantment(ItemStack stk, String enchantmentName) {
         for (Config c : Config.CONFIGS.values()) {
             CustomEnchantment e;
