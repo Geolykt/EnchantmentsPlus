@@ -17,7 +17,16 @@ import de.geolykt.enchantments_plus.util.Tool;
 public class Siphon extends CustomEnchantment {
 
     public static final int ID = 53;
+
+    /**
+     * @deprecated This is basically a needless alternative to the power parameter. Will be removed in v3.0.0
+     * A multiplier for the damage taken to health added conversion.
+     *  Please note that there are other multipliers and the power of the enchantment should be used instead.
+     * @since 1.0
+     */
+    @Deprecated
     public static double ratio = 0.5;
+
     public static boolean calcAmour = true;
 
     @Override

@@ -29,7 +29,7 @@ public class Storage {
      * It's currently only used by the `/ench version` command.
      * @since 1.0.0
      */
-    public static final String DISTRIBUTION = "Git";
+    public static final String DISTRIBUTION = "self-compiled";
 
     /**
      * A coled text-based logo for the plugin, used mainly for command responses, but can be used for other stuff. <br>
@@ -57,6 +57,15 @@ public class Storage {
     public static String version = "";
 
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER = new CompatibilityAdapter();
+    
+    /**
+     * @deprecated Not used, at all.
+     * The anticheat adapter used for the plugin, however while it is planned that it's functions are added eventually in one shape or
+     * form, it is currently (v2.2.0) absolutely not used and only remains for upwards compatibillity. Who know's maybe it will even
+     * be removed?
+     * @since 1.1.0
+     */
+    @Deprecated
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     /**

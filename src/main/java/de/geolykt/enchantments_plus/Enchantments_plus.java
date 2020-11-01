@@ -175,7 +175,7 @@ public class Enchantments_plus extends JavaPlugin {
         Spectral.SEARCH_FACES = ALL_SEARCH_FACES;
         Pierce.SEARCH_FACES = ALL_SEARCH_FACES;
 
-        Storage.ANTICHEAT_ADAPTER.onEnable();
+//        Storage.ANTICHEAT_ADAPTER.onEnable();
         
         Laser.colorKey = new NamespacedKey(this, "laserCol");
         
