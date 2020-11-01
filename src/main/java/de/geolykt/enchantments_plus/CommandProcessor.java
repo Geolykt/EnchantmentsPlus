@@ -134,7 +134,7 @@ public class CommandProcessor {
                 return Arrays.asList();
             }
             LinkedList<String> results = new LinkedList<>();
-            if (args.length == 1) {
+            if (args.length == 1) { // TODO we can use a switch statement here!
                 for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
                     if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (
                             stack.getType() == BOOK
@@ -158,19 +158,22 @@ public class CommandProcessor {
             } else if (args.length == 4) {
                 results.addAll(Arrays.asList("true", "false"));
                 results.removeIf(e -> !e.startsWith(args[3]));
+            } else if (args.length == 5) {
+                results.addAll(Arrays.asList("true", "false"));
+                results.removeIf(e -> !e.startsWith(args[3]));
             }
             return results;
         }
     }
 
     // Reloads the Enchantments_plus plugin
-    private static boolean reload(CommandSender player) {
-        if (!PermissionTypes.RELOAD.hasPermission(player)) {
-            player.sendMessage(Storage.LOGO + "You do not have permission to do this!");
+    private static boolean reload(CommandSender sebder) {
+        if (!PermissionTypes.RELOAD.hasPermission(sebder)) {
+            sebder.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
-        player.sendMessage(Storage.LOGO + "Reloaded Enchantments_plus configurations.");
-        player.sendMessage(ChatColor.RED + " Please avoid using the command. It may create memory leaks and inaccurate configurations.");
+        sebder.sendMessage(Storage.LOGO + "Reloaded Enchantments+ configurations.");
+        sebder.sendMessage(ChatColor.RED + " Please avoid using the command. It may create memory leaks and inaccurate configurations.");
         Storage.plugin.loadConfigs();
         return true;
     }
@@ -403,8 +406,8 @@ public class CommandProcessor {
                         + ChatColor.AQUA + "Gives the target a specified enchanted item.");
             }
             if (PermissionTypes.ENCHANT.hasPermission(player)) {
-                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enchantment> <?level> <?modifier> <?doNotification>: " + ChatColor.AQUA
-                        + "Enchants the item in hand with the given enchantment and level");
+                player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enchantment> <?level> <?modifier> <?doNotification> <?force>: "
+                        + ChatColor.AQUA + "Enchants the item in hand with the given enchantment and level");
             }
             if (PermissionTypes.ONOFF.hasPermission(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "- " + "ench <enable/disable> <enchantment/all>: " + ChatColor.AQUA
@@ -464,37 +467,44 @@ public class CommandProcessor {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
+        int level = 1;
+        if (args.length > 1) {
+            try {
+                level = Integer.decode(args[1]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(Storage.LOGO + ChatColor.RED + "Argument 2 is not a number, however an Integer was expected");
+                return true;
+            }
+        }
         switch (args.length) {
         case 0:
             return false;
         case 1:
-            return ench(sender,args[0], 1);
+            return ench(sender,args[0], 1, true, false);
         case 2:
-            try {
-                return ench(sender, args[0], Integer.decode(args[1]));
-            } catch (NumberFormatException e) {
-                sender.sendMessage(Storage.LOGO + ChatColor.RED + "Argument 2 is not a number, however an Integer was expected");
-                return false;
-            }
+            return ench(sender, args[0], level, true, false);
         case 3:
-            try {
-                return ench(sender, args[0], Integer.decode(args[1]), args[2], false);
-            } catch (NumberFormatException e) {
-                sender.sendMessage(Storage.LOGO + ChatColor.RED + "Argument 2 is not a number, however an Integer was expected");
-                return false;
-            }
+            return ench(sender, args[0], level, args[2], true, false);
         case 4:
+            return ench(sender, args[0], level, args[2], Boolean.parseBoolean(args[3]), false);
+        case 5:
         default:
-            try {
-                return ench(sender, args[0], Integer.decode(args[1]), args[2], Boolean.parseBoolean(args[3]));
-            } catch (NumberFormatException e) {
-                sender.sendMessage(Storage.LOGO + ChatColor.RED + "Argument 2 is not a number, however an Integer was expected");
-                return false;
-            }
+            return ench(sender, args[0], level, args[2], Boolean.parseBoolean(args[3]),  Boolean.parseBoolean(args[4]));
         }
     }
 
-    private static boolean ench(CommandSender infoReciever, String enchantmentName, Integer level, String targetModif, Boolean doNotify) {
+    /**
+     * Performs the enchantment command with a known target
+     * @param infoReciever The receiver that should get the feedback of the command
+     * @param eName The name of the enchantment
+     * @param level The level of the enchantment
+     * @param targetModif Dictates who gets the enchantment
+     * @param doNotify True if the targets should receive feedback
+     * @param force Whether or not the enchantment should be forced onto the tool, ignoring several things (UNSAFE!)
+     * @return True if the enchantment was performed correctly
+     * @since 2.2.0
+     */
+    private static boolean ench(CommandSender infoReciever, String eName, Integer level, String targetModif, boolean doNotify, boolean force) {
         Entity[] target = CommandUtils.getTargets(infoReciever, targetModif);
         if (target.length == 0) {
             infoReciever.sendMessage(Storage.LOGO + ChatColor.AQUA + "No entities changed.");
@@ -502,11 +512,11 @@ public class CommandProcessor {
         }
         for (Entity e: target) {
             if (e instanceof Player) {
-                ench(infoReciever, enchantmentName, level, doNotify);
+                ench(infoReciever, eName, level, doNotify, force);
             } else if (e instanceof Monster) {
                 ItemStack stack = ((Monster) e).getEquipment().getItemInMainHand();
                 if (stack != null) {
-                    CustomEnchantment.setEnchantment(stack, Config.get(e.getWorld()).enchantFromString(enchantmentName), level, e.getWorld());
+                    CustomEnchantment.setEnchantment(stack, Config.get(e.getWorld()).enchantFromString(eName), level, e.getWorld());
                     ((Monster) e).getEquipment().setItemInMainHand(stack);
                 }
             }
@@ -514,23 +524,58 @@ public class CommandProcessor {
         return true;
     }
 
-    private static boolean ench(CommandSender target, String enchantmentName, Integer level, boolean postPlayerFeedback) {
-        if (target instanceof Player) {
+    /**
+     * Performs the enchantment command on a given target
+     * @param target The target of the execution, this should be a player to execute correctly.
+     * @param enchantmentName The name of the enchantment
+     * @param level The level of the enchantment
+     * @param postPlayerFeedback True if the target should be notified, false if not
+     * @param force True if the enchantments should be applied without thinking, if false incompatibilities are sorted out automatically
+     * @return Returns true if the target was a player, false otherwise
+     * @since 2.2.0
+     */
+    private static boolean ench(CommandSender target, String enchantmentName, Integer level, boolean postPlayerFeedback, boolean force) {
+        if (target instanceof Player) { // This instanceof can be removed as it should (and is!) be checked on another level
             Player player = (Player) target;
-            CustomEnchantment ench = Config.get(player.getWorld()).enchantFromString(enchantmentName);
+            Config cfg = Config.get(player.getWorld());
+            CustomEnchantment ench = cfg.enchantFromString(enchantmentName);
+            ItemStack stack = player.getInventory().getItemInMainHand();
             if (ench == null) {
                 if (postPlayerFeedback) {
                     player.sendMessage(Storage.LOGO + ChatColor.RED + "This is not a valid enchantment");
                 }
-                return true;
-            } else if (player.getInventory().getItemInMainHand() == null ||
-                       player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+            } else if (stack == null ||
+                    stack.getType() == Material.AIR) {
                 if (postPlayerFeedback) {
                     target.sendMessage(Storage.LOGO + ChatColor.RED + " You cannot enchant air");
                 }
-                return true;
             } else {
-                CustomEnchantment.setEnchantment(player.getInventory().getItemInMainHand(), ench, level, player.getWorld());
+                if (force 
+                        || level <= 0 
+                        || CustomEnchantment.getEnchantLevel(cfg, stack, ench.asEnum()) > 0) {
+                    CustomEnchantment.setEnchantment(stack, ench, level, player.getWorld());
+                } else {
+                    Map<CustomEnchantment, Integer> enchs = CustomEnchantment.getEnchants(stack, true, player.getWorld());
+                    for (Map.Entry<CustomEnchantment, Integer> potentiallyConflicting : enchs.entrySet()) {
+                        for (Class<? extends CustomEnchantment> conflict : ench.getConflicting()) {
+                            if (potentiallyConflicting.getKey().getClass().equals(conflict.getClass())) {
+                                target.sendMessage(Storage.LOGO + ChatColor.RED + "An incompatible enchantment is already on your tool!");
+                                return true;
+                            }
+                        }
+                    }
+                    if (enchs.size() >= cfg.getMaxEnchants()) {
+                        if (postPlayerFeedback) {
+                            target.sendMessage(Storage.LOGO + ChatColor.RED + "You already have too many enchantments on your tool!");
+                        }
+                        return true;
+                    } else if (ench.validMaterial(stack)) {
+                        CustomEnchantment.setEnchantment(stack, ench, level, player.getWorld());
+                    } else if (postPlayerFeedback) {
+                        target.sendMessage(Storage.LOGO + ChatColor.RED + "The enchantment cannot be applied on your current tool.");
+                        return true;
+                    }
+                }
                 if (postPlayerFeedback) {
                     if (level <= 0) {
                         player.sendMessage(Storage.LOGO + ChatColor.AQUA + "The enchantment " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + " was removed from your tool.");
@@ -544,10 +589,6 @@ public class CommandProcessor {
             return true;
         }
         return false;
-    }
-    
-    private static boolean ench(CommandSender infoReciever, String enchantmentName, Integer level) {
-        return ench(infoReciever, enchantmentName, level, true);
     }
 
     private static boolean setLaserColor(CommandSender sender, String[] args) {
