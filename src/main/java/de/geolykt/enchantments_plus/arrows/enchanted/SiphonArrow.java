@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
+import de.geolykt.enchantments_plus.enchantments.Siphon;
 
 public class SiphonArrow extends EnchantedArrow {
 
@@ -21,13 +22,14 @@ public class SiphonArrow extends EnchantedArrow {
                 (LivingEntity) evt.getEntity(),
                 (Player) arrow.getShooter(), 0)) {
             Player player = (Player) ((Projectile) evt.getDamager()).getShooter();
-            int difference = (int) Math.round(.17 * getLevel() * getPower() * evt.getDamage());
-            while (difference > 0) {
-                if (player.getHealth() <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-                    player.setHealth(player.getHealth() + 1);
-                }
-                difference--;
+            double difference = 0;
+            if (Siphon.calcAmour) {
+                difference = 0.17 * level * power * evt.getFinalDamage() * Siphon.ratio;
+            } else {
+                difference = 0.17 * level * power * evt.getDamage() * Siphon.ratio;
             }
+            player.setHealth(player.getHealth() + 
+                    Math.min(difference, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - player.getHealth()));
         }
         die();
         return true;

@@ -36,20 +36,14 @@ public class Siphon extends CustomEnchantment {
         if (evt.getEntity() instanceof LivingEntity
                 && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
             Player player = (Player) evt.getDamager();
-            int difference = 0;
+            double difference = 0;
             if (calcAmour) {
-                difference = (int) Math.round(.17 * level * power * evt.getFinalDamage());
+                difference = 0.17 * level * power * evt.getFinalDamage() * ratio;
             } else {
-                difference = (int) Math.round(.17 * level * power * evt.getDamage());
+                difference = 0.17 * level * power * evt.getDamage() * ratio;
             }
-            while (difference > 0) {
-                if (player.getHealth()+1 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
-                    player.setHealth(player.getHealth() + ratio);
-                } else {
-                    return true;
-                }
-                difference--;
-            }
+            player.setHealth(player.getHealth() + 
+                    Math.min(difference, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - player.getHealth()));
         }
         return true;
     }
