@@ -128,13 +128,23 @@ public class CommandProcessor {
                     return results;
             }
         }
-        
         private static Collection<String> enchantTabCompletion (CommandSender sender, Config config, ItemStack stack, String [] args) {
+
+        /**
+         * Performs the Tab Completion for the enchanting part of the ench command.
+         * @param sender The sender of the tab completion request
+         * @param config The configuration to be used
+         * @param stack The Itemstack that is held in hand
+         * @param args the previous arguments that were used
+         * @return The tab completion suggestions.
+         * @since 1.0
+         */
             if (!PermissionTypes.ENCHANT.hasPermission(sender)) {
                 return Arrays.asList();
             }
             LinkedList<String> results = new LinkedList<>();
-            if (args.length == 1) { // TODO we can use a switch statement here!
+            switch (args.length) {
+            case 1:
                 for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
                     if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (
                             stack.getType() == BOOK
@@ -145,35 +155,41 @@ public class CommandProcessor {
                     }
                 }
                 results.removeIf(e -> !e.startsWith(args[0]));
-            } else if (args.length == 2) {
+                break;
+            case 2: {
                 CustomEnchantment ench = config.enchantFromString(args[0]);
                 if (ench != null) {
                     for (int i = 0; i <= ench.getMaxLevel(); i++) {
                         results.add(i + "");
                     }
                 }
-            } else if (args.length == 3) {
+                break;
+            }
+            case 3:
                 results.addAll(Arrays.asList("@a", "@p", "@r", "@s"));
                 results.removeIf(e -> !e.startsWith(args[2]));
-            } else if (args.length == 4) {
+                break;
+            case 4:
                 results.addAll(Arrays.asList("true", "false"));
                 results.removeIf(e -> !e.startsWith(args[3]));
-            } else if (args.length == 5) {
+                break;
+            case 5:
                 results.addAll(Arrays.asList("true", "false"));
-                results.removeIf(e -> !e.startsWith(args[3]));
+                results.removeIf(e -> !e.startsWith(args[4]));
+                break;
             }
             return results;
         }
     }
 
     // Reloads the Enchantments_plus plugin
-    private static boolean reload(CommandSender sebder) {
-        if (!PermissionTypes.RELOAD.hasPermission(sebder)) {
-            sebder.sendMessage(Storage.LOGO + "You do not have permission to do this!");
+    private static boolean reload(CommandSender sender) {
+        if (!PermissionTypes.RELOAD.hasPermission(sender)) {
+            sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
-        sebder.sendMessage(Storage.LOGO + "Reloaded Enchantments+ configurations.");
-        sebder.sendMessage(ChatColor.RED + " Please avoid using the command. It may create memory leaks and inaccurate configurations.");
+        sender.sendMessage(Storage.LOGO + "Reloaded Enchantments+ configurations.");
+        sender.sendMessage(ChatColor.RED + " Please avoid using the command. It may create memory leaks and inaccurate configurations.");
         Storage.plugin.loadConfigs();
         return true;
     }
@@ -266,10 +282,10 @@ public class CommandProcessor {
         if (!(sender instanceof Player)) {
             return false;
         }
-        
+
         Config config = Config.get(((Player) sender).getWorld());
         ItemStack stack = ((Player) sender).getInventory().getItemInMainHand();
-        
+
         if (!PermissionTypes.LIST.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
@@ -289,10 +305,10 @@ public class CommandProcessor {
         if (!(sender instanceof Player)) {
             return false;
         }
-        
+
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
-        
+
         if (!PermissionTypes.INFO.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
@@ -329,10 +345,10 @@ public class CommandProcessor {
         if (!(sender instanceof Player)) {
             return false;
         }
-        
+
         EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
-        
+
         if (!PermissionTypes.ONOFF.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
@@ -438,25 +454,25 @@ public class CommandProcessor {
         if (commandlabel.equalsIgnoreCase("ench")) {
             String label = args.length == 0 ? "" : args[0].toLowerCase();
             switch (label) {
-                case "reload":
-                    return reload(sender);
-                case "give":
-                    return give(sender, args);
-                case "list":
-                    return listEnchantment(sender);
-                case "info":
-                    return infoEnchantment(sender, args);
-                case "disable":
-                    return disable(sender, args);
-                case "enable":
-                    return enable(sender, args);
-                case "version":
-                    return versionInfo(sender);
-                case "lasercol":
-                    return setLaserColor(sender, args);
-                case "help":
-                default:
-                    return helpEnchantment(sender, label) || enchant(sender, args);
+            case "reload":
+                return reload(sender);
+            case "give":
+                return give(sender, args);
+            case "list":
+                return listEnchantment(sender);
+            case "info":
+                return infoEnchantment(sender, args);
+            case "disable":
+                return disable(sender, args);
+            case "enable":
+                return enable(sender, args);
+            case "version":
+                return versionInfo(sender);
+            case "lasercol":
+                return setLaserColor(sender, args);
+            case "help":
+            default:
+                return helpEnchantment(sender, label) || enchant(sender, args);
             }
         }
         return true;
@@ -591,6 +607,13 @@ public class CommandProcessor {
         return false;
     }
 
+    /**
+     * Processes the lasercol subcommand
+     * @param sender The sender of the request
+     * @param args The arguments for the subcommand, where as args[0] should be "lasercol" (not used internally)
+     * @return True if the command was performed successfully, false otherwise
+     * @since 1.1.1
+     */
     private static boolean setLaserColor(CommandSender sender, String[] args) {
         if (!PermissionTypes.LASERCOL.hasPermission(sender)) {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
@@ -608,7 +631,7 @@ public class CommandProcessor {
                 if (args.length != 1) {
                     col = ColUtil.toBukkitColor(args[1].toUpperCase(Locale.ROOT), Color.RED);
                 }
-                
+
                 Laser.setColor(stk, col);
                 player.getInventory().setItemInMainHand(stk);
                 if (player.getLocale().toLowerCase(Locale.ROOT).contains("uk")) {
@@ -619,8 +642,7 @@ public class CommandProcessor {
             } else {
                 player.sendMessage(Storage.LOGO + ChatColor.RED + "The item in hand does not have the laser enchantment applied.");
             }
-            return true;
         }
-        return false;
+        return true;
     }
 }
