@@ -29,7 +29,7 @@ public class Combustion extends CustomEnchantment {
         Entity ent;
         if (evt.getDamager().getType() == EntityType.ARROW) {
             Arrow arrow = (Arrow) evt.getDamager();
-            if (arrow.getShooter() instanceof LivingEntity) {
+            if (arrow.getShooter() instanceof Entity) {
                 ent = (Entity) arrow.getShooter();
             } else {
                 return false;

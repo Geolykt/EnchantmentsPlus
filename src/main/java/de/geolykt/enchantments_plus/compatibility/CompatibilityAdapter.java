@@ -40,6 +40,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +50,7 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
 
 public class CompatibilityAdapter {
@@ -575,8 +577,9 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * Shears the target entity and performs the necessary checks beforehand.
-     * The method checks whether the entity can be sheared and calls an event to check for protection.
+     * Shears the target entity and performs the necessary checks beforehand. The correct (guessed) drops are dropped afterwards.
+     * Currently only works for Mushroom cow and sheep, other entities aren't yet supported and will return false.
+     * Does not damage the item.
      * @param target The target entity
      * @param player The player that shears the entity, used for world protection
      * @param mainHand True if the mainhand was used to shear the event, false otherwise. Used for the event construction.
@@ -584,27 +587,51 @@ public class CompatibilityAdapter {
      * @since 1.0
      */
     public boolean shearEntityNMS(Entity target, Player player, boolean mainHand) {
-        // FIXME this method desperately requires a refractor
-        if ((target instanceof Sheep && !((Sheep) target).isSheared()) || target instanceof MushroomCow) {
+        if (target instanceof Sheep || target instanceof MushroomCow) {
             EquipmentSlot slot = mainHand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
             PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target, player.getInventory().getItem(slot), slot);
             Bukkit.getPluginManager().callEvent(evt);
             if (!evt.isCancelled()) {
                 if (target instanceof Sheep) {
-                    target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(getWoolCol(((Sheep) target).getColor()), RND.nextInt(3) + 1));
+                    target.getWorld().dropItemNaturally(target.getLocation(), 
+                            new ItemStack(ColUtil.getWoolCol(((Sheep)target).getColor()), ThreadLocalRandom.current().nextInt(1, 4)));
                     ((Sheep) target).setSheared(true);
-
-                    // TODO: Apply damage to tool
                 } else if (target instanceof MushroomCow) {
-                    //MushroomCow cow = (MushroomCow) target;
-                    // TODO: DO
+                    // Warning: this may fail if Javadocs are to be believed
+                    Cow newCow = (Cow) target.getWorld().spawnEntity(target.getLocation(), EntityType.COW);
+                    // Transfer old data to new cow
+                    newCow.setFallDistance(target.getFallDistance());
+                    newCow.setCustomName(target.getCustomName());
+                    newCow.setCustomNameVisible(target.isCustomNameVisible());
+                    newCow.setFireTicks(target.getFireTicks());
+                    newCow.setGlowing(target.isGlowing());
+                    newCow.setTicksLived(target.getTicksLived());
+                    newCow.setInvulnerable(target.isInvulnerable());
+                    newCow.setPersistent(target.isPersistent());
+                    newCow.setSilent(target.isSilent());
+                    newCow.setAbsorptionAmount(((MushroomCow) target).getAbsorptionAmount());
+                    newCow.setArrowsInBody(((MushroomCow) target).getArrowCooldown());
+                    newCow.setLastDamage(((MushroomCow) target).getLastDamage());
+                    newCow.setAgeLock(((MushroomCow) target).getAgeLock());
+                    newCow.setBreed(((MushroomCow) target).canBreed());
+                    newCow.setLoveModeTicks(((MushroomCow) target).getLoveModeTicks());
+                    newCow.setAge(((MushroomCow) target).getAge());
+                    target.remove();
                 }
                 return true;
             }
         }
         return false;
     }
-    
+
+    /**
+     * Ignites the target entity and calls the according events.
+     * @param target The target entity that should be ignited
+     * @param player The player that is the cause of the ignition
+     * @param duration The duration of the ignition
+     * @return True if the entity was ignited, false otherwise
+     * @since 1.0
+     */
     public boolean igniteEntity(Entity target, Player player, int duration) {
         EntityCombustByEntityEvent evt = new EntityCombustByEntityEvent(target, player, duration);
         Bukkit.getPluginManager().callEvent(evt);
@@ -629,22 +656,25 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    public boolean explodeCreeper(Creeper c, boolean damage) {
+    /**
+     * Explodes a Creeper, removes it and deals the correct damage when the creeper is charged and if it's not.
+     * The explosion always performs entity damage. The creeper is marked for removal afterwards.
+     * The explosion never generates fire.
+     * @param creeper The creeper to explode
+     * @param doWorldDamage True if blocks should be broken, false otherwise.
+     * @return true if the explosion wasn't cancelled
+     * @since 1.0
+     */
+    public boolean explodeCreeper(Creeper creeper, boolean doWorldDamage) {
         float power;
-        Location l = c.getLocation();
-        if (c.isPowered()) {
+        if (creeper.isPowered()) {
             power = 6f;
         } else {
             power = 3.1f;
         }
-        if (damage) {
-            c.getWorld().createExplosion(l, power);
-        } else {
-            c.getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), power, false, false);
-        }
-        c.remove();
-
-        return true;
+        boolean performed = creeper.getWorld().createExplosion(creeper.getLocation(), power, false, doWorldDamage, creeper);
+        creeper.remove();
+        return performed;
     }
 
     public boolean formBlock(Block block, Material mat, Player player) {
