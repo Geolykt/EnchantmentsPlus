@@ -380,6 +380,7 @@ tools:
     - "BOW"
     - "SHEARS"
     - "FLINT_AND_STEEL"
+    - "ENCHANTED_BOOK"
   axe:
     - "WOODEN_AXE"
     - "STONE_AXE"
