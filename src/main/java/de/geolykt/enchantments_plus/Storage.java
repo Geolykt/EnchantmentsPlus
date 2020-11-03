@@ -9,6 +9,12 @@ import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.compatibility.anticheat.AbstractAnticheatAdapter;
 import de.geolykt.enchantments_plus.compatibility.anticheat.None;
 
+/**
+ * This class will be removed in the 3.0.0 or 4.0.0 refractor since it deeply violates the principles of OOP.
+ * 
+ * Shared class where constants are provided.
+ * @since 1.0
+ */
 public class Storage {
 
     /**
@@ -56,7 +62,7 @@ public class Storage {
      */
     public static String version = "";
 
-    public static final CompatibilityAdapter COMPATIBILITY_ADAPTER = new CompatibilityAdapter();
+    public static final CompatibilityAdapter COMPATIBILITY_ADAPTER = new CompatibilityAdapter(Enchantments_plus.internal_instance);
     
     /**
      * @deprecated Not used, at all.
@@ -69,7 +75,7 @@ public class Storage {
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     /**
-     * @deprecated Will be removed in the future to make way for proper thread safety
+     * @deprecated Will be removed in the future to make way for proper thread safety. No longer used internally
      * Shared random object
      * @since 1.0.0
      */
@@ -77,7 +83,7 @@ public class Storage {
     public static final Random rnd = new Random();
 
     /**
-     * Container for the cardinal block faces, i. e. block faces that are directly touch the current block.
+     * Container for the cardinal block faces, i. e. block faces that directly touch the current block like UP DOWN or NORTH.
      * @since 1.0.0
      */
     public static final BlockFace[] CARDINAL_BLOCK_FACES = {

@@ -30,6 +30,13 @@ import java.util.TreeMap;
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
 public class Enchantments_plus extends JavaPlugin {
+    
+    /**
+     * Internal value that should not be used outside of the plugin.
+     * It's main use is to initialize tertiary classes without the need of hacks.
+     * @since 2.2.1
+     */
+    protected static Enchantments_plus internal_instance;
 
     // Creates a directory for the plugin and then loads configs
     public void loadConfigs() {
@@ -143,6 +150,7 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Loads configs and starts tasks
     public void onEnable() {
+        internal_instance = this;
         StopWatch w = new StopWatch();
         w.start();
         Storage.plugin = this;

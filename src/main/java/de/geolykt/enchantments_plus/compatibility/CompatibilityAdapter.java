@@ -40,7 +40,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,10 +55,22 @@ import de.geolykt.enchantments_plus.util.Tool;
 
 public class CompatibilityAdapter {
     
+    /**
+     * @deprecated This uses a hack to obtain the plugin instance and should NOT be used!
+     * Parameterless constructor. Nothing more
+     * @since 1.0
+     */
+    @Deprecated
     public CompatibilityAdapter() {
-        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Enchantments_plus"), () -> {
-            scanMethods();
-        }, 0l);
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Enchantments_plus"), this::scanMethods, 0l);
+    }
+
+    /**
+     * Constructs the class and starts a Task on the next tick to initialize it further (scans methods from other plugins or spigot)
+     * @param plugin The plugin that is used to initialize the task.
+     */
+    public CompatibilityAdapter(Plugin plugin) {
+        Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0l);
     }
 
     private EnumSet<Material> grownCrops;
