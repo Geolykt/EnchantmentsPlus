@@ -16,7 +16,6 @@ import de.geolykt.enchantments_plus.enchantments.Laser;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
-import me.zombie_striker.psudocommands.CommandUtils;
 
 import java.util.*;
 
@@ -521,8 +520,8 @@ public class CommandProcessor {
      * @since 2.2.0
      */
     private static boolean ench(CommandSender infoReciever, String eName, Integer level, String targetModif, boolean doNotify, boolean force) {
-        Entity[] target = CommandUtils.getTargets(infoReciever, targetModif);
-        if (target.length == 0) {
+        List<Entity> target = Bukkit.selectEntities(infoReciever, targetModif);
+        if (target.size() == 0) {
             infoReciever.sendMessage(Storage.LOGO + ChatColor.AQUA + "No entities changed.");
             return true;
         }
