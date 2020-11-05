@@ -135,7 +135,7 @@ public class Utilities {
     // players inventory and returns true
     // if the item stack was direction their inventory
     public static boolean removeItem(Player player, Material mat, int amount) {
-        if (player.getGameMode().equals(CREATIVE)) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
             return true;
         }
         Inventory inv = player.getInventory();
@@ -165,7 +165,7 @@ public class Utilities {
     // players inventory and returns true
     // if the item stack was direction their inventory
     public static boolean hasItem(Player player, Material mat, int amount) {
-        if (player.getGameMode().equals(CREATIVE)) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
             return true;
         }
         Inventory inv = player.getInventory();
@@ -174,6 +174,7 @@ public class Utilities {
             if (inv.getItem(i) != null && inv.getItem(i).getType() == mat) {
                 if (inv.getItem(i).getAmount() >= amount) {
                     amount = 0;
+                    return true;
                 } else {
                     amount -= inv.getItem(i).getAmount();
                 }
@@ -183,23 +184,34 @@ public class Utilities {
         return amount == 0;
     }
 
-    // Returns a level for the enchant event given the XP level and the enchantments
-    // max level
+    /**
+     * Uses magic constants to return a level for the enchantment event given the XP level and the enchantment's max level.
+     *  Quite honestly, I got no idea what exactly it is about. (For every other bystander, please document your methods properly.)
+     * @param maxlevel The maximum level of the enchantment
+     * @param levels The EXP level of the player
+     * @return The corresponding enchantment level
+     * @since 1.0
+     */
     public static int getEnchantLevel(int maxlevel, int levels) {
-        if (maxlevel == 1) {
-            return 1;
+        if (maxlevel < 2) {
+            return maxlevel;
         }
         int sectionsize = 32 / (maxlevel - 1);
         int position = levels / sectionsize;
-        int mod = levels - position * sectionsize;
-        if (ThreadLocalRandom.current().nextInt(2 * sectionsize) >= mod) {
+        if (ThreadLocalRandom.current().nextInt(2 * sectionsize) >= (levels - position * sectionsize)) {
             return position + 1;
         } else {
             return position + 2;
         }
     }
 
-    // Returns the English number representation of the given Roman number string
+    /**
+     * Returns the corresponding integer representation of the given Roman number string.
+     *  May behave unexpectedly for numbers outside of the 0 to 10 range as all numbers are hardcoded.
+     * @param numeral The input Roman numeral input string
+     * @return The corresponding integer
+     * @since 1.0
+     */
     public static int getNumber(String numeral) {
         switch (numeral.toUpperCase()) {
             case "-":
@@ -229,7 +241,13 @@ public class Utilities {
         }
     }
 
-    // Returns the roman number string representation of the given english number
+    /**
+     * Returns the corresponding roman number string representation of the given integer.
+     *  May behave unexpectedly for numbers outside of the 0 to 10 range as all numbers are hardcoded.
+     * @param number The integer input
+     * @return The corresponding roman representation of the input integer
+     * @since 1.0
+     */
     public static String getRomanString(int number) {
         switch (number) {
             case 0:
@@ -259,14 +277,18 @@ public class Utilities {
         }
     }
 
-    // Returns the roman number string representation of the given english number,
-    // capped at the int 'limit'
+    /**
+     * @deprecated This is the same as calling {@code #getRomanString(Math.max(number, limit)}, which makes it needless for an unused method
+     * Returns the roman number string representation of the given decimal number, capped at the int 'limit'.
+     *  Numbers outside of the 0 - 10 range may behave unexpectedly
+     * @param number The input number
+     * @param limit The maximum input number
+     * @return The roman numeral string
+     * @since 1.0
+     */
+    @Deprecated
     public static String getRomanString(int number, int limit) {
-        if (number > limit) {
-            return getRomanString(limit);
-        } else {
-            return getRomanString(number);
-        }
+        return getRomanString(Math.min(number, limit));
     }
 
     // Returns the exact center of a block of a given location

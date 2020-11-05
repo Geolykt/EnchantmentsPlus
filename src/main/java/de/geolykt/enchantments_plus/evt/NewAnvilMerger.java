@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
@@ -84,7 +85,7 @@ public class NewAnvilMerger implements Listener {
      * @param evt The event
      * @since 2.1.5
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void prepareEvent(PrepareAnvilEvent evt) {
         AnvilInventory inv = evt.getInventory();
         if (inv.getSize() < 3 || evt.getViewers().size() == 0 || inv.getItem(0) == null)
@@ -109,6 +110,7 @@ public class NewAnvilMerger implements Listener {
                     for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
                         if (ench.getKey().asEnum() == BaseEnchantments.UNREPAIRABLE && ench.getValue() != 0) {
                             unrepairable = true;
+                            break;
                         }
                     }
                     if (unrepairable) {
