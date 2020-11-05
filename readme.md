@@ -30,19 +30,19 @@ As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the 
 <b>enchplus.command.lasercol</b> - Enables the abillity to colo(u)r the laser of your item in hand. Purely cosmetic and a good way to get a few extra "donations".<br>
 
 ## Commands
-**/ench help**: Prints the help menu
-**/ench version**: prints the version of the plugin
-**/ench info**: Prints the information of all the enchantments on your current tool
-**/ench info &lt;enchantment&gt;**: Prints the information about a single enchantment
-**/ench list**: Returns the list of the applicable enchantments for the tool in your hand
-**/ench give &lt;player&gt; &lt;material&gt; &lt;enchantment&gt;**: Gives the player a given material with the given enchantment at level 1
-**/ench give &lt;player&gt; &lt;material&gt; &lt;enchantment&gt; &lt;level&gt;**: Gives the player a given material with the given enchantment at the given level
-**/ench lasercol &lt;col&gt;**: Chages the tone of the laser used by the laser enchantment, per tool.
-**/ench &lt;enchantment&gt;**: Enchants your tool in the hand with the given enchantment at level 1.
-**/ench &lt;enchantment&gt; &lt;level&gt;**: Enchants your tool in the hand with the given enchantment at the given level.
-**/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt;**: Like above, but the third parameter dictates for who the enchantment should be applied (accepts things such as @a)
-**/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt; &lt;doNotification&gt;**: Like above, but the fourth parameter handles whether or not chat messages should be send as a error/success message. (use True or false)
-**/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt; &lt;doNotification&gt; &lt;force&gt;**: Like above, but the fith parameter handles whether the enchantment should be forced onto the tool. (use True or false)
+**/ench help**: Prints the help menu <br>
+**/ench version**: prints the version of the plugin <br>
+**/ench info**: Prints the information of all the enchantments on your current tool <br>
+**/ench info &lt;enchantment&gt;**: Prints the information about a single enchantment <br>
+**/ench list**: Returns the list of the applicable enchantments for the tool in your hand <br>
+**/ench give &lt;player&gt; &lt;material&gt; &lt;enchantment&gt;**: Gives the player a given material with the given enchantment at level 1 <br>
+**/ench give &lt;player&gt; &lt;material&gt; &lt;enchantment&gt; &lt;level&gt;**: Gives the player a given material with the given enchantment at the given level <br>
+**/ench lasercol &lt;col&gt;**: Chages the tone of the laser used by the laser enchantment, per tool. <br>
+**/ench &lt;enchantment&gt;**: Enchants your tool in the hand with the given enchantment at level 1. <br>
+**/ench &lt;enchantment&gt; &lt;level&gt;**: Enchants your tool in the hand with the given enchantment at the given level. <br>
+**/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt;**: Like above, but the third parameter dictates for who the enchantment should be applied (accepts things such as @a) <br>
+**/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt; &lt;doNotification&gt;**: Like above, but the fourth parameter handles whether or not chat messages should be send as a error/success message. (use True or false) <br>
+**/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt; &lt;doNotification&gt; &lt;force&gt;**: Like above, but the fith parameter handles whether the enchantment should be forced onto the tool. (use True or false) <br>
 
 ## Download
 See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloads

@@ -97,8 +97,8 @@ public class NewAnvilMerger implements Listener {
             ItemStack stackB = inv.getItem(1);
             if (stackA != null
                     && stackB != null
-                    && (stackA.getType() == stackB.getType() || stackB.getType() == Material.ENCHANTED_BOOK) 
-                    && CompatibilityAdapter.getDamage(stackA) == 0
+                    && ((stackA.getType() == stackB.getType() && CompatibilityAdapter.getDamage(stackA) == 0) 
+                            || stackB.getType() == Material.ENCHANTED_BOOK)
                     && CompatibilityAdapter.getDamage(stackB) == 0) {
                 // Undamaged conversion
                 World world = evt.getViewers().get(0).getWorld();
@@ -119,7 +119,7 @@ public class NewAnvilMerger implements Listener {
                         out.forEach((ench, level) -> {
                             CustomEnchantment.setEnchantment(stackA, ench, ench.validMaterial(stackA) ? level : 0, world);
                         });
-                        inv.setRepairCost(out.size()*7+inv.getRepairCost());
+                        inv.setRepairCost(out.size()*4+inv.getRepairCost());
                         evt.setResult(stackA);
                     }
                 }
