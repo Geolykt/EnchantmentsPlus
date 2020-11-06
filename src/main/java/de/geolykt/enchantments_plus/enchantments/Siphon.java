@@ -43,7 +43,7 @@ public class Siphon extends CustomEnchantment {
     @Override
     public boolean onEntityHit(EntityDamageByEntityEvent evt, int level, boolean usedHand) {
         if (evt.getEntity() instanceof LivingEntity
-                && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
+                && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             Player player = (Player) evt.getDamager();
             double difference = 0;
             if (calcAmour) {

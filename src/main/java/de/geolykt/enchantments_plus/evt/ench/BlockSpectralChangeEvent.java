@@ -70,6 +70,7 @@ public class BlockSpectralChangeEvent extends BlockBreakEvent  {
     /**
      * This variable keeps track on which enchantment invoked the Event, which is useful for 3rd party APIs to check for which reason the query was used.<br>
      * By default it's {@link BaseEnchantments#SPECTRAL} and cannot be changed during the object's lifecycle.
+     * @return The enchantment that has issued the event.
      * @since 1.2.1
      */
     public BaseEnchantments getUse() {

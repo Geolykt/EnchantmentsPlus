@@ -91,7 +91,7 @@ public interface IEnchGatherer {
      * In case the enchantment is not found, 0 should be returned.
      * @param config The configuration that should be used
      * @param stk The stack that should be read
-     * @param clazz The Enchantment that should be searched for.
+     * @param ench The Enchantment that should be searched for.
      * @return The level of the given enchantment on a given stack.
      * @since 2.1.1
      */

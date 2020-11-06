@@ -20,7 +20,7 @@ public class SiphonArrow extends EnchantedArrow {
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (evt.getEntity() instanceof LivingEntity && Storage.COMPATIBILITY_ADAPTER.attackEntity(
                 (LivingEntity) evt.getEntity(),
-                (Player) arrow.getShooter(), 0)) {
+                (Player) arrow.getShooter(), 0, false)) {
             Player player = (Player) ((Projectile) evt.getDamager()).getShooter();
             double difference = 0;
             if (Siphon.calcAmour) {

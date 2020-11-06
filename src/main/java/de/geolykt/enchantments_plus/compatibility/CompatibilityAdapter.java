@@ -341,7 +341,7 @@ public class CompatibilityAdapter {
      * This has the side effect that items that do not have durability will break instantly.
      * @param player The player that should be targeted
      * @param damage The amount of damage that should be applied
-     * @param slotIndex The index of the item within the inventory
+     * @param handUsed True if the mainhand should be damaged, false if the offhand should be damaged
      * @since 1.0
      */
     public static void damageTool(Player player, int damage, boolean handUsed) {
@@ -397,6 +397,7 @@ public class CompatibilityAdapter {
                 || stack.getItemMeta() == null
                 || !(stack.getItemMeta() instanceof Damageable)
                 || stack.getItemMeta().isUnbreakable()) {
+            return false;
         }
         // chance that the item is broken is 1/(level+1)
         // So at level = 2 it's 33%, at level = 0 it's 100%, at level 1 it's 50%, at level = 3 it's 25%
@@ -475,11 +476,12 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * Sets the amount of Damage that a given ItemStack has (which is the inverse of the remaining durability). <br>
+     * Gets the amount of Damage that a given ItemStack has (which is the inverse of the remaining durability). <br>
      * If the ItemMeta of the ItemStack is not a {@link org.bukkit.inventory.meta.Damageable} instance then 0 will be returned. <br>
      * Does not check whether the itemstack has the unbreakable flag set, caution is advised.
      * @param is The target itemstack
      * @param damage The value that the damage should now have
+     * @return The amount of damage an ItemStack has.
      * @since 1.0
      */
     public static int getDamage(ItemStack is) {
@@ -563,10 +565,15 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * 
-     * @return True if damaged, false otherwise
+     * @deprecated This method does not specify the tool that should be broken.
+     * Queries whether the player is allowed to damage the target, damages it and breaks the mainhand tool.
+     * @param target The target that should be attacked
+     * @param attacker The player that attacks the target
+     * @param damage The damage that should be dealt in half hearts
+     * @return True if performed without issues, false otherwise
      * @since 1.0
      */
+    @Deprecated
     public boolean attackEntity(LivingEntity target, Player attacker, double damage) {
         return attackEntity(target, attacker, damage, true);
     }
@@ -576,8 +583,7 @@ public class CompatibilityAdapter {
         Bukkit.getPluginManager().callEvent(damageEvent);
         if (damage == 0) {
             return !damageEvent.isCancelled();
-        }
-        if (!damageEvent.isCancelled()) {
+        } else if (!damageEvent.isCancelled()) {
             target.damage(damage, attacker);
             target.setLastDamageCause(damageEvent);
             if (performEquipmentDamage) {

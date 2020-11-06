@@ -46,8 +46,7 @@ public class FuseArrow extends EnchantedArrow {
 
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         Location l = evt.getEntity().getLocation();
-        if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(),
-            0)) {
+        if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(), 0, false)) {
             if (evt.getEntity().getType().equals(EntityType.CREEPER)) {
                 Creeper c = (Creeper) evt.getEntity();
                 Storage.COMPATIBILITY_ADAPTER.explodeCreeper(c, Config.get(evt.getDamager().getWorld()).explosionBlockBreak());

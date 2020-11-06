@@ -126,7 +126,7 @@ public class Anthropomorphism extends CustomEnchantment {
 
                                     if (targetEntity.getNoDamageTicks() == 0 && attackBlocks.get(blockEntity) != null
                                             && Storage.COMPATIBILITY_ADAPTER.attackEntity(targetEntity, attacker,
-                                                    2.0 * attackBlocks.get(blockEntity).getKey())) {
+                                                    2.0 * attackBlocks.get(blockEntity).getKey(), false)) {
                                         targetEntity.setNoDamageTicks(0);
                                         anthroIterator.remove();
                                         blockEntity.remove();

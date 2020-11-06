@@ -50,7 +50,7 @@ public class Weight extends CustomEnchantment {
         if (!(evt.getEntity() instanceof Player) || //check if victim is a player
             !(evt.getDamager() instanceof LivingEntity) || //check if the damager is alive
             //check if the victim (player) can damage the attacker
-            !ADAPTER.attackEntity((LivingEntity) evt.getDamager(), (Player) evt.getEntity(), 0)) {
+            !ADAPTER.attackEntity((LivingEntity) evt.getDamager(), (Player) evt.getEntity(), 0, false)) {
             return true;
         }
         Player player = (Player) evt.getEntity();

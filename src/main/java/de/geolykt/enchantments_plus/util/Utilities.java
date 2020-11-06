@@ -459,6 +459,7 @@ public class Utilities {
      *                          found
      * @param flipValidSearch   true -> validSearch is a allowlist; false ->
      *                          validSearch is a denylist
+     * @return A list of the Blocks the BFS algorithm found that match the given parameters.
      */
     public static List<Block> BFS(Block startBlock, int maxBlocks, boolean strictMax, float maxDistFromOrigin,
             int[][] searchFaces, Set<Material> validFind, Set<Material> validSearch, boolean strictValidSearch,

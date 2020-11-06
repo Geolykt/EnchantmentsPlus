@@ -71,7 +71,7 @@ public class Force extends CustomEnchantment {
                         org.bukkit.util.Vector vect = new Vector(total.getX(), total.getY(), total.getZ())
                             .multiply((.1f + (power * level * .2f)));
                         vect.setY(vect.getY() > 1 ? 1 : -1);
-                        if (ent instanceof LivingEntity && ADAPTER.attackEntity((LivingEntity) ent, player, 0)) {
+                        if (ent instanceof LivingEntity && ADAPTER.attackEntity((LivingEntity) ent, player, 0, false)) {
                             ent.setVelocity(vect);
                         }
                     }

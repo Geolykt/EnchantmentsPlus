@@ -29,7 +29,7 @@ public class FirestormArrow extends EnchantedArrow {
         for (Entity e : arrow.getNearbyEntities(aoe, aoe, aoe)) {
             if (e instanceof LivingEntity && !e.equals(arrow.getShooter())
                     && Storage.COMPATIBILITY_ADAPTER.attackEntity(
-                            (LivingEntity) e, (Player) arrow.getShooter(), 0)) {
+                            (LivingEntity) e, (Player) arrow.getShooter(), 0, false)) {
                 e.setFireTicks((int) Math.round(getLevel() * getPower() * 100));
             }
         }

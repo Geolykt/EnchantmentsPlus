@@ -22,7 +22,7 @@ public class ToxicArrow extends EnchantedArrow {
 
     public boolean onImpact(final EntityDamageByEntityEvent evt) {
         if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(),
-            0)) {
+            0, false)) {
             final int value = (int) Math.round(getLevel() * getPower());
             Utilities.addPotion((LivingEntity) evt.getEntity(), CONFUSION, 80 + 60 * value, 4);
             Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 40 + 60 * value, 4);

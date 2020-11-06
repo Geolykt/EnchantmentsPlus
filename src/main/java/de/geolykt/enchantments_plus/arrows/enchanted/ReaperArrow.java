@@ -20,7 +20,7 @@ public class ReaperArrow extends EnchantedArrow {
 
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(),
-            0)) {
+            0, false)) {
             int pow = (int) Math.round(getLevel() * getPower());
             int dur = (int) Math.round(20 + getLevel() * 10 * getPower());
             Utilities.addPotion((LivingEntity) evt.getEntity(), PotionEffectType.WITHER, dur, pow);

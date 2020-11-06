@@ -32,7 +32,7 @@ public class Stationary extends CustomEnchantment {
     @Override
     public boolean onEntityHit(EntityDamageByEntityEvent evt, int level, boolean usedHand) {
         if (!(evt.getEntity() instanceof LivingEntity)
-                || ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
+                || ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             LivingEntity ent = (LivingEntity) evt.getEntity();
             if (evt.getDamage() < ent.getHealth()) {
                 evt.setCancelled(true);

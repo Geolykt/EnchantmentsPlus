@@ -12,6 +12,7 @@ public interface AreaOfEffectable {
      *  in which the AOE could be affected. <br> Additionally the AOE has the player (or arrow) at it's center and the size
      *  is the distance between the border of the AOE and the center of the AOE. <br>
      *  Implementations should ideally make use of {@link #getAOEMultiplier()}.
+     * @param level The level of the enchantment
      * @return The size of the AOE
      * @since 2.1.6
      */

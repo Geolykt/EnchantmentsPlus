@@ -42,7 +42,7 @@ public class RainbowSlam extends CustomEnchantment {
     @Override
     public boolean onEntityInteract(final PlayerInteractEntityEvent evt, final int level, boolean usedHand) {
         if (!(evt.getRightClicked() instanceof LivingEntity) ||
-            !ADAPTER.attackEntity((LivingEntity) evt.getRightClicked(), evt.getPlayer(), 0)) {
+            !ADAPTER.attackEntity((LivingEntity) evt.getRightClicked(), evt.getPlayer(), 0, false)) {
             return false;
         }
         final LivingEntity ent = (LivingEntity) evt.getRightClicked();

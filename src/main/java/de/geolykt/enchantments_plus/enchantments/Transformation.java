@@ -42,7 +42,7 @@ public class Transformation extends CustomEnchantment {
             return false;
         }
         if (evt.getEntity() instanceof LivingEntity
-                && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
+                && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             if (ThreadLocalRandom.current().nextInt(100) > (100 - (level * power * 8))) {
                 LivingEntity newEnt = Storage.COMPATIBILITY_ADAPTER.transformationCycle((LivingEntity) evt.getEntity(),
                         ThreadLocalRandom.current());

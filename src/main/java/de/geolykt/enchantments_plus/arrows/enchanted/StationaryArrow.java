@@ -16,7 +16,7 @@ public class StationaryArrow extends EnchantedArrow {
 
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(),
-                0)) {
+                0, false)) {
             LivingEntity ent = (LivingEntity) evt.getEntity();
             if (evt.getDamage() < ent.getHealth()) {
                 evt.setCancelled(true);

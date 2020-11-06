@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -69,7 +70,8 @@ public class Laser extends CustomEnchantment {
             for (Entity ent : Bukkit.getWorld(playLoc.getWorld().getName()).getNearbyEntities(tempLoc, .3, .3, .3)) {
                 if (ent instanceof LivingEntity && ent != player) {
                     LivingEntity e = (LivingEntity) ent;
-                    ADAPTER.attackEntity(e, player, 1 + (level + power * 2));
+                    ADAPTER.attackEntity(e, player, 1 + (level + power * 2), false);
+                    CompatibilityAdapter.damageTool(player, 1, usedHand);
                     return;
                 }
             }

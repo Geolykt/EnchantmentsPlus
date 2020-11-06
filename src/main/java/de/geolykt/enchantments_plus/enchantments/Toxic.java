@@ -51,7 +51,7 @@ public class Toxic extends CustomEnchantment {
     @Override
     public boolean onEntityHit(final EntityDamageByEntityEvent evt, int level, boolean usedHand) {
         if (!(evt.getEntity() instanceof LivingEntity) ||
-            !ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
+            !ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             final int value = (int) Math.round(level * power);
             Utilities.addPotion((LivingEntity) evt.getEntity(), CONFUSION, 80 + 60 * value, 4);
             Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 40 + 60 * value, 4);

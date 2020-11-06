@@ -42,7 +42,7 @@ public class Reaper extends CustomEnchantment {
     @Override
     public boolean onEntityHit(EntityDamageByEntityEvent evt, int level, boolean usedHand) {
         if (evt.getEntity() instanceof LivingEntity &&
-            ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0)) {
+            ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             int pow = (int) Math.round(level * power);
             int dur = (int) Math.round(10 + level * 20 * power);
             Utilities.addPotion((LivingEntity) evt.getEntity(), PotionEffectType.WITHER, dur, pow);
