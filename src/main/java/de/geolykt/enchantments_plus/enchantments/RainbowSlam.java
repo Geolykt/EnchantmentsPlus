@@ -45,7 +45,6 @@ public class RainbowSlam extends CustomEnchantment {
             !ADAPTER.attackEntity((LivingEntity) evt.getRightClicked(), evt.getPlayer(), 0)) {
             return false;
         }
-        CompatibilityAdapter.damageTool(evt.getPlayer(), 9, usedHand);
         final LivingEntity ent = (LivingEntity) evt.getRightClicked();
         final Location l = ent.getLocation().clone();
         ent.teleport(l);
@@ -73,20 +72,15 @@ public class RainbowSlam extends CustomEnchantment {
         AtomicBoolean applied = new AtomicBoolean(false);
         rainbowSlamNoFallEntities.add(ent);
         for (int i = 0; i < 3; i++) {
+            CompatibilityAdapter.damageTool(evt.getPlayer(), 3, usedHand);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                // ent.setNoDamageTicks(20); // Prevent fall damage
                 ent.setVelocity(l.toVector().subtract(ent.getLocation().toVector()).multiply(.3));
                 ent.setFallDistance(0);
                 if (ent.isOnGround() && !applied.get()) {
                     applied.set(true);
                     rainbowSlamNoFallEntities.remove(ent);
-                    ADAPTER.attackEntity(ent, evt.getPlayer(), level * power);
-                    for (int c = 0; c < 1000; c++) {
-                        // Vector v = new Vector(Math.sin(Math.toRadians(c)), Storage.rnd.nextFloat(), Math.cos(Math
-                        // .toRadians(c))).multiply(.75);
-                        ent.getWorld().spawnParticle(Particle.BLOCK_DUST, Utilities.getCenter(l), 10,
-                            evt.getPlayer().getLocation().getBlock().getBlockData());
-                    }
+                    ADAPTER.attackEntity(ent, evt.getPlayer(), level * power, false);
+                    ent.getWorld().spawnParticle(Particle.BLOCK_DUST, Utilities.getCenter(l), 20, evt.getPlayer().getLocation().getBlock().getBlockData());
                 }
             }, 35 + (i * 5));
         }
