@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,6 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -327,6 +329,17 @@ public class Watcher implements Listener {
             evt.getItem().remove();
             evt.setCancelled(true);
         }
+    }
+
+    /**
+     * Called when a player quits the game.
+     *  Internally it is used to prevent a buildup of instances that may not be useful after a player quit.
+     * @param evt The event to handle
+     * @since 2.2.2
+     */
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent evt) {
+    	EnchantPlayer.removePlayer(evt.getPlayer().getUniqueId());
     }
 
 }

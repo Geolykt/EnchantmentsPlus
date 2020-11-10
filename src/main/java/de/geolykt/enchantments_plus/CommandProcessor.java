@@ -339,8 +339,6 @@ public class CommandProcessor {
 
     // Disables the given enchantment for the player
     private static boolean disable(CommandSender sender, String[] args) {
-        sender.sendMessage(Storage.LOGO + "We are planning on removing this feature, is you believe it should be kept,"
-                + " then notify us about that here: https://github.com/Geolykt/EnchantmentsPlus/issues/9");
         if (!(sender instanceof Player)) {
             return false;
         }
