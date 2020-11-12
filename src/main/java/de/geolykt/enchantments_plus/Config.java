@@ -372,8 +372,36 @@ public class Config {
         return (double) data.getOrDefault(ConfigKeys.POWER.toString(), 1.0);
     }
     
+    /**
+     * Gets the modifier for the Area of Effect.
+     * @param data The data
+     * @return The aoe modifier
+     * @since 2.1.6
+     */
     private static double getAOEMod(LinkedHashMap<String, Object> data) {
         return (double) data.getOrDefault(ConfigKeys.AREA_OF_EFFECT.toString(), 1.0);
+    }
+
+    /**
+     * Returns the Enchantments that are conflicting with the enchantment.
+     * Unused until v3.0.0
+     * @param data The data
+     * @param defaults The defaults to return if the key does not exist.
+     * @return The conflicting enchantments, or defaults if it is unmapped.
+     * @since 2.2.2
+     */
+    @SuppressWarnings("unused")
+	private static BaseEnchantments[] getConflicts(LinkedHashMap<String, Object> data, BaseEnchantments[] defaults) {
+    	if (data.containsKey(ConfigKeys.CONFLICTS.toString())) {
+    		String[] s = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
+    		BaseEnchantments [] conflicts = new BaseEnchantments[s.length];
+    		for (int i = 0; i < s.length; i++) {
+    			conflicts[i] = BaseEnchantments.valueOf(s[i]);
+    		}
+    		return conflicts;
+    	} else {
+    		return defaults;
+    	}
     }
 
     // Returns the config object associated with the given world
@@ -485,7 +513,15 @@ enum ConfigKeys {
      *  If the key does not exist, but should then a value of 1 should be implied.
      * @since 2.1.6
      */
-    AREA_OF_EFFECT("Effect area modifier");
+    AREA_OF_EFFECT("Effect area modifier"),
+
+    /**
+     *  The key to get the conflicts of an enchantment. 
+     *   Unused until v3.0.0
+     *   It's value should be a String separated with commas, the individual strings should all represent a {@link BaseEnchantments}
+     *  @since 2.2.2
+     */
+    CONFLICTS("Conflicts");
 
     private String key;
 
