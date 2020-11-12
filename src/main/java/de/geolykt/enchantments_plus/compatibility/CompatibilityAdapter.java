@@ -92,8 +92,11 @@ public class CompatibilityAdapter {
     
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
         EnumSet<Material> es = EnumSet.noneOf(Material.class);
-        for (String s : config.getStringList(path)) {
-            es.add(Material.matchMaterial(s));
+        for (String materialName : config.getStringList(path)) {
+        	Material material = Material.matchMaterial(materialName);
+        	if (material != null) {
+                es.add(material);
+        	}
         }
         return es;
     }

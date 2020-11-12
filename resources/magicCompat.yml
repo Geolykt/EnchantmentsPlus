@@ -33,7 +33,7 @@ ores:
   - "LAPIS_ORE"
   - "IRON_ORE"
   - "GLOWSTONE"
-  - "NETHER_QUARTZ_ORE" # 1.16 and beyond
+  - "NETHER_QUARTZ_ORE"
   - "EMERALD_ORE"
   - "ANCIENT_DEBRIS" # 1.16 and beyond
   - "GOLD_ORE"
@@ -70,6 +70,7 @@ unbreakable:
   - "BUBBLE_COLUMN"
   - "CAVE_AIR"
   - "COMMAND_BLOCK"
+  - "CHAIN_COMMAND_BLOCK"
   - "DRAGON_BREATH"
   - "DRAGON_EGG"
   - "END_CRYSTAL"
@@ -173,7 +174,7 @@ terraformerAllowlist:
   - "LAPIS_ORE"
   - "IRON_ORE"
   - "GLOWSTONE"
-  - "NETHER_QUARTZ_ORE" # 1.16 and beyond
+  - "NETHER_QUARTZ_ORE"
   - "EMERALD_ORE"
   - "ANCIENT_DEBRIS" # 1.16 and beyond
   - "GOLD_ORE"
