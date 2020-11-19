@@ -7,7 +7,6 @@ commands:
   ench:
     description: Gives basic access; /ench help.
     usage: /ench
-    default: true
 permissions:
   enchplus.enchant.get:
     description: Allows for obtaining custom enchantments
