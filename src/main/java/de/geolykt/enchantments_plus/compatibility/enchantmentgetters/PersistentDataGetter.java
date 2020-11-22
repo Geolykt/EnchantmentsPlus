@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 
@@ -44,7 +45,7 @@ public class PersistentDataGetter extends LeightweightPDCGetter {
     }
 
     @Override
-    public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
+    public LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, boolean acceptBooks, World world,
             List<String> outExtraLore) {
         if (stk != null) {
             if (isGetterDenylist) {

@@ -74,7 +74,7 @@ public interface IEnchGatherer {
 
     /**
      * Checks whether an Item has a given Enchantment. This should be used instead of a normal map.contains() as it can be
-     * Optimized by some getters to result in significantly better performance.
+     * Optimised by some getters to result in significantly better performance.
      * @param config The configuration that should be used
      * @param stk The stack that should be read
      * @param ench The Enchantment that should be searched for.
@@ -87,7 +87,7 @@ public interface IEnchGatherer {
 
     /**
      * Returns the level of a given enchantment. This should be used instead of a normal map.get() as it can be
-     * Optimized by some getters to result in significantly better performance. <br>
+     * Optimised by some getters to result in significantly better performance. <br>
      * In case the enchantment is not found, 0 should be returned.
      * @param config The configuration that should be used
      * @param stk The stack that should be read

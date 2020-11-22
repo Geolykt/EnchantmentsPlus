@@ -32,14 +32,17 @@ public class LeightweightPDCGetter implements IEnchGatherer {
             List<String> outExtraLore) {
         LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
         if ( (stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
-            if (stk.hasItemMeta()) {
+            if (stk.getItemMeta() != null) {
                 
                 final PersistentDataContainer cont = stk.getItemMeta().getPersistentDataContainer();
 
                 Set<NamespacedKey> keys = cont.getKeys();
+                if (keys == null) {
+                    return map;
+                }
 
                 for (NamespacedKey key : keys) {
-                    if (!key.getNamespace().toLowerCase(Locale.ROOT).equals("enchantments_plus")) {
+                    if (!key.getNamespace().toLowerCase(Locale.ROOT).equals("enchantments_plus")) { // FIXME hardcoded string!
                         continue;
                     }
                     if (!key.getKey().split("\\.")[0].equals("ench")) {
@@ -66,7 +69,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
         }
         ItemMeta meta = stk.getItemMeta();
         List<String> lore = new LinkedList<>();
-        if (meta.hasLore()) {
+        if (meta.getLore() != null) {
             for (String loreStr : meta.getLore()) {
                 if (!loreStr.toLowerCase(Locale.ENGLISH).contains(ench.getLoreName().toLowerCase(Locale.ENGLISH))) {
                     lore.add(loreStr);

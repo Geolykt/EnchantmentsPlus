@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
@@ -28,15 +29,16 @@ public class NewAnvilMerger implements Listener {
 
     /**
      * The remapping function used by {@link #mergeEnchantments(Map, Map)} to merge the levels of the same enchantments.
-     *  Default behavior (v2.1.5) results in the following: if Integer A and Integer B are the same and non-0, then A+1 is returned.
-     *  Otherwise the bigger of the two is returned.
-     * @param ench The enchantment that needs to be remapped, ignored per default
+     *  Default behaviour (v2.1.5) results in the following: if Integer A and Integer B are the same and non-0, then the smaller of A+1 or the maximum level
+     *   of the enchantment is returned.
+     *  Otherwise the bigger of the two input levels is returned.
+     * @param ench The enchantment that needs to be remapped, used to retrieve the maximum enchantment level
      * @param inputA The primary input level
      * @param inputB The secondary input level
      * @return Returns the new level of the Enchantment.
      * @since 2.1.5
      */
-    public static Integer enchantmentLevelRemappingFunction(CustomEnchantment ench, Integer inputA, Integer inputB) {
+    public static int enchantmentLevelRemappingFunction(@NotNull CustomEnchantment ench, Integer inputA, Integer inputB) {
         if (inputA != 0 && inputB != 0 && inputA == inputB) {
             return Math.min(inputA + 1, ench.getMaxLevel());
         } else {
@@ -91,7 +93,7 @@ public class NewAnvilMerger implements Listener {
         if (inv.getSize() < 3 || evt.getViewers().size() == 0 || inv.getItem(0) == null)
             return;
         List<String> nleftLore = new ArrayList<String>();
-        if (evt.getResult() == null) {
+        if (evt.getResult() == null || evt.getResult().getType() == Material.AIR) {
             // Best guess merge
             ItemStack stackA = inv.getItem(0).clone();
             ItemStack stackB = inv.getItem(1);

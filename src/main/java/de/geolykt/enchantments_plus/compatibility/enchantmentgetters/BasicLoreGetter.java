@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -28,22 +29,20 @@ import de.geolykt.enchantments_plus.util.Utilities;
 public class BasicLoreGetter implements IEnchGatherer {
 
     @Override
-    public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
+    public LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, boolean acceptBooks, World world,
             List<String> outExtraLore) {
         LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
         if (stk != null && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
-            if (stk.hasItemMeta()) {
-                if (stk.getItemMeta().hasLore()) {
-                    Config cfg = Config.get(world);
-                    List<String> lore = stk.getItemMeta().getLore();
-                    for (String raw : lore) {
-                        Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, cfg);
-                        if (ench != null) {
-                            map.put(ench.getKey(), ench.getValue());
-                        } else {
-                            if (outExtraLore != null) {
-                                outExtraLore.add(raw);
-                            }
+            if (stk.getItemMeta() != null && stk.getItemMeta().hasLore() && stk.getItemMeta().getLore() != null) {
+                Config cfg = Config.get(world);
+                List<String> lore = stk.getItemMeta().getLore();
+                for (String raw : lore) {
+                    Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, cfg);
+                    if (ench != null) {
+                        map.put(ench.getKey(), ench.getValue());
+                    } else {
+                        if (outExtraLore != null) {
+                            outExtraLore.add(raw);
                         }
                     }
                 }
@@ -51,7 +50,8 @@ public class BasicLoreGetter implements IEnchGatherer {
         }
         return map;
     }
-    
+
+    @Nullable
     private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, Config cfg) {
         raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "").trim();
         switch (raw.split(" ").length) {
@@ -135,7 +135,7 @@ public class BasicLoreGetter implements IEnchGatherer {
 
     @Override
     public int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments enchantment) {
-        if (stk != null && stk.hasItemMeta() && stk.getItemMeta().hasLore()) {
+        if (stk != null && stk.hasItemMeta() && stk.getItemMeta().getLore() != null) {
             for (String raw : stk.getItemMeta().getLore()) {
                 Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, config);
                 if (ench != null && ench.getKey().asEnum() == enchantment) {
