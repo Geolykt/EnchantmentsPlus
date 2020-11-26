@@ -110,7 +110,8 @@ public class LeightweightPDCGetter implements IEnchGatherer {
     @Override
     public int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments ench) {
         if (stk != null && stk.getItemMeta() != null) {
-            return stk.getItemMeta().getPersistentDataContainer().get(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
+            Short level = stk.getItemMeta().getPersistentDataContainer().get(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
+            return level != null ? level : 0;
         }
         return 0;
     }

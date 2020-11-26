@@ -391,17 +391,17 @@ public class Config {
      * @since 2.2.2
      */
     @SuppressWarnings("unused")
-	private static BaseEnchantments[] getConflicts(LinkedHashMap<String, Object> data, BaseEnchantments[] defaults) {
-    	if (data.containsKey(ConfigKeys.CONFLICTS.toString())) {
-    		String[] s = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
-    		BaseEnchantments [] conflicts = new BaseEnchantments[s.length];
-    		for (int i = 0; i < s.length; i++) {
-    			conflicts[i] = BaseEnchantments.valueOf(s[i]);
-    		}
-    		return conflicts;
-    	} else {
-    		return defaults;
-    	}
+        private static BaseEnchantments[] getConflicts(LinkedHashMap<String, Object> data, BaseEnchantments[] defaults) {
+        if (data.containsKey(ConfigKeys.CONFLICTS.toString())) {
+            String[] s = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
+                BaseEnchantments [] conflicts = new BaseEnchantments[s.length];
+                for (int i = 0; i < s.length; i++) {
+                    conflicts[i] = BaseEnchantments.valueOf(s[i]);
+                }
+                return conflicts;
+        } else {
+            return defaults;
+        }
     }
 
     // Returns the config object associated with the given world
