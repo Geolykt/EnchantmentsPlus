@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Config;
@@ -52,13 +53,13 @@ public class BasicLoreGetter implements IEnchGatherer {
     }
 
     @Nullable
-    private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, Config cfg) {
+    private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, @NotNull Config cfg) {
         raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "").trim();
         switch (raw.split(" ").length) {
         case 0:
             return null; // Invalid length, don't tell me otherwise
         case 1:
-            CustomEnchantment enchant =cfg.enchantFromString(raw);
+            CustomEnchantment enchant = cfg.enchantFromString(raw);
             if (enchant == null) {
                 return null; // Not able to map enchantment
             } else {

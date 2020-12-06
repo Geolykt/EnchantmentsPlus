@@ -35,6 +35,7 @@ public class Bind extends CustomEnchantment {
         if (evt.getKeepInventory()) {
             return false;
         }
+        // FIXME this works perfectly with other plugins \s - refractor needed!
         final Player player = evt.getEntity();
         Config config = Config.get(player.getWorld());
         final ItemStack[] contents = player.getInventory().getContents().clone();
@@ -48,7 +49,7 @@ public class Bind extends CustomEnchantment {
             }
         }
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-            if (evt.getKeepInventory()) {
+            if (evt.getKeepInventory()) { // TODO test if this works as intended
                 evt.getDrops().addAll(removed);
             } else {
                 player.getInventory().setContents(contents);

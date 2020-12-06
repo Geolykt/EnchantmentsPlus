@@ -25,14 +25,15 @@ public class BlizzardArrow extends EnchantedArrow {
         aoe = aoeSize;
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     public void onImpact() {
         CompatibilityAdapter.display(Utilities.getCenter(arrow.getLocation()), Particle.CLOUD,
                 100 * getLevel(), .1f, getLevel(), 1.5f, getLevel());
         for (Entity e : arrow.getNearbyEntities(aoe, aoe, aoe)) {
             if (e instanceof LivingEntity && !e.equals(arrow.getShooter())
                     && Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) e, (Player) arrow.getShooter(), 0, false)) {
-                Utilities.addPotion((LivingEntity) e, SLOW, (int) Math.round(50 + getLevel()
-                        * getPower() * 50), (int) Math.round(getLevel() * getPower() * 2));
+                Utilities.addPotion((LivingEntity) e, SLOW, 50 + (int) (getLevel() * getPower() * 50),
+                        (int) Math.round(getLevel() * getPower() * 2));
             }
         }
         die();

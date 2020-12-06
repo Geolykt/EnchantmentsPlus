@@ -49,9 +49,9 @@ public class Burst extends CustomEnchantment {
         final ItemStack hand = Utilities.usedStack(player, usedHand);
         boolean result = false;
         if (evt.getAction().equals(RIGHT_CLICK_AIR) || evt.getAction().equals(RIGHT_CLICK_BLOCK)) {
+            boolean infinity = hand.containsEnchantment(Enchantment.ARROW_INFINITE) && Utilities.hasItem(player, Material.ARROW, 1);
             for (int i = 0; i <= (int) Math.round((power * level) + 1); i++) {
-                if ((hand.containsEnchantment(Enchantment.ARROW_INFINITE) && Utilities.hasItem(player, Material.ARROW, 1))
-                        || Utilities.removeItem(player, Material.ARROW, 1)) {
+                if (infinity || Utilities.removeItem(player, Material.ARROW, 1)) {
                     result = true;
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                         Arrow arrow = player.getWorld().spawnArrow(player.getEyeLocation(),

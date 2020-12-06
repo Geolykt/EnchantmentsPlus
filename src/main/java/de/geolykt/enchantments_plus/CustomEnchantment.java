@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
@@ -275,9 +277,9 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     // Returns a mapping of custom enchantments and their level on a given tool
-    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world,
-            List<String> outExtraLore) {
-    	return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
+    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, @NotNull World world,
+            @Nullable List<String> outExtraLore) {
+        return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
     }
 
     // Returns a mapping of custom enchantments and their level on a given tool
@@ -287,21 +289,21 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     // Returns a mapping of custom enchantments and their level on a given tool
-    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, World world) {
+    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, @NotNull World world) {
         return Enchantment_Adapter.getEnchants(stk, false, world, null);
     }
 
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
-            World world,
-            List<String> outExtraLore) {
+            @NotNull World world,
+            @Nullable List<String> outExtraLore) {
         return Enchantment_Adapter.getEnchants(stk, acceptBooks, world, outExtraLore);
     }
 
-    public static boolean hasEnchantment(Config config, ItemStack stk, BaseEnchantments ench) {
+    public static boolean hasEnchantment(@NotNull Config config, ItemStack stk, BaseEnchantments ench) {
         return Enchantment_Adapter.hasEnchantment(config, stk, ench);
     }
 
-    public static int getEnchantLevel(Config config, ItemStack stk, BaseEnchantments ench) {
+    public static int getEnchantLevel(@NotNull Config config, ItemStack stk, BaseEnchantments ench) {
         return Enchantment_Adapter.getEnchantmentLevel(config, stk, ench);
     }
 

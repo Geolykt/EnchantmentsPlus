@@ -1,6 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -69,14 +68,7 @@ public class BlazesCurse extends CustomEnchantment {
         }
         if (player.getWorld().hasStorm()
             && !Storage.COMPATIBILITY_ADAPTER.dryBiomes().contains(player.getLocation().getBlock().getBiome())) {
-            Location check_loc = player.getLocation();
-            while (check_loc.getBlockY() < 256) {
-                if (!Storage.COMPATIBILITY_ADAPTER.airs().contains(check_loc.getBlock().getType())) {
-                    break;
-                }
-                check_loc.setY(check_loc.getBlockY() + 1);
-            }
-            if (check_loc.getBlockY() == 256) {
+            if (player.getWorld().getHighestBlockYAt(player.getLocation()) < player.getLocation().getBlockY()) {
                 ADAPTER.damagePlayer(player, rainDamage, EntityDamageEvent.DamageCause.CUSTOM);
             }
         }

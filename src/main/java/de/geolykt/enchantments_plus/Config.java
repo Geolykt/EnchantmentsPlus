@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
@@ -131,7 +132,7 @@ public class Config {
         return world;
     }
 
-    public CustomEnchantment enchantFromString(String enchName) {
+    public CustomEnchantment enchantFromString(@NotNull String enchName) {
         return nameToEnch.get(ChatColor.stripColor(enchName.toLowerCase()));
     }
 
@@ -321,9 +322,9 @@ public class Config {
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
                     enchantColor, curseColor, enchantGlow, world);
         } catch (IOException | InvalidConfigurationException ex) {
-            System.err.printf("Error parsing config for world '%s'. Skipping", world.getName());
+            System.err.printf("Error parsing config for world '%s'.", world.getName());
+            throw new RuntimeException("Error parsing config for a world");
         }
-        return null;
     }
 
     /**

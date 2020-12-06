@@ -30,7 +30,7 @@ public class Anthropomorphism extends CustomEnchantment {
 
     /**
      * The falling blocks from the Anthropomorphism enchantment that are attacking, moving towards a set target <br>
-     * Warning: not iterating over the map in a thread-safe manner will lead to non-deterministic behavior 
+     * Warning: not iterating over the map in a thread-safe manner will lead to non-deterministic behaviour 
      * as some code that uses this map is running in async! <br>
      * Key: the falling block that is used <br>
      * Value: Key: The power of the enchantment, Value: Vector <br>
@@ -49,7 +49,7 @@ public class Anthropomorphism extends CustomEnchantment {
 
     /**
      * The falling blocks from the Anthropomorphism enchantment that are idle, staying within the relative region<br>
-     * Warning: not iterating over the map in a thread-safe manner will lead to non-deterministic behavior 
+     * Warning: not iterating over the map in a thread-safe manner will lead to non-deterministic behaviour 
      * as some code that uses this map is running in async! <br>
      * Key: the falling block that is used <br>
      * Value: The player that is linked with the Key<br>
@@ -191,13 +191,15 @@ public class Anthropomorphism extends CustomEnchantment {
                 if (!anthVortex.contains(uid)) {
                     anthVortex.add(uid);
                 }
-                int counter = 0;
-                for (UUID p : idleBlocks.values()) {
-                    if (p.equals(uid)) {
-                        counter++;
+                synchronized (idleBlocks.values()) {
+                    int counter = 0;
+                    for (UUID p : idleBlocks.values()) {
+                        if (p.equals(uid) && ++counter > 64) {
+                            return false;
+                        }
                     }
                 }
-                if (counter < 64 && player.getInventory().contains(COBBLESTONE)) {
+                if (player.getInventory().contains(COBBLESTONE)) {
                     Utilities.removeItem(player, COBBLESTONE, 1);
                     CompatibilityAdapter.damageTool(player, 2, usedHand);
                     Location loc = player.getLocation();
