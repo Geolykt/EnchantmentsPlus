@@ -1,3 +1,6 @@
+**IMPORTANT: As of 3.0.0 the project requires Java 11 or above to run, use the 2.x.x LTS versions instead if you use Java 8**
+Or update your java version, lel
+
 Got a question? Need help or want to discuss changes? Then feel free to join our [discord server](https://discord.gg/DcceT53). Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
 The plugin only intends to support 1.16.3 and newer versions when the time comes.
@@ -48,7 +51,7 @@ As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the 
 See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloads
 
 ## Compilation
-Compile this project like every other project out there. Note that you need to have the latest bindings.
+Compile this project like every other project out there. Note that you need to have the latest bindings. It requires JDK 11 in order to compile
 
 ## Compatibility
 The current version of this plugin is fully compatible with Spigot version 1.16.1, 1.16.2 and 1.16.3. Any versions under 1.16.1, will **not** work without tinkering, versions above, may, although with a few issues.

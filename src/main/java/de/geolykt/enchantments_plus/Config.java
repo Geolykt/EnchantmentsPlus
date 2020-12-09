@@ -19,7 +19,6 @@ import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,7 +41,6 @@ public class Config {
      */
     public static final Set<Class<? extends CustomEnchantment>> REGISTERED_ENCHANTMENTS = new HashSet<>(72, 1);
 
-    private static final int CONFIG_BUFFER_SIZE = 16 * 1024;
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
     private final Map<Integer, CustomEnchantment> idToEnch;
@@ -205,34 +203,16 @@ public class Config {
         }
     }
 
-    private static byte[] streamReadAllBytes(InputStream stream) {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int nRead;
-        byte[] data = new byte[CONFIG_BUFFER_SIZE];
-
-        try {
-            while ((nRead = stream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return buffer.toByteArray();
-        }
-
-        return buffer.toByteArray();
-    }
-
     public static Config getWorldConfig(World world) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
             File file = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
             if (!file.exists()) {
                 try {
-                    String raw = new String(streamReadAllBytes(stream), StandardCharsets.UTF_8);
+                    String raw = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
                     byte[] b = raw.getBytes();
                     FileOutputStream fos = new FileOutputStream(file);
-                    fos.write(b, 0, b.length);
+                    fos.write(b);
                     fos.flush();
                     fos.close();
                 } catch (IOException e) {
