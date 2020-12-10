@@ -22,7 +22,6 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,7 +30,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -322,24 +320,13 @@ public class Watcher implements Listener {
     // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
     // by removing them
     // FIXME is this even needed nowadays?
-    @SuppressWarnings("deprecation")
     @EventHandler
+    @Deprecated(forRemoval = false, since = "3.0.0")
     public void onArrowPickup(PlayerPickupArrowEvent evt) {
         if (evt.getItem().hasMetadata("ze.arrow")) {
             evt.getItem().remove();
             evt.setCancelled(true);
         }
-    }
-
-    /**
-     * Called when a player quits the game.
-     *  Internally it is used to prevent a buildup of instances that may not be useful after a player quit.
-     * @param evt The event to handle
-     * @since 2.2.2
-     */
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent evt) {
-    	EnchantPlayer.removePlayer(evt.getPlayer().getUniqueId());
     }
 
 }

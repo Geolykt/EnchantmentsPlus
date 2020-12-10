@@ -1,7 +1,5 @@
 package de.geolykt.enchantments_plus;
 
-import java.util.Random;
-
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 
@@ -67,20 +65,12 @@ public class Storage {
     /**
      * @deprecated Not used, at all.
      * The anticheat adapter used for the plugin, however while it is planned that it's functions are added eventually in one shape or
-     * form, it is currently (v2.2.0) absolutely not used and only remains for upwards compatibillity. Who know's maybe it will even
+     * form, it is currently (v2.2.0) absolutely not used and only remains for upwards compatibility. Who know's maybe it will even
      * be removed?
      * @since 1.1.0
      */
-    @Deprecated
+    @Deprecated(forRemoval = false)
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
-
-    /**
-     * @deprecated Will be removed in the future to make way for proper thread safety. No longer used internally
-     * Shared random object
-     * @since 1.0.0
-     */
-    @Deprecated
-    public static final Random rnd = new Random();
 
     /**
      * Container for the cardinal block faces, i. e. block faces that directly touch the current block like UP DOWN or NORTH.

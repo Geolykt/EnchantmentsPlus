@@ -1,108 +1,113 @@
 package de.geolykt.enchantments_plus;
 
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-// This is used to manage players on the server. It allows for easy access in enabling/disabling enchantments
-//      and for adding cooldowns for different enchantments as they are used
+/**
+ * This is used to manage enchantment cooldowns of players on the server.
+ *  The class might be removed in future development builds and integrated elsewhere
+ * @since 1.0.0
+ */
 public class EnchantPlayer {
 
-    private static final Map<UUID, EnchantPlayer> PLAYERS = new HashMap<>();   // Collection of all players on the server
-
-    private final Map<Integer, Integer> enchantCooldown;   // Enchantment names mapped to their remaining cooldown
-
     /**
-     * If the cooldown is above this value it will be regarded as if the enchantment is disabled.
-     *  This value should not be too near to 0 or Integer.MAX_VALUE. This is pretty much a magic constant.
-     * @since 2.2.2
+     * Returns true if the given enchantment name is disabled for the player,
+     * otherwise false
+     * @param player The player
+     * @param ench The enchantment
+     * @return True if the player was disabled
+     * @since 3.0.0
      */
-    private static final int DISABLE_THRESHOLD = 0x5FFFFFFF;
-    
-    // Creates a new enchant player objects and reads the player config file for their information
-    public EnchantPlayer(@NotNull Player player) {
-        enchantCooldown = new HashMap<>();
-        PLAYERS.put(player.getUniqueId(), this);
-    }
-
-    // Decrements the players cooldowns by one tick
-    public void tick() {
-    	enchantCooldown.replaceAll((key, value) -> Math.max(--value, 0));
-    }
-
-    // Returns true if the given enchantment name is disabled for the player, otherwise false
-    public boolean isDisabled(int enchantmentID) {
-		return enchantCooldown.getOrDefault(enchantmentID, 0) > DISABLE_THRESHOLD;
+    public static boolean isDisabled(@NotNull Player player, @NotNull CustomEnchantment ench) {
+        return player.getPersistentDataContainer().getOrDefault(ench.getKey(), PersistentDataType.LONG, (long) 0.0)
+                == Long.MAX_VALUE;
     }
 
     /**
-     * Returns the cooldown remaining for the given enchantment in ticks
-     *  may return very high numbers if the enchantment is disabled.
-     * @param enchantmentID the enchantment ID
-     * @return the cooldown remaining for the given enchantment in ticks
+     * Returns the remaining cooldown for the given enchantment in milliseconds that is left, may be negative.
+     * The function does not take care of when an enchantment is disabled, use {@link #isDisabled(Player, CustomEnchantment)}
+     * instead.
+     * 
+     * @param player the player the query is valid for
+     * @param ench the enchantment
+     * @return the cooldown remaining for the given enchantment in milliseconds
+     * @since 3.0.0
      */
-    public int getCooldown(int enchantmentID) {
-        return enchantCooldown.getOrDefault(enchantmentID, 0);
+    public static long getCooldown(@NotNull Player player, @NotNull CustomEnchantment ench) {
+        return player.getPersistentDataContainer().getOrDefault(ench.getKey(), PersistentDataType.LONG, (long) 0.0)
+                - System.currentTimeMillis();
     }
 
     /**
-     * Sets the given enchantment cooldown to the given amount of ticks
-     *  has no effect if the enchantment either is or could be disabled.
-     * @param enchantmentID The enchantment
-     * @param ticks The ticks for the cooldown
-     * @since 1.0
+     * Returns the time when the cooldown has ended, this is presented by the amount of milliseconds that have passed since
+     *  the epoch start, or Long.MAX_VALUE to represent that the enchantment is disabled
+     * 
+     * @param player the player the query is valid for
+     * @param ench the enchantment
+     * @return the time at which the cooldown ends, or Long.MAX_VALUE if it should never end.
+     * @since 3.0.0
      */
-    public void setCooldown(int enchantmentID, int ticks) {
-        enchantCooldown.put(enchantmentID, ticks);
+    public static long getCooldownEnd(@NotNull Player player, @NotNull CustomEnchantment ench) {
+        return player.getPersistentDataContainer().getOrDefault(ench.getKey(), PersistentDataType.LONG, (long) 0.0);
     }
 
-    // Disables the given enchantment for the player
-    public void disable(int enchantmentID) {
-    	enchantCooldown.put(enchantmentID, Integer.MAX_VALUE);
+    /**
+     * Sets the given enchantment cooldown to the given amount of milliseconds; silently fails if the enchantment
+     * is disabled
+     * 
+     * @param player The player
+     * @param enchantment The enchantment
+     * @param millis The milliseconds for the cooldown
+     * @since 3.0.0
+     */
+    public static void setCooldown(@NotNull Player player, @NotNull CustomEnchantment enchantment, int millis) {
+        if (!isDisabled(player, enchantment)) {
+            player.getPersistentDataContainer().set(enchantment.getKey(), PersistentDataType.LONG, millis + System.currentTimeMillis());
+        }
     }
 
-    // Enables the given enchantment for the player
-    public void enable(int enchantmentID) {
-    	if (isDisabled(enchantmentID)) {
-        	enchantCooldown.put(enchantmentID, 0);
-    	}
+    /**
+     * Disables the given enchantment for the player
+     * @param player The player that should be targeted in the operation
+     * @param ench The targeted enchantment
+     * @since 3.0.0
+     */
+    public static void disable(@NotNull Player player, @NotNull CustomEnchantment ench) {
+        player.getPersistentDataContainer().set(ench.getKey(), PersistentDataType.LONG, Long.MAX_VALUE);
     }
 
-    // Disables all enchantments for the player
-    public void disableAll() {
+    /**
+     * Enables the given enchantment for the player and silently fails if the enchantment is not disabled.
+     * @param player The player that should be targeted in the operation
+     * @param ench The enchantment to enable for the player
+     * @since 3.0.0
+     */
+    public static void enable(@NotNull Player player, @NotNull CustomEnchantment ench) {
+        if (isDisabled(player, ench)) {
+            player.getPersistentDataContainer().set(ench.getKey(), PersistentDataType.LONG, (long) 0);
+        }
+    }
+
+    /**
+     * Disables all enchantments for the player
+     * @param player The player that is the target of the operation
+     * @since 3.0.0 the cooldown remaining for the given enchantment in ticks
+     */
+    public static void disableAll(@NotNull Player player) {
         for (CustomEnchantment enchant : Config.allEnchants) {
-        	disable(enchant.getId());
-        }
-    }
-
-    // Enables all enchantments for the player
-    public void enableAll() {
-        for (CustomEnchantment enchant : Config.allEnchants) {
-        	enable(enchant.getId());
-        }
-    }
-
-    // Returns the EnchantPlayer object associated with the given Player
-    public static EnchantPlayer matchPlayer(@NotNull Player player) {
-        EnchantPlayer enchPlayer = PLAYERS.get(player.getUniqueId());
-        if (enchPlayer == null) {
-            return new EnchantPlayer(player);
-        } else {
-            return enchPlayer;
+            disable(player, enchant);
         }
     }
 
     /**
-     * Removes the corresponding EnchantPlayer from the lookup tables.
-     *  This is used to prevent a buildup of EnchantPlayer instances over time.
-     *  This should also only be used after a player logged of as otherwise it would be a bit strange
-     * @param playerUID The UUID of the player that should be removed.
-     * @since 2.2.2
+     * Enables all enchantments for the player
+     * @param player
+     * @since 3.0.0
      */
-    public static void removePlayer(@NotNull UUID playerUID) {
-    	PLAYERS.remove(playerUID);
+    public static void enableAll(@NotNull Player player) {
+        for (CustomEnchantment enchant : Config.allEnchants) {
+            enable(player, enchant);
+        }
     }
 }

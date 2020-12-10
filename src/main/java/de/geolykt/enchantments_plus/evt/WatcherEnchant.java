@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -377,19 +376,6 @@ public class WatcherEnchant implements Listener {
         }
     }
 
-    // Fast Scan of Player's Armor and their hand to register enchantments
-    public static void scanPlayers() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            EnchantPlayer enchPlayer = EnchantPlayer.matchPlayer(player);
-            if (enchPlayer != null) {
-                enchPlayer.tick();
-            }
-        }
-
-        // Sweeping scan over the player list for armor enchants
-        cache.run();
-    }
-
     // Implicitly scheduled MEDIUM_HIGH due to being called by HighFrequencyEnchCache with interval 5
     private static void feedEnchCache(Player player, Consumer<Supplier<Boolean>> consoomer) {
         for (ItemStack stk : player.getInventory().getArmorContents()) {
@@ -399,7 +385,7 @@ public class WatcherEnchant implements Listener {
                         return false;
                     }
                     if (ench.onFastScan(player, level, true)) {
-                        EnchantPlayer.matchPlayer(player).setCooldown(ench.getId(), ench.getCooldown());
+                        EnchantPlayer.setCooldown(player, ench, ench.getCooldown() * 50); // TODO cooldown in milliseconds
                     }
                     return true;
                 });
@@ -412,7 +398,7 @@ public class WatcherEnchant implements Listener {
                     return false;
                 }
                 if (ench.onFastScanHands(player, level, true)) {
-                    EnchantPlayer.matchPlayer(player).setCooldown(ench.getId(), ench.getCooldown());
+                    EnchantPlayer.setCooldown(player, ench, ench.getCooldown() * 50); // TODO cooldown in milliseconds
                 }
                 return true;
             });
@@ -424,7 +410,7 @@ public class WatcherEnchant implements Listener {
                     return false;
                 }
                 if (ench.onFastScanHands(player, level, false)) {
-                    EnchantPlayer.matchPlayer(player).setCooldown(ench.getId(), ench.getCooldown());
+                    EnchantPlayer.setCooldown(player, ench, ench.getCooldown() * 50); // TODO cooldown in milliseconds
                 }
                 return true;
             });
@@ -435,5 +421,13 @@ public class WatcherEnchant implements Listener {
             player.removePotionEffect(FAST_DIGGING);
             player.removeMetadata("ze.haste", Storage.plugin);
         }
+    }
+
+    /**
+     * Runs the internal cache, this disperses less often used tick based events to avoid lag spikes.
+     * @since 3.0.0
+     */
+    public static void runCache() {
+        cache.run();
     }
 }

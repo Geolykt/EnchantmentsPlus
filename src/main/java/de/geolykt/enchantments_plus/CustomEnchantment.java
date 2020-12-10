@@ -258,13 +258,13 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     //endregion
-    public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {    
+    public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
         getEnchants(tool, player.getWorld()).forEach((CustomEnchantment ench, Integer level) -> {
-            if (!ench.used && Utilities.canUse(player, ench.id)) {
+            if (!ench.used && Utilities.canUse(player, ench)) {
                 try {
                     ench.used = true;
                     if (action.test(ench, level)) {
-                        EnchantPlayer.matchPlayer(player).setCooldown(ench.id, ench.cooldown);
+                        EnchantPlayer.setCooldown(player, ench, ench.cooldown * 50); // TODO Use milliseconds
                         final ZenchantmentUseEvent evt = new ZenchantmentUseEvent(player, EquipmentSlot.HAND, ench, level);
                         Bukkit.getPluginManager().callEvent(evt);
                     }

@@ -8,20 +8,16 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.bukkit.GameMode.CREATIVE;
-import static org.bukkit.Material.AIR;
 
 public class Utilities {
 
@@ -31,70 +27,6 @@ public class Utilities {
         stk.add(mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand());
         stk.removeIf((ItemStack is) -> is == null || is.getType() == Material.AIR);
         return stk;
-    }
-
-    // Removes the given ItemStack's durability by the given 'damage' and then sets
-    // the item direction the given
-    // players hand.
-    // This also takes into account the unbreaking enchantment
-    @Deprecated
-    public static void damageTool(Player player, int damage, boolean handUsed) {
-        if (!player.getGameMode().equals(CREATIVE)) {
-            ItemStack hand = handUsed ? player.getInventory().getItemInMainHand()
-                    : player.getInventory().getItemInOffHand();
-            for (int i = 0; i < damage; i++) {
-                if (Storage.rnd.nextInt(100) <= (100
-                        / (hand.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
-                    setDamage(hand, getDamage(hand) + 1);
-                }
-            }
-            if (handUsed) {
-                player.getInventory().setItemInMainHand(
-                        getDamage(hand) > hand.getType().getMaxDurability() ? new ItemStack(AIR) : hand);
-            } else {
-                player.getInventory().setItemInOffHand(
-                        getDamage(hand) > hand.getType().getMaxDurability() ? new ItemStack(AIR) : hand);
-            }
-        }
-    }
-
-    // Displays a particle with the given data
-    @Deprecated
-    public static void spawnParticle(Location loc, Particle particle, int amount, double speed, double xO, double yO,
-            double zO) {
-        loc.getWorld().spawnParticle(particle, loc.getX(), loc.getY(), loc.getZ(), amount, (float) xO, (float) yO,
-                (float) zO, (float) speed);
-    }
-
-    // Removes the given ItemStack's durability by the given 'damage'
-    // This also takes into account the unbreaking enchantment
-    @Deprecated
-    public static void addUnbreaking(Player player, ItemStack is, int damage) {
-        if (!player.getGameMode().equals(CREATIVE)) {
-            for (int i = 0; i < damage; i++) {
-                if (Storage.rnd.nextInt(
-                        100) <= (100 / (is.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
-                    setDamage(is, getDamage(is) + 1);
-                }
-            }
-        }
-    }
-
-    @Deprecated
-    public static void setDamage(ItemStack is, int damage) {
-        if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
-            org.bukkit.inventory.meta.Damageable dm = ((Damageable) is.getItemMeta());
-            dm.setDamage(damage);
-            is.setItemMeta((ItemMeta) dm);
-        }
-    }
-
-    @Deprecated
-    public static int getDamage(ItemStack is) {
-        if (is.getItemMeta() instanceof Damageable) {
-            return ((Damageable)is.getItemMeta()).getDamage();
-        }
-        return 0;
     }
 
     /**
@@ -107,28 +39,6 @@ public class Utilities {
      */
     public static ItemStack usedStack(Player player, boolean mainHand) {
         return mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
-    }
-
-    // Sets the hand the player to the given item stack, determined by 'handUsed'
-    @Deprecated
-    public static void setHand(Player player, ItemStack stk, boolean handUsed) {
-        if (handUsed) {
-            player.getInventory().setItemInMainHand(stk);
-        } else {
-            player.getInventory().setItemInOffHand(stk);
-        }
-    }
-
-    // Removes an item stack of the given description from the players inventory
-    @Deprecated
-    public static boolean removeItem(Player player, Material mat) {
-        return removeItem(player, mat, 1);
-    }
-
-    // Removes an item stack of the given description from the players inventory
-    @Deprecated
-    public static boolean removeItem(Player player, ItemStack is) {
-        return removeItem(player, is.getType(), is.getAmount());
     }
 
     // Removes a certain number of an item stack of the given description from the
@@ -277,20 +187,6 @@ public class Utilities {
         }
     }
 
-    /**
-     * @deprecated This is the same as calling {@code #getRomanString(Math.max(number, limit)}, which makes it needless for an unused method
-     * Returns the roman number string representation of the given decimal number, capped at the int 'limit'.
-     *  Numbers outside of the 0 - 10 range may behave unexpectedly
-     * @param number The input number
-     * @param limit The maximum input number
-     * @return The roman numeral string
-     * @since 1.0
-     */
-    @Deprecated
-    public static String getRomanString(int number, int limit) {
-        return getRomanString(Math.min(number, limit));
-    }
-
     // Returns the exact center of a block of a given location
     public static Location getCenter(Location loc) {
         return getCenter(loc, false);
@@ -388,13 +284,18 @@ public class Utilities {
         return direction;
     }
 
-    // Returns true if a player can use a certain enchantment at a certain time
-    // (permissions and cooldowns),
-    // otherwise false
-    public static boolean canUse(Player player, int enchantmentID) {
-        return PermissionTypes.USE.hasPermission(player) &&
-                (EnchantPlayer.matchPlayer(player).getCooldown(enchantmentID) == 0) &&
-                (!EnchantPlayer.matchPlayer(player).isDisabled(enchantmentID));
+    /**
+     * Checks whether an enchantment can be used, this has many factors, such as permissions, enchant cooldown
+     * or if the enchantment is disabled.
+     * 
+     * @param player The player
+     * @param ench The enchantment
+     * @since 3.0.0
+     * @return true if the enchantment may be used naturally
+     */
+    public static boolean canUse(Player player, CustomEnchantment ench) {
+        return PermissionTypes.USE.hasPermission(player) && 
+                EnchantPlayer.getCooldown(player, ench) < System.currentTimeMillis();
     }
 
     // Adds a potion effect of given length and intensity to the given entity.
@@ -460,6 +361,7 @@ public class Utilities {
      * @param flipValidSearch   true -> validSearch is a allowlist; false ->
      *                          validSearch is a denylist
      * @return A list of the Blocks the BFS algorithm found that match the given parameters.
+     * @since 1.0.0
      */
     public static List<Block> BFS(Block startBlock, int maxBlocks, boolean strictMax, float maxDistFromOrigin,
             int[][] searchFaces, Set<Material> validFind, Set<Material> validSearch, boolean strictValidSearch,

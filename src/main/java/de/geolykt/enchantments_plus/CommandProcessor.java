@@ -305,7 +305,6 @@ public class CommandProcessor {
             return false;
         }
 
-        EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
 
         if (!PermissionTypes.INFO.hasPermission(sender)) {
@@ -316,7 +315,7 @@ public class CommandProcessor {
             CustomEnchantment ench = config.enchantFromString(args[1]);
             if (ench != null) {
                 sender.sendMessage(Storage.LOGO + ench.loreName + ": "
-                        + (player.isDisabled(ench.getId()) ? ChatColor.RED + "**Disabled** " : "")
+                        + (EnchantPlayer.isDisabled((Player) sender, ench) ? ChatColor.RED + "**Disabled** " : "")
                         + ChatColor.AQUA + ench.description);
             }
         } else {
@@ -330,7 +329,7 @@ public class CommandProcessor {
 
             for (CustomEnchantment ench : enchs) {
                 sender.sendMessage(ChatColor.DARK_AQUA + ench.loreName + ": "
-                        + (player.isDisabled(ench.getId()) ? ChatColor.RED + "**Disabled** " : "")
+                        + (EnchantPlayer.isDisabled((Player) sender, ench) ? ChatColor.RED + "**Disabled** " : "")
                         + ChatColor.AQUA + ench.description);
             }
         }
@@ -343,7 +342,6 @@ public class CommandProcessor {
             return false;
         }
 
-        EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
 
         if (!PermissionTypes.ONOFF.hasPermission(sender)) {
@@ -353,11 +351,11 @@ public class CommandProcessor {
         if (args.length > 1) {
             CustomEnchantment ench = config.enchantFromString(args[1]);
             if (ench != null) {
-                player.disable(ench.getId());
+                EnchantPlayer.disable((Player) sender, ench);
                 sender.sendMessage(Storage.LOGO + "The enchantment " + ChatColor.DARK_AQUA
                         + ench.loreName + ChatColor.AQUA + " has been " + ChatColor.RED + "disabled.");
             } else if (args[1].equalsIgnoreCase("all")) {
-                player.disableAll();
+                EnchantPlayer.disableAll((Player) sender);
                 sender.sendMessage(Storage.LOGO + ChatColor.DARK_AQUA + "All " + ChatColor.AQUA
                         + "enchantments have been " + ChatColor.RED + "disabled.");
             } else {
@@ -375,8 +373,6 @@ public class CommandProcessor {
         if (!(sender instanceof Player)) {
             return false;
         }
-
-        EnchantPlayer player = EnchantPlayer.matchPlayer((Player) sender);
         Config config = Config.get(((Player) sender).getWorld());
 
         if (!PermissionTypes.ONOFF.hasPermission(sender)) {
@@ -386,11 +382,11 @@ public class CommandProcessor {
         if (args.length > 1) {
             CustomEnchantment ench = config.enchantFromString(args[1]);
             if (ench != null) {
-                player.enable(ench.getId());
+                EnchantPlayer.enable((Player) sender, ench);
                 sender.sendMessage(Storage.LOGO + "The enchantment " + ChatColor.DARK_AQUA
                         + ench.loreName + ChatColor.AQUA + " has been" + ChatColor.GREEN + " enabled.");
             } else if (args[1].equalsIgnoreCase("all")) {
-                player.enableAll();
+                EnchantPlayer.enableAll((Player) sender);
                 sender.sendMessage(Storage.LOGO + ChatColor.DARK_AQUA + "All " + ChatColor.AQUA
                         + "enchantments have been enabled.");
             } else {

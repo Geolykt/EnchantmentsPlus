@@ -193,7 +193,7 @@ public class Enchantments_plus extends JavaPlugin {
             EnchantedArrow.doTick();
             Anthropomorphism.entityPhysics();
             MysteryFish.guardian(); // TODO is this even needed?
-            WatcherEnchant.scanPlayers();
+            WatcherEnchant.runCache();
             Tracer.tracer();
             Singularity.blackholes();
         }, 1, 1);
