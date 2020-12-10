@@ -1,6 +1,5 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -13,8 +12,7 @@ import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 
-import static org.bukkit.entity.EntityType.*;
-
+import java.util.EnumMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Decapitation extends CustomEnchantment {
@@ -34,20 +32,20 @@ public class Decapitation extends CustomEnchantment {
                     Hand.LEFT);
     }
 
-    private static final EntityType[] ENTITIES = new EntityType[]{PLAYER, SKELETON, WITHER_SKULL, ZOMBIE, CREEPER};
-    private static final Material[]   SKULLS   =
-        new Material[]{Material.PLAYER_HEAD, Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL,
-            Material.ZOMBIE_HEAD, Material.CREEPER_HEAD};
+    /**
+     * Maps what Entities drop which Head.
+     * @since 3.0.0
+     */
+    private static final EnumMap<EntityType, Material> entityToSkull = new EnumMap<>(EntityType.class);
 
     @Override
     public boolean onEntityKill(EntityDeathEvent evt, int level, boolean usedHand) {
-        // TODO refractor
-        short id = (short) ArrayUtils.indexOf(ENTITIES, evt.getEntityType());
-        if (id == -1) {
+        Material mat = entityToSkull.get(evt.getEntityType());
+        if (mat == null) {
             return false;
         }
-        ItemStack stk = new ItemStack(SKULLS[id], 1);
-        if (id == 0) {
+        ItemStack stk = new ItemStack(mat, 1);
+        if (mat == Material.PLAYER_HEAD) {
             if (ThreadLocalRandom.current().nextInt(Math.max((int) Math.round(BASE_PLAYER_DROP_CHANCE / (level * power)), 1)) == 0) {
 
                 SkullMeta meta = (SkullMeta) stk.getItemMeta();
@@ -61,5 +59,14 @@ public class Decapitation extends CustomEnchantment {
             return true;
         }
         return false;
+    }
+
+    static {
+        entityToSkull.put(EntityType.PLAYER, Material.PLAYER_HEAD);
+        entityToSkull.put(EntityType.SKELETON, Material.SKELETON_SKULL);
+        entityToSkull.put(EntityType.WITHER_SKELETON, Material.WITHER_SKELETON_SKULL);
+        entityToSkull.put(EntityType.CREEPER, Material.CREEPER_HEAD);
+        entityToSkull.put(EntityType.ENDER_DRAGON, Material.DRAGON_HEAD);
+        entityToSkull.put(EntityType.ZOMBIE, Material.ZOMBIE_HEAD);
     }
 }
