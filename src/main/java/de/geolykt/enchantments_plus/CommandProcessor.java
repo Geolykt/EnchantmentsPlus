@@ -216,13 +216,7 @@ public class CommandProcessor {
                         + ChatColor.AQUA + " is not online or does not exist.");
                 return true;
             }
-            Material mat = null;
-            if (scanner.hasNextInt()) {
-                // TODO: ID MAPPINGS, mat = Material.getMaterial(s.nextInt());
-            } else {
-                mat = Material.matchMaterial(scanner.next());
-            }
-
+            Material mat =  Material.matchMaterial(scanner.next());
             Config config = Config.get(recipient.getWorld());
 
             if (mat == null) {

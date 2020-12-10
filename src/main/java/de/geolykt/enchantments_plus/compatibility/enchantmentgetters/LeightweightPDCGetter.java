@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
+import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 
 /**
@@ -42,7 +43,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
                 }
 
                 for (NamespacedKey key : keys) {
-                    if (!key.getNamespace().toLowerCase(Locale.ROOT).equals("enchantments_plus")) { // FIXME hardcoded string!
+                    if (!key.getNamespace().toLowerCase(Locale.ROOT).equals(Storage.plugin.getName())) {
                         continue;
                     }
                     if (!key.getKey().split("\\.")[0].equals("ench")) {

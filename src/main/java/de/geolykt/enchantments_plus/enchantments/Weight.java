@@ -55,9 +55,9 @@ public class Weight extends CustomEnchantment {
         }
         Player player = (Player) evt.getEntity();
         if (evt.getDamage() < player.getHealth()) {
-            //FIXME this looks like bad practice - plugins may not have a say in this and
-            //this would prevent the MONITOR priority of being used.
-            //This should be changed into something better sometime in the future
+            // FIXME this looks like bad practice - plugins may not have a say in this and
+            // this would prevent the MONITOR priority of being used.
+            // This should be changed into something better sometime in the future
             evt.setCancelled(true);
             player.damage(evt.getDamage());
             player.setVelocity(player.getLocation().subtract(evt.getDamager().getLocation()).toVector()
