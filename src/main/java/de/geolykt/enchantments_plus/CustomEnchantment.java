@@ -457,12 +457,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return customEnchantment.getEnchantable();
         }
 
-        @Deprecated
-        public Builder<T> conflicting(Set<Class<? extends CustomEnchantment>> conflicts) {
-            customEnchantment.setConflicting(conflicts);
-            return this;
-        }
-
         //I hope that the final modifier doesn't end up making any issues.
         @SafeVarargs //The vararg in this method can be generally be considered safe
         public final Builder<T> conflicting(Class<? extends CustomEnchantment>... conflicts) {
@@ -527,7 +521,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             customEnchantment.setBase(base);
             return this;
         }
-        
+
         /**
          * Calls all the setters with the supplied arguments, this method also implies the power to be 1, so the power should be set afterwards
          * if needed.
@@ -559,7 +553,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             power(1.0);
             return this;
         }
-        
+
         /**
          * Calls all the setters with the supplied arguments
          * @param base The base enchantment that should be used. (Usually the enchantment supplied as an Enum)
@@ -590,7 +584,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             power(power);
             return this;
         }
-        
+
         public T build() {
             return customEnchantment;
         }

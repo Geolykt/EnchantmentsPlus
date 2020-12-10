@@ -6,13 +6,11 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
@@ -24,8 +22,6 @@ import de.geolykt.enchantments_plus.evt.WatcherArrow;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 
 import java.io.File;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
@@ -66,80 +62,6 @@ public class Enchantments_plus extends JavaPlugin {
     // Sends commands over to the CommandProcessor for it to handle
     public boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
         return CommandProcessor.onCommand(sender, command, commandlabel, args);
-    }
-
-    // Returns true if the given item stack has a custom enchantment
-    @Deprecated
-    public boolean hasEnchantment(ItemStack stack) {
-        boolean has = false;
-        for (Config c : Config.CONFIGS.values()) {
-            if (!CustomEnchantment.getEnchants(stack, c.getWorld()).isEmpty()) {
-                has = true;
-            }
-        }
-        return has;
-    }
-
-    // Returns enchantment names mapped to their level from the given item stack
-    @Deprecated
-    public Map<String, Integer> getEnchantments(ItemStack stack) {
-        Map<String, Integer> enchantments = new TreeMap<>();
-        for (Map.Entry<CustomEnchantment, Integer> ench : 
-            CustomEnchantment.getEnchants(stack, (World) Config.CONFIGS.keySet().toArray()[0]).entrySet()) {
-            enchantments.put(ench.getKey().getLoreName(), ench.getValue());
-        }
-        return enchantments;
-    }
-
-    @Deprecated
-    public Map<String, Integer> getEnchantments(ItemStack stack, World world) {
-        Map<String, Integer> enchantments = new TreeMap<>();
-        for (Map.Entry<CustomEnchantment, Integer> ench : CustomEnchantment.getEnchants(stack, world).entrySet()) {
-            enchantments.put(ench.getKey().getLoreName(), ench.getValue());
-        }
-        return enchantments;
-    }
-
-    // Returns true if the enchantment (given by the string) can be applied to the given item stack
-    @Deprecated
-    public boolean isCompatible(String enchantmentName, ItemStack stack) {
-        for (Config c : Config.CONFIGS.values()) {
-            CustomEnchantment e;
-            if ((e = c.enchantFromString(enchantmentName)) != null) {
-                if (e.validMaterial(stack)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    // Adds the enchantments (given by the string) of level 'level' to the given item stack, returning true if the
-    //      action was successful
-    @Deprecated
-    public boolean addEnchantment(ItemStack stk, String enchantmentName, int lvl) {
-        for (Config c : Config.CONFIGS.values()) {
-            CustomEnchantment e;
-            if ((e = c.enchantFromString(enchantmentName)) != null) {
-                e.setEnchantment(stk, lvl, c.getWorld());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Removes the enchantment (given by the string) from the given item stack, returning true if the action was
-    //      successful
-    @Deprecated
-    public boolean removeEnchantment(ItemStack stk, String enchantmentName) {
-        for (Config c : Config.CONFIGS.values()) {
-            CustomEnchantment e;
-            if ((e = c.enchantFromString(enchantmentName)) != null) {
-                e.setEnchantment(stk, 0, c.getWorld());
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

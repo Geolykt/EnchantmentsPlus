@@ -69,7 +69,7 @@ public class Storage {
      * be removed?
      * @since 1.1.0
      */
-    @Deprecated(forRemoval = false)
+    @Deprecated(forRemoval = false, since = "1.1.0")
     public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     /**

@@ -177,7 +177,6 @@ public class Watcher implements Listener {
         }
     }
 
-    // FIXME should probably be outsourced to a different plugin
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if (event.getMessage().startsWith("/enchant ")) {

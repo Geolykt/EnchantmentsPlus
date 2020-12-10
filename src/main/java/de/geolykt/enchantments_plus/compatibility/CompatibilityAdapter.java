@@ -54,16 +54,6 @@ import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
 
 public class CompatibilityAdapter {
-    
-    /**
-     * @deprecated This uses a hack to obtain the plugin instance and should NOT be used!
-     * Parameterless constructor. Nothing more
-     * @since 1.0
-     */
-    @Deprecated
-    public CompatibilityAdapter() {
-        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Enchantments_plus"), this::scanMethods, 0l);
-    }
 
     /**
      * Constructs the class and starts a Task on the next tick to initialize it further (scans methods from other plugins or spigot)
@@ -410,56 +400,11 @@ public class CompatibilityAdapter {
         return getRemaingDurabillity(stack) <= 0;
     }
 
-    /**
-     * Damages a given itemstack with a given amount of damage (deducting the amount of unbreaking) and returns that itemstack.
-     * The item may have a durability below 0 afterwards.
-     * @param stack The stack that should be targeted
-     * @param damage The amount of damage that should be applied
-     * @return The new damaged item or Air if the input stack is null or air
-     * @since 1.0
-     * @deprecated This does not break the items correctly, use {@link #damageItem(ItemStack, int, boolean)} instead
-     */
-    @Deprecated
-    public static @NotNull ItemStack damageItem(@Nullable ItemStack stack, int damage) {
-        if (stack == null || stack.getType() == Material.AIR)
-            return new ItemStack(Material.AIR);
-        if (!stack.getItemMeta().isUnbreakable()) {
-            // chance that the item is broken is 1/(level+1)
-            // So at level = 2 it's 33%, at level = 0 it's 100%, at level 1 it's 50%, at level = 3 it's 25%
-            if (RND.nextInt(1000) <= (1000/(stack.getEnchantmentLevel(Enchantment.DURABILITY)+1))) {
-                setDamage(stack, getDamage(stack) + damage);
-            }
-        }
-        return stack;
-    }
-
     // Displays a particle with the given data
     public static void display(Location loc, Particle particle, int amount, double speed, double xO, double yO,
             double zO) {
         loc.getWorld().spawnParticle(particle, loc.getX(), loc.getY(), loc.getZ(), amount, (float) xO, (float) yO,
                 (float) zO, (float) speed);
-    }
-
-    /**
-     * @deprecated Duplicate method. Use {@link #damageItem(ItemStack, int)} instead.
-     * Damages a given itemstack with a given amount of damage (deducting the amount of unbreaking). Also checks for the appropriate GameMode
-     * of the player. <br>
-     * The item may have a durability below 0 afterwards, so caution is advised. <br>
-     * This uses the old unoptimized method for strange backwards compatibility.
-     * @param player The player whose GameMode should be checked
-     * @param is The stack that should be targeted
-     * @param damage The amount of damage that should be applied
-     * @since 1.0
-     */
-    @Deprecated
-    public static void addUnbreaking(Player player, ItemStack is, int damage) {
-        if (!player.getGameMode().equals(GameMode.CREATIVE)) {
-            for (int i = 0; i < damage; i++) {
-                if (RND.nextInt(100) <= (100 / (is.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DURABILITY) + 1))) {
-                    setDamage(is, getDamage(is) + 1);
-                }
-            }
-        }
     }
 
     /**
@@ -545,40 +490,6 @@ public class CompatibilityAdapter {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Places a block on the given player's behalf. Fires a BlockPlaceEvent with
-     * (nearly) appropriate parameters to probe the legitimacy (permissions etc)
-     * of the action and to communicate to other plugins where the block is
-     * coming from. <br>
-     * The method always assumes that the block is placed against the lower block, 
-     * unless it's not possible otherwise.
-     * 
-     * @deprecated Probably doesn't even work. Unused internally
-     * @param blockPlaced the block to be changed
-     * @param player the player whose identity to use
-     * @param is The itemstack that is used to get which block data should be used and of which material the block should be.
-     * @return true if the block placement has been successful
-     * @since 1.0
-     */
-    @Deprecated
-    public boolean placeBlock(Block blockPlaced, Player player, ItemStack is) {
-        return placeBlock(blockPlaced, player, is.getType(), (BlockData) is.getData());
-    }
-
-    /**
-     * @deprecated This method does not specify the tool that should be broken.
-     * Queries whether the player is allowed to damage the target, damages it and breaks the mainhand tool.
-     * @param target The target that should be attacked
-     * @param attacker The player that attacks the target
-     * @param damage The damage that should be dealt in half hearts
-     * @return True if performed without issues, false otherwise
-     * @since 1.0
-     */
-    @Deprecated
-    public boolean attackEntity(LivingEntity target, Player attacker, double damage) {
-        return attackEntity(target, attacker, damage, true);
     }
 
     public boolean attackEntity(LivingEntity target, Player attacker, double damage, boolean performEquipmentDamage) {
@@ -710,23 +621,6 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    @Deprecated
-    public Entity spawnGuardian(Location loc, boolean elderGuardian) {
-        return loc.getWorld().spawnEntity(loc, elderGuardian ? EntityType.ELDER_GUARDIAN : EntityType.GUARDIAN);
-    }
-
-    @Deprecated
-    public boolean isZombie(Entity e) {
-        switch (e.getType()) {
-        case ZOMBIE:
-        case ZOMBIE_VILLAGER:
-        case HUSK:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     public boolean isBlockSafeToBreak(Block b) {
         Material mat = b.getType();
         return mat.isSolid() && !mat.isInteractable() && !unbreakableBlocks().contains(mat);
@@ -817,69 +711,21 @@ public class CompatibilityAdapter {
         }
         return false;
     }
-    
-    /**
-     * @deprecated This method is a duplicate with another method within the ColUtils class.
-     * 
-     * Returns the dyed variant of the wool block based on the DyeColor.
-     * @param col The input dye color
-     * @return The output dyed material
-     * @since 1.0
-     */
-    @Deprecated
-    public Material getWoolCol (DyeColor col)  {
-        switch (col) {
-        case BLACK:
-            return Material.BLACK_WOOL;
-        case BLUE:
-            return Material.BLUE_WOOL;
-        case BROWN:
-            return Material.BROWN_WOOL;
-        case CYAN:
-            return Material.CYAN_WOOL;
-        case GRAY:
-            return Material.GRAY_WOOL;
-        case GREEN:
-            return Material.GREEN_WOOL;
-        case LIGHT_BLUE:
-            return Material.LIGHT_BLUE_WOOL;
-        case LIGHT_GRAY:
-            return Material.LIGHT_GRAY_WOOL;
-        case LIME:
-            return Material.LIME_WOOL;
-        case MAGENTA:
-            return Material.MAGENTA_WOOL;
-        case ORANGE:
-            return Material.ORANGE_WOOL;
-        case PINK:
-            return Material.PINK_WOOL;
-        case PURPLE:
-            return Material.PURPLE_WOOL;
-        case RED:
-            return Material.RED_WOOL;
-        case WHITE:
-            return Material.WHITE_WOOL;
-        case YELLOW:
-            return Material.YELLOW_WOOL;
-        default:
-            return Material.WHITE_WOOL;
-        }
-    }
-    
+
     private boolean legacyEntityShootBowEvent = false;
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
      *  should target Towny, in most cases this is just a boolean that is true if towny was found, false otherwise.
      */
     private boolean perm_useTowny = false;
-    
+
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
      *  should target WorldGuard, in most cases this is just a boolean that is true if WorldGuard was found, false otherwise. <br>
      *  Note that this may not represent the actual state due to method not found issues.
      */
     private boolean perm_useWG = false;
-    
+
     /**
      * Method that scans whether API methods can be used. It also checks whether plugin integrations are possible and enabled
      */
@@ -917,7 +763,7 @@ public class CompatibilityAdapter {
             Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.YELLOW + ": Worldguard runtime not found.");
         }
     }
-    
+
     /**
      * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
      *  the correct constructor without throwing a java.lang.NoSuchMethodError.
@@ -950,7 +796,7 @@ public class CompatibilityAdapter {
             return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
         }
     }
-    
+
     /**
      * This method queries the correct Permission interfaces, which are plugins. 
      * If the plugin is not loaded the method will ignore it gracefully. <br>
