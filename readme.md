@@ -1,4 +1,4 @@
-Got a question? Need help or want to discuss changes? Then feel free to join our [discord server](https://discord.gg/DcceT53). Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
+Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). I can no longer give help via discord as I deleted my discord account. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
 The plugin only intends to support 1.16.3 and newer versions when the time comes.
 
