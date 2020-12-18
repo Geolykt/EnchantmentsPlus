@@ -53,7 +53,7 @@ public class BasicLoreGetter implements IEnchGatherer {
     }
 
     @Nullable
-    private Map.Entry<CustomEnchantment, Integer> getEnchant(String raw, @NotNull Config cfg) {
+    private Map.Entry<CustomEnchantment, Integer> getEnchant(@NotNull String raw, @NotNull Config cfg) {
         raw = raw.replaceAll("(" + ChatColor.COLOR_CHAR + ".)", "").trim();
         switch (raw.split(" ").length) {
         case 0:

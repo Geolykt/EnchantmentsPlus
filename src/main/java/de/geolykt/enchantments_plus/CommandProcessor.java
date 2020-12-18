@@ -93,7 +93,7 @@ public class CommandProcessor {
                     if (!PermissionTypes.INFO.hasPermission(sender)) {
                         return results;
                     }
-                    results = config.getEnchantNames();
+                    results.addAll(config.getEnchantNames());
                     if (args.length > 1) {
                         results.removeIf(e -> !e.startsWith(args[1]));
                     }

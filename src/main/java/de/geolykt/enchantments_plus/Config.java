@@ -8,6 +8,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
@@ -56,9 +57,9 @@ public class Config {
 
     public static final FileConfiguration PATCH_CONFIGURATION;
     // Constructs a new config object
-    public Config(Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
+    public Config(@NotNull Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
             boolean explosionBlockBreak,
-            ChatColor enchantmentColor, ChatColor curseColor, boolean enchantGlow, World world) {
+            @NotNull ChatColor enchantmentColor, @NotNull ChatColor curseColor, boolean enchantGlow, @NotNull World world) {
         this.worldEnchants = worldEnchants;
         this.enchantRarity = enchantRarity;
         this.maxEnchants = maxEnchants;
@@ -125,28 +126,66 @@ public class Config {
         return curseColor;
     }
 
-    // Returns the world associated with the config
-    public World getWorld() {
+    /**
+     * @deprecated This is bound to be removed as the world shouldn't be obtained this way.
+     *  Returns the world associated with the config
+     * @return The world that the config was made for
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public @NotNull World getWorld() {
         return world;
     }
 
-    public CustomEnchantment enchantFromString(@NotNull String enchName) {
+    /**
+     * Obtains an enchantment from it's name
+     * @param enchName The name of the enchantment
+     * @return The instance of the enchantment, or null if unmapped
+     * @since 1.0.0
+     */
+    public @Nullable CustomEnchantment enchantFromString(@NotNull String enchName) {
         return nameToEnch.get(ChatColor.stripColor(enchName.toLowerCase()));
     }
 
-    public List<String> getEnchantNames() {
-        return new ArrayList<>(nameToEnch.keySet());
+    /**
+     * Returns the set of enchantment names. Please note that the returned key set backs the actual registered enchantments,
+     * so removal is not recommended.
+     * @return The names of the registered enchantments in this world
+     * @since 3.0.0
+     */
+    public @NotNull Set<String> getEnchantNames() {
+        return nameToEnch.keySet();
     }
 
-    public Set<Map.Entry<String, CustomEnchantment>> getSimpleMappings() {
+    /**
+     * Returns the Name-Enchantment instance mappings of the world.
+     * @return A set of the entries of the map of registered enchantments
+     * @since 1.0.0
+     */
+    public @NotNull Set<Map.Entry<String, CustomEnchantment>> getSimpleMappings() {
         return nameToEnch.entrySet();
     }
 
-    public CustomEnchantment enchantFromID(int id) {
+    /**
+     * @deprecated Integer IDs are no longer used as a universal method of finding enchantments.
+     * Obtains an enchantment from it's ID
+     * @param id The ID of the enchantment
+     * @return The enchantment mapped to the ID
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public @Nullable CustomEnchantment enchantFromID(int id) {
         return idToEnch.get(id);
     }
 
-    public CustomEnchantment enchantFromEnum(BaseEnchantments ench) {
+    /**
+     * Obtains the enchantment that is backed by the BaseEnchantments enum.
+     * Please note that the enchantment not be registered, which is why it may return null.
+     * @param ench The enchantment
+     * @return The enchantment instance valid in the world, or null
+     * @since 2.1.1
+     */
+    public @Nullable CustomEnchantment enchantFromEnum(@NotNull BaseEnchantments ench) {
         return baseToEnch.get(ench);
     }
 
@@ -203,7 +242,7 @@ public class Config {
         }
     }
 
-    public static Config getWorldConfig(World world) {
+    public static @NotNull Config getWorldConfig(@NotNull World world) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
             File file = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
@@ -216,7 +255,7 @@ public class Config {
                     fos.flush();
                     fos.close();
                 } catch (IOException e) {
-                    System.err.println("Error loading config");
+                    throw new RuntimeException(e);
                 }
             }
             YamlConfiguration yamlConfig = new YamlConfiguration();
@@ -296,6 +335,7 @@ public class Config {
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                         NoSuchMethodException | SecurityException ex) {
+                    ex.printStackTrace();
                     System.err.printf("Error parsing config for enchantment '%s'. Skipping.", cl.getName());
                 }
             }
@@ -303,42 +343,42 @@ public class Config {
                     enchantColor, curseColor, enchantGlow, world);
         } catch (IOException | InvalidConfigurationException ex) {
             System.err.printf("Error parsing config for world '%s'.", world.getName());
-            throw new RuntimeException("Error parsing config for a world");
+            throw new RuntimeException("Error parsing config for a world", ex);
         }
     }
 
     /**
      * Must be specified
      */
-    private static float getProbability(LinkedHashMap<String, Object> data) {
+    private static float getProbability(@NotNull LinkedHashMap<String, Object> data) {
         return (float) (double) data.get(ConfigKeys.PROBABILITY.toString());
     }
 
     /**
      * Must be specified
      */
-    private static String getLoreName(LinkedHashMap<String, Object> data) {
+    private static String getLoreName(@NotNull LinkedHashMap<String, Object> data) {
         return (String) data.get(ConfigKeys.NAME.toString());
     }
 
     /**
      * Must be specified
      */
-    private static int getCooldown(LinkedHashMap<String, Object> data) {
+    private static int getCooldown(@NotNull LinkedHashMap<String, Object> data) {
         return (int) data.get(ConfigKeys.COOLDOWN.toString());
     }
 
     /**
      * Must be specified.
      */
-    private static int getMaxLevel(LinkedHashMap<String, Object> data) {
+    private static int getMaxLevel(@NotNull LinkedHashMap<String, Object> data) {
         return (int) data.get(ConfigKeys.MAX_LEVEL.toString());
     }
 
     /**
      * Must be specified
      */
-    private static Tool[] getTools(LinkedHashMap<String, Object> data) {
+    private static Tool[] getTools(@NotNull LinkedHashMap<String, Object> data) {
         Set<Tool> materials = new HashSet<>();
         for (String s : ((String) data.get(ConfigKeys.TOOLS.toString())).split(", |\\,")) {
             materials.add(Tool.fromString(s));
@@ -349,7 +389,7 @@ public class Config {
     /**
      * Defaulting to 1, as stated in CustomEnchantment
      */
-    private static double getPower(LinkedHashMap<String, Object> data) {
+    private static double getPower(@NotNull LinkedHashMap<String, Object> data) {
         return (double) data.getOrDefault(ConfigKeys.POWER.toString(), 1.0);
     }
     
@@ -359,7 +399,7 @@ public class Config {
      * @return The aoe modifier
      * @since 2.1.6
      */
-    private static double getAOEMod(LinkedHashMap<String, Object> data) {
+    private static double getAOEMod(@NotNull LinkedHashMap<String, Object> data) {
         return (double) data.getOrDefault(ConfigKeys.AREA_OF_EFFECT.toString(), 1.0);
     }
 
@@ -371,8 +411,7 @@ public class Config {
      * @return The conflicting enchantments, or defaults if it is unmapped.
      * @since 2.2.2
      */
-    @SuppressWarnings("unused")
-        private static BaseEnchantments[] getConflicts(LinkedHashMap<String, Object> data, BaseEnchantments[] defaults) {
+        private static @NotNull BaseEnchantments[] getConflicts(@NotNull LinkedHashMap<String, Object> data, @NotNull BaseEnchantments[] defaults) {
         if (data.containsKey(ConfigKeys.CONFLICTS.toString())) {
             String[] s = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
                 BaseEnchantments [] conflicts = new BaseEnchantments[s.length];
@@ -386,7 +425,7 @@ public class Config {
     }
 
     // Returns the config object associated with the given world
-    public static Config get(World world) {
+    public static Config get(@NotNull World world) {
         if (CONFIGS.get(world) == null) {
             Config.CONFIGS.put(world, getWorldConfig(world));
         }
@@ -394,7 +433,7 @@ public class Config {
     }
 
     static {
-        for (World world : Bukkit.getWorlds()) {
+        for (World world : Bukkit.getWorlds()) { // FIXME This may not be safe in the long run
             Config.CONFIGS.put(world, getWorldConfig(world));
         }
         File patchFile = new File(Storage.plugin.getDataFolder(), "patches.yml");
