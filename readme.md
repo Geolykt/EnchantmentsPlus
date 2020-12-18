@@ -1,6 +1,6 @@
 Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). I can no longer give help via discord as I deleted my discord account. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
-The plugin only intends to support 1.16.3 and newer versions when the time comes.
+The plugin only intends to support 1.16.4 and newer versions when the time comes.
 
 # Enchantments+
 ## Description
@@ -16,7 +16,7 @@ Zenchantments is a custom enchantment plugin that adds 70+ new enchantments (it 
   - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will often be fixed in under a day (especially on github).
 
 ## Metrics
-As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the information is shown can be found [here](https://bstats.org/plugin/bukkit/EnchantmentsPlus/9211).
+As of version 2.1.6 onwards the plugin uses bstats to cover metrics, the page where the information is shown can be found [here](https://bstats.org/plugin/bukkit/EnchantmentsPlus/9211).
 
 ## Permissions
 <b>enchplus.enchant.get</b> - On player enchant event, allow player to have a chance at the enabled custom enchantments<br>
@@ -51,8 +51,19 @@ See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloa
 Compile this project like every other project out there. Note that you need to have the latest bindings.
 
 ## Compatibility
-The current version of this plugin is fully compatible with Spigot version 1.16.1, 1.16.2 and 1.16.3. Any versions under 1.16.1, will **not** work without tinkering, versions above, may, although with a few issues.
-1.15.2 can work when changing around the magicCompat.yml file, however isn't technically fully supported
+The current version of this plugin is fully compatible with Paper version 1.16.1, 1.16.2, 1.16.3 and 1.16.4. Any versions under 1.15.2, will **not** work without tinkering, versions above, may, although with a few issues.
+1.15.2 can work with a few issues as it isn't tested well and as such isn't officially supported. (Bugs on that version are going to get fixed though - provided you report them).
+Spigot is also almost fully supported, however we currently have a bug that I wasn't able to solve, see [Issue 24 for more info](https://github.com/Geolykt/EnchantmentsPlus/issues/24).
+
+## Common mishaps
+The configuration is pretty weak in terms of error handling, so extra caution is required when editing it.
+ - -1.0 as a probabillity is disabled, -1 will throw an error
+ - 0.0 as a probabillity results in the enchantment being unobtainable in the world, 0 will throw an error
+ - All decimal values have to have a `.` and a leading digit (like 0) or it will throw an error
+ - All integer values cannot have decimal values (i. e. not `.`)
+ - Which values are decimal and which aren't is descibed in the header of the defaultconfig.yml
+
+ After an update it is recommended to reset the magicCompat.yml and reset the values manually, otherwise some things might break.
 
 ## Contribute
 Anyone is free to contribute to this repository via pull requests, issues or comments, however keep in mind that this repository uses 4 space indentation.
@@ -64,7 +75,7 @@ To view the changes compared to Zenchantments, add the Changelog of [NMS-Less Ze
   <ul>
    <li>Most values in the compatibillity adapter can be changed via magic configuration files now</li>
    <li>The Spectral enchantment can now be levelled by default</li>
-   <li>Uses the 1.16.3 Spigot API</li>
+   <li>Uses the 1.16.4 Spigot API</li>
    <li>2 more enchantment getters</li>
   </ul>
  </li>
