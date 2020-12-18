@@ -97,7 +97,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
             stk.setType(Material.ENCHANTED_BOOK);
         }
 
-        CustomEnchantment.setGlow(stk, true, world);
+        CustomEnchantment.setGlow(stk, true, Config.get(world));
     }
 
     @Override

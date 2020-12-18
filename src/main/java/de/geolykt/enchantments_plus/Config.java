@@ -25,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 // This class manages individual world configs, loading them each from the config file. It will start the process
@@ -50,22 +49,32 @@ public class Config {
     private final int maxEnchants; // Max number of Custom Enchantments on a tool
     private final int shredDrops; // The setting (all, block, none) for shred drops
     private final boolean explosionBlockBreak; // Determines whether enchantment explosions cause world damage
-    private final World world; // The World associated with the config
     private final boolean enchantGlow;
     private final ChatColor enchantmentColor;
     private final ChatColor curseColor;
 
     public static final FileConfiguration PATCH_CONFIGURATION;
-    // Constructs a new config object
+
+    /**
+     * Constructs a new Config object
+     * @param worldEnchants The enchantment supported on this world
+     * @param enchantRarity The global rarity of enchantments on the world
+     * @param maxEnchants The maximum enchantments on a item
+     * @param shredDrops 0 = all; 1 = only blocks; 2 = none
+     * @param explosionBlockBreak True if explosions block breaking is enabled, only affects a few enchantments
+     * @param enchantmentColor The color of enchantments in the lore of an item
+     * @param curseColor The color of a curse enchantment in the lore of an item
+     * @param enchantGlow True if item glow should be enabled
+     * @since 3.0.0
+     */
     public Config(@NotNull Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
             boolean explosionBlockBreak,
-            @NotNull ChatColor enchantmentColor, @NotNull ChatColor curseColor, boolean enchantGlow, @NotNull World world) {
+            @NotNull ChatColor enchantmentColor, @NotNull ChatColor curseColor, boolean enchantGlow) {
         this.worldEnchants = worldEnchants;
         this.enchantRarity = enchantRarity;
         this.maxEnchants = maxEnchants;
         this.shredDrops = shredDrops;
         this.explosionBlockBreak = explosionBlockBreak;
-        this.world = world;
 
         this.nameToEnch = new HashMap<>(worldEnchants.size());
         this.idToEnch = new HashMap<>(worldEnchants.size());
@@ -124,17 +133,6 @@ public class Config {
     // Returns the color for curse lore
     public ChatColor getCurseColor() {
         return curseColor;
-    }
-
-    /**
-     * @deprecated This is bound to be removed as the world shouldn't be obtained this way.
-     *  Returns the world associated with the config
-     * @return The world that the config was made for
-     * @since 1.0.0
-     */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public @NotNull World getWorld() {
-        return world;
     }
 
     /**
@@ -242,18 +240,13 @@ public class Config {
         }
     }
 
-    public static @NotNull Config getWorldConfig(@NotNull World world) {
+    private static @NotNull Config getWorldConfig(@NotNull World world) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
             File file = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
             if (!file.exists()) {
-                try {
-                    String raw = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-                    byte[] b = raw.getBytes();
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.write(b);
-                    fos.flush();
-                    fos.close();
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    stream.transferTo(fos);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -340,7 +333,7 @@ public class Config {
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
-                    enchantColor, curseColor, enchantGlow, world);
+                    enchantColor, curseColor, enchantGlow);
         } catch (IOException | InvalidConfigurationException ex) {
             System.err.printf("Error parsing config for world '%s'.", world.getName());
             throw new RuntimeException("Error parsing config for a world", ex);

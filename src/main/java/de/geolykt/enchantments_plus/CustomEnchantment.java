@@ -351,8 +351,15 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         Enchantment_Adapter.setEnchantment(stk, ench, level, world);
     }
 
-    public static void setGlow(ItemStack stk, boolean customEnch, World world) {
-        if (Config.get(world) == null || !Config.get(world).enchantGlow()) {
+    /**
+     * Makes the item in the hand glow, provided that the enchantment glow was enabled in the configuration
+     * @param stk The itemstack that the glow should be valid for
+     * @param customEnch True if a hidden enchantment should be applied if all odds fail
+     * @param conf the configuration that the beforementioned check is valid for
+     * @since 3.0.0
+     */
+    public static void setGlow(@NotNull ItemStack stk, boolean customEnch, @NotNull Config conf) {
+        if (!conf.enchantGlow()) {
             return;
         }
         ItemMeta itemMeta = stk.getItemMeta();

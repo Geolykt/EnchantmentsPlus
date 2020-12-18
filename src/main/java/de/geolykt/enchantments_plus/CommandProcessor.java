@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.enchantments.Laser;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -109,7 +110,7 @@ public class CommandProcessor {
                         }
                         if (PermissionTypes.LASERCOL.hasPermission(sender) && 
                                 CustomEnchantment.getEnchants(stack, ((Player)sender)
-                                        .getWorld()).containsKey(config.enchantFromID(Laser.ID))) {
+                                        .getWorld()).containsKey(config.enchantFromEnum(BaseEnchantments.LASER))) {
                             results.add("lasercol");
                         }
                         if (PermissionTypes.LIST.hasPermission(sender)) {
@@ -253,7 +254,7 @@ public class CommandProcessor {
                             + ChatColor.AQUA + " the enchantments ");
 
             for (Map.Entry<CustomEnchantment, Integer> ench : enchantsToAdd.entrySet()) {
-                ench.getKey().setEnchantment(stk, ench.getValue(), config.getWorld());
+                ench.getKey().setEnchantment(stk, ench.getValue(), recipient.getWorld());
                 msgBldr.append(ChatColor.stripColor(ench.getKey().getLoreName()));
                 msgBldr.append(", ");
             }
@@ -314,7 +315,7 @@ public class CommandProcessor {
             }
         } else {
             Set<CustomEnchantment> enchs = CustomEnchantment.getEnchants(
-                    ((Player) sender).getInventory().getItemInMainHand(), true, config.getWorld()).keySet();
+                    ((Player) sender).getInventory().getItemInMainHand(), true, ((Entity) sender).getWorld()).keySet();
             if (enchs.isEmpty()) {
                 sender.sendMessage(Storage.LOGO + "There are no custom enchantments on this tool!");
             } else {

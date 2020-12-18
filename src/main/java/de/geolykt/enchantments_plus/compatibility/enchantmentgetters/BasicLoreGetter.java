@@ -105,8 +105,8 @@ public class BasicLoreGetter implements IEnchGatherer {
         List<String> lore = new LinkedList<>();
         List<String> normalLore = new LinkedList<>();
         boolean customEnch = false;
+        Config cfg = Config.get(world);
         if (meta.hasLore()) {
-            Config cfg = Config.get(world);
             for (String loreStr : meta.getLore()) {
                 Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, cfg);
                 if (enchEntry == null) {
@@ -131,7 +131,7 @@ public class BasicLoreGetter implements IEnchGatherer {
             stk.setType(ENCHANTED_BOOK);
         }
 
-        CustomEnchantment.setGlow(stk, customEnch, world);
+        CustomEnchantment.setGlow(stk, customEnch, cfg);
     }
 
     @Override

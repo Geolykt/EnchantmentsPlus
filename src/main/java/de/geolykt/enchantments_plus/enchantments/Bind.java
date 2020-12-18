@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
@@ -37,11 +36,10 @@ public class Bind extends CustomEnchantment {
         }
         // FIXME this works perfectly with other plugins \s - refractor needed!
         final Player player = evt.getEntity();
-        Config config = Config.get(player.getWorld());
         final ItemStack[] contents = player.getInventory().getContents().clone();
         final List<ItemStack> removed = new ArrayList<>();
         for (int i = 0; i < contents.length; i++) {
-            if (!CustomEnchantment.getEnchants(contents[i], config.getWorld()).containsKey(this)) {
+            if (!CustomEnchantment.getEnchants(contents[i], player.getWorld()).containsKey(this)) {
                 contents[i] = null;
             } else {
                 removed.add(contents[i]);

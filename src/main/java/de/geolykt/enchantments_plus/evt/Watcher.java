@@ -185,7 +185,7 @@ public class Watcher implements Listener {
                     .isEmpty();
             Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 CustomEnchantment.setGlow(event.getPlayer().getInventory().getItemInMainHand(), customEnch,
-                        event.getPlayer().getWorld());
+                        Config.get(event.getPlayer().getWorld()));
             }, 0);
         }
     }
@@ -244,7 +244,7 @@ public class Watcher implements Listener {
             }
         }
         for (Map.Entry<CustomEnchantment, Integer> pair : addedEnchants.entrySet()) {
-            pair.getKey().setEnchantment(stk, pair.getValue(), config.getWorld());
+            pair.getKey().setEnchantment(stk, pair.getValue(), evt.getEnchantBlock().getWorld());
         }
 
         if (evt.getItem().getType().equals(ENCHANTED_BOOK)) {
@@ -261,7 +261,7 @@ public class Watcher implements Listener {
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-            CustomEnchantment.setGlow(stk, !addedEnchants.isEmpty(), config.getWorld());
+            CustomEnchantment.setGlow(stk, !addedEnchants.isEmpty(), config);
         }, 0);
 
     }
