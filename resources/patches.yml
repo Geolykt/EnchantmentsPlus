@@ -13,7 +13,6 @@ recipe:
   misc:
     arborist-doGoldenAppleDrop: true
 nerfs:
-  siphonRatio: 0.5 # Will be removed in v3.0.0! USe the power of the enchantment instead.
   siphonsubstractAmour: true
   shredCoolDownOnLaser: true
 # Specifies the reader / writer for enchantments. They can be divided into two main categories, NBT getters and Lore getters, NBT getters are more stable, however can bork other plugins and are inefficent

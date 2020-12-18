@@ -202,7 +202,6 @@ public class Config {
         Spectral.performWorldProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.spectral", true);
         Spectral.useNativeProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.native", true);
         Arborist.doGoldenAppleDrop = PATCH_CONFIGURATION.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
-        Siphon.ratio = PATCH_CONFIGURATION.getDouble("nerfs.siphonRatio", 0.5);
         Siphon.calcAmour = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);
         Laser.doShredCooldown = PATCH_CONFIGURATION.getBoolean("nerfs.shredCoolDownOnLaser", true);
         
