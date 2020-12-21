@@ -4,9 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +37,15 @@ import java.util.*;
 //      to automatically update the config files if they are old
 public class Config {
 
-    public static final Map<World, Config> CONFIGS = new HashMap<>(3, 1); // Map of all world configs on the current server
+    public static final Map<World, Config> CONFIGS = new HashMap<>(3); // Map of all world configs on the current server
     public static final Set<CustomEnchantment> allEnchants = new HashSet<>(72, 1); // Set of all active Custom enchantments in form of instances.
+
+    /**
+     * True if reveal was registered, false otherwise, internally used to make sure that
+     *  the OreUncover event listener is not registered when not needed
+     *  @since 3.0.0
+     */
+    private static boolean registeredReveal = false;
 
     /**
      * This variable holds the classes of every registered enchantment in the plugin, please do not modify the variable, as it may have some
@@ -65,11 +78,12 @@ public class Config {
      * @param enchantmentColor The color of enchantments in the lore of an item
      * @param curseColor The color of a curse enchantment in the lore of an item
      * @param enchantGlow True if item glow should be enabled
+     * @param plugin The plugin that created the config
      * @since 3.0.0
      */
     public Config(@NotNull Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
-            boolean explosionBlockBreak,
-            @NotNull ChatColor enchantmentColor, @NotNull ChatColor curseColor, boolean enchantGlow) {
+            boolean explosionBlockBreak, @NotNull ChatColor enchantmentColor, @NotNull ChatColor curseColor,
+            boolean enchantGlow, Plugin plugin) {
         this.worldEnchants = worldEnchants;
         this.enchantRarity = enchantRarity;
         this.maxEnchants = maxEnchants;
@@ -90,6 +104,20 @@ public class Config {
         this.enchantmentColor = enchantmentColor;
         this.curseColor = curseColor;
 
+        if (!registeredReveal && baseToEnch.containsKey(BaseEnchantments.REVEAL)) {
+            Bukkit.getPluginManager().registerEvents(new Listener() {
+                // Makes glowing shulkers on an ore block disappear if it is uncovered
+                @EventHandler
+                public void onOreUncover(BlockBreakEvent evt) {
+                    for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
+                        Entity blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
+                        if (blockToRemove != null) {
+                            blockToRemove.remove();
+                        }
+                    }
+                }
+            }, plugin);
+        }
         allEnchants.addAll(worldEnchants);
     }
 
@@ -239,7 +267,14 @@ public class Config {
         }
     }
 
-    private static @NotNull Config getWorldConfig(@NotNull World world) {
+    /**
+     * Creates and returns the config of a world.
+     * @param world The world the the configuration is valid for.
+     * @param plugin The plugin requesting this operation (used internally for smart even registration)
+     * @return The newly constructed configuration
+     * @since 3.0.0
+     */
+    private static @NotNull Config getWorldConfig(@NotNull World world, Plugin plugin) {
         try {
             InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
             File file = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
@@ -332,7 +367,7 @@ public class Config {
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
-                    enchantColor, curseColor, enchantGlow);
+                    enchantColor, curseColor, enchantGlow, plugin);
         } catch (IOException | InvalidConfigurationException ex) {
             System.err.printf("Error parsing config for world '%s'.", world.getName());
             throw new RuntimeException("Error parsing config for a world", ex);
@@ -419,15 +454,23 @@ public class Config {
     // Returns the config object associated with the given world
     public static Config get(@NotNull World world) {
         if (CONFIGS.get(world) == null) {
-            Config.CONFIGS.put(world, getWorldConfig(world));
+            Config.CONFIGS.put(world, getWorldConfig(world, Storage.plugin));
         }
         return CONFIGS.get(world);
     }
 
-    static {
-        for (World world : Bukkit.getWorlds()) { // FIXME This may not be safe in the long run
-            Config.CONFIGS.put(world, getWorldConfig(world));
+    /**
+     * Registers the configurations for the currently loaded worlds
+     * @param plugin The plugin requesting this operation
+     * @since 3.0.0
+     */
+    protected static void registerWorldConfigurations(Plugin plugin) {
+        for (World world : Bukkit.getWorlds()) {
+            Config.CONFIGS.put(world, getWorldConfig(world, plugin));
         }
+    }
+
+    static {
         File patchFile = new File(Storage.plugin.getDataFolder(), "patches.yml");
         if (!patchFile.exists()) {
             Storage.plugin.saveResource("patches.yml", false);

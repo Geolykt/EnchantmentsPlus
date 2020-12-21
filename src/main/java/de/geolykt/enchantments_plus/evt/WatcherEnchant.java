@@ -88,7 +88,6 @@ public class WatcherEnchant implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onBlockShred(BlockShredEvent evt) {
-        System.out.println("BSE");
         if (evt.getBlock().getType() != AIR) {
             Player player = evt.getPlayer();
             ItemStack usedStack = Utilities.usedStack(player, true);
@@ -117,7 +116,7 @@ public class WatcherEnchant implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = false)
     public void onEntityExplodeEvent(EntityExplodeEvent evt) {
         if (!apply_patch_explosion) {
@@ -132,7 +131,7 @@ public class WatcherEnchant implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = false)
     public void onBlockPistonExtendEvent(BlockPistonExtendEvent evt) {
         if (!apply_patch_piston) {
@@ -147,7 +146,7 @@ public class WatcherEnchant implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = false)
     public void onBlockPistonRetractEvent(BlockPistonRetractEvent evt) {
         if (!apply_patch_piston) {
@@ -162,7 +161,7 @@ public class WatcherEnchant implements Listener {
             }
         }
     }
-    
+
     /**
      * This method returns whether a block is protected by the plugin and whether it should be considered <br>
      * 
@@ -176,6 +175,7 @@ public class WatcherEnchant implements Listener {
      * <li>1 if the netherstep protects the block</li>
      * <li>2 if the frozenstep protects the block</li>
      * </ul>
+     * @since 1.0.0
      */
     public byte protectedBlockQuery(Block block, boolean netherstep_remove, boolean frozenstep_remove) {
         Location a = block.getLocation();
@@ -200,7 +200,7 @@ public class WatcherEnchant implements Listener {
         }
         return 0;
     }
-    
+
     @EventHandler(ignoreCancelled = false)
     public void onBlockInteract(PlayerInteractEvent evt) {
         if (evt.getClickedBlock() == null || !evt.getClickedBlock().getType().isInteractable()) {

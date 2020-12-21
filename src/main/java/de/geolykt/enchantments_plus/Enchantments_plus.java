@@ -41,7 +41,14 @@ public class Enchantments_plus extends JavaPlugin {
         if (success) {
             System.out.println("Created folder for Enchantments+ configuration.");
         }
+        File compatFile = new File(getDataFolder(), "magicCompat.yml");
+        if (!compatFile.exists()) {
+            saveResource("magicCompat.yml", false);
+        }
+        FileConfiguration compatConfig = YamlConfiguration.loadConfiguration(compatFile);
+        Storage.COMPATIBILITY_ADAPTER.loadValues(compatConfig);
         Config.loadConfigs();
+        Config.registerWorldConfigurations(this);
     }
 
     // Sets blocks to their natural states at shutdown
@@ -76,12 +83,6 @@ public class Enchantments_plus extends JavaPlugin {
         StopWatch w = new StopWatch();
         w.start();
         Storage.plugin = this;
-        File compatFile = new File(getDataFolder(), "magicCompat.yml");
-        if (!compatFile.exists()) {
-            saveResource("magicCompat.yml", false);
-        }
-        FileConfiguration compatConfig = YamlConfiguration.loadConfiguration(compatFile);
-        Storage.COMPATIBILITY_ADAPTER.loadValues(compatConfig);
 
         Storage.version = this.getDescription().getVersion();
         loadConfigs();
@@ -105,10 +106,8 @@ public class Enchantments_plus extends JavaPlugin {
         Spectral.SEARCH_FACES = ALL_SEARCH_FACES;
         Pierce.SEARCH_FACES = ALL_SEARCH_FACES;
 
-//        Storage.ANTICHEAT_ADAPTER.onEnable();
-        
         Laser.colorKey = new NamespacedKey(this, "laserCol");
-        
+
         // Load runnables
         // High frequency runnable (every tick) -> Gotta run fast
         getServer().getScheduler().runTaskTimer(this, () -> {
@@ -119,7 +118,7 @@ public class Enchantments_plus extends JavaPlugin {
             Tracer.tracer();
             Singularity.blackholes();
         }, 1, 1);
-        
+
         // medium-high frequency runnable (every five ticks)
         getServer().getScheduler().runTaskTimer(this, () -> {
             EnchantedArrow.scanAndReap();
@@ -128,13 +127,13 @@ public class Enchantments_plus extends JavaPlugin {
 
         // medium-high asynchronous frequency runnable (every five ticks)
         getServer().getScheduler().runTaskTimerAsynchronously(this, () -> Anthropomorphism.removeCheck(), 5, 5);
-        
+
         // BSTATS metrics init
         metric = new Metrics(this, 9211);
         metric.addCustomChart(new Metrics.SimplePie("distribution_method", () -> Storage.DISTRIBUTION));
         metric.addCustomChart(new Metrics.SimplePie("plugin_brand", () -> Storage.BRAND));
         metric.addCustomChart(new Metrics.SimplePie("enchantment_getter", () -> CustomEnchantment.Enchantment_Adapter.getClass().getSimpleName()));
-        
+
         w.stop();
         getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
     }

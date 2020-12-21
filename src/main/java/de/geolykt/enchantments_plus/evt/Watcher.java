@@ -5,7 +5,6 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -163,17 +162,6 @@ public class Watcher implements Listener {
         if (FrozenStep.frozenLocs.containsKey(evt.getBlock().getLocation())
                 || NetherStep.netherstepLocs.containsKey(evt.getBlock().getLocation())) {
             evt.setCancelled(true);
-        }
-    }
-
-    // Makes glowing shulkers on an ore block disappear if it is uncovered
-    @EventHandler
-    public void onOreUncover(BlockBreakEvent evt) {
-        for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
-            Entity blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
-            if (blockToRemove != null) {
-                blockToRemove.remove();
-            }
         }
     }
 
