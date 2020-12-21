@@ -1,7 +1,9 @@
 package de.geolykt.enchantments_plus;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,6 +12,17 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.0.0
  */
 public class EnchantPlayer {
+
+    @SuppressWarnings("unchecked") // Cannot be done otherwise
+    // There are only 73 enchantments, however the highest registered ID is 75, 
+    // the other 5 are just as an overhead in case I forgot one
+    private static final HashMap<UUID, Long>[] COOLDOWNS = new HashMap[80]; 
+
+    static {
+        for (int i = 0; i < COOLDOWNS.length; i++) {
+            COOLDOWNS[i] = new HashMap<>();
+        }
+    }
 
     /**
      * Returns true if the given enchantment name is disabled for the player,
@@ -20,8 +33,7 @@ public class EnchantPlayer {
      * @since 3.0.0
      */
     public static boolean isDisabled(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        return player.getPersistentDataContainer().getOrDefault(ench.getKey(), PersistentDataType.LONG, (long) 0.0)
-                == Long.MAX_VALUE;
+        return COOLDOWNS[ench.getId()].getOrDefault(player.getUniqueId(), (long) 0.0) == Long.MAX_VALUE;
     }
 
     /**
@@ -35,8 +47,7 @@ public class EnchantPlayer {
      * @since 3.0.0
      */
     public static long getCooldown(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        return player.getPersistentDataContainer().getOrDefault(ench.getKey(), PersistentDataType.LONG, (long) 0.0)
-                - System.currentTimeMillis();
+        return COOLDOWNS[ench.getId()].getOrDefault(player.getUniqueId(), (long) 0.0) - System.currentTimeMillis();
     }
 
     /**
@@ -49,7 +60,7 @@ public class EnchantPlayer {
      * @since 3.0.0
      */
     public static long getCooldownEnd(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        return player.getPersistentDataContainer().getOrDefault(ench.getKey(), PersistentDataType.LONG, (long) 0.0);
+        return COOLDOWNS[ench.getId()].getOrDefault(player.getUniqueId(), (long) 0.0);
     }
 
     /**
@@ -63,7 +74,7 @@ public class EnchantPlayer {
      */
     public static void setCooldown(@NotNull Player player, @NotNull CustomEnchantment enchantment, int millis) {
         if (!isDisabled(player, enchantment)) {
-            player.getPersistentDataContainer().set(enchantment.getKey(), PersistentDataType.LONG, millis + System.currentTimeMillis());
+            COOLDOWNS[enchantment.getId()].put(player.getUniqueId(), millis + System.currentTimeMillis());
         }
     }
 
@@ -74,7 +85,7 @@ public class EnchantPlayer {
      * @since 3.0.0
      */
     public static void disable(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        player.getPersistentDataContainer().set(ench.getKey(), PersistentDataType.LONG, Long.MAX_VALUE);
+        COOLDOWNS[ench.getId()].put(player.getUniqueId(), Long.MAX_VALUE);
     }
 
     /**
@@ -85,7 +96,7 @@ public class EnchantPlayer {
      */
     public static void enable(@NotNull Player player, @NotNull CustomEnchantment ench) {
         if (isDisabled(player, ench)) {
-            player.getPersistentDataContainer().set(ench.getKey(), PersistentDataType.LONG, (long) 0);
+            COOLDOWNS[ench.getId()].put(player.getUniqueId(), (long) 0);
         }
     }
 
