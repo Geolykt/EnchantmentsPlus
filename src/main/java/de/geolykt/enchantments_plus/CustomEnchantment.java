@@ -1,6 +1,5 @@
 package de.geolykt.enchantments_plus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -12,7 +11,6 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -25,7 +23,6 @@ import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGe
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.IEnchGatherer;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
-import de.geolykt.enchantments_plus.evt.ench.ZenchantmentUseEvent;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
@@ -265,8 +262,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                     ench.used = true;
                     if (action.test(ench, level)) {
                         EnchantPlayer.setCooldown(player, ench, ench.cooldown * 50); // TODO Use milliseconds
-                        final ZenchantmentUseEvent evt = new ZenchantmentUseEvent(player, EquipmentSlot.HAND, ench, level);
-                        Bukkit.getPluginManager().callEvent(evt);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

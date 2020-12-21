@@ -4,8 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
-import de.geolykt.enchantments_plus.compatibility.anticheat.AbstractAnticheatAdapter;
-import de.geolykt.enchantments_plus.compatibility.anticheat.None;
 
 /**
  * This class will be removed in the 3.0.0 or 4.0.0 refractor since it deeply violates the principles of OOP.
@@ -61,16 +59,6 @@ public class Storage {
     public static String version = "";
 
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER = new CompatibilityAdapter(Enchantments_plus.internal_instance);
-    
-    /**
-     * @deprecated Not used, at all.
-     * The anticheat adapter used for the plugin, however while it is planned that it's functions are added eventually in one shape or
-     * form, it is currently (v2.2.0) absolutely not used and only remains for upwards compatibility. Who know's maybe it will even
-     * be removed?
-     * @since 1.1.0
-     */
-    @Deprecated(forRemoval = false, since = "1.1.0")
-    public static AbstractAnticheatAdapter ANTICHEAT_ADAPTER = new None();
 
     /**
      * Container for the cardinal block faces, i. e. block faces that directly touch the current block like UP DOWN or NORTH.
