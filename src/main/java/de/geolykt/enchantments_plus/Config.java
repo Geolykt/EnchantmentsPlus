@@ -109,10 +109,12 @@ public class Config {
                 // Makes glowing shulkers on an ore block disappear if it is uncovered
                 @EventHandler
                 public void onOreUncover(BlockBreakEvent evt) {
-                    for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
-                        Entity blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
-                        if (blockToRemove != null) {
-                            blockToRemove.remove();
+                    if (Reveal.GLOWING_BLOCKS.size() != 0) {
+                        for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
+                            Entity blockToRemove = Reveal.GLOWING_BLOCKS.remove(evt.getBlock().getRelative(face).getLocation());
+                            if (blockToRemove != null) {
+                                blockToRemove.remove();
+                            }
                         }
                     }
                 }
