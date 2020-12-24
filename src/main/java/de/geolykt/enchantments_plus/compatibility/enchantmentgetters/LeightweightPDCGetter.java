@@ -52,7 +52,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
 
                     Integer level = (int) cont.getOrDefault(key, PersistentDataType.SHORT, (short) 0);
                     Short id = Short.decode(key.getKey().split("\\.")[1]);
-                    CustomEnchantment ench = Config.get(world).enchantFromID(id);
+                    CustomEnchantment ench = Config.get(world).enchantFromID(id); // TODO use the ordinal ID instead of the legacy ID
                     if (ench == null) {
                         continue;
                     }
