@@ -33,14 +33,14 @@ import java.util.function.Supplier;
 import static org.bukkit.Material.BOOK;
 import static org.bukkit.Material.ENCHANTED_BOOK;
 
-// CustomEnchantment is the defualt structure for any enchantment. Each enchantment below it will extend this class
+// CustomEnchantment is the default structure for any enchantment. Each enchantment below it will extend this class
 //      and will override any methods as neccecary in its behavior
 // Why do we even have a comparable interface?
 public abstract class CustomEnchantment implements Comparable<CustomEnchantment> {
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
     public static IEnchGatherer Enchantment_Adapter = new BasicLoreGetter();
-    
+
     protected int id;
 
     protected int maxLevel;         // Max level the given enchant can naturally obtain
@@ -49,7 +49,15 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     protected Tool[] enchantable;   // Enums that represent tools that can receive and work with given enchantment
     protected Set<Class<? extends CustomEnchantment>> conflicting; // Classes of enchantments that don't work with given enchantment
     protected String description;   // Description of what the enchantment does
+
+    /**
+     * @deprecated Cooldowns will be in milliseconds soon
+     * The cooldown of the enchantment in ticks
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     protected int cooldown;         // Cooldown for given enchantment given in ticks; Default is 0
+
     protected double power;         // Power multiplier for the enchantment's effects; Default is 0; -1 means no
     // effect
     protected Hand handUse;
@@ -58,11 +66,16 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     // Indicates that an enchantment has already been applied to an event, avoiding infinite regress
     protected boolean isCursed;
     protected NamespacedKey key; // The NamespacedKey for this enchantment which can be used for storage
-    protected BaseEnchantments base; // The base of the enchantment
+
+    /**
+     * The base of the enchantment used for comparing two CustomEnchantment instances with each other.
+     * Will be final later in the 3.0.0 development lifecycle
+     * @since 1.1.0
+     */
+    protected BaseEnchantments base; // TODO make this final
 
     public abstract Builder<? extends CustomEnchantment> defaults();
 
-    //region Enchanment Events
     public boolean onBlockBreak(BlockBreakEvent evt, int level, boolean usedHand) {
         return false;
     }
@@ -152,8 +165,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return false;
     }
 
-    //endregion
-    //region Getters and Setters
     public int getMaxLevel() {
         return maxLevel;
     }
@@ -209,10 +220,26 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         this.description = description;
     }
 
+    /**
+     * @deprecated Cooldowns will be in milliseconds soon!
+     * Obtains the cooldown of the enchantment after use.
+     *  The cooldown is currently in ticks
+     * @param cooldown The new cooldown
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public int getCooldown() {
         return cooldown;
     }
 
+    /**
+     * @deprecated Cooldowns will be in milliseconds soon!
+     * Sets the cooldown that the enchantment should have after use.
+     *  The cooldown is currently in ticks
+     * @param cooldown The new cooldown
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     void setCooldown(int cooldown) {
         this.cooldown = cooldown;
     }
@@ -233,10 +260,28 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         this.handUse = handUse;
     }
 
+    /**
+     * @deprecated Obtaining the legacyID via the BaseEnchantment enum is preferred
+     * Obtains the legacy ID of the enchantment.
+     * It's the way of differentiating and storing enchantments in Zenchantments and
+     *  one (albeit not liked) way of differentiating enchantments in Enchantments+ 1.0.0 to 3.0.0
+     * @return The ID of the enchantment
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public int getId() {
         return id;
     }
 
+    /**
+     * @deprecated The ID of the enchantment should not be altered
+     * Set the legacy ID of the enchantment.
+     * It's the way of differentiating and storing enchantments in Zenchantments and
+     *  one (albeit not liked) way of differentiating enchantments in Enchantments+ 1.0.0 to 3.0.0
+     * @param id The ID of the enchantment
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     void setId(int id) {
         this.id = id;
     }
@@ -244,17 +289,23 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public BaseEnchantments asEnum() {
         return base;
     }
-    
+
+    /**
+     * @deprecated The base will be set on initialisation in the future
+     * Sets the base of the enchantment. It is used mainly for differentiation
+     * @param baseEnchant The new base that the enchantment has
+     * @since 1.1.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     void setBase(BaseEnchantments baseEnchant) {
         base = baseEnchant;
     }
     
     @Override
     public int compareTo(CustomEnchantment o) {
-        return this.getLoreName().compareTo(o.getLoreName());
+        return base.compareTo(o.base);
     }
 
-    //endregion
     public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
         getEnchants(tool, player.getWorld()).forEach((CustomEnchantment ench, Integer level) -> {
             if (!ench.used && Utilities.canUse(player, ench)) {
@@ -271,23 +322,44 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         });
     }
 
-    // Returns a mapping of custom enchantments and their level on a given tool
-    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, @NotNull World world,
-            @Nullable List<String> outExtraLore) {
-        return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
-    }
-
-    // Returns a mapping of custom enchantments and their level on a given tool
+    /**
+     * @deprecated acceptBooks might be a concept that could be staged for removal soon (probably in 3.0.0) as it is not really used correctly internally
+     * Returns a mapping of custom enchantments and their level on a given tool
+     * @param stk The itemstack that the operation applies for
+     * @param acceptBooks True if books should be accepted, false otherwise
+     * @param world The world where the itemstack is located, used for configuration obtaining
+     * @return A map of enchantments mapped to their level
+     * @since 3.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
             World world) {
         return Enchantment_Adapter.getEnchants(stk, acceptBooks, world, null);
     }
 
-    // Returns a mapping of custom enchantments and their level on a given tool
+    /**
+     * Returns a mapping of custom enchantments and their level on a given tool
+     * @param stk The itemstack that the operation applies for
+     * @param world The world where the itemstack is located, used for configuration obtaining
+     * @return A map of enchantments mapped to their level
+     * @since 3.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, @NotNull World world) {
         return Enchantment_Adapter.getEnchants(stk, false, world, null);
     }
 
+    /**
+     * @deprecated acceptBooks might be a concept that could be staged for removal soon (probably in 3.0.0) as it is not really used correctly internally
+     * Returns a mapping of custom enchantments and their level on a given tool
+     * @param stk The itemstack that the operation applies for
+     * @param acceptBooks True if books should be accepted, false otherwise
+     * @param world The world where the itemstack is located, used for configuration obtaining
+     * @param outExtraLore The output of any unused lore will be written to this list, or null if not needed
+     * @return A map of enchantments mapped to their level
+     * @since 3.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
             @NotNull World world,
             @Nullable List<String> outExtraLore) {
@@ -408,6 +480,10 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         stk.setItemMeta(isBook ? bookMeta : itemMeta);
     }
 
+    /**
+     * Obtains the key of the enchantment
+     * @return
+     */
     public NamespacedKey getKey() {
         return key;
     }
@@ -426,10 +502,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public Builder<T> maxLevel(int maxLevel) {
             customEnchantment.setMaxLevel(maxLevel);
             return this;
-        }
-
-        public int maxLevel() {
-            return customEnchantment.getMaxLevel();
         }
 
         public Builder<T> loreName(String loreName) {
@@ -455,10 +527,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return this;
         }
 
-        public Tool[] enchantable() {
-            return customEnchantment.getEnchantable();
-        }
-
         //I hope that the final modifier doesn't end up making any issues.
         @SafeVarargs //The vararg in this method can be generally be considered safe
         public final Builder<T> conflicting(Class<? extends CustomEnchantment>... conflicts) {
@@ -467,23 +535,10 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             }
             return this;
         }
-        
-        public Set<Class<? extends CustomEnchantment>> getConflicting() {
-            return customEnchantment.getConflicting();
-        }
-        
-        public Builder<T> conflicting() {
-            customEnchantment.setConflicting(new HashSet<Class<? extends CustomEnchantment>>());
-            return this;
-        }
-        
+
         public Builder<T> description(String description) {
             customEnchantment.setDescription(description);
             return this;
-        }
-
-        public String description() {
-            return customEnchantment.getDescription();
         }
 
         /**
@@ -497,30 +552,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return this;
         }
 
-        public int cooldown() {
-            return customEnchantment.getCooldown();
-        }
-
+        /**
+         * Sets the power of the enchantment, this is a world-sensitive option
+         * @param power The new power of the enchantment, it should be at 1.0f by default
+         * @return The instance of the builder (for chaining)
+         * @since 1.0.0
+         */
         public Builder<T> power(double power) {
             customEnchantment.setPower(power);
-            return this;
-        }
-
-        public double power() {
-            return customEnchantment.getPower();
-        }
-
-        public Builder<T> handUse(Hand handUse) {
-            customEnchantment.setHandUse(handUse);
-            return this;
-        }
-
-        public Hand handUse() {
-            return customEnchantment.getHandUse();
-        }
-
-        public Builder<T> base(BaseEnchantments base) {
-            customEnchantment.setBase(base);
             return this;
         }
 
@@ -531,7 +570,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
          * @param description The description of the enchantment
          * @param enchantable The tools on which the enchantment can be applied on
          * @param lore The lore string (Usually the name of the enchantment)
-         * @param maxlevel The maximum level the enchantment can be leveled
+         * @param maxlevel The maximum level the enchantment can be levelled
          * @param handUse Which hands the enchantments can be applied on
          * @param conflicts The Conflicting enchantments
          * @return The builder instance
@@ -545,45 +584,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 int maxlevel,
                 Hand handUse,
                 Class<? extends CustomEnchantment>... conflicts) {
-            base(base);
+            customEnchantment.setBase(base);
+            customEnchantment.setHandUse(handUse);
             conflicting(conflicts);
             description(description);
             enchantable(enchantable);
             loreName(lore);
             maxLevel(maxlevel);
-            handUse(handUse);
             power(1.0);
-            return this;
-        }
-
-        /**
-         * Calls all the setters with the supplied arguments
-         * @param base The base enchantment that should be used. (Usually the enchantment supplied as an Enum)
-         * @param cooldown The cooldown until the enchantment can be used again, used to prevent deadlocks and enchantment overusage
-         * @param description The description of the enchantment
-         * @param enchantable The tools on which the enchantment can be applied on
-         * @param lore The lore string (Usually the name of the enchantment)
-         * @param maxlevel The maximum level the enchantment can be leveled
-         * @param power The base power of the enchantment, usually 0
-         * @param handUse Which hands the enchantments can be applied on
-         * @param conflicts The Conflicting enchantments
-         * @return The builder instance
-         * @since 2.1.3
-         * @deprecated Since 2.1.5 as it's not used internally anymore
-         */
-        @SafeVarargs
-        public final Builder<T> all(BaseEnchantments base,
-                int cooldown,
-                String description,
-                Tool[] enchantable,
-                String lore,
-                int maxlevel,
-                double power,
-                Hand handUse,
-                Class<? extends CustomEnchantment>... conflicts) {
-            all(base, description, enchantable, lore, maxlevel, handUse, conflicts);
-            cooldown(cooldown);
-            power(power);
             return this;
         }
 
