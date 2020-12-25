@@ -510,7 +510,7 @@ enchantments:
       Power: 1.0
   - Vortex:
       Probability: 1.0
-      Tools: Sword, Bow
+      Tools: Sword, Bow, Axe
       Name: Vortex
       Max Level: 1
       Cooldown: 0
