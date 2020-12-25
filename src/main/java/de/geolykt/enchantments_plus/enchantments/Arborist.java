@@ -22,12 +22,15 @@ public class Arborist extends CustomEnchantment {
     @Override
     public Builder<Arborist> defaults() {
         return new Builder<>(Arborist::new, ID)
-                .all(BaseEnchantments.ARBORIST, // BASE
-                    "Drops more apples, sticks, and saplings when used on leaves", // DESCRIPTION
+                .all("Drops more apples, sticks, and saplings when used on leaves", // DESCRIPTION
                     new Tool[]{Tool.AXE}, // APPLICABLE TOOLS
                     "Arborist", // NAME
                     3, // MAX LEVEL
                     Hand.LEFT); // APPLICABLE HANDS
+    }
+
+    private Arborist() {
+        super(BaseEnchantments.ARBORIST);
     }
 
     @Override

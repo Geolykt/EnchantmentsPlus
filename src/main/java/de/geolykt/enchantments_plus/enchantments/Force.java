@@ -31,13 +31,16 @@ public class Force extends CustomEnchantment {
     @Override
     public Builder<Force> defaults() {
         return new Builder<>(Force::new, ID)
-            .all(BaseEnchantments.FORCE,
-                    "Pushes and pulls nearby mobs, configurable through shift clicking",
+            .all("Pushes and pulls nearby mobs, configurable through shift clicking",
                     new Tool[]{Tool.SWORD},
                     "Force",
                     3, // MAX LVL
                     Hand.RIGHT,
-                    RainbowSlam.class, Gust.class);
+                    BaseEnchantments.RAINBOW_SLAM, BaseEnchantments.GUST);
+    }
+
+    private Force() {
+        super(BaseEnchantments.FORCE);
     }
 
     @Override

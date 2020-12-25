@@ -27,12 +27,15 @@ public class Transformation extends CustomEnchantment {
     @Override
     public Builder<Transformation> defaults() {
         return new Builder<>(Transformation::new, ID)
-                .all(BaseEnchantments.TRANSFORMATION,
-                        "Occasionally causes the attacked mob to be transformed into its \"similar\" cousin",
+                .all("Occasionally causes the attacked mob to be transformed into its \"similar\" cousin",
                         new Tool[]{Tool.SWORD},
                         "Transformation",
                         3,
                         Hand.LEFT);
+    }
+
+    private Transformation() {
+        super(BaseEnchantments.TRANSFORMATION);
     }
 
     @Override

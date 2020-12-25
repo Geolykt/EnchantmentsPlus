@@ -19,12 +19,15 @@ public class Haste extends CustomEnchantment {
     @Override
     public Builder<Haste> defaults() {
         return new Builder<>(Haste::new, ID)
-            .all(BaseEnchantments.HASTE,
-                    "Gives the player a mining boost",
+            .all("Gives the player a mining boost",
                     new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL},
                     "Haste",
                     4, // MAX LVL
                     Hand.NONE);
+    }
+
+    private Haste() {
+        super(BaseEnchantments.HASTE);
     }
 
     @Override

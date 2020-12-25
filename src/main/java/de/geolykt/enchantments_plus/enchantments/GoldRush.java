@@ -20,12 +20,15 @@ public class GoldRush extends CustomEnchantment {
     @Override
     public Builder<GoldRush> defaults() {
         return new Builder<>(GoldRush::new, ID)
-            .all(BaseEnchantments.GOLD_RUSH,
-                    "Randomly drops gold nuggets when mining sand",
+            .all("Randomly drops gold nuggets when mining sand",
                     new Tool[]{Tool.SHOVEL},
                     "Gold Rush",
                     3, // MAX LVL
                     Hand.LEFT);
+    }
+
+    private GoldRush() {
+        super(BaseEnchantments.GOLD_RUSH);
     }
 
     @Override

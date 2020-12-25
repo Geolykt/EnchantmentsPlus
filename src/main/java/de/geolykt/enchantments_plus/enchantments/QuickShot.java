@@ -18,12 +18,15 @@ public class QuickShot extends CustomEnchantment {
     @Override
     public Builder<QuickShot> defaults() {
         return new Builder<>(QuickShot::new, ID)
-            .all(BaseEnchantments.QUICK_SHOT,
-                    "Shoots arrows at full speed, instantly",
+            .all("Shoots arrows at full speed, instantly",
                     new Tool[]{Tool.BOW},
                     "Quick Shot",
                     1, // MAX LVL
                     Hand.RIGHT);
+    }
+
+    private QuickShot() {
+        super(BaseEnchantments.QUICK_SHOT);
     }
 
     @Override

@@ -12,38 +12,38 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.1.0
  *
  */
-public class Tool {
+public final class Tool {
 
     public static final Tool AXE = new Tool();
     public static final Tool HOE = new Tool();
     public static final Tool PICKAXE = new Tool();
     public static final Tool SHOVEL = new Tool();
-    
+
     public static final Tool HELMET = new Tool();
     public static final Tool CHESTPLATE = new Tool();
     public static final Tool WINGS = new Tool();
     public static final Tool LEGGINGS = new Tool();
     public static final Tool BOOTS = new Tool();
-    
+
     public static final Tool BOW = new Tool();
     public static final Tool SWORD = new Tool();
 
     public static final Tool ROD = new Tool();
     public static final Tool SHEARS = new Tool();
-    
+
     public static final Tool ALL = new Tool();
     
     private EnumSet<Material> materials;
-    
+
     private Tool () {
         materials = EnumSet.noneOf(Material.class);
     }
-    
-    public void setMaterials(EnumSet<Material> newMaterials) {
+
+    public final void setMaterials(EnumSet<Material> newMaterials) {
         this.materials = newMaterials;
     }
 
-    public boolean contains(Material m) {
+    public final boolean contains(Material m) {
         return materials.contains(m);
     }
 
@@ -82,7 +82,7 @@ public class Tool {
         return null;
     }
 
-    public Iterable<Material> getMaterials() {
+    public final Iterable<Material> getMaterials() {
         return materials;
     }
 }

@@ -23,12 +23,15 @@ public class Tracer extends CustomEnchantment {
     @Override
     public Builder<Tracer> defaults() {
         return new Builder<>(Tracer::new, ID)
-            .all(BaseEnchantments.TRACER,
-                    "Guides the arrow to targets and then attacks",
+            .all("Guides the arrow to targets and then attacks",
                     new Tool[]{Tool.BOW},
                     "Tracer",
                     4,
                     Hand.RIGHT);
+    }
+
+    private Tracer() {
+        super(BaseEnchantments.TRACER);
     }
 
     @Override

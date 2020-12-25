@@ -23,14 +23,19 @@ public class Switch extends CustomEnchantment {
     @Override
     public Builder<Switch> defaults() {
         return new Builder<>(Switch::new, ID)
-                .all(BaseEnchantments.SWITCH,
-                        "Replaces the clicked block with the leftmost block in your hotbar when sneaking",
+                .all("Replaces the clicked block with the leftmost block in your hotbar when sneaking",
                         new Tool[]{Tool.PICKAXE},
                         "Switch",
                         1,
                         Hand.RIGHT,
-                        Shred.class, Anthropomorphism.class, Fire.class, Extraction.class, Pierce.class, Reveal.class)
-                .cooldown(2);
+                        BaseEnchantments.SHRED, BaseEnchantments.ANTHROPOMORPHISM, 
+                        BaseEnchantments.FIRE, BaseEnchantments.EXTRACTION,
+                        BaseEnchantments.PIERCE, BaseEnchantments.REVEAL)
+                .cooldown(2); // TODO cooldown in millis
+    }
+
+    private Switch() {
+        super(BaseEnchantments.SWITCH);
     }
 
     @Override

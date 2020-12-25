@@ -27,12 +27,16 @@ public class Vortex extends CustomEnchantment {
     @Override
     public Builder<Vortex> defaults() {
         return new Builder<>(Vortex::new, ID)
-                .all(BaseEnchantments.VORTEX,
-                        "Teleports mob loot and XP directly to the player",
-                        new Tool[]{Tool.BOW, Tool.SWORD},
+                .all("Teleports mob loot and XP directly to the player",
+                        new Tool[]{Tool.BOW, Tool.SWORD, Tool.AXE},
                         "Vortex",
                         1,
-                        Hand.BOTH);
+                        Hand.BOTH,
+                        BaseEnchantments.GRAB);
+    }
+
+    private Vortex() {
+        super(BaseEnchantments.VORTEX);
     }
 
     @Override

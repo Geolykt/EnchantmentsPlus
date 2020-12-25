@@ -31,12 +31,15 @@ public class Stream extends CustomEnchantment {
     @Override
     public Builder<Stream> defaults() {
         return new Builder<>(Stream::new, ID)
-            .all(BaseEnchantments.STREAM,
-                    "Creates a trail of particles when in flight",
+            .all("Creates a trail of particles when in flight",
                     new Tool[]{Tool.WINGS},
                     "Stream",
                     1,
                     Hand.NONE);
+    }
+
+    private Stream() {
+        super(BaseEnchantments.STREAM);
     }
 
     @Override

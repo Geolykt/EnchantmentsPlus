@@ -28,12 +28,15 @@ public class Singularity extends CustomEnchantment {
     @Override
     public Builder<Singularity> defaults() {
         return new Builder<>(Singularity::new, ID)
-            .all(BaseEnchantments.SINGULARITY,
-                    "Creates a black hole that attracts nearby entities and then discharges them",
+            .all("Creates a black hole that attracts nearby entities and then discharges them",
                     new Tool[]{Tool.BOW},
                     "Singularity",
                     1,
                     Hand.RIGHT);
+    }
+
+    private Singularity() {
+        super(BaseEnchantments.SINGULARITY);
     }
 
     @Override

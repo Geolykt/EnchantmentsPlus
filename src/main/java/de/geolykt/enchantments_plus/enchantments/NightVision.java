@@ -17,12 +17,15 @@ public class NightVision extends CustomEnchantment {
     @Override
     public Builder<NightVision> defaults() {
         return new Builder<>(NightVision::new, ID)
-            .all(BaseEnchantments.NIGHT_VISION,
-                    "Lets the player see in the darkness",
+            .all("Lets the player see in the darkness",
                     new Tool[]{Tool.HELMET},
                     "Night Vision",
                     1,
                     Hand.NONE);
+    }
+
+    private NightVision() {
+        super(BaseEnchantments.NIGHT_VISION);
     }
 
     @Override

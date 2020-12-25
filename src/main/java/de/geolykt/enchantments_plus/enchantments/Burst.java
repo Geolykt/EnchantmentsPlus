@@ -34,13 +34,16 @@ public class Burst extends CustomEnchantment {
     public Builder<Burst> defaults() {
         return new Builder<>(Burst::new, ID)
                     .probability(0)
-                    .all(BaseEnchantments.BURST,
-                        "Rapidly fires arrows in series",
+                    .all("Rapidly fires arrows in series",
                         new Tool[]{Tool.BOW},
                         "Burst",
                         3, // MAX LVL
                         Hand.RIGHT,
-                        Spread.class);
+                        BaseEnchantments.SPREAD);
+    }
+
+    private Burst() {
+        super(BaseEnchantments.BURST);
     }
 
     @Override

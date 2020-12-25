@@ -26,12 +26,15 @@ public class Rainbow extends CustomEnchantment {
     @Override
     public Builder<Rainbow> defaults() {
         return new Builder<>(Rainbow::new, ID)
-            .all(BaseEnchantments.RAINBOW,
-                    "Drops random flowers and wool colors when used",
+            .all("Drops random flowers and wool colors when used",
                     new Tool[]{Tool.SHEARS},
                     "Rainbow",
                     3,
                     Hand.BOTH);
+    }
+
+    private Rainbow() {
+        super(BaseEnchantments.RAINBOW);
     }
 
     @Override

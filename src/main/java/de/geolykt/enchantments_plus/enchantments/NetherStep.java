@@ -25,13 +25,16 @@ public class NetherStep extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<NetherStep> defaults() {
         return new Builder<>(NetherStep::new, ID)
-            .all(BaseEnchantments.NETHER_STEP,
-                    "Allows the player to slowly but safely walk on lava",
+            .all("Allows the player to slowly but safely walk on lava",
                     new Tool[]{Tool.BOOTS},
                     "Nether Step",
                     3, // MAX LVL
                     Hand.NONE,
-                    FrozenStep.class);
+                    BaseEnchantments.FROZEN_STEP);
+    }
+
+    private NetherStep() {
+        super(BaseEnchantments.NETHER_STEP);
     }
 
     @Override

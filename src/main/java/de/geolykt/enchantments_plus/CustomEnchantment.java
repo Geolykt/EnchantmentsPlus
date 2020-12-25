@@ -47,8 +47,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     protected String loreName;      // Name the given enchantment will appear as; with &7 (Gray) color
     protected float probability;    // Relative probability of obtaining the given enchantment
     protected Tool[] enchantable;   // Enums that represent tools that can receive and work with given enchantment
-    protected Set<Class<? extends CustomEnchantment>> conflicting; // Classes of enchantments that don't work with given enchantment
-    protected String description;   // Description of what the enchantment does
+
+    /**
+     * The enchantments this enchantment is incompatible with.
+     *  The values are simply dummy values and don't mean anything as the keys will be used, not they values.
+     * @since 3.0.0 (or 1.0.0 with another signature)
+     */
+    protected EnumMap<BaseEnchantments, Object> conflicting; // FIXME use an EnumSet dummy
+    protected String description; // Description of what the enchantment does
 
     /**
      * @deprecated Cooldowns will be in milliseconds soon
@@ -69,10 +75,18 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     /**
      * The base of the enchantment used for comparing two CustomEnchantment instances with each other.
-     * Will be final later in the 3.0.0 development lifecycle
-     * @since 1.1.0
+     * @since 3.0.0
      */
-    protected BaseEnchantments base; // TODO make this final
+    protected final BaseEnchantments baseEnum;
+
+    /**
+     * Constructor.
+     * @param enumRepresentation The BaseEnchantments enum that is returned in the asEnum() operation
+     * @since 3.0.0
+     */
+    protected CustomEnchantment(@NotNull BaseEnchantments enumRepresentation) {
+        baseEnum = enumRepresentation;
+    }
 
     public abstract Builder<? extends CustomEnchantment> defaults();
 
@@ -197,19 +211,20 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         this.enchantable = enchantable;
     }
 
-    public Set<Class<? extends CustomEnchantment>> getConflicting() {
-        return conflicting;
+    /**
+     * Obtains the conflicting enchantments (as an enum)
+     * @return A set of enchantments the enchantment conflicts with
+     * @since 3.0.0
+     */
+    public @NotNull Set<BaseEnchantments> getConflicts() {
+        return null; // FIXME obvious NPE
     }
 
-    void setConflicting(Set<Class<? extends CustomEnchantment>> conflicts) {
-        this.conflicting = conflicts;
-    }
-    
-    void addConflicting(Class<? extends CustomEnchantment> conflict) {
+    void addConflict(BaseEnchantments conflict) {
         if (conflicting == null) {
-            conflicting = new HashSet<Class<? extends CustomEnchantment>>();
+            conflicting = new EnumMap<>(BaseEnchantments.class);
         }
-        conflicting.add(conflict);
+        conflicting.put(conflict, (byte) 0);
     }
 
     String getDescription() {
@@ -286,24 +301,18 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         this.id = id;
     }
 
-    public BaseEnchantments asEnum() {
-        return base;
-    }
-
     /**
-     * @deprecated The base will be set on initialisation in the future
-     * Sets the base of the enchantment. It is used mainly for differentiation
-     * @param baseEnchant The new base that the enchantment has
+     * Returns the Enum representation of the enchantment used for comparing
+     * @return The BaseEnchantments enum attached to the enchantment
      * @since 1.1.0
      */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    void setBase(BaseEnchantments baseEnchant) {
-        base = baseEnchant;
+    public @NotNull BaseEnchantments asEnum() {
+        return baseEnum;
     }
-    
+
     @Override
     public int compareTo(CustomEnchantment o) {
-        return base.compareTo(o.base);
+        return baseEnum.compareTo(o.baseEnum);
     }
 
     public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
@@ -496,7 +505,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             customEnchantment = sup.get();
             customEnchantment.setId(id);
             customEnchantment.key = new NamespacedKey(Storage.plugin, "ench." + id);
-            conflicting();
+            setConflicts();
         }
 
         public Builder<T> maxLevel(int maxLevel) {
@@ -527,11 +536,15 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return this;
         }
 
-        //I hope that the final modifier doesn't end up making any issues.
-        @SafeVarargs //The vararg in this method can be generally be considered safe
-        public final Builder<T> conflicting(Class<? extends CustomEnchantment>... conflicts) {
-            for (Class<? extends CustomEnchantment> ce : conflicts) {
-                customEnchantment.addConflicting(ce);
+        /**
+         * Sets the enchantments this enchantment instance is incompatible with
+         * @param conflicts The conflicts
+         * @return The instance of the builder
+         * @since 3.0.0
+         */
+        public Builder<T> setConflicts(BaseEnchantments... conflicts) {
+            for (BaseEnchantments conflict : conflicts) {
+                customEnchantment.addConflict(conflict);
             }
             return this;
         }
@@ -566,7 +579,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         /**
          * Calls all the setters with the supplied arguments, this method also implies the power to be 1, so the power should be set afterwards
          * if needed.
-         * @param base The base enchantment that should be used. (Usually the enchantment supplied as an Enum)
          * @param description The description of the enchantment
          * @param enchantable The tools on which the enchantment can be applied on
          * @param lore The lore string (Usually the name of the enchantment)
@@ -574,19 +586,18 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
          * @param handUse Which hands the enchantments can be applied on
          * @param conflicts The Conflicting enchantments
          * @return The builder instance
-         * @since 2.1.5
+         * @since 3.0.0
          */
         @SafeVarargs
-        public final Builder<T> all(BaseEnchantments base,
+        public final Builder<T> all(
                 String description,
                 Tool[] enchantable,
                 String lore,
                 int maxlevel,
                 Hand handUse,
-                Class<? extends CustomEnchantment>... conflicts) {
-            customEnchantment.setBase(base);
+                BaseEnchantments... conflicts) {
             customEnchantment.setHandUse(handUse);
-            conflicting(conflicts);
+            setConflicts(conflicts);
             description(description);
             enchantable(enchantable);
             loreName(lore);

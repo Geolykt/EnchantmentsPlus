@@ -17,12 +17,15 @@ public class Spikes extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Spikes> defaults() {
         return new Builder<>(Spikes::new, ID)
-            .all(BaseEnchantments.SPIKES,
-                    "Damages entities the player jumps onto",
+            .all("Damages entities the player jumps onto",
                     new Tool[]{Tool.BOOTS},
                     "Spikes",
                     3,
                     Hand.NONE);
+    }
+
+    private Spikes() {
+        super(BaseEnchantments.SPIKES);
     }
 
     @Override

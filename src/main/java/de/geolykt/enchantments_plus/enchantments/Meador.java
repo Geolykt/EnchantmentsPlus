@@ -16,13 +16,17 @@ public class Meador extends CustomEnchantment {
     @Override
     public Builder<Meador> defaults() {
         return new Builder<>(Meador::new, ID)
-            .all(BaseEnchantments.MEADOR,
-                    "Gives the player a speed and jump boost",
+            .all("Gives the player a speed and jump boost",
                     new Tool[]{Tool.BOOTS},
                     "Meador",
                     1,
                     Hand.NONE,
-                    Speed.class, Weight.class, Jump.class);
+                    BaseEnchantments.SPEED, BaseEnchantments.WEIGHT, BaseEnchantments.JUMP);
+    }
+
+    
+    private Meador() {
+        super(BaseEnchantments.MEADOR);
     }
 
     @Override

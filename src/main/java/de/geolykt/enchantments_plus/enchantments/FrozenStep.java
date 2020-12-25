@@ -25,13 +25,16 @@ public class FrozenStep extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<FrozenStep> defaults() {
         return new Builder<>(FrozenStep::new, ID)
-            .all(BaseEnchantments.FROZEN_STEP,
-                    "Allows the player to walk on water and safely emerge from it when sneaking",
+            .all("Allows the player to walk on water and safely emerge from it when sneaking",
                     new Tool[]{Tool.BOOTS},
                     "Frozen Step",
                     3, // MAX LVL
                     Hand.NONE,
-                    NetherStep.class);
+                    BaseEnchantments.NETHER_STEP);
+    }
+
+    private FrozenStep() {
+        super(BaseEnchantments.FROZEN_STEP);
     }
 
     public boolean onScan(Player player, int level, boolean usedHand) {

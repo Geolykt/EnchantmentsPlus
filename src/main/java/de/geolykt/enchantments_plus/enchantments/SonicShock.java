@@ -18,12 +18,15 @@ public class SonicShock extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<SonicShock> defaults() {
         return new Builder<>(SonicShock::new, ID)
-            .all(BaseEnchantments.SONIC_SHOCK,
-                    "Damages mobs when flying past at high speed",
+            .all("Damages mobs when flying past at high speed",
                     new Tool[]{Tool.WINGS},
                     "Sonic Shock",
                     3,
                     Hand.NONE);
+    }
+
+    private SonicShock() {
+        super(BaseEnchantments.SONIC_SHOCK);
     }
 
     @Override

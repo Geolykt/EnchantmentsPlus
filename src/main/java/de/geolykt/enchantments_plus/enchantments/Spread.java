@@ -31,13 +31,16 @@ public class Spread extends CustomEnchantment {
     @Override
     public Builder<Spread> defaults() {
         return new Builder<>(Spread::new, ID)
-            .all(BaseEnchantments.SPREAD,
-                    "Fires an array of arrows simultaneously",
+            .all("Fires an array of arrows simultaneously",
                     new Tool[]{Tool.BOW},
                     "Spread",
                     5,
                     Hand.RIGHT,
-                    Burst.class);
+                    BaseEnchantments.BURST);
+    }
+
+    private Spread() {
+        super(BaseEnchantments.SPREAD);
     }
 
     @Override

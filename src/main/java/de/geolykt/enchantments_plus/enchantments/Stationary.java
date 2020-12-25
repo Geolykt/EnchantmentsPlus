@@ -21,12 +21,15 @@ public class Stationary extends CustomEnchantment {
     @Override
     public Builder<Stationary> defaults() {
         return new Builder<>(Stationary::new, ID)
-                .all(BaseEnchantments.STATIONARY,
-                        "Negates any knockback when attacking mobs, leaving them clueless as to who is attacking",
+                .all("Negates any knockback when attacking mobs, leaving them clueless as to who is attacking",
                         new Tool[]{Tool.BOW, Tool.SWORD},
                         "Stationary",
                         1,
                         Hand.BOTH);
+    }
+
+    private Stationary() {
+        super(BaseEnchantments.STATIONARY);
     }
 
     @Override

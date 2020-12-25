@@ -28,12 +28,15 @@ public class Terraformer extends CustomEnchantment {
     @Override
     public Builder<Terraformer> defaults() {
         return new Builder<>(Terraformer::new, ID)
-            .all(BaseEnchantments.TERRAFORMER,
-                    "Places the leftmost blocks in the players inventory within a 7 block radius",
+            .all("Places the leftmost blocks in the players inventory within a 7 block radius",
                     new Tool[]{Tool.SHOVEL},
                     "Terraformer",
                     1,
                     Hand.RIGHT);
+    }
+
+    private Terraformer() {
+        super(BaseEnchantments.TERRAFORMER);
     }
 
     @Override

@@ -29,14 +29,18 @@ public class Shred extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Shred> defaults() {
         return new Builder<>(Shred::new, ID)
-                .all(BaseEnchantments.SHRED,
-                        "Breaks the blocks within a radius of the original block mined",
+                .all("Breaks the blocks within a radius of the original block mined",
                         new Tool[]{Tool.PICKAXE, Tool.SHOVEL},
                         "Shred",
                         5,
                         Hand.LEFT,
-                        Pierce.class, Switch.class);
+                        BaseEnchantments.PIERCE, BaseEnchantments.SWITCH);
     }
+
+    private Shred() {
+        super(BaseEnchantments.SHRED);
+    }
+
     // FIXME these methods may require a recode as they are not maintainable
 
     @Override

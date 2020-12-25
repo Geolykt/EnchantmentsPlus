@@ -23,12 +23,15 @@ public class Siphon extends CustomEnchantment {
     @Override
     public Builder<Siphon> defaults() {
         return new Builder<>(Siphon::new, ID)
-                .all(BaseEnchantments.SIPHON,
-                        "Drains the health of the mob that you attack, giving it to you",
+                .all("Drains the health of the mob that you attack, giving it to you",
                         new Tool[]{Tool.BOW, Tool.SWORD},
                         "Siphon",
                         4,
                         Hand.BOTH);
+    }
+
+    private Siphon() {
+        super(BaseEnchantments.SIPHON);
     }
 
     @Override

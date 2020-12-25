@@ -26,12 +26,15 @@ public class Persephone extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Persephone> defaults() {
         return new Builder<>(Persephone::new, ID)
-                .all(BaseEnchantments.PERSEPHONE,
-                        "Plants seeds from the player's inventory around them",
+                .all("Plants seeds from the player's inventory around them",
                         new Tool[]{Tool.HOE},
                         "Persephone",
                         3, // MAX LVL
                         Hand.RIGHT);
+    }
+
+    private Persephone() {
+        super(BaseEnchantments.PERSEPHONE);
     }
 
     @Override

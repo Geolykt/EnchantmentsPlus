@@ -23,13 +23,16 @@ public class Gust extends CustomEnchantment {
     @Override
     public Builder<Gust> defaults() {
         return new Builder<>(Gust::new, ID)
-            .all(BaseEnchantments.GUST,
-                    "Pushes the user through the air at the cost of their health",
+            .all("Pushes the user through the air at the cost of their health",
                     new Tool[]{Tool.SWORD},
                     "Gust",
                     1, // MAX LVL
                     Hand.RIGHT,
-                    RainbowSlam.class, Force.class);
+                    BaseEnchantments.RAINBOW_SLAM, BaseEnchantments.FORCE);
+    }
+
+    private Gust() {
+        super(BaseEnchantments.GUST);
     }
 
     @Override

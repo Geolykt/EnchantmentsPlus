@@ -17,12 +17,15 @@ public class Magnetism extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Magnetism> defaults() {
         return new Builder<>(Magnetism::new, ID)
-            .all(BaseEnchantments.MAGNETISM,
-                    "Slowly attracts nearby items to the players inventory",
+            .all("Slowly attracts nearby items to the players inventory",
                     new Tool[]{Tool.LEGGINGS},
                     "Magnetism",
                     3,
                     Hand.NONE);
+    }
+
+    private Magnetism() {
+        super(BaseEnchantments.MAGNETISM);
     }
 
     @Override

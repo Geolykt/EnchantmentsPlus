@@ -22,12 +22,15 @@ public class Conversion extends CustomEnchantment {
     @Override
     public Builder<Conversion> defaults() {
         return new Builder<>(Conversion::new, ID)
-            .all(BaseEnchantments.CONVERSION,
-                "Converts XP to health when right clicking and sneaking",
+            .all("Converts XP to health when right clicking and sneaking",
                 new Tool[]{Tool.SWORD},
                 "Conversion",
                 4, // MAX LVL
                 Hand.RIGHT);
+    }
+
+    private Conversion() {
+        super(BaseEnchantments.CONVERSION);
     }
 
     @Override

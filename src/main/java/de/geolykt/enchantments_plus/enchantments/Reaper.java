@@ -24,12 +24,15 @@ public class Reaper extends CustomEnchantment {
     @Override
     public Builder<Reaper> defaults() {
         return new Builder<>(Reaper::new, ID)
-            .all(BaseEnchantments.REAPER,
-                    "Gives the target temporary wither effect and blindness",
+            .all("Gives the target temporary wither effect and blindness",
                     new Tool[]{Tool.SWORD, Tool.BOW},
                     "Reaper",
                     4, // MAX LVL
                     Hand.BOTH);
+    }
+
+    private Reaper() {
+        super(BaseEnchantments.REAPER);
     }
 
     @Override

@@ -25,12 +25,15 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Germination> defaults() {
         return new Builder<>(Germination::new, ID)
-                .all(BaseEnchantments.GERMINATION,
-                        "Uses bonemeal from the player's inventory to grow nearby plants",
+                .all("Uses bonemeal from the player's inventory to grow nearby plants",
                         new Tool[]{Tool.HOE},
                         "Germination",
                         3, // MAX LVL
                         Hand.RIGHT);
+    }
+
+    private Germination() {
+        super(BaseEnchantments.GERMINATION);
     }
 
     @Override

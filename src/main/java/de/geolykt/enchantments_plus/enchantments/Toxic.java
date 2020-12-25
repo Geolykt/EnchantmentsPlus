@@ -32,12 +32,15 @@ public class Toxic extends CustomEnchantment {
     @Override
     public Builder<Toxic> defaults() {
         return new Builder<>(Toxic::new, ID)
-            .all(BaseEnchantments.TOXIC,
-                    "Sickens the target, making them nauseous and unable to eat",
+            .all("Sickens the target, making them nauseous and unable to eat",
                     new Tool[]{Tool.BOW, Tool.SWORD},
                     "Toxic",
                     4,
                     Hand.BOTH);
+    }
+
+    private Toxic() {
+        super(BaseEnchantments.TOXIC);
     }
 
     @Override

@@ -22,7 +22,7 @@ import de.geolykt.enchantments_plus.util.Tool;
 public class Weight extends CustomEnchantment {
 
     public static final int ID = 67;
-    
+
     /**
      * Is put on the PDC of a player to mark that the player has the Enchantment active (the slowness was made by the plugin).
      * Used to prevent abuse so players cannot remove permanent slowness effects.
@@ -33,13 +33,16 @@ public class Weight extends CustomEnchantment {
     @Override
     public Builder<Weight> defaults() {
         return new Builder<>(Weight::new, ID)
-            .all(BaseEnchantments.WEIGHT,
-                    "Slows the player down but makes them stronger and more resistant to knockback",
+            .all("Slows the player down but makes them stronger and more resistant to knockback",
                     new Tool[]{Tool.BOOTS},
                     "Weight",
                     4,
                     Hand.NONE,
-                    Meador.class, Speed.class);
+                    BaseEnchantments.MEADOR, BaseEnchantments.SPEED);
+    }
+
+    public Weight() {
+        super(BaseEnchantments.WEIGHT);
     }
 
     private static final EquipmentSlot[] SLOTS = 

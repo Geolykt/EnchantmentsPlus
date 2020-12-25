@@ -561,8 +561,8 @@ public class CommandProcessor {
                 } else {
                     Map<CustomEnchantment, Integer> enchs = CustomEnchantment.getEnchants(stack, true, player.getWorld());
                     for (Map.Entry<CustomEnchantment, Integer> potentiallyConflicting : enchs.entrySet()) {
-                        for (Class<? extends CustomEnchantment> conflict : ench.getConflicting()) {
-                            if (potentiallyConflicting.getKey().getClass().equals(conflict.getClass())) {
+                        for (BaseEnchantments conflict : ench.getConflicts()) {
+                            if (potentiallyConflicting.getKey().asEnum() == conflict) {
                                 target.sendMessage(Storage.LOGO + ChatColor.RED + "An incompatible enchantment is already on your tool!");
                                 return true;
                             }

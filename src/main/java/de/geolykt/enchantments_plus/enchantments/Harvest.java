@@ -24,12 +24,15 @@ public class Harvest extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Harvest> defaults() {
         return new Builder<>(Harvest::new, ID)
-                .all(BaseEnchantments.HARVEST,
-                        "Harvests fully grown crops within a radius when clicked",
+                .all("Harvests fully grown crops within a radius when clicked",
                         new Tool[]{Tool.HOE},
                         "Harvest",
                         3, // MAX LVL
                         Hand.RIGHT);
+    }
+
+    private Harvest() {
+        super(BaseEnchantments.HARVEST);
     }
 
     @Override

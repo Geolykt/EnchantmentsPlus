@@ -19,13 +19,16 @@ public class Firestorm extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Firestorm> defaults() {
         return new Builder<>(Firestorm::new, ID)
-            .all(BaseEnchantments.FIRESTORM,
-                    "Spawns a firestorm where the arrow strikes burning nearby entities",
+            .all("Spawns a firestorm where the arrow strikes burning nearby entities",
                     new Tool[]{Tool.BOW},
                     "Firestorm",
                     3, // MAX LVL
                     Hand.RIGHT,
-                    Blizzard.class);
+                    BaseEnchantments.BLIZZARD);
+    }
+
+    private Firestorm() {
+        super(BaseEnchantments.FIRE);
     }
 
     @Override

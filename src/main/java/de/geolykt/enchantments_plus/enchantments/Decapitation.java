@@ -24,12 +24,15 @@ public class Decapitation extends CustomEnchantment {
     @Override
     public Builder<Decapitation> defaults() {
         return new Builder<>(Decapitation::new, ID)
-            .all(BaseEnchantments.DECAPITATION,
-                    "Increases the chance for dropping the enemies head on death",
+            .all("Increases the chance for dropping the enemies head on death",
                     new Tool[]{Tool.SWORD},
                     "Decapitation",
                     4, // MAX LVL
                     Hand.LEFT);
+    }
+
+    private Decapitation() {
+        super(BaseEnchantments.DECAPITATION);
     }
 
     /**

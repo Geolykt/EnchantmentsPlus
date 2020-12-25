@@ -17,12 +17,15 @@ public class Saturation extends CustomEnchantment {
     @Override
     public Builder<Saturation> defaults() {
         return new Builder<>(Saturation::new, ID)
-            .all(BaseEnchantments.SATURATION,
-                    "Uses less of the player's hunger",
+            .all("Uses less of the player's hunger",
                     new Tool[]{Tool.LEGGINGS},
                     "Saturation",
                     3, // MAX LVL
                     Hand.NONE);
+    }
+
+    private Saturation() {
+        super(BaseEnchantments.SATURATION);
     }
 
     @Override

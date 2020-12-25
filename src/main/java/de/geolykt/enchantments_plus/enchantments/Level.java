@@ -22,12 +22,15 @@ public class Level extends CustomEnchantment {
     @Override
     public Builder<Level> defaults() {
         return new Builder<>(Level::new, ID)
-                .all(BaseEnchantments.LEVEL,
-                        "Drops more XP when killing mobs or mining ores",
+                .all("Drops more XP when killing mobs or mining ores",
                         new Tool[]{Tool.BOW, Tool.SWORD},
                         "Level",
                         3, // MAX LVL
                         Hand.BOTH);
+    }
+
+    private Level() {
+        super(BaseEnchantments.LEVEL);
     }
 
     @Override

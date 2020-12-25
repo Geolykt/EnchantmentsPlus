@@ -22,13 +22,16 @@ public class Variety extends CustomEnchantment {
     @Override
     public Builder<Variety> defaults() {
         return new Builder<>(Variety::new, ID)
-            .all(BaseEnchantments.VARIETY,
-                    "Drops random types of wood or leaves",
+            .all("Drops random types of wood or leaves",
                     new Tool[]{Tool.AXE},
                     "Variety",
                     1,
                     Hand.LEFT,
-                    Fire.class);
+                    BaseEnchantments.FIRE);
+    }
+
+    private Variety() {
+        super(BaseEnchantments.VARIETY);
     }
 
     @Override

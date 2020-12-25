@@ -12,11 +12,14 @@ public class Unrepairable extends CustomEnchantment {
     @Override
     public Builder<Unrepairable> defaults() {
         return new Builder<>(Unrepairable::new, ID)
-            .all(BaseEnchantments.UNREPAIRABLE,
-                    "Prevents an item from being repaired",
+            .all("Prevents an item from being repaired",
                     new Tool[]{Tool.ALL},
                     "Unrepairable",
                     1,
                     Hand.NONE);
+    }
+
+    private Unrepairable() {
+        super(BaseEnchantments.UNREPAIRABLE);
     }
 }

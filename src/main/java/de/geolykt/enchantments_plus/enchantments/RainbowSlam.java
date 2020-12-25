@@ -30,13 +30,16 @@ public class RainbowSlam extends CustomEnchantment {
     @Override
     public Builder<RainbowSlam> defaults() {
         return new Builder<>(RainbowSlam::new, ID)
-            .all(BaseEnchantments.RAINBOW_SLAM,
-                    "Attacks enemy mobs with a powerful swirling slam",
+            .all("Attacks enemy mobs with a powerful swirling slam",
                     new Tool[]{Tool.SWORD},
                     "Rainbow Slam",
                     4,
                     Hand.RIGHT,
-                    Gust.class, Force.class);
+                    BaseEnchantments.GUST, BaseEnchantments.FORCE);
+    }
+
+    private RainbowSlam() {
+        super(BaseEnchantments.RAINBOW_SLAM);
     }
 
     @Override

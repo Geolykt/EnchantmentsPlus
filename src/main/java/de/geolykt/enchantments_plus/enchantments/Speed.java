@@ -16,13 +16,16 @@ public class Speed extends CustomEnchantment {
     @Override
     public Builder<Speed> defaults() {
         return new Builder<>(Speed::new, ID)
-            .all(BaseEnchantments.SPEED,
-                    "Gives the player a speed boost",
+            .all("Gives the player a speed boost",
                     new Tool[]{Tool.BOOTS},
                     "Speed",
                     4,
                     Hand.NONE,
-                    Meador.class, Weight.class);
+                    BaseEnchantments.MEADOR, BaseEnchantments.WEIGHT);
+    }
+
+    private Speed() {
+        super(BaseEnchantments.SPEED);
     }
 
     @Override

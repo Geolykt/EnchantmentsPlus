@@ -26,12 +26,15 @@ public class Mow extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Mow> defaults() {
         return new Builder<>(Mow::new, ID)
-            .all(BaseEnchantments.MOW,
-                    "Shears all nearby sheep",
+            .all("Shears all nearby sheep",
                     new Tool[]{Tool.SHEARS},
                     "Mow",
                     3,
                     Hand.RIGHT);
+    }
+
+    private Mow() {
+        super(BaseEnchantments.MOW);
     }
 
     private boolean shear(PlayerEvent evt, int level, boolean usedHand) {

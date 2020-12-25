@@ -18,12 +18,15 @@ public class Fuse extends CustomEnchantment {
     @Override
     public Builder<Fuse> defaults() {
         return new Builder<>(Fuse::new, ID)
-            .all(BaseEnchantments.FUSE,
-                    "Instantly ignites anything explosive",
+            .all("Instantly ignites anything explosive",
                     new Tool[]{Tool.BOW},
                     "Fuse",
                     1, // MAX LVL
                     Hand.RIGHT);
+    }
+
+    private Fuse() {
+        super(BaseEnchantments.FUSE);
     }
 
     @Override

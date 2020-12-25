@@ -21,15 +21,18 @@ public class Bind extends CustomEnchantment {
     @Override
     public Builder<Bind> defaults() {
         return new Builder<>(Bind::new, ID)
-                .all(BaseEnchantments.BIND, // BASE
-                    "Keeps items with this enchantment in your inventory after death", // DESCRIPTION
+                .all("Keeps items with this enchantment in your inventory after death", // DESCRIPTION
                     new Tool[]{Tool.ALL}, // APPLICABLE TOOLS
                     "Bind", // NAME
                     1, // MAX LEVEL
                     Hand.NONE);
     }
 
-    @Override
+    private Bind() {
+        super(BaseEnchantments.BIND);
+    }
+
+    @Override // TODO refractor in it's own event
     public boolean onPlayerDeath(final PlayerDeathEvent evt, int level, boolean usedHand) {
         if (evt.getKeepInventory()) {
             return false;

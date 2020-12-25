@@ -21,12 +21,15 @@ public class Missile extends CustomEnchantment {
     @Override
     public Builder<Missile> defaults() {
         return new Builder<>(Missile::new, ID)
-            .all(BaseEnchantments.MISSILE,
-                    "Shoots a missile from the bow",
+            .all("Shoots a missile from the bow",
                     new Tool[]{Tool.BOW},
                     "Missile",
                     1,
                     Hand.RIGHT);
+    }
+
+    private Missile() {
+        super(BaseEnchantments.MISSILE);
     }
 
     @Override

@@ -53,16 +53,19 @@ public class Spectral extends CustomEnchantment {
      * @since 1.2.0
      */
     public static boolean useNativeProtection;
-    
+
     @Override
     public Builder<Spectral> defaults() {
         return new Builder<>(Spectral::new, ID)
-                .all(BaseEnchantments.SPECTRAL,
-                        "Allows for cycling through a block's types",
+                .all("Allows for cycling through a block's types",
                         new Tool[]{Tool.SHOVEL},
                         "Spectral",
                         3,
                         Hand.RIGHT);
+    }
+
+    private Spectral() {
+        super(BaseEnchantments.SPECTRAL);
     }
 
     /**

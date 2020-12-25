@@ -39,12 +39,15 @@ public class Laser extends CustomEnchantment {
     @Override
     public Builder<Laser> defaults() {
         return new Builder<>(Laser::new, ID)
-                .all(BaseEnchantments.LASER,
-                        "Breaks blocks and damages mobs using a powerful beam of light",
+                .all("Breaks blocks and damages mobs using a powerful beam of light",
                         new Tool[]{Tool.PICKAXE, Tool.AXE},
                         "Laser",
                         3,
                         Hand.RIGHT);
+    }
+
+    private Laser() {
+        super(BaseEnchantments.LASER);
     }
 
     public void shoot(Player player, int level, boolean usedHand) {

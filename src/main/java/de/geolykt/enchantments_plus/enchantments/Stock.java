@@ -20,12 +20,15 @@ public class Stock extends CustomEnchantment {
     @Override
     public Builder<Stock> defaults() {
         return new Builder<>(Stock::new, ID)
-            .all(BaseEnchantments.STOCK,
-                    "Refills the player's item in hand when they run out",
+            .all("Refills the player's item in hand when they run out",
                     new Tool[]{Tool.CHESTPLATE},
                     "Stock",
                     1,
                     Hand.NONE);
+    }
+
+    private Stock() {
+        super(BaseEnchantments.STOCK);
     }
 
     @Override

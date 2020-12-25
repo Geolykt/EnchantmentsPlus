@@ -30,17 +30,20 @@ public class Glide extends CustomEnchantment {
     @Override
     public Builder<Glide> defaults() {
         return new Builder<>(Glide::new, ID)
-                .all(BaseEnchantments.GLIDE,
-                        "Gently brings the player back to the ground when sneaking",
+                .all("Gently brings the player back to the ground when sneaking",
                         new Tool[]{Tool.LEGGINGS},
                         "Glide",
                         3, // MAX LVL
                         Hand.NONE);
     }
 
+    private Glide() {
+        super(BaseEnchantments.GLIDE);
+    }
+
     private static final EquipmentSlot[] SLOTS = 
             new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD};
-    
+
     @Override
     public boolean onFastScan(Player player, int level, boolean usedHand) {
         if (!sneakGlide.containsKey(player)) {
@@ -71,7 +74,7 @@ public class Glide extends CustomEnchantment {
             l.setY(l.getY() - 3);
             CompatibilityAdapter.display(l, Particle.CLOUD, 1, .1f, 0, 0, 0);
         }
-        if (ThreadLocalRandom.current().nextInt(5 * level) == 5) { // Slowly damage all armor
+        if (ThreadLocalRandom.current().nextInt(5 * level) == 5) { // "Slowly" damage all armour
             for (EquipmentSlot slot : SLOTS) {
                 final ItemStack s = player.getInventory().getItem(slot);
                 if (s != null

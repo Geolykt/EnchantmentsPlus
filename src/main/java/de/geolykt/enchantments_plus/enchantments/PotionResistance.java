@@ -19,12 +19,15 @@ public class PotionResistance extends CustomEnchantment {
     @Override
     public Builder<PotionResistance> defaults() {
         return new Builder<>(PotionResistance::new, ID)
-            .all(BaseEnchantments.POTION_RESISTANCE,
-                    "Lessens the effects of all potions on players, even the good ones",
+            .all("Lessens the effects of all potions on players, even the good ones",
                     new Tool[]{Tool.HELMET, Tool.CHESTPLATE, Tool.LEGGINGS, Tool.BOOTS},
                     "Potion Resistance",
                     4,
                     Hand.NONE);
+    }
+
+    private PotionResistance() {
+        super(BaseEnchantments.POTION_RESISTANCE);
     }
 
     @Override

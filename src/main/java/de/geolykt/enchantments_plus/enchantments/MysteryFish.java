@@ -26,12 +26,15 @@ public class MysteryFish extends CustomEnchantment {
     @Override
     public Builder<MysteryFish> defaults() {
         return new Builder<>(MysteryFish::new, ID)
-            .all(BaseEnchantments.MYSTERY_FISH,
-                    "Catches water mobs and fishes",
+            .all("Catches water mobs and fishes",
                     new Tool[]{Tool.ROD},
                     "Mystery Fish",
                     1,
                     Hand.RIGHT);
+    }
+
+    private MysteryFish() {
+        super(BaseEnchantments.MYSTERY_FISH);
     }
 
     @Override

@@ -20,13 +20,16 @@ public class Blizzard extends CustomEnchantment implements AreaOfEffectable {
     public Builder<Blizzard> defaults() {
         return new Builder<>(Blizzard::new, ID)
                 .probability(0)
-                .all(BaseEnchantments.BLIZZARD,
-                    "Spawns a blizzard where the arrow strikes freezing nearby entities",
+                .all("Spawns a blizzard where the arrow strikes freezing nearby entities",
                     new Tool[]{Tool.BOW},
                     "Blizzard",
                     3, // MAX LVL
                     Hand.RIGHT,
-                    Firestorm.class);
+                    BaseEnchantments.FIRESTORM);
+    }
+
+    private Blizzard() {
+        super(BaseEnchantments.BLIZZARD);
     }
 
     @Override

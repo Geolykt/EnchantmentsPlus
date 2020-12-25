@@ -22,12 +22,15 @@ public class Lumber extends CustomEnchantment {
     @Override
     public Builder<Lumber> defaults() {
         return new Builder<>(Lumber::new, ID)
-            .all(BaseEnchantments.LUMBER,
-                    "Breaks the entire tree at once",
+            .all("Breaks the entire tree at once",
                     new Tool[]{Tool.AXE},
                     "Lumber",
                     1,
                     Hand.LEFT);
+    }
+
+    private Lumber() {
+        super(BaseEnchantments.LUMBER);
     }
 
     @Override

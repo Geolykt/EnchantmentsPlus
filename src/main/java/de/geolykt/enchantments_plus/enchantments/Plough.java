@@ -25,12 +25,15 @@ public class Plough extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Plough> defaults() {
         return new Builder<>(Plough::new, ID)
-            .all(BaseEnchantments.PLOUGH,
-                    "Tills all soil within a radius",
+            .all("Tills all soil within a radius",
                     new Tool[]{Tool.HOE},
                     "Plough",
                     3,
                     Hand.RIGHT);
+    }
+
+    private Plough() {
+        super(BaseEnchantments.PLOUGH);
     }
 
     @Override

@@ -207,7 +207,7 @@ public class Watcher implements Listener {
             for (CustomEnchantment ench : mainPool) {
                 boolean conflicts = false;
                 for (CustomEnchantment e : addedEnchants.keySet()) {
-                    if (ench.getConflicting().contains(e.getClass()) || addedEnchants.containsKey(ench)
+                    if (ench.getConflicts().contains(e.asEnum()) || addedEnchants.containsKey(ench)
                             || e.getProbability() <= 0) {
                         conflicts = true;
                         break;

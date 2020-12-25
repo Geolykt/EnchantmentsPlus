@@ -63,16 +63,19 @@ public class Anthropomorphism extends CustomEnchantment {
     // Determines if falling entities from Anthropomorphism should fall up or down
     private static boolean fallBool = false;
 
+    private Anthropomorphism() {
+        super(BaseEnchantments.ANTHROPOMORPHISM);
+    }
+
     @Override
     public Builder<Anthropomorphism> defaults() {
         return new Builder<>(Anthropomorphism::new, ID)
-                .all(BaseEnchantments.ANTHROPOMORPHISM, // BASE
-                        "Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking", // DESCRIPTION
+                .all("Spawns blocks to protect you when right sneak clicking, and attacks entities when left clicking", // DESCRIPTION
                         new Tool[]{Tool.PICKAXE}, // APPLICABLE TOOLS
                         "Anthropomorphism", // NAME
                         1, // MAX LEVEL
                         Hand.BOTH, // APPLICABLE HANDS
-                        Pierce.class, Switch.class); // CONFLICTS
+                        BaseEnchantments.PIERCE, BaseEnchantments.SWITCH); // CONFLICTS
     }
 
     /**

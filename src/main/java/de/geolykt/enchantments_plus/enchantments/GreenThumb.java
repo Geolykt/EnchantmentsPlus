@@ -29,12 +29,15 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<GreenThumb> defaults() {
         return new Builder<>(GreenThumb::new, ID)
-            .all(BaseEnchantments.GREEN_THUMB,
-                    "Grows the foliage around the player",
+            .all("Grows the foliage around the player",
                     new Tool[]{Tool.LEGGINGS},
                     "Green Thumb",
                     3, // MAX LVL
                     Hand.NONE);
+    }
+
+    private GreenThumb() {
+        super(BaseEnchantments.GREEN_THUMB);
     }
 
     private static final EquipmentSlot[] SLOTS = 

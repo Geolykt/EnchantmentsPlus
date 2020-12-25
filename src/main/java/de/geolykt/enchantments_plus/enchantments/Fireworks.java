@@ -18,12 +18,15 @@ public class Fireworks extends CustomEnchantment {
     @Override
     public Builder<Fireworks> defaults() {
         return new Builder<>(Fireworks::new, ID)
-            .all(BaseEnchantments.FIREWORKS,
-                    "Shoots arrows that burst into fireworks upon impact",
+            .all("Shoots arrows that burst into fireworks upon impact",
                     new Tool[]{Tool.BOW},
                     "Fireworks",
                     4, // MAX LVL
                     Hand.RIGHT);
+    }
+
+    private Fireworks() {
+        super(BaseEnchantments.FIREWORKS);
     }
 
     @Override

@@ -23,13 +23,16 @@ public class Extraction extends CustomEnchantment {
     @Override
     public Builder<Extraction> defaults() {
         return new Builder<>(Extraction::new, ID)
-            .all(BaseEnchantments.EXTRACTION,
-                "Smelts and yields more product from ores",
+            .all("Smelts and yields more product from ores",
                 new Tool[]{Tool.PICKAXE},
                 "Extraction",
                 3, // MAX LVL
                 Hand.LEFT,
-                Switch.class);
+                BaseEnchantments.SWITCH);
+    }
+
+    public Extraction() {
+        super(BaseEnchantments.EXTRACTION);
     }
 
     @Override

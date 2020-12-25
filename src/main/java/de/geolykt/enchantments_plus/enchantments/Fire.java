@@ -42,13 +42,16 @@ public class Fire extends CustomEnchantment {
     @Override
     public Builder<Fire> defaults() {
         return new Builder<>(Fire::new, ID)
-                .all(BaseEnchantments.FIRE,
-                        "Drops the smelted version of the block broken",
+                .all("Drops the smelted version of the block broken",
                         new Tool[]{Tool.PICKAXE, Tool.AXE, Tool.SHOVEL},
                         "Fire",
                         1, // MAX LVL
                         Hand.LEFT,
-                        Switch.class, Variety.class);
+                        BaseEnchantments.SWITCH, BaseEnchantments.VARIETY);
+    }
+
+    private Fire() {
+        super(BaseEnchantments.FIRE);
     }
 
     @Override

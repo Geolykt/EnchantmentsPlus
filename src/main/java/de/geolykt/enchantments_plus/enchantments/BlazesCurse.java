@@ -24,24 +24,29 @@ public class BlazesCurse extends CustomEnchantment {
     @Override
     public Builder<BlazesCurse> defaults() {
         return new Builder<>(BlazesCurse::new, ID)
-                .all(BaseEnchantments.BLAZES_CURSE,
-                    "Causes the player to be unharmed in lava and fire, but damages them in water and rain",
+                .all("Causes the player to be unharmed in lava and fire, but damages them in water and rain",
                     new Tool[]{Tool.CHESTPLATE},
                     "Blaze's Curse",
                     1, // MAX LVL
                     Hand.NONE);
     }
 
+    private BlazesCurse() {
+        super(BaseEnchantments.BLAZES_CURSE);
+    }
+
     @Override
     public boolean onEntityDamage(EntityDamageEvent evt, int level, boolean usedHand) {
-        if (evt.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR ||
-            evt.getCause() == EntityDamageEvent.DamageCause.LAVA ||
-            evt.getCause() == EntityDamageEvent.DamageCause.FIRE ||
-            evt.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+        switch (evt.getCause()) {
+        case HOT_FLOOR:
+        case LAVA:
+        case FIRE:
+        case FIRE_TICK:
             evt.setCancelled(true);
             return true;
+        default:
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -56,6 +61,7 @@ public class BlazesCurse extends CustomEnchantment {
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
+        player.setFireTicks(0);
         Material mat = player.getLocation().getBlock().getType();
         if (mat == WATER) {
             ADAPTER.damagePlayer(player, submergeDamage, EntityDamageEvent.DamageCause.DROWNING);
@@ -72,9 +78,6 @@ public class BlazesCurse extends CustomEnchantment {
                 ADAPTER.damagePlayer(player, rainDamage, EntityDamageEvent.DamageCause.CUSTOM);
             }
         }
-        player.setFireTicks(0);
         return true;
     }
 }
-
-

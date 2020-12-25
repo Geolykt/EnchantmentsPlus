@@ -19,12 +19,15 @@ public class Apocalypse extends CustomEnchantment {
     public Builder<Apocalypse> defaults() {
         return new Builder<>(Apocalypse::new, ID)
             .probability(0)
-            .all(BaseEnchantments.APOCALYPSE,
-                "Unleashes hell",
+            .all("Unleashes hell",
                 new Tool[]{Tool.BOW},
                 "Apocalypse",
                 1,
                 Hand.RIGHT);
+    }
+
+    private Apocalypse() {
+        super(BaseEnchantments.APOCALYPSE);
     }
 
     @Override

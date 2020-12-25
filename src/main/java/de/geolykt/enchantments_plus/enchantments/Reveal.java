@@ -28,15 +28,19 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
     @Override
     public Builder<Reveal> defaults() {
         return new Builder<>(Reveal::new, ID)
-            .all(BaseEnchantments.REVEAL,
-                    "Makes nearby ores glow white through the stone.",
+            .all("Makes nearby ores glow white through the stone.",
                     new Tool[]{Tool.PICKAXE},
                     "Reveal",
                     4,
                     Hand.NONE,
-                    Switch.class, Pierce.class, Spectral.class)
-            .cooldown(100);
+                    BaseEnchantments.SWITCH, BaseEnchantments.PIERCE, BaseEnchantments.SPECTRAL)
+            .cooldown(100); // TODO cooldown in milliseconds
     }
+
+    private Reveal() {
+        super(BaseEnchantments.REVEAL);
+    }
+
     @Override
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {
         if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {

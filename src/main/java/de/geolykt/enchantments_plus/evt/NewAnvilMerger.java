@@ -67,12 +67,7 @@ public class NewAnvilMerger implements Listener {
         // pretty sure I'm overcomplicating things again
         out.keySet().forEach((ench) -> {
             inB.keySet().removeIf((newEnch) -> {
-                for (Class<? extends CustomEnchantment> conflict : ench.getConflicting()) {
-                    if (newEnch.getClass().equals(conflict)) {
-                        return true;
-                    }
-                }
-                return false;
+                return ench.getConflicts().contains(newEnch.asEnum());
             });
         });
         inB.forEach((ench, newLevel) -> out.merge(ench, newLevel, (oench, olevel) -> enchantmentLevelRemappingFunction(ench, olevel, newLevel)));
