@@ -24,7 +24,7 @@ public class Magnetism extends CustomEnchantment implements AreaOfEffectable {
                     Hand.NONE);
     }
 
-    private Magnetism() {
+    public Magnetism() {
         super(BaseEnchantments.MAGNETISM);
     }
 

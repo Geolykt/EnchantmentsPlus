@@ -38,7 +38,7 @@ public class Stream extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Stream() {
+    public Stream() {
         super(BaseEnchantments.STREAM);
     }
 

@@ -26,7 +26,7 @@ public class Haste extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Haste() {
+    public Haste() {
         super(BaseEnchantments.HASTE);
     }
 

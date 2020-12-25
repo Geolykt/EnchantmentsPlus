@@ -63,7 +63,7 @@ public class Anthropomorphism extends CustomEnchantment {
     // Determines if falling entities from Anthropomorphism should fall up or down
     private static boolean fallBool = false;
 
-    private Anthropomorphism() {
+    public Anthropomorphism() {
         super(BaseEnchantments.ANTHROPOMORPHISM);
     }
 

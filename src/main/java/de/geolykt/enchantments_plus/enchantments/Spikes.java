@@ -24,7 +24,7 @@ public class Spikes extends CustomEnchantment implements AreaOfEffectable {
                     Hand.NONE);
     }
 
-    private Spikes() {
+    public Spikes() {
         super(BaseEnchantments.SPIKES);
     }
 

@@ -31,7 +31,7 @@ public class BlazesCurse extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private BlazesCurse() {
+    public BlazesCurse() {
         super(BaseEnchantments.BLAZES_CURSE);
     }
 

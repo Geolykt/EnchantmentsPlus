@@ -25,7 +25,7 @@ public class Jump extends CustomEnchantment {
                     BaseEnchantments.MEADOR);
     }
 
-    private Jump() {
+    public Jump() {
         super(BaseEnchantments.JUMP);
     }
 

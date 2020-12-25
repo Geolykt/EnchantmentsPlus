@@ -30,7 +30,7 @@ public class Siphon extends CustomEnchantment {
                         Hand.BOTH);
     }
 
-    private Siphon() {
+    public Siphon() {
         super(BaseEnchantments.SIPHON);
     }
 

@@ -35,7 +35,7 @@ public class Terraformer extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Terraformer() {
+    public Terraformer() {
         super(BaseEnchantments.TERRAFORMER);
     }
 

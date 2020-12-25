@@ -35,7 +35,7 @@ public class Vortex extends CustomEnchantment {
                         BaseEnchantments.GRAB);
     }
 
-    private Vortex() {
+    public Vortex() {
         super(BaseEnchantments.VORTEX);
     }
 

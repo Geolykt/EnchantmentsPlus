@@ -24,8 +24,7 @@ public class Meador extends CustomEnchantment {
                     BaseEnchantments.SPEED, BaseEnchantments.WEIGHT, BaseEnchantments.JUMP);
     }
 
-    
-    private Meador() {
+    public Meador() {
         super(BaseEnchantments.MEADOR);
     }
 

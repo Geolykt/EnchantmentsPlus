@@ -33,7 +33,7 @@ public class Persephone extends CustomEnchantment implements AreaOfEffectable {
                         Hand.RIGHT);
     }
 
-    private Persephone() {
+    public Persephone() {
         super(BaseEnchantments.PERSEPHONE);
     }
 

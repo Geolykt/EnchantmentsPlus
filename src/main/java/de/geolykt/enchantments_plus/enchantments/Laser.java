@@ -46,7 +46,7 @@ public class Laser extends CustomEnchantment {
                         Hand.RIGHT);
     }
 
-    private Laser() {
+    public Laser() {
         super(BaseEnchantments.LASER);
     }
 

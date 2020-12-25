@@ -19,7 +19,7 @@ public class Unrepairable extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Unrepairable() {
+    public Unrepairable() {
         super(BaseEnchantments.UNREPAIRABLE);
     }
 }

@@ -31,7 +31,7 @@ public class Harvest extends CustomEnchantment implements AreaOfEffectable {
                         Hand.RIGHT);
     }
 
-    private Harvest() {
+    public Harvest() {
         super(BaseEnchantments.HARVEST);
     }
 

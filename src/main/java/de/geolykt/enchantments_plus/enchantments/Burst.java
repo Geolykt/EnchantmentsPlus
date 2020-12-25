@@ -42,7 +42,7 @@ public class Burst extends CustomEnchantment {
                         BaseEnchantments.SPREAD);
     }
 
-    private Burst() {
+    public Burst() {
         super(BaseEnchantments.BURST);
     }
 

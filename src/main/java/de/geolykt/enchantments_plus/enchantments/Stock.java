@@ -27,7 +27,7 @@ public class Stock extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Stock() {
+    public Stock() {
         super(BaseEnchantments.STOCK);
     }
 

@@ -39,7 +39,7 @@ public class Force extends CustomEnchantment {
                     BaseEnchantments.RAINBOW_SLAM, BaseEnchantments.GUST);
     }
 
-    private Force() {
+    public Force() {
         super(BaseEnchantments.FORCE);
     }
 

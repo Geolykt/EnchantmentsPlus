@@ -27,7 +27,7 @@ public class Firestorm extends CustomEnchantment implements AreaOfEffectable {
                     BaseEnchantments.BLIZZARD);
     }
 
-    private Firestorm() {
+    public Firestorm() {
         super(BaseEnchantments.FIRE);
     }
 

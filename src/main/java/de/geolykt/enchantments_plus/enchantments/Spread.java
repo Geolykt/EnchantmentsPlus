@@ -39,7 +39,7 @@ public class Spread extends CustomEnchantment {
                     BaseEnchantments.BURST);
     }
 
-    private Spread() {
+    public Spread() {
         super(BaseEnchantments.SPREAD);
     }
 

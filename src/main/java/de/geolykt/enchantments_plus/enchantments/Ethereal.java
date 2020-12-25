@@ -26,7 +26,7 @@ public class Ethereal extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Ethereal() {
+    public Ethereal() {
         super(BaseEnchantments.ETHERAL);
     }
 

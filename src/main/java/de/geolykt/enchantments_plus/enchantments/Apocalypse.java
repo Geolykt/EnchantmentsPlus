@@ -26,7 +26,7 @@ public class Apocalypse extends CustomEnchantment {
                 Hand.RIGHT);
     }
 
-    private Apocalypse() {
+    public Apocalypse() {
         super(BaseEnchantments.APOCALYPSE);
     }
 

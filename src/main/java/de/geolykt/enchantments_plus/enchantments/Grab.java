@@ -30,7 +30,7 @@ public class Grab extends CustomEnchantment {
                     Hand.LEFT);
     }
 
-    private Grab() {
+    public Grab() {
         super(BaseEnchantments.GRAB);
     }
 

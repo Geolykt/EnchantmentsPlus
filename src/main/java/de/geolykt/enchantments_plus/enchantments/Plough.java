@@ -32,7 +32,7 @@ public class Plough extends CustomEnchantment implements AreaOfEffectable {
                     Hand.RIGHT);
     }
 
-    private Plough() {
+    public Plough() {
         super(BaseEnchantments.PLOUGH);
     }
 

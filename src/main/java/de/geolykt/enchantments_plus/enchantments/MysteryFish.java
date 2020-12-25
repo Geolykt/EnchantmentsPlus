@@ -33,7 +33,7 @@ public class MysteryFish extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private MysteryFish() {
+    public MysteryFish() {
         super(BaseEnchantments.MYSTERY_FISH);
     }
 

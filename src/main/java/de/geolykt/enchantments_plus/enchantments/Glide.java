@@ -37,7 +37,7 @@ public class Glide extends CustomEnchantment {
                         Hand.NONE);
     }
 
-    private Glide() {
+    public Glide() {
         super(BaseEnchantments.GLIDE);
     }
 

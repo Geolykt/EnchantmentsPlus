@@ -30,7 +30,7 @@ public class Tracer extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Tracer() {
+    public Tracer() {
         super(BaseEnchantments.TRACER);
     }
 

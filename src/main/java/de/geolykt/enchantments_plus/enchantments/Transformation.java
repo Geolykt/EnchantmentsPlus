@@ -34,7 +34,7 @@ public class Transformation extends CustomEnchantment {
                         Hand.LEFT);
     }
 
-    private Transformation() {
+    public Transformation() {
         super(BaseEnchantments.TRANSFORMATION);
     }
 

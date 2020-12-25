@@ -37,7 +37,7 @@ public class Shred extends CustomEnchantment implements AreaOfEffectable {
                         BaseEnchantments.PIERCE, BaseEnchantments.SWITCH);
     }
 
-    private Shred() {
+    public Shred() {
         super(BaseEnchantments.SHRED);
     }
 

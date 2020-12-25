@@ -29,7 +29,7 @@ public class Arborist extends CustomEnchantment {
                     Hand.LEFT); // APPLICABLE HANDS
     }
 
-    private Arborist() {
+    public Arborist() {
         super(BaseEnchantments.ARBORIST);
     }
 

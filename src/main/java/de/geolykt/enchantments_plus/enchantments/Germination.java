@@ -32,7 +32,7 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
                         Hand.RIGHT);
     }
 
-    private Germination() {
+    public Germination() {
         super(BaseEnchantments.GERMINATION);
     }
 

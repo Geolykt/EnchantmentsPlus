@@ -24,7 +24,7 @@ public class Speed extends CustomEnchantment {
                     BaseEnchantments.MEADOR, BaseEnchantments.WEIGHT);
     }
 
-    private Speed() {
+    public Speed() {
         super(BaseEnchantments.SPEED);
     }
 

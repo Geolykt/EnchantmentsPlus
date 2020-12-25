@@ -38,7 +38,7 @@ public class RainbowSlam extends CustomEnchantment {
                     BaseEnchantments.GUST, BaseEnchantments.FORCE);
     }
 
-    private RainbowSlam() {
+    public RainbowSlam() {
         super(BaseEnchantments.RAINBOW_SLAM);
     }
 

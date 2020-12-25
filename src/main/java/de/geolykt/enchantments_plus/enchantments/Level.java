@@ -29,7 +29,7 @@ public class Level extends CustomEnchantment {
                         Hand.BOTH);
     }
 
-    private Level() {
+    public Level() {
         super(BaseEnchantments.LEVEL);
     }
 

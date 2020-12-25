@@ -27,7 +27,7 @@ public class IceAspect extends CustomEnchantment {
                     Hand.LEFT);
     }
 
-    private IceAspect() {
+    public IceAspect() {
         super(BaseEnchantments.ICE_ASPECT);
     }
 

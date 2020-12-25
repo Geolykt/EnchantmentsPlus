@@ -29,7 +29,7 @@ public class Lumber extends CustomEnchantment {
                     Hand.LEFT);
     }
 
-    private Lumber() {
+    public Lumber() {
         super(BaseEnchantments.LUMBER);
     }
 

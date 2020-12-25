@@ -29,7 +29,7 @@ public class Conversion extends CustomEnchantment {
                 Hand.RIGHT);
     }
 
-    private Conversion() {
+    public Conversion() {
         super(BaseEnchantments.CONVERSION);
     }
 

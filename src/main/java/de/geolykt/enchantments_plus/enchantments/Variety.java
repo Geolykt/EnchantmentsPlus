@@ -30,7 +30,7 @@ public class Variety extends CustomEnchantment {
                     BaseEnchantments.FIRE);
     }
 
-    private Variety() {
+    public Variety() {
         super(BaseEnchantments.VARIETY);
     }
 

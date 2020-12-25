@@ -25,7 +25,7 @@ public class QuickShot extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private QuickShot() {
+    public QuickShot() {
         super(BaseEnchantments.QUICK_SHOT);
     }
 

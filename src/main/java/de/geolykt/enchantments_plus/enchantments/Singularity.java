@@ -35,7 +35,7 @@ public class Singularity extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Singularity() {
+    public Singularity() {
         super(BaseEnchantments.SINGULARITY);
     }
 

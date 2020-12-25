@@ -31,7 +31,7 @@ public class Gust extends CustomEnchantment {
                     BaseEnchantments.RAINBOW_SLAM, BaseEnchantments.FORCE);
     }
 
-    private Gust() {
+    public Gust() {
         super(BaseEnchantments.GUST);
     }
 

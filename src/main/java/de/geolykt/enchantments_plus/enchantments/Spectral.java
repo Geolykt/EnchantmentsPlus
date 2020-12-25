@@ -64,7 +64,7 @@ public class Spectral extends CustomEnchantment {
                         Hand.RIGHT);
     }
 
-    private Spectral() {
+    public Spectral() {
         super(BaseEnchantments.SPECTRAL);
     }
 

@@ -31,7 +31,7 @@ public class Decapitation extends CustomEnchantment {
                     Hand.LEFT);
     }
 
-    private Decapitation() {
+    public Decapitation() {
         super(BaseEnchantments.DECAPITATION);
     }
 

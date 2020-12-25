@@ -37,7 +37,7 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
             .cooldown(100); // TODO cooldown in milliseconds
     }
 
-    private Reveal() {
+    public Reveal() {
         super(BaseEnchantments.REVEAL);
     }
 

@@ -23,7 +23,7 @@ public class ShortCast extends CustomEnchantment {
                     BaseEnchantments.LONG_CAST);
     }
 
-    private ShortCast() {
+    public ShortCast() {
         super(BaseEnchantments.SHORT_CAST);
     }
 

@@ -28,7 +28,7 @@ public class Bind extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Bind() {
+    public Bind() {
         super(BaseEnchantments.BIND);
     }
 

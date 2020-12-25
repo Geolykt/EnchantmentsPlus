@@ -24,7 +24,7 @@ public class Saturation extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Saturation() {
+    public Saturation() {
         super(BaseEnchantments.SATURATION);
     }
 

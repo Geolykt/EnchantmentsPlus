@@ -31,7 +31,7 @@ public class Reaper extends CustomEnchantment {
                     Hand.BOTH);
     }
 
-    private Reaper() {
+    public Reaper() {
         super(BaseEnchantments.REAPER);
     }
 

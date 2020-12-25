@@ -33,7 +33,7 @@ public class Mow extends CustomEnchantment implements AreaOfEffectable {
                     Hand.RIGHT);
     }
 
-    private Mow() {
+    public Mow() {
         super(BaseEnchantments.MOW);
     }
 

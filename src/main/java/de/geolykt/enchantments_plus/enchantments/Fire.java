@@ -50,7 +50,7 @@ public class Fire extends CustomEnchantment {
                         BaseEnchantments.SWITCH, BaseEnchantments.VARIETY);
     }
 
-    private Fire() {
+    public Fire() {
         super(BaseEnchantments.FIRE);
     }
 

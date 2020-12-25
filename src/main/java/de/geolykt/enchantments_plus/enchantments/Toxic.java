@@ -39,7 +39,7 @@ public class Toxic extends CustomEnchantment {
                     Hand.BOTH);
     }
 
-    private Toxic() {
+    public Toxic() {
         super(BaseEnchantments.TOXIC);
     }
 

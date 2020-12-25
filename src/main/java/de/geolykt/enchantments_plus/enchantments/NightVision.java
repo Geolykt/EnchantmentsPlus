@@ -24,7 +24,7 @@ public class NightVision extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private NightVision() {
+    public NightVision() {
         super(BaseEnchantments.NIGHT_VISION);
     }
 

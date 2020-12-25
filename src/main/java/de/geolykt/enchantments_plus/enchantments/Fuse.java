@@ -25,7 +25,7 @@ public class Fuse extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Fuse() {
+    public Fuse() {
         super(BaseEnchantments.FUSE);
     }
 

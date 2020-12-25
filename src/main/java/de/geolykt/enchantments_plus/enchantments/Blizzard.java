@@ -28,7 +28,7 @@ public class Blizzard extends CustomEnchantment implements AreaOfEffectable {
                     BaseEnchantments.FIRESTORM);
     }
 
-    private Blizzard() {
+    public Blizzard() {
         super(BaseEnchantments.BLIZZARD);
     }
 

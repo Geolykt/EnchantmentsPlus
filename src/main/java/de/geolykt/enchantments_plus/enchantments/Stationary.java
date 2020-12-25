@@ -28,7 +28,7 @@ public class Stationary extends CustomEnchantment {
                         Hand.BOTH);
     }
 
-    private Stationary() {
+    public Stationary() {
         super(BaseEnchantments.STATIONARY);
     }
 

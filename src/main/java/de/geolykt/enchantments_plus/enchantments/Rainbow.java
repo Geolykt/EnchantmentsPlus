@@ -33,7 +33,7 @@ public class Rainbow extends CustomEnchantment {
                     Hand.BOTH);
     }
 
-    private Rainbow() {
+    public Rainbow() {
         super(BaseEnchantments.RAINBOW);
     }
 

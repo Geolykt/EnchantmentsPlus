@@ -34,7 +34,7 @@ public class Switch extends CustomEnchantment {
                 .cooldown(2); // TODO cooldown in millis
     }
 
-    private Switch() {
+    public Switch() {
         super(BaseEnchantments.SWITCH);
     }
 

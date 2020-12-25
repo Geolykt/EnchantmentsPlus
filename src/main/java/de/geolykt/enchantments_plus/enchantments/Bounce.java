@@ -24,7 +24,7 @@ public class Bounce extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Bounce() {
+    public Bounce() {
         super(BaseEnchantments.BOUNCE);
     }
 

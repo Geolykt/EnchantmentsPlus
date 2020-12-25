@@ -27,7 +27,7 @@ public class GoldRush extends CustomEnchantment {
                     Hand.LEFT);
     }
 
-    private GoldRush() {
+    public GoldRush() {
         super(BaseEnchantments.GOLD_RUSH);
     }
 

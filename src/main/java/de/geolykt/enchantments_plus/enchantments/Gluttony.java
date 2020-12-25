@@ -26,7 +26,7 @@ public class Gluttony extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Gluttony() {
+    public Gluttony() {
         super(BaseEnchantments.GLUTTONY);
     }
 

@@ -26,7 +26,7 @@ public class PotionResistance extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private PotionResistance() {
+    public PotionResistance() {
         super(BaseEnchantments.POTION_RESISTANCE);
     }
 

@@ -25,7 +25,7 @@ public class Potion extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Potion() {
+    public Potion() {
         super(BaseEnchantments.POTION);
     }
 

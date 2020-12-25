@@ -44,7 +44,7 @@ public class Pierce extends CustomEnchantment {
                     BaseEnchantments.ANTHROPOMORPHISM, BaseEnchantments.SWITCH, BaseEnchantments.SHRED, BaseEnchantments.REVEAL);
     }
 
-    private Pierce() {
+    public Pierce() {
         super(BaseEnchantments.PIERCE);
     }
 

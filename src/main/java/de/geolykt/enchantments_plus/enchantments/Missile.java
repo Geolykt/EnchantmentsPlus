@@ -28,7 +28,7 @@ public class Missile extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Missile() {
+    public Missile() {
         super(BaseEnchantments.MISSILE);
     }
 

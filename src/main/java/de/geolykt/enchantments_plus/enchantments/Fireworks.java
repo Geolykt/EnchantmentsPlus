@@ -25,7 +25,7 @@ public class Fireworks extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    private Fireworks() {
+    public Fireworks() {
         super(BaseEnchantments.FIREWORKS);
     }
 

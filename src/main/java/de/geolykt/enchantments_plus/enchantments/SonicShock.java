@@ -25,7 +25,7 @@ public class SonicShock extends CustomEnchantment implements AreaOfEffectable {
                     Hand.NONE);
     }
 
-    private SonicShock() {
+    public SonicShock() {
         super(BaseEnchantments.SONIC_SHOCK);
     }
 

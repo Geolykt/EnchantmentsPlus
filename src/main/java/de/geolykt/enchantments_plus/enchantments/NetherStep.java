@@ -33,7 +33,7 @@ public class NetherStep extends CustomEnchantment implements AreaOfEffectable {
                     BaseEnchantments.FROZEN_STEP);
     }
 
-    private NetherStep() {
+    public NetherStep() {
         super(BaseEnchantments.NETHER_STEP);
     }
 

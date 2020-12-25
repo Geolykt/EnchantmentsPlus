@@ -36,7 +36,7 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                     Hand.NONE);
     }
 
-    private GreenThumb() {
+    public GreenThumb() {
         super(BaseEnchantments.GREEN_THUMB);
     }
 

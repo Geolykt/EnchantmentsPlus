@@ -23,7 +23,7 @@ public class Combustion extends CustomEnchantment {
                     Hand.NONE);
     }
 
-    private Combustion() {
+    public Combustion() {
         super(BaseEnchantments.COMBUSTION);
     }
 
