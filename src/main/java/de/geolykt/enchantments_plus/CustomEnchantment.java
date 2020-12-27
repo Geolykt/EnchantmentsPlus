@@ -316,7 +316,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
-        getEnchants(tool, player.getWorld()).forEach((CustomEnchantment ench, Integer level) -> {
+        getEnchants(tool, player.getWorld(), null).forEach((CustomEnchantment ench, Integer level) -> {
             if (!ench.used && Utilities.canUse(player, ench)) {
                 try {
                     ench.used = true;
@@ -332,47 +332,18 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     /**
-     * @deprecated acceptBooks might be a concept that could be staged for removal soon (probably in 3.0.0) as it is not really used correctly internally
      * Returns a mapping of custom enchantments and their level on a given tool
      * @param stk The itemstack that the operation applies for
-     * @param acceptBooks True if books should be accepted, false otherwise
-     * @param world The world where the itemstack is located, used for configuration obtaining
-     * @return A map of enchantments mapped to their level
-     * @since 3.0.0
-     */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
-            World world) {
-        return Enchantment_Adapter.getEnchants(stk, acceptBooks, world, null);
-    }
-
-    /**
-     * Returns a mapping of custom enchantments and their level on a given tool
-     * @param stk The itemstack that the operation applies for
-     * @param world The world where the itemstack is located, used for configuration obtaining
-     * @return A map of enchantments mapped to their level
-     * @since 3.0.0
-     */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, @NotNull World world) {
-        return Enchantment_Adapter.getEnchants(stk, false, world, null);
-    }
-
-    /**
-     * @deprecated acceptBooks might be a concept that could be staged for removal soon (probably in 3.0.0) as it is not really used correctly internally
-     * Returns a mapping of custom enchantments and their level on a given tool
-     * @param stk The itemstack that the operation applies for
-     * @param acceptBooks True if books should be accepted, false otherwise
      * @param world The world where the itemstack is located, used for configuration obtaining
      * @param outExtraLore The output of any unused lore will be written to this list, or null if not needed
      * @return A map of enchantments mapped to their level
      * @since 3.0.0
      */
     @Deprecated(forRemoval = true, since = "3.0.0")
-    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks,
+    public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk,
             @NotNull World world,
             @Nullable List<String> outExtraLore) {
-        return Enchantment_Adapter.getEnchants(stk, acceptBooks, world, outExtraLore);
+        return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
     }
 
     public static boolean hasEnchantment(@NotNull Config config, ItemStack stk, BaseEnchantments ench) {

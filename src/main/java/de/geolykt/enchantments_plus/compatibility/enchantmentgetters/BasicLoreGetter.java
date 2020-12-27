@@ -97,7 +97,7 @@ public class BasicLoreGetter implements IEnchGatherer {
     }
 
     @Override
-    public void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world) {
+    public void setEnchantment(@Nullable ItemStack stk, CustomEnchantment ench, int level, World world) {
         if (stk == null || stk.getItemMeta() == null) {
             return;
         }
@@ -135,7 +135,7 @@ public class BasicLoreGetter implements IEnchGatherer {
     }
 
     @Override
-    public int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments enchantment) {
+    public int getEnchantmentLevel(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments enchantment) {
         if (stk != null && stk.hasItemMeta() && stk.getItemMeta().getLore() != null) {
             for (String raw : stk.getItemMeta().getLore()) {
                 Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, config);

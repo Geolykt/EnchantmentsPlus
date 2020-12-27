@@ -36,7 +36,7 @@ public class PotionResistance extends CustomEnchantment {
             if (ent instanceof Player) {
                 int effect = 0;
                 for (ItemStack stk : ((Player) ent).getInventory().getArmorContents()) {
-                    Map<CustomEnchantment, Integer> map = CustomEnchantment.getEnchants(stk, ent.getWorld());
+                    Map<CustomEnchantment, Integer> map = CustomEnchantment.getEnchants(stk, ent.getWorld(), null);
                     for (CustomEnchantment e : map.keySet()) {
                         if (e.equals(this)) {
                             effect += map.get(e);

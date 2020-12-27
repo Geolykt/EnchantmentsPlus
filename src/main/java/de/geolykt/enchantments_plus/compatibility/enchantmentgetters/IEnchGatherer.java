@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Config;
@@ -81,7 +82,7 @@ public interface IEnchGatherer {
      * @return True if the stack contained the given Enchantment, false otherwise
      * @since 2.1.1
      */
-    public default boolean hasEnchantment(Config config, ItemStack stk, BaseEnchantments ench) {
+    public default boolean hasEnchantment(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments ench) {
         return getEnchantmentLevel(config, stk, ench) != 0;
     }
 
@@ -95,5 +96,5 @@ public interface IEnchGatherer {
      * @return The level of the given enchantment on a given stack.
      * @since 2.1.1
      */
-    public abstract int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments ench);
+    public abstract int getEnchantmentLevel(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments ench);
 }

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
@@ -41,8 +42,9 @@ public class Bind extends CustomEnchantment {
         final Player player = evt.getEntity();
         final ItemStack[] contents = player.getInventory().getContents().clone();
         final List<ItemStack> removed = new ArrayList<>();
+        final Config config = Config.get(player.getWorld());
         for (int i = 0; i < contents.length; i++) {
-            if (!CustomEnchantment.getEnchants(contents[i], player.getWorld()).containsKey(this)) {
+            if (!CustomEnchantment.hasEnchantment(config, contents[i], BaseEnchantments.BIND)) {
                 contents[i] = null;
             } else {
                 removed.add(contents[i]);

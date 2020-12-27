@@ -169,7 +169,7 @@ public class Watcher implements Listener {
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if (event.getMessage().startsWith("/enchant ")) {
             boolean customEnch = !CustomEnchantment
-                    .getEnchants(event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getWorld())
+                    .getEnchants(event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getWorld(), null)
                     .isEmpty();
             Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 CustomEnchantment.setGlow(event.getPlayer().getInventory().getItemInMainHand(), customEnch,
@@ -193,7 +193,7 @@ public class Watcher implements Listener {
         Config config = Config.get(evt.getEnchantBlock().getWorld());
 
         Map<CustomEnchantment, Integer> existingEnchants = CustomEnchantment.getEnchants(evt.getItem(),
-                evt.getEnchantBlock().getWorld());
+                evt.getEnchantBlock().getWorld(), null);
 
         Map<CustomEnchantment, Integer> addedEnchants = new HashMap<>();
         ItemStack stk = evt.getItem();
@@ -263,7 +263,7 @@ public class Watcher implements Listener {
                 if (evt.getCurrentItem().hasItemMeta()) {
                     if (evt.getCurrentItem().getItemMeta().hasLore()) {
                         Player player = (Player) evt.getWhoClicked();
-                        for (CustomEnchantment e : CustomEnchantment.getEnchants(evt.getCurrentItem(), player.getWorld()).keySet()) {
+                        for (CustomEnchantment e : CustomEnchantment.getEnchants(evt.getCurrentItem(), player.getWorld(), null).keySet()) {
                             switch (e.asEnum()) {
                             case MEADOR:
                                 player.removePotionEffect(PotionEffectType.SPEED);

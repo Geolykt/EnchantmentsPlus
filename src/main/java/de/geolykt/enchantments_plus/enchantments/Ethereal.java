@@ -3,14 +3,13 @@ package de.geolykt.enchantments_plus.enchantments;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
-
-import java.util.Map;
 
 public class Ethereal extends CustomEnchantment {
 
@@ -48,12 +47,10 @@ public class Ethereal extends CustomEnchantment {
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
         //FIXME could maybe be removed
+        Config config = Config.get(player.getWorld());
         for (ItemStack s : player.getInventory().getArmorContents()) {
-            if (s != null) {
-                Map<CustomEnchantment, Integer> map = CustomEnchantment.getEnchants(s, player.getWorld());
-                if (map.containsKey(this)) {
-                    CompatibilityAdapter.setDamage(s, 0);
-                }
+            if (s != null && CustomEnchantment.hasEnchantment(config, s, BaseEnchantments.ETHERAL)) {
+                CompatibilityAdapter.setDamage(s, 0);
             }
         }
         return true;

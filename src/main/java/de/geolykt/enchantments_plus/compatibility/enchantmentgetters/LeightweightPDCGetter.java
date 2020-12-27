@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -101,7 +103,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
     }
 
     @Override
-    public boolean hasEnchantment(Config config, ItemStack stk, BaseEnchantments ench) {
+    public boolean hasEnchantment(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments ench) {
         if (stk != null && stk.getItemMeta() != null) {
             return stk.getItemMeta().getPersistentDataContainer().has(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
         }
@@ -109,7 +111,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
     }
 
     @Override
-    public int getEnchantmentLevel(Config config, ItemStack stk, BaseEnchantments ench) {
+    public int getEnchantmentLevel(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments ench) {
         if (stk != null && stk.getItemMeta() != null) {
             Short level = stk.getItemMeta().getPersistentDataContainer().get(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
             return level != null ? level : 0;

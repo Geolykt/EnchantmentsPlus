@@ -50,7 +50,8 @@ public class GrindstoneMerge implements Listener {
         } else {
             return;
         }
-        Map<CustomEnchantment, Integer> enchants = CustomEnchantment.getEnchants(stk, world);
+        // TODO can be done more efficiently (maybe a dedicated method for that?)
+        Map<CustomEnchantment, Integer> enchants = CustomEnchantment.getEnchants(stk, world, null);
         for (CustomEnchantment ench : enchants.keySet()) {
             CustomEnchantment.setEnchantment(stk, ench, 0, world);
         }

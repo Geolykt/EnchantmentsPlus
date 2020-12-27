@@ -109,8 +109,7 @@ public class CommandProcessor {
                             results.add("info");
                         }
                         if (PermissionTypes.LASERCOL.hasPermission(sender) && 
-                                CustomEnchantment.getEnchants(stack, ((Player)sender)
-                                        .getWorld()).containsKey(config.enchantFromEnum(BaseEnchantments.LASER))) {
+                                CustomEnchantment.hasEnchantment(config, stack, BaseEnchantments.LASER)) {
                             results.add("lasercol");
                         }
                         if (PermissionTypes.LIST.hasPermission(sender)) {
@@ -315,7 +314,7 @@ public class CommandProcessor {
             }
         } else {
             Set<CustomEnchantment> enchs = CustomEnchantment.getEnchants(
-                    ((Player) sender).getInventory().getItemInMainHand(), true, ((Entity) sender).getWorld()).keySet();
+                    ((Player) sender).getInventory().getItemInMainHand(), ((Entity) sender).getWorld(), null).keySet();
             if (enchs.isEmpty()) {
                 sender.sendMessage(Storage.LOGO + "There are no custom enchantments on this tool!");
             } else {
@@ -559,7 +558,7 @@ public class CommandProcessor {
                         || CustomEnchantment.getEnchantLevel(cfg, stack, ench.asEnum()) > 0) {
                     CustomEnchantment.setEnchantment(stack, ench, level, player.getWorld());
                 } else {
-                    Map<CustomEnchantment, Integer> enchs = CustomEnchantment.getEnchants(stack, true, player.getWorld());
+                    Map<CustomEnchantment, Integer> enchs = CustomEnchantment.getEnchants(stack, player.getWorld(), null);
                     for (Map.Entry<CustomEnchantment, Integer> potentiallyConflicting : enchs.entrySet()) {
                         for (BaseEnchantments conflict : ench.getConflicts()) {
                             if (potentiallyConflicting.getKey().asEnum() == conflict) {
@@ -614,13 +613,9 @@ public class CommandProcessor {
                 return true;
             }
             final ItemStack stk = player.getInventory().getItemInMainHand();
-            if (CustomEnchantment.getEnchants(stk, player.getWorld()).containsKey(Config.get(player.getWorld()).enchantFromString("laser"))) {
-                Color col = Color.RED;
-                if (args.length != 1) {
-                    col = ColUtil.toBukkitColor(args[1].toUpperCase(Locale.ROOT), Color.RED);
-                }
-
-                Laser.setColor(stk, col);
+            if (CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), stk, BaseEnchantments.LASER)) {
+                Laser.setColor(stk, 
+                        args.length != 1 ? ColUtil.toBukkitColor(args[1].toUpperCase(Locale.ROOT), Color.RED) : Color.RED);
                 player.getInventory().setItemInMainHand(stk);
                 if (player.getLocale().toLowerCase(Locale.ROOT).contains("uk")) {
                     player.sendMessage(Storage.LOGO + ChatColor.RED + "Colour of the laser set successfully.");
