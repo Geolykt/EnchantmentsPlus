@@ -3,13 +3,16 @@ package de.geolykt.enchantments_plus.evt;
 import static org.bukkit.Material.AIR;
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -42,12 +45,15 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.HighFrequencyRunnableCache;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.enchantments.FrozenStep;
 import de.geolykt.enchantments_plus.enchantments.NetherStep;
+import de.geolykt.enchantments_plus.enchantments.Weight;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.evt.ench.BlockShredEvent;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
@@ -66,13 +72,12 @@ public class WatcherEnchant implements Listener {
     public static boolean patch_cancel_frozenstep = true;
     public static boolean patch_cancel_netherstep = true;
     public static boolean patch_cancel_explosion = true;
-    
+
     public static WatcherEnchant instance() {
         return INSTANCE;
     }
 
-    private WatcherEnchant() {
-    }
+    private WatcherEnchant() {} // The class should not be constructible
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onBlockBreak(BlockBreakEvent evt) {
@@ -205,10 +210,13 @@ public class WatcherEnchant implements Listener {
         // TODO optimise
         if (evt.getClickedBlock() == null || !evt.getClickedBlock().getType().isInteractable()) {
             Player player = evt.getPlayer();
-            boolean isMainHand = evt.getHand() == EquipmentSlot.HAND;
-            for (ItemStack usedStack : Utilities.getArmorAndMainHandItems(player, isMainHand)) {
-                CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> {
-                    return ench.onBlockInteract(evt, level, isMainHand);
+            if (evt.getHand() == EquipmentSlot.HAND) {
+                CustomEnchantment.applyForTool(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
+                    return ench.onBlockInteractInteractable(evt, level, true);
+                });
+            } else {
+                CustomEnchantment.applyForTool(player, player.getInventory().getItemInOffHand(), (ench, level) -> {
+                    return ench.onBlockInteractInteractable(evt, level, false);
                 });
             }
         }
@@ -340,7 +348,7 @@ public class WatcherEnchant implements Listener {
         for (LivingEntity entity : affected) {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
-                AtomicBoolean apply = new AtomicBoolean(true);
+                AtomicBoolean apply = new AtomicBoolean(true); // TODO this is not multithreaded, so why is it needed?
                 for (ItemStack usedStack : Utilities.getArmorAndMainHandItems(player, true)) {
                     CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> {
                         // Only apply one enchantment, which in practice is Potion Resistance.
@@ -365,12 +373,36 @@ public class WatcherEnchant implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDeath(PlayerDeathEvent evt) {
-        Player player = evt.getEntity();
-        for (ItemStack usedStack : (ItemStack[]) ArrayUtils.addAll(player.getInventory().getArmorContents(), (player.getInventory().getContents()))) {
-            CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onPlayerDeath(evt, level, true));
+        if (evt.getKeepInventory()) {
+            return;
         }
+
+        // TODO make this work with other plugins
+        final Player player = evt.getEntity();
+        final ItemStack[] contents = player.getInventory().getContents().clone();
+        final List<ItemStack> removed = new ArrayList<>();
+        final Config config = Config.get(player.getWorld());
+
+        for (int i = 0; i < contents.length; i++) {
+            if (CustomEnchantment.hasEnchantment(config, contents[i], BaseEnchantments.WEIGHT)) {
+                player.getPersistentDataContainer().remove(Weight.ACTIVE);
+            }
+            if (CustomEnchantment.hasEnchantment(config, contents[i], BaseEnchantments.BIND)) {
+                removed.add(contents[i]);
+                evt.getDrops().remove(contents[i]);
+            } else {
+                contents[i] = null;
+            }
+        }
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
+            if (evt.getKeepInventory()) {
+                evt.getDrops().addAll(removed);
+            } else {
+                player.getInventory().setContents(contents);
+            }
+        }, 1);
     }
 
     @EventHandler

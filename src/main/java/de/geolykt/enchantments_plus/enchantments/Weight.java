@@ -5,7 +5,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -74,12 +73,6 @@ public class Weight extends CustomEnchantment {
                 }
             }
         }
-        return true;
-    }
-
-    @Override
-    public boolean onPlayerDeath(PlayerDeathEvent evt, int level, boolean usedHand) {
-        evt.getEntity().getPersistentDataContainer().remove(ACTIVE);
         return true;
     }
 

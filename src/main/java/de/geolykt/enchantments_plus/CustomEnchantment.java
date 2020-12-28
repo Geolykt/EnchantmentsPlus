@@ -93,13 +93,25 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return false;
     }
 
+    /**
+     * Fired on the PlayerInteractEvent if the block the player clicked on is either null (air)
+     * OR is not interactive (so things such as Workbenches, Beds and so on).
+     * Since this is only fired for enchantments that need the enchantment be in hand, the
+     * method is not called for enchantment applied to non-hand items (this was different before v3.0.0
+     * where it was called for everything)
+     * @param evt The event that caused the method to be called
+     * @param level The level of the enchantment
+     * @param usedHand The hand used for the event, true if it is the main hand, false otherwise
+     * @return True if an action was performed, false otherwise (used for cooldowns and other actions)
+     * @since 1.0.0
+     */
     public boolean onBlockInteract(PlayerInteractEvent evt, int level, boolean usedHand) {
         return false;
     }
 
     /**
      * Fired on the PlayerInteractEvent if the block the player clicked is not null
-     * AND the block is intractable (so things such as Workbenches, Beds and so on).
+     * AND the block is interactive (so things such as Workbenches, Beds and so on).
      * Since the event is only listened by the Spectral enchantment, the event will not be fired
      * for any enchantments existing on non-hand items (this is a change in behaviour
      * was introduced in v3.0.0 to patch a serious TPS Drain)
@@ -163,10 +175,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     public boolean onProjectileLaunch(ProjectileLaunchEvent evt, int level, boolean usedHand) {
-        return false;
-    }
-
-    public boolean onPlayerDeath(PlayerDeathEvent evt, int level, boolean usedHand) {
         return false;
     }
 
