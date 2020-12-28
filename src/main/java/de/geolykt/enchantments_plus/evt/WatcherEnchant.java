@@ -182,7 +182,7 @@ public class WatcherEnchant implements Listener {
      * </ul>
      * @since 1.0.0
      */
-    public byte protectedBlockQuery(Block block, boolean netherstep_remove, boolean frozenstep_remove) {
+    public final byte protectedBlockQuery(Block block, boolean netherstep_remove, boolean frozenstep_remove) {
         Location a = block.getLocation();
         if (netherstep_remove) {
             if (NetherStep.netherstepLocs.remove(a) != null) {

@@ -19,6 +19,7 @@ import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 public class Reveal extends CustomEnchantment implements AreaOfEffectable {
 
@@ -41,56 +42,65 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
         super(BaseEnchantments.REVEAL);
     }
 
+    /**
+     * Scans the blocks around the center for uncovered ores.
+     * What an uncovered Ore is depends on Storage.COMPATIBILITY_ADAPTER.ores()
+     * @param center The central location to iterate over
+     * @param radius The radius of the search
+     * @return The locations of the covered ores
+     * @since 3.0.0-rc.2
+     */
+    public final LinkedHashSet<Location> scanOres(Block center, int radius) {
+        LinkedHashSet<Location> locs = new LinkedHashSet<>();
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    Block blk = center.getRelative(x, y, z);
+                    if (Storage.COMPATIBILITY_ADAPTER.ores().contains(blk.getType())) {
+                        boolean exposed = false;
+                        for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
+                            if (Storage.COMPATIBILITY_ADAPTER.airs().contains(blk.getRelative(face).getType())) {
+                                exposed = true;
+                                break;
+                            }
+                        }
+                        if (!exposed) {
+                            locs.add(blk.getLocation());
+                        }
+                    }
+                }
+            }
+        }
+        return locs;
+    }
+
     @Override
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {
         if (evt.getAction() == Action.RIGHT_CLICK_AIR || evt.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (evt.getPlayer().isSneaking()) {
                 int radius = (int) getAOESize(level);
-                int found_blocks = 0;
-                for (int x = -radius; x <= radius; x++) {
-                    for (int y = -radius; y <= radius; y++) {
-                        for (int z = -radius; z <= radius; z++) {
-                            Block blk = evt.getPlayer().getLocation().getBlock().getRelative(x, y, z);
-                            if (Storage.COMPATIBILITY_ADAPTER.ores().contains(blk.getType())) {
-                                boolean exposed = false;
-                                for (BlockFace face : Storage.CARDINAL_BLOCK_FACES) {
-                                    if (Storage.COMPATIBILITY_ADAPTER.airs().contains(blk.getRelative(face).getType())) {
-                                        exposed = true;
-                                        break;
-                                    }
-                                }
-                                if (exposed) {
-                                    continue;
-                                }
-                                found_blocks++;
-
-                                // Show fallingBlock Code
-                                Location loc = blk.getLocation();
-                                LivingEntity entity = (LivingEntity) blk.getWorld().spawnEntity(loc, EntityType.SHULKER);
-                                entity.setGlowing(true);
-                                entity.setGravity(false);
-                                entity.setInvulnerable(true);
-                                entity.setSilent(true);
-                                ((LivingEntity)entity).setAI(false);
-                                Entity ent = GLOWING_BLOCKS.put(loc, entity);
-                                if (ent != null) {
-                                    ent.remove();
-                                }
-
-                                Bukkit.getServer().getScheduler()
-                                    .scheduleSyncDelayedTask(Storage.plugin, () -> {
-                                        // Hide fallingBlockCode
-                                        Entity blockToRemove = GLOWING_BLOCKS.remove(loc);
-                                        if (blockToRemove != null) {
-                                            blockToRemove.remove();
-                                        }
-                                }, 100);
-                            }
-                        }
+                LinkedHashSet<Location> foundBlocks = scanOres(evt.getPlayer().getLocation().getBlock(), radius);
+                foundBlocks.forEach((loc) -> {
+                    LivingEntity entity = (LivingEntity) loc.getWorld().spawnEntity(loc, EntityType.SHULKER);
+                    entity.setGlowing(true);
+                    entity.setGravity(false);
+                    entity.setInvulnerable(true);
+                    entity.setSilent(true);
+                    entity.setAI(false);
+                    Entity ent = GLOWING_BLOCKS.put(loc, entity);
+                    if (ent != null) {
+                        ent.remove();
                     }
-                }
-                CompatibilityAdapter.damageTool(evt.getPlayer(), Math.max(16, (int) Math.round(found_blocks * 1.3)), usedHand);
-
+                });
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
+                    foundBlocks.forEach((loc) -> {
+                        Entity blockToRemove = GLOWING_BLOCKS.remove(loc);
+                        if (blockToRemove != null) {
+                            blockToRemove.remove();
+                        }
+                    });
+                }, 100);
+                CompatibilityAdapter.damageTool(evt.getPlayer(), Math.max(16, (int) Math.round(foundBlocks.size() * 1.3)), usedHand);
                 return true;
             }
         }

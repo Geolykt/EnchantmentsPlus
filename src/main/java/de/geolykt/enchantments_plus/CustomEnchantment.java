@@ -52,7 +52,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      * The enchantments this enchantment is incompatible with.
      * @since 3.0.0 (or 1.0.0 with another signature)
      */
-    protected EnumSet<BaseEnchantments> conflicting;
+    protected final EnumSet<BaseEnchantments> conflicting;
     protected String description; // Description of what the enchantment does
 
     /**
@@ -84,6 +84,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      */
     protected CustomEnchantment(@NotNull BaseEnchantments enumRepresentation) {
         baseEnum = enumRepresentation;
+        conflicting = EnumSet.noneOf(BaseEnchantments.class);
     }
 
     public abstract Builder<? extends CustomEnchantment> defaults();
@@ -239,9 +240,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     void addConflict(BaseEnchantments conflict) {
-        if (conflicting == null) {
-            conflicting = EnumSet.noneOf(BaseEnchantments.class);
-        }
         conflicting.add(conflict);
     }
 
