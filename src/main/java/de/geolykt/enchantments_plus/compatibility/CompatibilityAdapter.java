@@ -362,21 +362,6 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * Returns the durability that is LEFT on an item. May be negative
-     * Returns 1 for items that are not damageable
-     * @param stack The input stack
-     * @return The remaining durability of the input stack.
-     * @since 2.1.6
-     */
-    public static int getRemaingDurabillity(@NotNull ItemStack stack) {
-        if (stack.getItemMeta() instanceof Damageable) {
-            return stack.getType().getMaxDurability() - ((Damageable) stack.getItemMeta()).getDamage();
-        } else {
-            return 1;
-        }
-    }
-    
-    /**
      * Damages a given itemstack with a given amount of damage (deducting the amount of unbreaking).
      * Optionally if the item is damageable and is not unbreakable but the durability is under 0, then item type is set to air.
      * @param stack The stack that should be targeted
@@ -385,19 +370,19 @@ public class CompatibilityAdapter {
      * @return true if the item should be removed, false otherwise
      */
     public static boolean damageItem2(ItemStack stack, int damage) {
-        if (stack == null
-                || stack.getType() == Material.AIR
-                || stack.getItemMeta() == null
-                || !(stack.getItemMeta() instanceof Damageable)
-                || stack.getItemMeta().isUnbreakable()) {
+        if (stack == null || stack.getType() == Material.AIR)
+            return false;
+        ItemMeta im = stack.getItemMeta();
+        if (im == null || !(im instanceof Damageable) || im.isUnbreakable()) {
             return false;
         }
         // chance that the item is broken is 1/(level+1)
         // So at level = 2 it's 33%, at level = 0 it's 100%, at level 1 it's 50%, at level = 3 it's 25%
         if (ThreadLocalRandom.current().nextInt(1000) <= (1000/(stack.getEnchantmentLevel(Enchantment.DURABILITY)+1))) {
-            setDamage(stack, getDamage(stack) + damage);
+            ((Damageable)im).setDamage(((Damageable) im).getDamage() + damage);
+            stack.setItemMeta(im);
         }
-        return getRemaingDurabillity(stack) <= 0;
+        return ((Damageable) im).getDamage() <= 0;
     }
 
     // Displays a particle with the given data
@@ -413,13 +398,13 @@ public class CompatibilityAdapter {
      * Does not check whether the itemstack has the unbreakable flag set, caution is advised.
      * @param is The target itemstack
      * @param damage The value that the damage should now have
-     * @since 1.0
+     * @since 1.0.0
      */
-    public static void setDamage(ItemStack is, int damage) {
-        if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
-            org.bukkit.inventory.meta.Damageable dm = ((org.bukkit.inventory.meta.Damageable) is.getItemMeta());
-            dm.setDamage(damage);
-            is.setItemMeta((ItemMeta) dm);
+    public static void setDamage(@NotNull ItemStack is, int damage) {
+        ItemMeta im = is.getItemMeta();
+        if (im instanceof org.bukkit.inventory.meta.Damageable) {
+            ((Damageable) im).setDamage(damage);
+            is.setItemMeta(im);
         }
     }
 
@@ -433,9 +418,9 @@ public class CompatibilityAdapter {
      * @since 1.0
      */
     public static int getDamage(ItemStack is) {
-        if (is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
-            org.bukkit.inventory.meta.Damageable dm = ((org.bukkit.inventory.meta.Damageable) is.getItemMeta());
-            return dm.getDamage();
+        ItemMeta im = is.getItemMeta();
+        if (im instanceof org.bukkit.inventory.meta.Damageable) {
+            return ((Damageable) im).getDamage();
         }
         return 0;
     }
