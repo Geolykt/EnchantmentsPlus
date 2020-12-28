@@ -34,7 +34,7 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
                     4,
                     Hand.NONE,
                     BaseEnchantments.SWITCH, BaseEnchantments.PIERCE, BaseEnchantments.SPECTRAL)
-            .cooldown(100); // TODO cooldown in milliseconds
+            .cooldownMillis(5000);
     }
 
     public Reveal() {

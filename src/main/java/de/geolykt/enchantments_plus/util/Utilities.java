@@ -11,9 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 
 import java.util.*;
@@ -293,7 +293,7 @@ public class Utilities {
      * @since 3.0.0
      * @return true if the enchantment may be used naturally
      */
-    public static boolean canUse(Player player, CustomEnchantment ench) {
+    public static boolean canUse(Player player, BaseEnchantments ench) {
         return PermissionTypes.USE.hasPermission(player) && 
                 EnchantPlayer.getCooldown(player, ench) < System.currentTimeMillis();
     }

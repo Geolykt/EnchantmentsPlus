@@ -31,7 +31,7 @@ public class Switch extends CustomEnchantment {
                         BaseEnchantments.SHRED, BaseEnchantments.ANTHROPOMORPHISM, 
                         BaseEnchantments.FIRE, BaseEnchantments.EXTRACTION,
                         BaseEnchantments.PIERCE, BaseEnchantments.REVEAL)
-                .cooldown(2); // TODO cooldown in millis
+                .cooldownMillis(100);
     }
 
     public Switch() {

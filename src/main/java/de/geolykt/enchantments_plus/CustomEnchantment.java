@@ -57,12 +57,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     protected String description; // Description of what the enchantment does
 
     /**
-     * @deprecated Cooldowns will be in milliseconds soon
-     * The cooldown of the enchantment in ticks
-     * @since 1.0.0
+     * The cooldown of the enchantment in milliseconds.
+     * Default is 0.
+     * @since 3.0.0
      */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    protected int cooldown;         // Cooldown for given enchantment given in ticks; Default is 0
+    protected int cooldownMillis;
 
     protected double power;         // Power multiplier for the enchantment's effects; Default is 0; -1 means no
     // effect
@@ -236,27 +235,23 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     /**
-     * @deprecated Cooldowns will be in milliseconds soon!
      * Obtains the cooldown of the enchantment after use.
-     *  The cooldown is currently in ticks
-     * @param cooldown The new cooldown
-     * @since 1.0.0
+     *  The cooldown is now in milliseconds
+     * @return The current cooldown of the enchantment in milliseconds
+     * @since 3.0.0
      */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public int getCooldown() {
-        return cooldown;
+    public int getCooldownMillis() {
+        return cooldownMillis;
     }
 
     /**
-     * @deprecated Cooldowns will be in milliseconds soon!
      * Sets the cooldown that the enchantment should have after use.
-     *  The cooldown is currently in ticks
-     * @param cooldown The new cooldown
-     * @since 1.0.0
+     *  The cooldown is now in milliseconds.
+     * @param cooldown The new cooldown in milliseconds
+     * @since 3.0.0
      */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    void setCooldownMillis(int cooldown) {
+        this.cooldownMillis = cooldown;
     }
 
     public double getPower() {
@@ -317,11 +312,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
         getEnchants(tool, player.getWorld(), null).forEach((CustomEnchantment ench, Integer level) -> {
-            if (!ench.used && Utilities.canUse(player, ench)) {
+            if (!ench.used && Utilities.canUse(player, ench.baseEnum)) {
                 try {
                     ench.used = true;
                     if (action.test(ench, level)) {
-                        EnchantPlayer.setCooldown(player, ench, ench.cooldown * 50); // TODO Use milliseconds
+                        EnchantPlayer.setCooldown(player, ench.asEnum(), ench.cooldownMillis);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -339,7 +334,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      * @return A map of enchantments mapped to their level
      * @since 3.0.0
      */
-    @Deprecated(forRemoval = true, since = "3.0.0")
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk,
             @NotNull World world,
             @Nullable List<String> outExtraLore) {
@@ -526,13 +520,13 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         }
 
         /**
-         * The inserted cooldown is in ticks
+         * The inserted cooldown is in milliseconds
          * @param cooldown The amount of cooldown to use
          * @return The current build instance
-         * @since 1.0.0
+         * @since 3.0.0
          */
-        public Builder<T> cooldown(int cooldown) {
-            customEnchantment.setCooldown(cooldown);
+        public Builder<T> cooldownMillis(int cooldown) {
+            customEnchantment.setCooldownMillis(cooldown);
             return this;
         }
 

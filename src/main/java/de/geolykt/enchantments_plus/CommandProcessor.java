@@ -309,7 +309,7 @@ public class CommandProcessor {
             CustomEnchantment ench = config.enchantFromString(args[1]);
             if (ench != null) {
                 sender.sendMessage(Storage.LOGO + ench.loreName + ": "
-                        + (EnchantPlayer.isDisabled((Player) sender, ench) ? ChatColor.RED + "**Disabled** " : "")
+                        + (EnchantPlayer.isDisabled((Player) sender, ench.asEnum()) ? ChatColor.RED + "**Disabled** " : "")
                         + ChatColor.AQUA + ench.description);
             }
         } else {
@@ -323,7 +323,7 @@ public class CommandProcessor {
 
             for (CustomEnchantment ench : enchs) {
                 sender.sendMessage(ChatColor.DARK_AQUA + ench.loreName + ": "
-                        + (EnchantPlayer.isDisabled((Player) sender, ench) ? ChatColor.RED + "**Disabled** " : "")
+                        + (EnchantPlayer.isDisabled((Player) sender, ench.asEnum()) ? ChatColor.RED + "**Disabled** " : "")
                         + ChatColor.AQUA + ench.description);
             }
         }
@@ -345,7 +345,7 @@ public class CommandProcessor {
         if (args.length > 1) {
             CustomEnchantment ench = config.enchantFromString(args[1]);
             if (ench != null) {
-                EnchantPlayer.disable((Player) sender, ench);
+                EnchantPlayer.disable((Player) sender, ench.asEnum());
                 sender.sendMessage(Storage.LOGO + "The enchantment " + ChatColor.DARK_AQUA
                         + ench.loreName + ChatColor.AQUA + " has been " + ChatColor.RED + "disabled.");
             } else if (args[1].equalsIgnoreCase("all")) {
@@ -376,7 +376,7 @@ public class CommandProcessor {
         if (args.length > 1) {
             CustomEnchantment ench = config.enchantFromString(args[1]);
             if (ench != null) {
-                EnchantPlayer.enable((Player) sender, ench);
+                EnchantPlayer.enable((Player) sender, ench.asEnum());
                 sender.sendMessage(Storage.LOGO + "The enchantment " + ChatColor.DARK_AQUA
                         + ench.loreName + ChatColor.AQUA + " has been" + ChatColor.GREEN + " enabled.");
             } else if (args[1].equalsIgnoreCase("all")) {

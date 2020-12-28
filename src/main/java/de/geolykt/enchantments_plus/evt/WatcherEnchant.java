@@ -385,7 +385,7 @@ public class WatcherEnchant implements Listener {
                         return false;
                     }
                     if (ench.onFastScan(player, level, true)) {
-                        EnchantPlayer.setCooldown(player, ench, ench.getCooldown() * 50); // TODO cooldown in milliseconds
+                        EnchantPlayer.setCooldown(player, ench.asEnum(), ench.getCooldownMillis());
                     }
                     return true;
                 });
@@ -398,7 +398,7 @@ public class WatcherEnchant implements Listener {
                     return false;
                 }
                 if (ench.onFastScanHands(player, level, true)) {
-                    EnchantPlayer.setCooldown(player, ench, ench.getCooldown() * 50); // TODO cooldown in milliseconds
+                    EnchantPlayer.setCooldown(player, ench.asEnum(), ench.getCooldownMillis());
                 }
                 return true;
             });
@@ -410,7 +410,7 @@ public class WatcherEnchant implements Listener {
                     return false;
                 }
                 if (ench.onFastScanHands(player, level, false)) {
-                    EnchantPlayer.setCooldown(player, ench, ench.getCooldown() * 50); // TODO cooldown in milliseconds
+                    EnchantPlayer.setCooldown(player, ench.asEnum(), ench.getCooldownMillis());
                 }
                 return true;
             });

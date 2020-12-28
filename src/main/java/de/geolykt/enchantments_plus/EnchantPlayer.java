@@ -1,10 +1,13 @@
 package de.geolykt.enchantments_plus;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 
 /**
  * This is used to manage enchantment cooldowns of players on the server.
@@ -13,14 +16,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EnchantPlayer {
 
-    @SuppressWarnings("unchecked") // Cannot be done otherwise
-    // There are only 73 enchantments, however the highest registered ID is 75, 
-    // the other 5 are just as an overhead in case I forgot one
-    private static final HashMap<UUID, Long>[] COOLDOWNS = new HashMap[80]; 
+    /**
+     * Internal data structure to store the cooldowns of the enchantment into.
+     *  It should not be used directly
+     * @since 3.0.0
+     */
+    private static final EnumMap<BaseEnchantments, HashMap<UUID, Long>> COOLDOWNS = new EnumMap<>(BaseEnchantments.class);
 
     static {
-        for (int i = 0; i < COOLDOWNS.length; i++) {
-            COOLDOWNS[i] = new HashMap<>();
+        for (BaseEnchantments ench : BaseEnchantments.values()) {
+            COOLDOWNS.put(ench, new HashMap<>());
         }
     }
 
@@ -32,8 +37,8 @@ public class EnchantPlayer {
      * @return True if the player was disabled
      * @since 3.0.0
      */
-    public static boolean isDisabled(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        return COOLDOWNS[ench.getId()].getOrDefault(player.getUniqueId(), (long) 0.0) == Long.MAX_VALUE;
+    public static boolean isDisabled(@NotNull Player player, @NotNull BaseEnchantments ench) {
+        return COOLDOWNS.get(ench).getOrDefault(player.getUniqueId(), (long) 0.0) == Long.MAX_VALUE;
     }
 
     /**
@@ -46,8 +51,8 @@ public class EnchantPlayer {
      * @return the cooldown remaining for the given enchantment in milliseconds
      * @since 3.0.0
      */
-    public static long getCooldown(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        return COOLDOWNS[ench.getId()].getOrDefault(player.getUniqueId(), (long) 0.0) - System.currentTimeMillis();
+    public static long getCooldown(@NotNull Player player, @NotNull BaseEnchantments ench) {
+        return COOLDOWNS.get(ench).getOrDefault(player.getUniqueId(), (long) 0.0) - System.currentTimeMillis();
     }
 
     /**
@@ -59,8 +64,8 @@ public class EnchantPlayer {
      * @return the time at which the cooldown ends, or Long.MAX_VALUE if it should never end.
      * @since 3.0.0
      */
-    public static long getCooldownEnd(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        return COOLDOWNS[ench.getId()].getOrDefault(player.getUniqueId(), (long) 0.0);
+    public static long getCooldownEnd(@NotNull Player player, @NotNull BaseEnchantments ench) {
+        return COOLDOWNS.get(ench).getOrDefault(player.getUniqueId(), (long) 0.0);
     }
 
     /**
@@ -72,9 +77,9 @@ public class EnchantPlayer {
      * @param millis The milliseconds for the cooldown
      * @since 3.0.0
      */
-    public static void setCooldown(@NotNull Player player, @NotNull CustomEnchantment enchantment, int millis) {
+    public static void setCooldown(@NotNull Player player, @NotNull BaseEnchantments enchantment, int millis) {
         if (!isDisabled(player, enchantment)) {
-            COOLDOWNS[enchantment.getId()].put(player.getUniqueId(), millis + System.currentTimeMillis());
+            COOLDOWNS.get(enchantment).put(player.getUniqueId(), millis + System.currentTimeMillis());
         }
     }
 
@@ -84,8 +89,8 @@ public class EnchantPlayer {
      * @param ench The targeted enchantment
      * @since 3.0.0
      */
-    public static void disable(@NotNull Player player, @NotNull CustomEnchantment ench) {
-        COOLDOWNS[ench.getId()].put(player.getUniqueId(), Long.MAX_VALUE);
+    public static void disable(@NotNull Player player, @NotNull BaseEnchantments ench) {
+        COOLDOWNS.get(ench).put(player.getUniqueId(), Long.MAX_VALUE);
     }
 
     /**
@@ -94,9 +99,9 @@ public class EnchantPlayer {
      * @param ench The enchantment to enable for the player
      * @since 3.0.0
      */
-    public static void enable(@NotNull Player player, @NotNull CustomEnchantment ench) {
+    public static void enable(@NotNull Player player, @NotNull BaseEnchantments ench) {
         if (isDisabled(player, ench)) {
-            COOLDOWNS[ench.getId()].put(player.getUniqueId(), (long) 0);
+            COOLDOWNS.get(ench).put(player.getUniqueId(), (long) 0);
         }
     }
 
@@ -106,7 +111,7 @@ public class EnchantPlayer {
      * @since 3.0.0 the cooldown remaining for the given enchantment in ticks
      */
     public static void disableAll(@NotNull Player player) {
-        for (CustomEnchantment enchant : Config.allEnchants) {
+        for (BaseEnchantments enchant : BaseEnchantments.values()) {
             disable(player, enchant);
         }
     }
@@ -117,7 +122,7 @@ public class EnchantPlayer {
      * @since 3.0.0
      */
     public static void enableAll(@NotNull Player player) {
-        for (CustomEnchantment enchant : Config.allEnchants) {
+        for (BaseEnchantments enchant : BaseEnchantments.values()) {
             enable(player, enchant);
         }
     }

@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
@@ -52,9 +51,9 @@ public class Laser extends CustomEnchantment {
 
     public void shoot(Player player, int level, boolean usedHand) {
         // Avoid recursing into other enchantments
-        EnchantPlayer.setCooldown(player, Config.get(player.getWorld()).enchantFromEnum(BaseEnchantments.LUMBER), 200);
+        EnchantPlayer.setCooldown(player, BaseEnchantments.LUMBER, 200);
         if (doShredCooldown) {
-            EnchantPlayer.setCooldown(player, Config.get(player.getWorld()).enchantFromEnum(BaseEnchantments.SHRED), 200);
+            EnchantPlayer.setCooldown(player, BaseEnchantments.SHRED, 200);
         }
         Block blk = player.getTargetBlock(null, 6
                 + (int) Math.round(level * power * 3));

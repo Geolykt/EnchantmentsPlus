@@ -93,15 +93,13 @@ public enum BaseEnchantments {
     }
 
     /**
-     * @deprecated Use of the legacyID is discouraged
      * Obtains the legacy ID of the enchantment.
      * This is the same ID that was used in Zenchantments
-     * as well as in the legacy NBT getters up until 2.x.x (inclusive)
+     * as well as in the legacy NBT getters up until 3.x.x (inclusive)
      * Will return 0 if the enchantment was not existing at the time the legacyID system was in use.
-     * @return 
+     * @return The legacy ID of an enchantment
      * @since 3.0.0
      */
-    @Deprecated(forRemoval = false, since = "3.0.0")
     public short getLegacyID() {
         return legacyID;
     }

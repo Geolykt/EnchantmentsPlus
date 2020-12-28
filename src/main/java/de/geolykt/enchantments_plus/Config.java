@@ -56,7 +56,7 @@ public class Config {
 
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
-    private final Map<Integer, CustomEnchantment> idToEnch;
+    private final Map<Short, CustomEnchantment> idToEnch; // Since 1.0.0, changed signature in 3.0.0
     private final Map<BaseEnchantments, CustomEnchantment> baseToEnch;
     private final double enchantRarity; // Overall rarity of obtaining enchantments
     private final int maxEnchants; // Max number of Custom Enchantments on a tool
@@ -95,7 +95,7 @@ public class Config {
         this.baseToEnch = new EnumMap<>(BaseEnchantments.class);
 
         for (CustomEnchantment ench : this.worldEnchants) {
-            idToEnch.put(ench.getId(), ench);
+            idToEnch.put(ench.asEnum().getLegacyID(), ench);
             nameToEnch.put(ChatColor.stripColor(ench.getLoreName().toLowerCase().replace(" ", "")), ench);
             baseToEnch.put(ench.asEnum(), ench);
         }
@@ -195,14 +195,12 @@ public class Config {
     }
 
     /**
-     * @deprecated Integer IDs are no longer used as a universal method of finding enchantments.
      * Obtains an enchantment from it's ID
      * @param id The ID of the enchantment
      * @return The enchantment mapped to the ID
-     * @since 1.0.0
+     * @since 3.0.0
      */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public @Nullable CustomEnchantment enchantFromID(int id) {
+    public @Nullable CustomEnchantment enchantFromID(short id) {
         return idToEnch.get(id);
     }
 
@@ -350,7 +348,7 @@ public class Config {
                         LinkedHashMap<String, Object> data = configInfo.get(ench.loreName());
                         ench.probability(getProbability(data));
                         ench.loreName(getLoreName(data));
-                        ench.cooldown(getCooldown(data));
+                        ench.cooldownMillis(getCooldown(data));
                         ench.maxLevel(getMaxLevel(data));
                         ench.power(getPower(data));
                         ench.enchantable(getTools(data));
@@ -391,7 +389,10 @@ public class Config {
     }
 
     /**
-     * Must be specified
+     * Must be specified.
+     *  The returned cooldown is in milliseconds starting from v3.0.0
+     *  and was in ticks until v3.0.0 (excluded)
+     * @since 1.0.0
      */
     private static int getCooldown(@NotNull LinkedHashMap<String, Object> data) {
         return (int) data.get(ConfigKeys.COOLDOWN.toString());
