@@ -1,6 +1,6 @@
 package de.geolykt.enchantments_plus;
-//For Bukkit & Spigot 1.16.X
 
+//For Bukkit & Spigot 1.16.X
 import org.apache.commons.lang.time.StopWatch;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ public class Enchantments_plus extends JavaPlugin {
     
     /**
      * Internal value that should not be used outside of the plugin.
-     * It's main use is to initialize tertiary classes without the need of hacks.
+     * It's main use is to initialise tertiary classes without the need of hacks.
      * @since 2.2.1
      */
     protected static Enchantments_plus internal_instance;

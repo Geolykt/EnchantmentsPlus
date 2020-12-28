@@ -1,11 +1,10 @@
 package de.geolykt.enchantments_plus.evt;
 
 import static org.bukkit.Material.AIR;
-import static org.bukkit.entity.EntityType.HORSE;
-import static org.bukkit.entity.EntityType.VILLAGER;
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -203,6 +202,7 @@ public class WatcherEnchant implements Listener {
 
     @EventHandler(ignoreCancelled = false)
     public void onBlockInteract(PlayerInteractEvent evt) {
+        // TODO optimise
         if (evt.getClickedBlock() == null || !evt.getClickedBlock().getType().isInteractable()) {
             Player player = evt.getPlayer();
             boolean isMainHand = evt.getHand() == EquipmentSlot.HAND;
@@ -216,24 +216,32 @@ public class WatcherEnchant implements Listener {
 
     @EventHandler(ignoreCancelled = false)
     public void onBlockInteractInteractable(PlayerInteractEvent evt) {
-        if (evt.getClickedBlock() == null || evt.getClickedBlock().getType().isInteractable()) {
+        if (evt.getClickedBlock() != null && evt.getClickedBlock().getType().isInteractable()) {
             Player player = evt.getPlayer();
-            boolean isMainHand = evt.getHand() == EquipmentSlot.HAND;
-            for (ItemStack usedStack : Utilities.getArmorAndMainHandItems(player, isMainHand)) {
-                CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> {
-                    return ench.onBlockInteractInteractable(evt, level, isMainHand);
+            if (evt.getHand() == EquipmentSlot.HAND) {
+                CustomEnchantment.applyForTool(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
+                    return ench.onBlockInteractInteractable(evt, level, true);
+                });
+            } else {
+                CustomEnchantment.applyForTool(player, player.getInventory().getItemInOffHand(), (ench, level) -> {
+                    return ench.onBlockInteractInteractable(evt, level, false);
                 });
             }
         }
     }
 
+    /**
+     * Entities that the onEntityInteract function should ignore.
+     * @since 3.0.0
+     */
+    private static final EnumSet<EntityType> BAD_ENTITIES = EnumSet.of(EntityType.HORSE, EntityType.ARMOR_STAND,
+            EntityType.ITEM_FRAME, EntityType.VILLAGER);
+
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent evt) {
-        final EntityType[] badEnts = new EntityType[]{HORSE, EntityType.ARMOR_STAND, EntityType.ITEM_FRAME, VILLAGER};
-        Player player = evt.getPlayer();
-        if (!ArrayUtils.contains(badEnts, evt.getRightClicked().getType())) {
-            ItemStack usedStack = Utilities.usedStack(player, true);
-            CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> {
+        if (!BAD_ENTITIES.contains(evt.getRightClicked().getType())) {
+            Player player = evt.getPlayer();
+            CustomEnchantment.applyForTool(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
                 return ench.onEntityInteract(evt, level, true);
             });
         }

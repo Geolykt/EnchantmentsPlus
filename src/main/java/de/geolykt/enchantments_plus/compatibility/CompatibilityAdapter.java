@@ -56,8 +56,8 @@ import de.geolykt.enchantments_plus.util.Tool;
 public class CompatibilityAdapter {
 
     /**
-     * Constructs the class and starts a Task on the next tick to initialize it further (scans methods from other plugins or spigot)
-     * @param plugin The plugin that is used to initialize the task.
+     * Constructs the class and starts a Task on the next tick to initialise it further (scans methods from other plugins or spigot)
+     * @param plugin The plugin that is used to initialise the task.
      */
     public CompatibilityAdapter(Plugin plugin) {
         Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0l);

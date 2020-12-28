@@ -97,6 +97,18 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return false;
     }
 
+    /**
+     * Fired on the PlayerInteractEvent if the block the player clicked is not null
+     * AND the block is intractable (so things such as Workbenches, Beds and so on).
+     * Since the event is only listened by the Spectral enchantment, the event will not be fired
+     * for any enchantments existing on non-hand items (this is a change in behaviour
+     * was introduced in v3.0.0 to patch a serious TPS Drain)
+     * @param evt The event that caused the method to be called
+     * @param level The level of the enchantment
+     * @param usedHand The hand used for the event, true if it is the main hand, false otherwise
+     * @return True if an action was performed, false otherwise (used for cooldowns and other actions)
+     * @since 1.0.0
+     */
     public boolean onBlockInteractInteractable(PlayerInteractEvent evt, int level, boolean usedHand) {
         return false;
     }
