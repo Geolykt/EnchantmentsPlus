@@ -63,7 +63,7 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
                                     continue;
                                 }
                                 found_blocks++;
-                                
+
                                 // Show fallingBlock Code
                                 Location loc = blk.getLocation();
                                 LivingEntity entity = (LivingEntity) blk.getWorld().spawnEntity(loc, EntityType.SHULKER);
@@ -76,7 +76,7 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
                                 if (ent != null) {
                                     ent.remove();
                                 }
-                                
+
                                 Bukkit.getServer().getScheduler()
                                     .scheduleSyncDelayedTask(Storage.plugin, () -> {
                                         // Hide fallingBlockCode
@@ -84,7 +84,7 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
                                         if (blockToRemove != null) {
                                             blockToRemove.remove();
                                         }
-                                    }, 100);
+                                }, 100);
                             }
                         }
                     }

@@ -295,7 +295,7 @@ public class Utilities {
      */
     public static boolean canUse(Player player, BaseEnchantments ench) {
         return PermissionTypes.USE.hasPermission(player) && 
-                EnchantPlayer.getCooldown(player, ench) < System.currentTimeMillis();
+                EnchantPlayer.getCooldownEnd(player, ench) < System.currentTimeMillis();
     }
 
     // Adds a potion effect of given length and intensity to the given entity.

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -207,24 +208,22 @@ public class WatcherEnchant implements Listener {
 
     @EventHandler(ignoreCancelled = false)
     public void onBlockInteract(PlayerInteractEvent evt) {
+        if (evt.getAction() == Action.PHYSICAL) {
+            return;
+        }
+        Player player = evt.getPlayer();
         if (evt.getClickedBlock() == null || !evt.getClickedBlock().getType().isInteractable()) {
-            Player player = evt.getPlayer();
             if (evt.getHand() == EquipmentSlot.HAND) {
                 CustomEnchantment.applyForTool(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
-                    return ench.onBlockInteractInteractable(evt, level, true);
+                    return ench.onBlockInteract(evt, level, true);
                 });
             } else {
                 CustomEnchantment.applyForTool(player, player.getInventory().getItemInOffHand(), (ench, level) -> {
-                    return ench.onBlockInteractInteractable(evt, level, false);
+                    return ench.onBlockInteract(evt, level, false);
                 });
             }
         }
-    }
-
-    @EventHandler(ignoreCancelled = false)
-    public void onBlockInteractInteractable(PlayerInteractEvent evt) {
         if (evt.getClickedBlock() != null && evt.getClickedBlock().getType().isInteractable()) {
-            Player player = evt.getPlayer();
             if (evt.getHand() == EquipmentSlot.HAND) {
                 CustomEnchantment.applyForTool(player, player.getInventory().getItemInMainHand(), (ench, level) -> {
                     return ench.onBlockInteractInteractable(evt, level, true);

@@ -334,7 +334,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             if (!ench.used && Utilities.canUse(player, ench.baseEnum)) {
                 try {
                     ench.used = true;
-                    if (action.test(ench, level)) {
+                    if (action.test(ench, level) && ench.cooldownMillis != 0) {
                         EnchantPlayer.setCooldown(player, ench.asEnum(), ench.cooldownMillis);
                     }
                 } catch (Exception ex) {
