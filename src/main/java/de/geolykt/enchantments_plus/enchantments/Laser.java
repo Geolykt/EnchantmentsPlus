@@ -1,8 +1,8 @@
 package de.geolykt.enchantments_plus.enchantments;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -11,9 +11,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
@@ -61,7 +63,12 @@ public class Laser extends CustomEnchantment {
         Location target = Utilities.getCenter(blk.getLocation());
         target.setY(target.getY() + .5);
         playLoc.setY(playLoc.getY() + 1.1);
+
         ItemStack itemInHand = usedHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+        ItemMeta itemMeta = itemInHand.getItemMeta();
+        Color laserColor = getColor(itemMeta);
+        short itemDamage = 0;
+
         double d = target.distance(playLoc);
         for (int i = 0; i < (int) d * 5; i++) {
             Location tempLoc = target.clone();
@@ -69,15 +76,21 @@ public class Laser extends CustomEnchantment {
             tempLoc.setY(playLoc.getY() + (i * ((target.getY() - playLoc.getY()) / (d * 5))));
             tempLoc.setZ(playLoc.getZ() + (i * ((target.getZ() - playLoc.getZ()) / (d * 5))));
 
-            player.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1, new Particle.DustOptions(getColor(itemInHand), 0.5f));
+            player.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1, new Particle.DustOptions(laserColor, 0.5f));
 
-            for (Entity ent : Bukkit.getWorld(playLoc.getWorld().getName()).getNearbyEntities(tempLoc, .3, .3, .3)) {
+            for (Entity ent : playLoc.getWorld().getNearbyEntities(tempLoc, .3, .3, .3)) {
                 if (ent instanceof LivingEntity && ent != player) {
-                    LivingEntity e = (LivingEntity) ent;
-                    ADAPTER.attackEntity(e, player, 1 + (level + power * 2), false);
-                    CompatibilityAdapter.damageTool(player, 1, usedHand);
+                    ADAPTER.attackEntity((LivingEntity) ent, player, 1 + (level + power * 2), false);
+                    itemDamage++;
                     return;
                 }
+            }
+        }
+        if (CompatibilityAdapter.damageMeta(itemMeta, itemDamage, itemInHand.getType())) {
+            if (usedHand) {
+                player.getInventory().clear(player.getInventory().getHeldItemSlot());
+            } else {
+                player.getInventory().setItem(EquipmentSlot.OFF_HAND, new ItemStack(Material.AIR));
             }
         }
         if (ADAPTER.isBlockSafeToBreak(blk) && !ADAPTER.laserDenylist().contains(blk.getType())) {
@@ -104,15 +117,21 @@ public class Laser extends CustomEnchantment {
         return false;
     }
 
-    public static org.bukkit.Color getColor(ItemStack stack) {
-        if (stack.hasItemMeta() && !stack.getItemMeta().getPersistentDataContainer().isEmpty()) {
-            return Color.fromRGB(stack.getItemMeta().getPersistentDataContainer().getOrDefault(colorKey, PersistentDataType.INTEGER, Color.RED.asRGB()));
+    /**
+     * Obtains the laser color of an enchantment based on the ItemMeta.
+     * @param itemMeta The itemMeta of the item
+     * @return The color of the laser
+     * @since 3.0.0-rc.3
+     */
+    public static org.bukkit.Color getColor(@NotNull ItemMeta itemMeta) {
+        if (!itemMeta.getPersistentDataContainer().isEmpty()) {
+            return Color.fromRGB(itemMeta.getPersistentDataContainer().getOrDefault(colorKey, PersistentDataType.INTEGER, Color.RED.asRGB()));
         }
         return Color.RED;
     }
 
     public static void setColor(ItemStack stack, org.bukkit.Color color) {
-        ItemMeta im = stack.getItemMeta();
+       ItemMeta im = stack.getItemMeta();
        im.getPersistentDataContainer().set(colorKey, PersistentDataType.INTEGER, color.asRGB());
        stack.setItemMeta(im);
     }

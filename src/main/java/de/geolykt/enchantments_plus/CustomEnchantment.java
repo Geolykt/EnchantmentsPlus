@@ -431,7 +431,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         Map<Enchantment, Integer> enchs;
 
         if (stk.getType() == ENCHANTED_BOOK) {
-            bookMeta = (EnchantmentStorageMeta) stk.getItemMeta();
+            bookMeta = (EnchantmentStorageMeta) itemMeta;
             enchs = bookMeta.getStoredEnchants();
         } else {
             enchs = itemMeta.getEnchants();

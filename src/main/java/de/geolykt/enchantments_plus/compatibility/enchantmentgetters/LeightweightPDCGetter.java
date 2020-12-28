@@ -34,16 +34,12 @@ public class LeightweightPDCGetter implements IEnchGatherer {
     public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
             List<String> outExtraLore) {
         LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
-        if ( (stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
-            if (stk.getItemMeta() != null) {
-                
-                final PersistentDataContainer cont = stk.getItemMeta().getPersistentDataContainer();
+        if ((stk != null && stk.getType() != Material.AIR) && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
+            ItemMeta itemMeta = stk.getItemMeta();
+            if (itemMeta != null) {
+                final PersistentDataContainer cont = itemMeta.getPersistentDataContainer();
 
                 Set<NamespacedKey> keys = cont.getKeys();
-                if (keys == null) {
-                    return map;
-                }
-
                 for (NamespacedKey key : keys) {
                     if (!key.getNamespace().toLowerCase(Locale.ROOT).equals(Storage.plugin.getName())) {
                         continue;
@@ -67,10 +63,12 @@ public class LeightweightPDCGetter implements IEnchGatherer {
 
     @Override
     public void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world) {
-        if (stk == null || stk.getItemMeta() == null) {
+        if (stk == null)
             return;
-        }
         ItemMeta meta = stk.getItemMeta();
+        if (meta == null)
+            return;
+
         List<String> lore = new LinkedList<>();
         if (meta.getLore() != null) {
             for (String loreStr : meta.getLore()) {
@@ -104,16 +102,22 @@ public class LeightweightPDCGetter implements IEnchGatherer {
 
     @Override
     public boolean hasEnchantment(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments ench) {
-        if (stk != null && stk.getItemMeta() != null) {
-            return stk.getItemMeta().getPersistentDataContainer().has(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
+        if (stk == null)
+            return false;
+        ItemMeta itemMeta = stk.getItemMeta();
+        if (itemMeta != null) {
+            return itemMeta.getPersistentDataContainer().has(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
         }
         return false;
     }
 
     @Override
     public int getEnchantmentLevel(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments ench) {
-        if (stk != null && stk.getItemMeta() != null) {
-            Short level = stk.getItemMeta().getPersistentDataContainer().get(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
+        if (stk == null)
+            return 0;
+        ItemMeta itemMeta = stk.getItemMeta();
+        if (itemMeta != null) {
+            Short level = itemMeta.getPersistentDataContainer().get(config.enchantFromEnum(ench).getKey(), PersistentDataType.SHORT);
             return level != null ? level : 0;
         }
         return 0;

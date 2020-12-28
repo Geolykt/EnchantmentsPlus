@@ -34,9 +34,10 @@ public class BasicLoreGetter implements IEnchGatherer {
             List<String> outExtraLore) {
         LinkedHashMap<CustomEnchantment, Integer> map = new LinkedHashMap<>();
         if (stk != null && (acceptBooks || stk.getType() != Material.ENCHANTED_BOOK)) {
-            if (stk.getItemMeta() != null && stk.getItemMeta().hasLore() && stk.getItemMeta().getLore() != null) {
+            ItemMeta itemMeta = stk.getItemMeta();
+            if (itemMeta != null && itemMeta.hasLore()) {
                 Config cfg = Config.get(world);
-                List<String> lore = stk.getItemMeta().getLore();
+                List<String> lore = itemMeta.getLore();
                 for (String raw : lore) {
                     Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, cfg);
                     if (ench != null) {
@@ -98,10 +99,12 @@ public class BasicLoreGetter implements IEnchGatherer {
 
     @Override
     public void setEnchantment(@Nullable ItemStack stk, CustomEnchantment ench, int level, World world) {
-        if (stk == null || stk.getItemMeta() == null) {
+        if (stk == null)
             return;
-        }
         ItemMeta meta = stk.getItemMeta();
+        if (meta == null)
+            return;
+
         List<String> lore = new LinkedList<>();
         List<String> normalLore = new LinkedList<>();
         boolean customEnch = false;
@@ -136,8 +139,11 @@ public class BasicLoreGetter implements IEnchGatherer {
 
     @Override
     public int getEnchantmentLevel(@NotNull Config config, @Nullable ItemStack stk, @NotNull BaseEnchantments enchantment) {
-        if (stk != null && stk.hasItemMeta() && stk.getItemMeta().getLore() != null) {
-            for (String raw : stk.getItemMeta().getLore()) {
+        if (stk == null)
+            return 0;
+        ItemMeta itemMeta = stk.getItemMeta();
+        if (itemMeta != null && itemMeta.getLore() != null) {
+            for (String raw : itemMeta.getLore()) {
                 Map.Entry<CustomEnchantment, Integer> ench = getEnchant(raw, config);
                 if (ench != null && ench.getKey().asEnum() == enchantment) {
                     return ench.getValue();

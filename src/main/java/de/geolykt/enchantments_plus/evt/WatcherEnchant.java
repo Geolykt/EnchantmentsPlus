@@ -63,7 +63,7 @@ import de.geolykt.enchantments_plus.util.Utilities;
 //      ensures that the item is not an enchantment book, and calls each enchantment's method if the player can
 //      perform a certain action and the cooldown time is 0. It will add the given enchantment's cooldown to the player
 //      if the action performed is successful, determined by each enchantment in their respective classes.
-public class WatcherEnchant implements Listener {
+public final class WatcherEnchant implements Listener {
 
     private static final WatcherEnchant INSTANCE = new WatcherEnchant();
     private static final HighFrequencyRunnableCache cache = new HighFrequencyRunnableCache(WatcherEnchant::feedEnchCache, 5);

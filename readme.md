@@ -1,5 +1,5 @@
 **IMPORTANT: As of 3.0.0 the project requires Java 11 or above to run, use the 2.x.x LTS versions instead if you use Java 8**
-Or update your java version, lel
+Or update your java version
 
 Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail-to:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). I can no longer give help via discord as I deleted my discord account. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
@@ -105,6 +105,7 @@ The current EnchantmentsPlus API is however entirely incompatible with the new Z
    <li>Fix compilation issues with later bindings</li>
    <li>Changed the way permissions are handled within the code</li>
    <li>Removed ClassGraph as a dependency</li>
+   <li>Minimal usage of ItemStack#getItemMeta, which is a very expensive call</li>
   </ul>
  </li>
 </ul>

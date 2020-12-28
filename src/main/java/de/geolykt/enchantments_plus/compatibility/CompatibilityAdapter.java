@@ -328,6 +328,23 @@ public class CompatibilityAdapter {
     }
 
     /**
+     * Damages the itemMeta and returns a signal on whether the item should be broken or not.
+     * @param itemMeta the Item meta that should be damaged
+     * @param damage The amount of damage that should be applied
+     * @param mat The material of the item that should be broken, used to get the maximum health of the item
+     * @return true if the item should be removed, false otherwise
+     * @since 3.0.0-rc.3
+     */
+    public static boolean damageMeta(@Nullable ItemMeta itemMeta, short damage, @NotNull Material mat) {
+        if (itemMeta instanceof Damageable) {
+            damage += ((Damageable) itemMeta).getDamage();
+            ((Damageable) itemMeta).setDamage(damage);
+            return damage > mat.getMaxDurability();
+        }
+        return false;
+    }
+
+    /**
      * Damages the tool that is stored in a given index of a player's inventory with 
      * a given amount of damage (deducting the amount of unbreaking).
      * If the durability of the result item is below 0, then the item will break.
@@ -369,11 +386,11 @@ public class CompatibilityAdapter {
      * @since 2.1.6
      * @return true if the item should be removed, false otherwise
      */
-    public static boolean damageItem2(ItemStack stack, int damage) {
+    public static boolean damageItem2(@Nullable ItemStack stack, int damage) {
         if (stack == null || stack.getType() == Material.AIR)
             return false;
         ItemMeta im = stack.getItemMeta();
-        if (im == null || !(im instanceof Damageable) || im.isUnbreakable()) {
+        if (!(im instanceof Damageable) || im.isUnbreakable()) {
             return false;
         }
         // chance that the item is broken is 1/(level+1)
