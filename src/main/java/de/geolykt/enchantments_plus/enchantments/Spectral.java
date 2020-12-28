@@ -278,7 +278,7 @@ public class Spectral extends CustomEnchantment {
     }
 
     private static DyeColor nextCol(DyeColor oldCol) {
-        return DyeColor.values()[(oldCol.ordinal()+1)%DyeColor.values().length]; // TODO this is a hacky approach
+        return DyeColor.values()[(oldCol.ordinal()+1) % DyeColor.values().length]; // TODO this is a hacky approach
     }
 
     private static Material cycleBlockType(Block block) {

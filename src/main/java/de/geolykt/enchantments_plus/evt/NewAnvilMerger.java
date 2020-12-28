@@ -60,7 +60,7 @@ public class NewAnvilMerger implements Listener {
      * @since 2.1.5
      */
     public static Map<CustomEnchantment, Integer> mergeEnchantments(Map<CustomEnchantment, Integer> inA, Map<CustomEnchantment, Integer> inB) {
-        // TODO revisit this code in the v3.0.0 refractor (great things can be changed when we use Enums instead of CE instances)
+        // TODO revisit this code in the v4.0.0 refractor (great things can be changed when we use Enums instead of CE instances)
         LinkedHashMap<CustomEnchantment, Integer> out = new LinkedHashMap<>();
         out.putAll(inA);
 

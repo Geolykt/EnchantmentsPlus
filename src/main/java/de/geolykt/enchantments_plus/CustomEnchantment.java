@@ -50,10 +50,9 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     /**
      * The enchantments this enchantment is incompatible with.
-     *  The values are simply dummy values and don't mean anything as the keys will be used, not they values.
      * @since 3.0.0 (or 1.0.0 with another signature)
      */
-    protected EnumMap<BaseEnchantments, Object> conflicting; // FIXME use an EnumSet dummy
+    protected EnumSet<BaseEnchantments> conflicting;
     protected String description; // Description of what the enchantment does
 
     /**
@@ -236,14 +235,14 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
      * @since 3.0.0
      */
     public @NotNull Set<BaseEnchantments> getConflicts() {
-        return null; // FIXME obvious NPE
+        return conflicting;
     }
 
     void addConflict(BaseEnchantments conflict) {
         if (conflicting == null) {
-            conflicting = new EnumMap<>(BaseEnchantments.class);
+            conflicting = EnumSet.noneOf(BaseEnchantments.class);
         }
-        conflicting.put(conflict, (byte) 0);
+        conflicting.add(conflict);
     }
 
     String getDescription() {

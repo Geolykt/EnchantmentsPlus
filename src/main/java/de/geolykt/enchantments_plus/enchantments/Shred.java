@@ -79,8 +79,7 @@ public class Shred extends CustomEnchantment implements AreaOfEffectable {
                     } else if (Storage.COMPATIBILITY_ADAPTER.ores().contains(relativeBlock.getType())) {
                         relativeBlock.setType(STONE);
                     }
-                    //TODO Why run this twice?
-                    WatcherEnchant.instance().onBlockShred(relativeEvent);
+                    WatcherEnchant.instance().onBlockShred(relativeEvent); // Run this again so enchantment can modify the loot
                     if (relativeEvent.isCancelled()) {
                         return;
                     }

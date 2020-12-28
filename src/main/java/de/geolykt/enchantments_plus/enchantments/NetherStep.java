@@ -18,7 +18,12 @@ import static de.geolykt.enchantments_plus.util.Utilities.selfRemovingArea;
 
 public class NetherStep extends CustomEnchantment implements AreaOfEffectable {
 
-    // Blocks spawned from the NatherStep enchantment
+    /**
+     * The location of the blocks spawned by the NetherStep enchantment mapped to when they were spawned in.
+     * In Zenchantments and 1.0.0 to 2.x.x the resolution of the time is in nanoseconds, in v3.0.0 onwards
+     * it is in millisecond resolution.
+     * @since 1.0.0
+     */
     public static final Map<Location, Long> netherstepLocs = new HashMap<>();
     public static final int                 ID             = 39;
 
@@ -59,7 +64,7 @@ public class NetherStep extends CustomEnchantment implements AreaOfEffectable {
         Iterator<Location> it = FrozenStep.frozenLocs.keySet().iterator();
         while (it.hasNext()) {
             Location location = it.next();
-            if (Math.abs(System.nanoTime() - FrozenStep.frozenLocs.get(location)) > 9E8) { // FIXME why in nanoseconds?
+            if (Math.abs(System.currentTimeMillis() - FrozenStep.frozenLocs.get(location)) > 900) {
                 location.getBlock().setType(Material.WATER);
                 it.remove();
             }
@@ -67,7 +72,7 @@ public class NetherStep extends CustomEnchantment implements AreaOfEffectable {
         it = netherstepLocs.keySet().iterator();
         while (it.hasNext()) {
             Location location = it.next();
-            if (Math.abs(System.nanoTime() - netherstepLocs.get(location)) > 9E8) {
+            if (Math.abs(System.nanoTime() - netherstepLocs.get(location)) > 900) {
                 location.getBlock().setType(Material.LAVA);
                 it.remove();
             }

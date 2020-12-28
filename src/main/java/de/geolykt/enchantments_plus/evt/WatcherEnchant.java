@@ -207,7 +207,6 @@ public class WatcherEnchant implements Listener {
 
     @EventHandler(ignoreCancelled = false)
     public void onBlockInteract(PlayerInteractEvent evt) {
-        // TODO optimise
         if (evt.getClickedBlock() == null || !evt.getClickedBlock().getType().isInteractable()) {
             Player player = evt.getPlayer();
             if (evt.getHand() == EquipmentSlot.HAND) {
