@@ -35,6 +35,9 @@ permissions:
   enchplus.command.lasercol:
     description: Sets the color of the laser enchantment of the Item in hand.
     default: true
+  enchplus.command.license:
+    description: Allows to view the license in full
+    default: op
   enchplus.*:
     children:
       enchplus.enchant.get: true

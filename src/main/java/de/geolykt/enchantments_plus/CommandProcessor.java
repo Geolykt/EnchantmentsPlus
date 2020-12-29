@@ -1,3 +1,21 @@
+/*
+ * 
+ *  This file is part of EnchantmentsPlus, a bukkit plugin.
+ *  Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
+ *  Copyright (c) 2020 Geolykt and EnchantmentsPlus contributors
+ *   
+ *  This program is free software: you can redistribute it and/or modify  
+ *  it under the terms of the GNU General Public License as published by  
+ *  the Free Software Foundation, version 3.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ *  General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License 
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package de.geolykt.enchantments_plus;
 
 import org.bukkit.Bukkit;
@@ -18,6 +36,8 @@ import de.geolykt.enchantments_plus.enums.PermissionTypes;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 import static org.bukkit.Material.*;
@@ -457,10 +477,34 @@ public class CommandProcessor {
                 return versionInfo(sender);
             case "lasercol":
                 return setLaserColor(sender, args);
+            case "license":
+                return printLicense(sender, args);
             case "help":
             default:
                 return helpEnchantment(sender, label) || enchant(sender, args);
             }
+        }
+        return true;
+    }
+
+    private static boolean printLicense(CommandSender sender, String[] args) {
+        if (args.length != 2) {
+            sender.sendMessage(Storage.LOGO + "This plugin is licensed under the  GNU GENERAL PUBLIC LICENSE Version 3.");
+            sender.sendMessage(Storage.LOGO + "Copyright authors:");
+            sender.sendMessage(Storage.LOGO + " (C) 2015 - 2020: Zedly and other Zenchantments contributors");
+            sender.sendMessage(Storage.LOGO + " (C) 2020: Geolykt and other EnchantmentsPlus contributors");
+            sender.sendMessage(Storage.LOGO + "To view the full license do /ench license full");
+        } else if (args[1].equalsIgnoreCase("full")) {
+            if (!sender.hasPermission("enchplus.command.license")) {
+                sender.sendMessage(Storage.LOGO + "You do not have the permission to view the license in full.");
+                sender.sendMessage(Storage.LOGO + "You may however find the license at "
+                        + "https://github.com/Geolykt/EnchantmentsPlus/blob/v3.0.0-rc.2/LICENSE.md.");
+                return true;
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(Storage.plugin.getResource("LICENSE.md")));
+            br.lines().forEachOrdered((line) -> {
+                sender.sendMessage(line);
+            });
         }
         return true;
     }
