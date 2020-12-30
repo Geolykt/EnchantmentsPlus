@@ -19,7 +19,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -58,15 +57,9 @@ public class FrozenStep extends CustomEnchantment implements AreaOfEffectable {
     public boolean onScan(Player player, int level, boolean usedHand) {
         if (player.isSneaking() && player.getLocation().getBlock().getType() == WATER &&
             !player.isFlying()) {
-
-
             player.setVelocity(player.getVelocity().setY(.4));
         }
-        Block block = player.getLocation().getBlock();
-        int radius = (int) getAOESize(level);
-
-
-        selfRemovingArea(PACKED_ICE, WATER, radius, block, player, frozenLocs);
+        selfRemovingArea(PACKED_ICE, WATER, (int) getAOESize(level), player.getLocation().getBlock(), player, frozenLocs);
         return true;
     }
 

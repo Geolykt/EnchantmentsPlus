@@ -90,7 +90,7 @@ public class NetherStep extends CustomEnchantment implements AreaOfEffectable {
         it = netherstepLocs.keySet().iterator();
         while (it.hasNext()) {
             Location location = it.next();
-            if (Math.abs(System.nanoTime() - netherstepLocs.get(location)) > 900) {
+            if (Math.abs(System.currentTimeMillis() - netherstepLocs.get(location)) > 900) {
                 location.getBlock().setType(Material.LAVA);
                 it.remove();
             }
