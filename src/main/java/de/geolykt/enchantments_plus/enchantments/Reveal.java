@@ -105,6 +105,7 @@ public class Reveal extends CustomEnchantment implements AreaOfEffectable {
                     entity.setInvulnerable(true);
                     entity.setSilent(true);
                     entity.setAI(false);
+                    entity.setInvisible(true);
                     Entity ent = GLOWING_BLOCKS.put(loc, entity);
                     if (ent != null) {
                         ent.remove();
