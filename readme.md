@@ -48,11 +48,9 @@ As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the 
 **/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt; &lt;doNotification&gt;**: Like above, but the fourth parameter handles whether or not chat messages should be send as a error/success message. (use True or false) <br>
 **/ench &lt;enchantment&gt; &lt;level&gt; &lt;modifier&gt; &lt;doNotification&gt; &lt;force&gt;**: Like above, but the fith parameter handles whether the enchantment should be forced onto the tool. (use True or false) <br>
 
-## Download
+## Obtaining
 See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloads
-
-## Compilation
-Compile this project like every other project out there. Note that you need to have the latest bindings. It requires JDK 11 in order to compile
+Or compile this project like every other project out there via maven and a JDK 11 or higher, a "mvn clean package" should suffice to build the plugin.
 
 ## Compatibility
 The current version of this plugin is compatible with Spigot version 1.15.2, 1.16.1, 1.16.2, 1.16.3 and 1.16.4. Any versions under 1.15.2, will **not** work without tinkering, versions above 1.16.4, may, although with a few issues.

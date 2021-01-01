@@ -526,9 +526,13 @@ public class CommandProcessor {
         case 0:
             return false;
         case 1:
-            return ench(sender,args[0], 1, true, false);
         case 2:
-            return ench(sender, args[0], level, true, false);
+            if (sender instanceof Player) {
+                return ench(sender,args[0], level, true, false, (Player) sender);
+            } else {
+                sender.sendMessage(Storage.LOGO + ChatColor.RED + "You need to provide more data as a non-player command sender.");
+                return true;
+            }
         case 3:
             return ench(sender, args[0], level, args[2], true, false);
         case 4:
@@ -558,7 +562,11 @@ public class CommandProcessor {
         }
         for (Entity e: target) {
             if (e instanceof Player) {
-                ench(infoReciever, eName, level, doNotify, force);
+                if (doNotify) {
+                    ench((CommandSender) e, eName, level, doNotify, force, (Player) e);
+                } else {
+                    ench(infoReciever, eName, level, doNotify, force, (Player) e);
+                }
             } else if (e instanceof Monster) {
                 ItemStack stack = ((Monster) e).getEquipment().getItemInMainHand();
                 if (stack != null) {
@@ -571,70 +579,70 @@ public class CommandProcessor {
     }
 
     /**
-     * Performs the enchantment command on a given target
-     * @param target The target of the execution, this should be a player to execute correctly.
+     * Performs the enchantment command on a given target and broadcasts information to the given sender
+     * @param infoReciever The receiver that should get the feedback of the command
      * @param enchantmentName The name of the enchantment
      * @param level The level of the enchantment
-     * @param postPlayerFeedback True if the target should be notified, false if not
+     * @param doNotify true if the infoReciever should be notified about feedback, false otherwise
      * @param force True if the enchantments should be applied without thinking, if false incompatibilities are sorted out automatically
-     * @return Returns true if the target was a player, false otherwise
-     * @since 2.2.0
+     * @param target The player that the enchantment should be applied on
+     * @since 3.0.0
      */
-    private static boolean ench(CommandSender target, String enchantmentName, Integer level, boolean postPlayerFeedback, boolean force) {
-        if (target instanceof Player) { // This instanceof can be removed as it should (and is!) be checked on another level
-            Player player = (Player) target;
-            Config cfg = Config.get(player.getWorld());
-            CustomEnchantment ench = cfg.enchantFromString(enchantmentName);
-            ItemStack stack = player.getInventory().getItemInMainHand();
-            if (ench == null) {
-                if (postPlayerFeedback) {
-                    player.sendMessage(Storage.LOGO + ChatColor.RED + "This is not a valid enchantment");
-                }
-            } else if (stack == null ||
-                    stack.getType() == Material.AIR) {
-                if (postPlayerFeedback) {
-                    target.sendMessage(Storage.LOGO + ChatColor.RED + " You cannot enchant air");
-                }
+    private static boolean ench(CommandSender infoReciever, String enchantmentName, Integer level, boolean doNotify, boolean force,
+            Player target) {
+        Config cfg = Config.get(target.getWorld());
+        CustomEnchantment ench = cfg.enchantFromString(enchantmentName);
+        ItemStack stack = target.getInventory().getItemInMainHand();
+        if (ench == null) {
+            if (doNotify) {
+                infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + "This is not a valid enchantment");
+            }
+            return true;
+        } else if (stack.getType() == Material.AIR) {
+            if (doNotify) {
+                infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + " You cannot enchant air");
+            }
+            return true;
+        } else {
+            if (force
+                    || level <= 0 
+                    || CustomEnchantment.getEnchantLevel(cfg, stack, ench.asEnum()) > 0) {
+                CustomEnchantment.setEnchantment(stack, ench, level, target.getWorld());
+                return true;
             } else {
-                if (force 
-                        || level <= 0 
-                        || CustomEnchantment.getEnchantLevel(cfg, stack, ench.asEnum()) > 0) {
-                    CustomEnchantment.setEnchantment(stack, ench, level, player.getWorld());
+                Map<CustomEnchantment, Integer> enchs = CustomEnchantment.getEnchants(stack, target.getWorld(), null);
+                for (Map.Entry<CustomEnchantment, Integer> potentiallyConflicting : enchs.entrySet()) {
+                    for (BaseEnchantments conflict : ench.getConflicts()) {
+                        if (potentiallyConflicting.getKey().asEnum() == conflict) {
+                            infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + "An incompatible enchantment is already on your tool!");
+                            return true;
+                        }
+                    }
+                }
+                if (enchs.size() >= cfg.getMaxEnchants()) {
+                    if (doNotify) {
+                        infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + "You already have too many enchantments on your tool!");
+                    }
+                    return true;
+                } else if (ench.validMaterial(stack)) {
+                    CustomEnchantment.setEnchantment(stack, ench, level, target.getWorld());
+                } else if (doNotify) {
+                    infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + "The enchantment cannot be applied on your current tool.");
+                    return true;
+                }
+            }
+            if (doNotify) {
+                if (level <= 0) {
+                    infoReciever.sendMessage(Storage.LOGO + ChatColor.AQUA + "The enchantment " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + " was removed from your tool.");
+                } else if (level == 1) {
+                    infoReciever.sendMessage(Storage.LOGO + ChatColor.AQUA + "Your tool in hand was enchanted with " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + ".");
                 } else {
-                    Map<CustomEnchantment, Integer> enchs = CustomEnchantment.getEnchants(stack, player.getWorld(), null);
-                    for (Map.Entry<CustomEnchantment, Integer> potentiallyConflicting : enchs.entrySet()) {
-                        for (BaseEnchantments conflict : ench.getConflicts()) {
-                            if (potentiallyConflicting.getKey().asEnum() == conflict) {
-                                target.sendMessage(Storage.LOGO + ChatColor.RED + "An incompatible enchantment is already on your tool!");
-                                return true;
-                            }
-                        }
-                    }
-                    if (enchs.size() >= cfg.getMaxEnchants()) {
-                        if (postPlayerFeedback) {
-                            target.sendMessage(Storage.LOGO + ChatColor.RED + "You already have too many enchantments on your tool!");
-                        }
-                        return true;
-                    } else if (ench.validMaterial(stack)) {
-                        CustomEnchantment.setEnchantment(stack, ench, level, player.getWorld());
-                    } else if (postPlayerFeedback) {
-                        target.sendMessage(Storage.LOGO + ChatColor.RED + "The enchantment cannot be applied on your current tool.");
-                        return true;
-                    }
+                    infoReciever.sendMessage(Storage.LOGO + ChatColor.AQUA + "Your tool in hand was enchanted with " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + " at level " + ChatColor.BLUE + level + ChatColor.AQUA + ".");
                 }
-                if (postPlayerFeedback) {
-                    if (level <= 0) {
-                        player.sendMessage(Storage.LOGO + ChatColor.AQUA + "The enchantment " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + " was removed from your tool.");
-                    } else if (level == 1) {
-                        player.sendMessage(Storage.LOGO + ChatColor.AQUA + "Your tool in hand was enchanted with " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + ".");
-                    } else {
-                        player.sendMessage(Storage.LOGO + ChatColor.AQUA + "Your tool in hand was enchanted with " + ChatColor.BLUE + ench.getLoreName() + ChatColor.AQUA + " at level " + ChatColor.BLUE + level + ChatColor.AQUA + ".");
-                    }
-                }
+                return true;
             }
             return true;
         }
-        return false;
     }
 
     /**
@@ -652,7 +660,7 @@ public class CommandProcessor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType().isAir()) {
-                player.sendMessage(Storage.LOGO + ChatColor.RED + "Did you thought air was a Laser?");
+                player.sendMessage(Storage.LOGO + ChatColor.RED + "Did you thought that air was a Laser?");
                 return true;
             }
             final ItemStack stk = player.getInventory().getItemInMainHand();
