@@ -416,7 +416,7 @@ public class CompatibilityAdapter {
             ((Damageable)im).setDamage(((Damageable) im).getDamage() + damage);
             stack.setItemMeta(im);
         }
-        return ((Damageable) im).getDamage() <= 0;
+        return ((Damageable) im).getDamage() >= stack.getType().getMaxDurability();
     }
 
     // Displays a particle with the given data
