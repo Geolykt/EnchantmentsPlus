@@ -34,41 +34,6 @@ public interface IEnchGatherer {
     /**
      * This method gets the Enchantments on an ItemStack, how the Enchantments are stored and read depends on the implementation
      * @param stk The Itemstack
-     * @param world The World that is used for the Configuration
-     * @param outExtraLore Puts non-zenchantments lore in this list
-     * @return A map of the Enchantments mapped to their level
-     * @since 2.0.0
-     */
-    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, World world, final List<String> outExtraLore) {
-        return getEnchants(stk, false, world, outExtraLore);
-    }
-
-    /**
-     * This method gets the Enchantments on an ItemStack, how the Enchantments are stored and read depends on the implementation
-     * @param stk The Itemstack
-     * @param acceptBooks Whether books should be accepted
-     * @param world The World that is used for the Configuration
-     * @return A map of the Enchantments mapped to their level
-     * @since 2.0.0
-     */
-    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, boolean acceptBooks, World world) {
-        return getEnchants(stk, acceptBooks, world, null);
-    }
-
-    /**
-     * This method gets the Enchantments on an ItemStack, how the Enchantments are stored and read depends on the implementation
-     * @param stk The Itemstack
-     * @param world The World that is used for the Configuration
-     * @return A map of the Enchantments mapped to their level
-     * @since 2.0.0
-     */
-    public default LinkedHashMap<CustomEnchantment, Integer> getEnchants(@Nullable ItemStack stk, World world) {
-        return getEnchants(stk, false, world, null);
-    }
-
-    /**
-     * This method gets the Enchantments on an ItemStack, how the Enchantments are stored and read depends on the implementation
-     * @param stk The Itemstack
      * @param acceptBooks Whether books should be accepted
      * @param world The World that is used for the Configuration
      * @param outExtraLore Puts non-zenchantments lore in this list

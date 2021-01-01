@@ -332,8 +332,9 @@ public class CommandProcessor {
                         + ChatColor.AQUA + ench.description);
             }
         } else {
-            Set<CustomEnchantment> enchs = CustomEnchantment.getEnchants(
-                    ((Player) sender).getInventory().getItemInMainHand(), ((Entity) sender).getWorld(), null).keySet();
+            Set<CustomEnchantment> enchs =  CustomEnchantment.Enchantment_Adapter
+                    .getEnchants(((Player) sender).getInventory().getItemInMainHand(), true, ((Entity) sender).getWorld(), null)
+                    .keySet();
             if (enchs.isEmpty()) {
                 sender.sendMessage(Storage.LOGO + "There are no custom enchantments on this tool!");
             } else {

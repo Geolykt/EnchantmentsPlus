@@ -361,7 +361,8 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     /**
-     * Returns a mapping of custom enchantments and their level on a given tool
+     * Returns a mapping of custom enchantments and their level on a given tool.
+     * Does not detect enchantments on books.
      * @param stk The itemstack that the operation applies for
      * @param world The world where the itemstack is located, used for configuration obtaining
      * @param outExtraLore The output of any unused lore will be written to this list, or null if not needed
@@ -371,7 +372,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public static LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk,
             @NotNull World world,
             @Nullable List<String> outExtraLore) {
-        return Enchantment_Adapter.getEnchants(stk, world, outExtraLore);
+        return Enchantment_Adapter.getEnchants(stk, false, world, outExtraLore);
     }
 
     public static boolean hasEnchantment(@NotNull Config config, ItemStack stk, BaseEnchantments ench) {

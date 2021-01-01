@@ -117,8 +117,8 @@ public class NewAnvilMerger implements Listener {
                 // Undamaged conversion
                 World world = evt.getViewers().get(0).getWorld();
                 Map<CustomEnchantment, Integer> out = mergeEnchantments(
-                        CustomEnchantment.getEnchants(stackA, world, nleftLore),
-                        CustomEnchantment.getEnchants(stackB, world, null));
+                        CustomEnchantment.Enchantment_Adapter.getEnchants(stackA, true, world, nleftLore),
+                        CustomEnchantment.Enchantment_Adapter.getEnchants(stackB, true, world, null));
                 if (out.size() > 0) {
                     boolean unrepairable = false;
                     for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
@@ -142,8 +142,8 @@ public class NewAnvilMerger implements Listener {
             final ItemStack result = evt.getResult().clone();
             World world = evt.getViewers().get(0).getWorld();
             Map<CustomEnchantment, Integer> out = mergeEnchantments(
-                    CustomEnchantment.getEnchants(inv.getItem(0), world, nleftLore),
-                    CustomEnchantment.getEnchants(inv.getItem(1), world, null));
+                    CustomEnchantment.Enchantment_Adapter.getEnchants(inv.getItem(0), true, world, nleftLore),
+                    CustomEnchantment.Enchantment_Adapter.getEnchants(inv.getItem(1), true, world, null));
             if (out.size() > 0) {
                 boolean unrepairable = false;
                 for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
