@@ -39,7 +39,7 @@ public class SiphonArrow extends EnchantedArrow {
                 (LivingEntity) evt.getEntity(),
                 (Player) arrow.getShooter(), 0, false)) {
             Player player = (Player) ((Projectile) evt.getDamager()).getShooter();
-            double difference = 0;
+            double difference;
             if (Siphon.calcAmour) {
                 difference = 0.17 * level * power * evt.getFinalDamage();
             } else {

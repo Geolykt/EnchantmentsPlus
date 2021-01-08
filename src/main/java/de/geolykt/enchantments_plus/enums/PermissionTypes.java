@@ -25,15 +25,16 @@ public enum PermissionTypes {
     ENCHANT("enchplus.command.enchant"), LIST("enchplus.command.list"), INFO("enchplus.command.info"),
     ONOFF("enchplus.command.onoff"), RELOAD("enchplus.command.reload"), LASERCOL("enchplus.command.lasercol");
 
-    private String permission;
+    private final String permission;
 
     PermissionTypes(String permission) {
         this.permission = permission;
     }
 
-    public String getPermissionNames() {
-        return this.permission;
-    }
+//    Possibly get rid of, as it's never used in the plugin.
+//    public String getPermissionNames() {
+//        return this.permission;
+//    }
     
     public boolean hasPermission(Permissible permissible) {
         return permissible.hasPermission(permission);

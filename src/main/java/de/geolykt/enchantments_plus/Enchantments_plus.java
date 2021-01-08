@@ -27,6 +27,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -73,7 +74,7 @@ public class Enchantments_plus extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
         FrozenStep.frozenLocs.keySet().forEach((location) -> location.getBlock().setType(Material.WATER));
         NetherStep.netherstepLocs.keySet().forEach((location) -> location.getBlock().setType(Material.LAVA));
-        Anthropomorphism.idleBlocks.keySet().forEach((e) -> e.remove());
+        Anthropomorphism.idleBlocks.keySet().forEach(Entity::remove);
         Reveal.GLOWING_BLOCKS.forEach((loc, ent) -> ent.remove());
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasMetadata("ze.haste")) {
@@ -143,7 +144,7 @@ public class Enchantments_plus extends JavaPlugin {
         }, 5, 5);
 
         // medium-high asynchronous frequency runnable (every five ticks)
-        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> Anthropomorphism.removeCheck(), 5, 5);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, Anthropomorphism::removeCheck, 5, 5);
 
         // BSTATS metrics init
         metric = new Metrics(this, 9211);

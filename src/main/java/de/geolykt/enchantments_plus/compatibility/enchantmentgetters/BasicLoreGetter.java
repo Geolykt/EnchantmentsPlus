@@ -81,7 +81,7 @@ public class BasicLoreGetter implements IEnchGatherer {
             if (enchant == null) {
                 return null; // Not able to map enchantment
             } else {
-                return new SimpleEntry<CustomEnchantment, Integer>(enchant, 1);
+                return new SimpleEntry<>(enchant, 1);
             }
         case 2:
             CustomEnchantment ench = cfg.enchantFromString(raw.split(" ")[0]);
@@ -93,7 +93,7 @@ public class BasicLoreGetter implements IEnchGatherer {
                     return new SimpleEntry<>(ench, 1);
             }
             try {
-                return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench,
+                return new AbstractMap.SimpleEntry<>(ench,
                         Utilities.getNumber(raw.split(" ")[1]));
             } catch (NumberFormatException expected) {
                 return null; // Invalid roman numeral
@@ -104,7 +104,7 @@ public class BasicLoreGetter implements IEnchGatherer {
                 return null; // Not able to map enchantment
             }
             try {
-                return new AbstractMap.SimpleEntry<CustomEnchantment, Integer>(ench2,
+                return new AbstractMap.SimpleEntry<>(ench2,
                         Utilities.getNumber(raw.split(" ")[2]));
             } catch (NumberFormatException expected) {
                 return null; // Invalid roman numeral
@@ -131,7 +131,7 @@ public class BasicLoreGetter implements IEnchGatherer {
                 Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, cfg);
                 if (enchEntry == null) {
                     normalLore.add(loreStr);
-                } else if (enchEntry != null && enchEntry.getKey() != ench) {
+                } else if (enchEntry.getKey() != ench) {
                     customEnch = true;
                     lore.add(enchEntry.getKey().getShown(enchEntry.getValue(), world));
                 }

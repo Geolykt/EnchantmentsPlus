@@ -97,9 +97,7 @@ public class Switch extends CustomEnchantment {
 
             Material mat = switchItem.getType();
 
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                Grab.grabLocs.remove(clickedBlock.getLocation());
-            }, 3);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> Grab.grabLocs.remove(clickedBlock.getLocation()), 3);
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 ADAPTER.placeBlock(clickedBlock, player, mat, null); // TODO blockData

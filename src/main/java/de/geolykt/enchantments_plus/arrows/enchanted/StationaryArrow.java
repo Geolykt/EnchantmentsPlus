@@ -44,9 +44,7 @@ public class StationaryArrow extends EnchantedArrow {
                     Bukkit.getPluginManager().callEvent(ecbee);
                     if (!ecbee.isCancelled()) {
                         // For some fucking reason I can't set the entity on fire in the same tick. So I'm delaying it by one tick and now it works
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                            Storage.COMPATIBILITY_ADAPTER.igniteEntity(ent, (Player) arrow.getShooter(), 300);
-                        }, 1);
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> Storage.COMPATIBILITY_ADAPTER.igniteEntity(ent, (Player) arrow.getShooter(), 300), 1);
                     }
                 }
 

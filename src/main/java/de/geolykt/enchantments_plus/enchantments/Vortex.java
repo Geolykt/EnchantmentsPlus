@@ -64,9 +64,7 @@ public class Vortex extends CustomEnchantment {
         evt.getEntity().getKiller().giveExp(evt.getDroppedExp());
         evt.setDroppedExp(0);
         
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-            vortexLocs.remove(deathBlock);
-        }, 3);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> vortexLocs.remove(deathBlock), 3);
         return true;
     }
 

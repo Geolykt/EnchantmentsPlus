@@ -80,7 +80,7 @@ public class Terraformer extends CustomEnchantment {
                 }
 
                 for (Block b : Utilities.BFS(start, MAX_BLOCKS, false, 5.f, SEARCH_FACES,
-                        Storage.COMPATIBILITY_ADAPTER.airs(), new HashSet<Material>(), false, true)) {
+                        Storage.COMPATIBILITY_ADAPTER.airs(), new HashSet<>(), false, true)) {
                     if (b.getType().equals(Material.AIR) 
                             && Utilities.hasItem(evt.getPlayer(), mat, 1)
                             && Storage.COMPATIBILITY_ADAPTER.placeBlock(b, evt.getPlayer(), mat, null)

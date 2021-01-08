@@ -83,9 +83,7 @@ public class Weight extends CustomEnchantment {
                                          .multiply((float) (1 / (level * power + 1.5))));
             for (EquipmentSlot slot : SLOTS) {
                 final ItemStack s = player.getInventory().getItem(slot);
-                if (s != null
-                        && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.WEIGHT)
-                        && CompatibilityAdapter.damageItem2(s, level)) {
+                if (CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.WEIGHT) && CompatibilityAdapter.damageItem2(s, level)) {
                     player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                 }
             }

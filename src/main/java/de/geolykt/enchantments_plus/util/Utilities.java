@@ -222,11 +222,12 @@ public class Utilities {
         if (centerVertical) {
             y = (int) y + .5;
         }
-        if (z >= 0) {
-            z += .5;
-        } else {
-            z += .5;
-        }
+//        if (z >= 0) {
+//            z += .5;
+//        } else {
+//            z += .5;
+//        }
+        z += .5;
         Location lo = loc.clone();
         lo.setX(x);
         lo.setY(y);
@@ -244,7 +245,7 @@ public class Utilities {
         return getCenter(blk.getLocation(), centerVertical);
     }
 
-    // Returns the nearby entities at any loction within the given range
+    // Returns the nearby entities at any location within the given range
     // Returns a direction integer, 0-8, for the given player's pitch and yaw
     public static BlockFace getDirection(Player player) {
         float yaw = player.getLocation().getYaw();

@@ -70,16 +70,15 @@ public class RecipeUtil {
      * @return the smelted Itemstack based on a given ItemStack.
      */
     public static ItemStack getSmeltedVariant(ItemStack input, boolean updateCache) {
+        ItemStack out;
         if (updateCache) {
-            ItemStack out = getSmeltedVariant(input);
+            out = getSmeltedVariant(input);
             smeltCache.put(input.getType(), out);
-            out.setAmount(out.getAmount()*input.getAmount());
-            return out;
         } else {
-            ItemStack out = smeltCache.getOrDefault(input.getType(), new ItemStack(Material.AIR));
-            out.setAmount(out.getAmount()*input.getAmount());
-            return out;
+            out = smeltCache.getOrDefault(input.getType(), new ItemStack(Material.AIR));
         }
+        out.setAmount(out.getAmount()*input.getAmount());
+        return out;
     }
     
     private static final HashMap<Material, Long> cacheDuration = new HashMap<>();

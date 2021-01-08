@@ -94,9 +94,7 @@ public class Glide extends CustomEnchantment {
         if (ThreadLocalRandom.current().nextInt(5 * level) == 5) { // "Slowly" damage all armour
             for (EquipmentSlot slot : SLOTS) {
                 final ItemStack s = player.getInventory().getItem(slot);
-                if (s != null
-                        && CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.GLIDE)
-                        && CompatibilityAdapter.damageItem2(s, level)) {
+                if (CustomEnchantment.hasEnchantment(Config.get(player.getWorld()), s, BaseEnchantments.GLIDE) && CompatibilityAdapter.damageItem2(s, level)) {
                     player.getInventory().setItem(slot, new ItemStack(Material.AIR));
                 }
             }
