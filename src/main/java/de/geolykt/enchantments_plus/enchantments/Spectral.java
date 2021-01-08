@@ -208,10 +208,8 @@ public class Spectral extends CustomEnchantment {
             secondaryBlockData.setFacing(((Directional) blockData).getFacing());
             block.getRelative(facing).setBlockData(secondaryBlockData, true);
             performed = true;
-
         }
 
-        // TODO probably could be simplified even further
         // Optimisations would be like first checking the Openable, Powerable etc. instances, then the Door and Gate instances.
         if (blockData instanceof Gate) {
             Gate newBlockData = (Gate) block.getBlockData();

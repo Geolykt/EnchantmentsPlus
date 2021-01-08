@@ -58,8 +58,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
     public static IEnchGatherer Enchantment_Adapter = new BasicLoreGetter();
 
-    protected int id;
-
     protected int maxLevel;         // Max level the given enchant can naturally obtain
     protected String loreName;      // Name the given enchantment will appear as; with &7 (Gray) color
     protected float probability;    // Relative probability of obtaining the given enchantment
@@ -305,32 +303,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     }
 
     /**
-     * @deprecated Obtaining the legacyID via the BaseEnchantment enum is preferred
-     * Obtains the legacy ID of the enchantment.
-     * It's the way of differentiating and storing enchantments in Zenchantments and
-     *  one (albeit not liked) way of differentiating enchantments in Enchantments+ 1.0.0 to 3.0.0
-     * @return The ID of the enchantment
-     * @since 1.0.0
-     */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @deprecated The ID of the enchantment should not be altered
-     * Set the legacy ID of the enchantment.
-     * It's the way of differentiating and storing enchantments in Zenchantments and
-     *  one (albeit not liked) way of differentiating enchantments in Enchantments+ 1.0.0 to 3.0.0
-     * @param id The ID of the enchantment
-     * @since 1.0.0
-     */
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    void setId(int id) {
-        this.id = id;
-    }
-
-    /**
      * Returns the Enum representation of the enchantment used for comparing
      * @return The BaseEnchantments enum attached to the enchantment
      * @since 1.1.0
@@ -503,7 +475,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
         public Builder(Supplier<T> sup, int id) {
             customEnchantment = sup.get();
-            customEnchantment.setId(id);
             customEnchantment.key = new NamespacedKey(Storage.plugin, "ench." + id);
             setConflicts();
         }

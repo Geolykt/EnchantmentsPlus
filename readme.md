@@ -3,7 +3,7 @@ Or update your java version
 
 Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail-to:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). I can no longer give help via discord as I deleted my discord account. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
 
-The plugin only intends to support 1.16.3 and newer versions when the time comes.
+The plugin only intends to support 1.16.4 and newer versions when the time comes.
 
 # Enchantments+
 ## Description
@@ -16,7 +16,7 @@ The hard fork status however means that we won't maintain any parity with Zencha
   - Enchantments+ doesn't use NMS. This means that newer versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support, this may no longer be full selling point.
   - The fork compiles, Zenchantments doesn't.
   - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will often be fixed in under a day (especially on github).
-  - EnchantmentsPlus 3+.x.x requires Java 11 (or higher) in order to compile and run, Zenchantments runs with Java 8
+  - EnchantmentsPlus 3+.x.x requires Java 11 (or higher) in order to compile and run, Zenchantments runs on Java 8
   - EnchantmentsPlus 4+.x.x (currently only planned) will make use of the Paper api for even more performance
 
 ## Metrics
@@ -103,7 +103,7 @@ The current EnchantmentsPlus API is however entirely incompatible with the new Z
    <li>Fix compilation issues with later bindings</li>
    <li>Changed the way permissions are handled within the code</li>
    <li>Removed ClassGraph as a dependency</li>
-   <li>Minimal usage of ItemStack#getItemMeta, which is a very expensive call</li>
+   <li>Minimal usage of ItemStack#getItemMeta, which is a very expensive call. This should increase the performance by a noticable amount</li>
   </ul>
  </li>
 </ul>

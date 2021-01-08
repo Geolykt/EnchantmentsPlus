@@ -74,7 +74,7 @@ public class Singularity extends CustomEnchantment {
                 ThreadLocalRandom rand = ThreadLocalRandom.current();
                 if (blackholes.get(l)) {
                     Vector v = l.clone().subtract(e.getLocation()).toVector();
-                    v.setX(v.getX() + (-.5f + rand.nextFloat()) * 10); // TODO lots of math that could likely be simplified
+                    v.setX(v.getX() + (-.5f + rand.nextFloat()) * 10);
                     v.setY(v.getY() + (-.5f + rand.nextFloat()) * 10);
                     v.setZ(v.getZ() + (-.5f + rand.nextFloat()) * 10);
                     e.setVelocity(v.multiply(.35f));
