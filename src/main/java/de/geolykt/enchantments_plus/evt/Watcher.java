@@ -70,38 +70,36 @@ public class Watcher implements Listener {
         Config config = Config.get(evt.getBlock().getWorld());
         if (evt.getBlock().getBlockData() instanceof Directional) {
             ItemStack stk = evt.getItem();
-            if (stk != null) {
-                int level = CustomEnchantment.getEnchantLevel(config, stk,  BaseEnchantments.LASER);
-                if (level == 0)
-                    return;
-                if (!stk.getType().equals(ENCHANTED_BOOK)) {
-                    evt.setCancelled(true);
-                    int range = 6 + (int) Math.round(level * 3); // TODO also calculate with the power of the enchantment
-                    Block blk = evt.getBlock()
-                            .getRelative(((Directional) evt.getBlock().getBlockData()).getFacing(), range);
-                    Location play = Utilities.getCenter(evt.getBlock());
-                    Location target = Utilities.getCenter(blk);
-                    play.setY(play.getY() - .5);
-                    target.setY(target.getY() + .5);
-                    play.setY(play.getY() + 1.1);
-                    double d = target.distance(play);
-                    for (int i = 0; i < (int) d * 10; i++) {
-                        Location tempLoc = target.clone();
-                        tempLoc.setX(play.getX() + (i * ((target.getX() - play.getX()) / (d * 10))));
-                        tempLoc.setY(play.getY() + (i * ((target.getY() - play.getY()) / (d * 10))));
-                        tempLoc.setZ(play.getZ() + (i * ((target.getZ() - play.getZ()) / (d * 10))));
-                        tempLoc.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1,
-                                new Particle.DustOptions(Color.RED, 0.75f));
-                        for (Entity ent : Bukkit.getWorld(play.getWorld().getName()).getEntities()) {
-                            if (ent.getLocation().distance(tempLoc) < .75) {
-                                if (ent instanceof LivingEntity) {
-                                    EntityDamageEvent event = new EntityDamageEvent(ent,
-                                            EntityDamageEvent.DamageCause.FIRE, (double) (1 + (level * 2)));
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    ent.setLastDamageCause(event);
-                                    if (!event.isCancelled()) {
-                                        ((LivingEntity) ent).damage((double) (1 + (level * 2)));
-                                    }
+            int level = CustomEnchantment.getEnchantLevel(config, stk,  BaseEnchantments.LASER);
+            if (level == 0)
+                return;
+            if (!stk.getType().equals(ENCHANTED_BOOK)) {
+                evt.setCancelled(true);
+                int range = 6 + (int) Math.round(level * 3); // TODO also calculate with the power of the enchantment
+                Block blk = evt.getBlock()
+                        .getRelative(((Directional) evt.getBlock().getBlockData()).getFacing(), range);
+                Location play = Utilities.getCenter(evt.getBlock());
+                Location target = Utilities.getCenter(blk);
+                play.setY(play.getY() - .5);
+                target.setY(target.getY() + .5);
+                play.setY(play.getY() + 1.1);
+                double d = target.distance(play);
+                for (int i = 0; i < (int) d * 10; i++) {
+                    Location tempLoc = target.clone();
+                    tempLoc.setX(play.getX() + (i * ((target.getX() - play.getX()) / (d * 10))));
+                    tempLoc.setY(play.getY() + (i * ((target.getY() - play.getY()) / (d * 10))));
+                    tempLoc.setZ(play.getZ() + (i * ((target.getZ() - play.getZ()) / (d * 10))));
+                    tempLoc.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1,
+                            new Particle.DustOptions(Color.RED, 0.75f));
+                    for (Entity ent : Bukkit.getWorld(play.getWorld().getName()).getEntities()) {
+                        if (ent.getLocation().distance(tempLoc) < .75) {
+                            if (ent instanceof LivingEntity) {
+                                EntityDamageEvent event = new EntityDamageEvent(ent,
+                                        DamageCause.FIRE, (double) (1 + (level * 2)));
+                                Bukkit.getPluginManager().callEvent(event);
+                                ent.setLastDamageCause(event);
+                                if (!event.isCancelled()) {
+                                    ((LivingEntity) ent).damage((double) (1 + (level * 2)));
                                 }
                             }
                         }
@@ -275,34 +273,33 @@ public class Watcher implements Listener {
     // are removed
     @EventHandler
     public void onInventoryClick(InventoryClickEvent evt) {
-        if (evt.getInventory() != null) {
-            if (evt.getSlotType().equals(SlotType.ARMOR)) {
-                if (evt.getCurrentItem().hasItemMeta()) {
-                    if (evt.getCurrentItem().getItemMeta().hasLore()) {
-                        Player player = (Player) evt.getWhoClicked();
-                        for (CustomEnchantment e : CustomEnchantment.getEnchants(evt.getCurrentItem(), player.getWorld(), null).keySet()) {
-                            switch (e.asEnum()) {
-                            case MEADOR:
-                                player.removePotionEffect(PotionEffectType.SPEED);
-                            case JUMP:
-                                player.removePotionEffect(PotionEffectType.JUMP);
-                                break;
-                            case SPEED:
-                                player.removePotionEffect(PotionEffectType.SPEED);
-                                break;
-                            case NIGHT_VISION:
-                                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                                break;
-                            case WEIGHT:
-                                if (player.getPersistentDataContainer().has(Weight.ACTIVE, PersistentDataType.BYTE)) {
-                                    player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                                    player.removePotionEffect(PotionEffectType.SLOW);
-                                    player.getPersistentDataContainer().remove(Weight.ACTIVE);
-                                }
-                                break;
-                            default:
-                                break;
+        evt.getInventory();
+        if (evt.getSlotType().equals(SlotType.ARMOR)) {
+            if (evt.getCurrentItem().hasItemMeta()) {
+                if (evt.getCurrentItem().getItemMeta().hasLore()) {
+                    Player player = (Player) evt.getWhoClicked();
+                    for (CustomEnchantment e : CustomEnchantment.getEnchants(evt.getCurrentItem(), player.getWorld(), null).keySet()) {
+                        switch (e.asEnum()) {
+                        case MEADOR:
+                            player.removePotionEffect(PotionEffectType.SPEED);
+                        case JUMP:
+                            player.removePotionEffect(PotionEffectType.JUMP);
+                            break;
+                        case SPEED:
+                            player.removePotionEffect(PotionEffectType.SPEED);
+                            break;
+                        case NIGHT_VISION:
+                            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                            break;
+                        case WEIGHT:
+                            if (player.getPersistentDataContainer().has(Weight.ACTIVE, PersistentDataType.BYTE)) {
+                                player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                                player.removePotionEffect(PotionEffectType.SLOW);
+                                player.getPersistentDataContainer().remove(Weight.ACTIVE);
                             }
+                            break;
+                        default:
+                            break;
                         }
                     }
                 }
@@ -316,7 +313,7 @@ public class Watcher implements Listener {
     public void onEat(PlayerInteractEvent evt) {
         if (evt.getPlayer().getInventory().getItemInMainHand().getType().isEdible()
                 && (evt.getAction().equals(RIGHT_CLICK_AIR) || evt.getAction().equals(RIGHT_CLICK_BLOCK))
-                && (Toxic.hungerPlayers.getOrDefault(evt.getPlayer().getUniqueId(), -1l) > System.currentTimeMillis())) {
+                && (Toxic.hungerPlayers.getOrDefault(evt.getPlayer().getUniqueId(), -1L) > System.currentTimeMillis())) {
             evt.setCancelled(true);
         }
     }

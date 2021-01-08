@@ -78,8 +78,7 @@ public class NewAnvilMerger implements Listener {
      */
     public static Map<CustomEnchantment, Integer> mergeEnchantments(Map<CustomEnchantment, Integer> inA, Map<CustomEnchantment, Integer> inB) {
         // TODO revisit this code in the v4.0.0 refractor (great things can be changed when we use Enums instead of CE instances)
-        LinkedHashMap<CustomEnchantment, Integer> out = new LinkedHashMap<>();
-        out.putAll(inA);
+        LinkedHashMap<CustomEnchantment, Integer> out = new LinkedHashMap<>(inA);
 
         // pretty sure I'm overcomplicating things again
         out.keySet().forEach((ench) -> {
@@ -109,11 +108,7 @@ public class NewAnvilMerger implements Listener {
             // Best guess merge
             ItemStack stackA = inv.getItem(0).clone();
             ItemStack stackB = inv.getItem(1);
-            if (stackA != null
-                    && stackB != null
-                    && ((stackA.getType() == stackB.getType() && CompatibilityAdapter.getDamage(stackA) == 0) 
-                            || stackB.getType() == Material.ENCHANTED_BOOK)
-                    && CompatibilityAdapter.getDamage(stackB) == 0) {
+            if (stackB != null && (stackA.getType() == stackB.getType() && CompatibilityAdapter.getDamage(stackA) == 0 || stackB.getType() == Material.ENCHANTED_BOOK) && CompatibilityAdapter.getDamage(stackB) == 0) {
                 // Undamaged conversion
                 World world = evt.getViewers().get(0).getWorld();
                 Map<CustomEnchantment, Integer> out = mergeEnchantments(

@@ -51,14 +51,14 @@ public class Stock extends CustomEnchantment {
     @Override
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {
         final ItemStack stk = evt.getPlayer().getInventory().getItemInMainHand().clone();
-        if (stk == null || stk.getType() == AIR) {
+        if (stk.getType() == AIR) {
             return false;
         }
         final Player player = evt.getPlayer();
         Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             int current = -1;
             ItemStack newHandItem = evt.getPlayer().getInventory().getItemInMainHand();
-            if (newHandItem != null && newHandItem.getType() != AIR) {
+            if (newHandItem.getType() != AIR) {
                 return;
             }
             for (int i = 0; i < evt.getPlayer().getInventory().getContents().length; i++) {

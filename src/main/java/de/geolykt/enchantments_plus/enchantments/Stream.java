@@ -96,6 +96,7 @@ public class Stream extends CustomEnchantment {
             if ((player.getInventory().getChestplate() == null ||
                 player.getInventory().getChestplate().getType() == Material.AIR)) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
+                    // Always null, should remove player.getInventory().getItemInMainHand() == null.
                     if ((player.getInventory().getItemInMainHand() == null ||
                         player.getInventory().getItemInMainHand().getType() == Material.AIR)) {
                         ItemStack stack = player.getInventory().getChestplate();

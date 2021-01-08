@@ -116,7 +116,7 @@ public class Spectral extends CustomEnchantment {
         if (evt.getPlayer().isSneaking()) { 
             potentialBlocks.addAll(Utilities.BFS(evt.getClickedBlock(), MAX_BLOCKS, false, (float) (level * power)+2.0f,
                     SEARCH_FACES, Sets.immutableEnumSet(evt.getClickedBlock().getType()),
-                    new HashSet<Material>(), false, true));
+                    new HashSet<>(), false, true));
         }
         
         int blocksChanged = 0;
@@ -127,6 +127,7 @@ public class Spectral extends CustomEnchantment {
         if (performWorldProtection) {
             for (final Block b : potentialBlocks) {
                 if (permissionQuery(b, p, BaseEnchantments.SPECTRAL)) {
+                    // TODO: Optimize duplicated code.
                     if (cache == null) {
                         cache = cycleBlockType(b);
                         doInteract = blockstateInteract(b);
@@ -142,6 +143,7 @@ public class Spectral extends CustomEnchantment {
             }
         } else {
             for (final Block b : potentialBlocks) {
+                // TODO: Optimize duplicated code.
                 if (cache == null) {
                     cache = cycleBlockType(b);
                     doInteract = blockstateInteract(b);

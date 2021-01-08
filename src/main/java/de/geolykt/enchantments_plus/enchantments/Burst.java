@@ -95,7 +95,7 @@ public class Burst extends CustomEnchantment {
                             CompatibilityAdapter.damageTool(player, 1, usedHand);
                         }
 
-                    }, i * 2);
+                    }, i * 2L);
                 }
             }
         }

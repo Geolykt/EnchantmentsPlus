@@ -102,22 +102,10 @@ public class Anthropomorphism extends CustomEnchantment {
      */
     public static void removeCheck() {
         synchronized (idleBlocks) {
-            Iterator<FallingBlock> it = idleBlocks.keySet().iterator();
-            while (it.hasNext()) {
-                FallingBlock b = it.next();
-                if (b.isDead()) {
-                    it.remove();
-                }
-            }
+            idleBlocks.keySet().removeIf(Entity::isDead);
         }
         synchronized (attackBlocks) {
-            Iterator<FallingBlock> it = attackBlocks.keySet().iterator();
-            while (it.hasNext()) {
-                FallingBlock b = it.next();
-                if (b.isDead()) {
-                    it.remove();
-                }
-            }
+            attackBlocks.keySet().removeIf(Entity::isDead);
         }
     }
 

@@ -79,8 +79,8 @@ public class Toxic extends CustomEnchantment {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                     ((LivingEntity) evt.getEntity()).removePotionEffect(HUNGER);
                     Utilities.addPotion((LivingEntity) evt.getEntity(), HUNGER, 60 + 40 * value, 0);
-                }, 20 + 60 * value);
-                hungerPlayers.put(evt.getEntity().getUniqueId(), (1 + value) * 5000 + System.currentTimeMillis());
+                }, 20 + 60L * value);
+                hungerPlayers.put(evt.getEntity().getUniqueId(), (1 + value) * 5000L + System.currentTimeMillis());
             }
         }
         return true;

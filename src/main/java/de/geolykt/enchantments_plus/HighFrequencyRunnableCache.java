@@ -56,12 +56,7 @@ public class HighFrequencyRunnableCache implements Runnable {
 
     @Override
     public void run() {
-        Iterator<Supplier<Boolean>> it = cache0.iterator();
-        while (it.hasNext()) {
-            if (!it.next().get()) {
-                it.remove();
-            }
-        }
+        cache0.removeIf(booleanSupplier -> !booleanSupplier.get());
 
         if (feedFraction == 0) {
             players.clear();

@@ -77,7 +77,7 @@ public class CompatibilityAdapter {
      * @param plugin The plugin that is used to initialise the task.
      */
     public CompatibilityAdapter(Plugin plugin) {
-        Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0l);
+        Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0L);
     }
 
     private EnumSet<Material> grownCrops;
@@ -447,7 +447,6 @@ public class CompatibilityAdapter {
      * If the ItemMeta of the ItemStack is not a {@link org.bukkit.inventory.meta.Damageable} instance then 0 will be returned. <br>
      * Does not check whether the itemstack has the unbreakable flag set, caution is advised.
      * @param is The target itemstack
-     * @param damage The value that the damage should now have
      * @return The amount of damage an ItemStack has.
      * @since 1.0
      */
@@ -534,10 +533,9 @@ public class CompatibilityAdapter {
      * @param target The target entity
      * @param player The player that shears the entity, used for world protection
      * @param mainHand True if the mainhand was used to shear the event, false otherwise. Used for the event construction.
-     * @return Returns true if the entity was sheared, false otherwise
      * @since 1.0
      */
-    public boolean shearEntityNMS(Entity target, Player player, boolean mainHand) {
+    public void shearEntityNMS(Entity target, Player player, boolean mainHand) {
         if (target instanceof Sheep || target instanceof MushroomCow) {
             EquipmentSlot slot = mainHand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
             PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target, player.getInventory().getItem(slot), slot);
@@ -547,7 +545,7 @@ public class CompatibilityAdapter {
                     target.getWorld().dropItemNaturally(target.getLocation(), 
                             new ItemStack(ColUtil.getWoolCol(((Sheep)target).getColor()), ThreadLocalRandom.current().nextInt(1, 4)));
                     ((Sheep) target).setSheared(true);
-                } else if (target instanceof MushroomCow) {
+                } else {
                     // Warning: this may fail if Javadocs are to be believed
                     Cow newCow = (Cow) target.getWorld().spawnEntity(target.getLocation(), EntityType.COW);
                     // Transfer old data to new cow
@@ -569,10 +567,8 @@ public class CompatibilityAdapter {
                     newCow.setAge(((MushroomCow) target).getAge());
                     target.remove();
                 }
-                return true;
             }
         }
-        return false;
     }
 
     /**
@@ -593,18 +589,17 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    public boolean damagePlayer(Player player, double damage, DamageCause cause) {
+    public void damagePlayer(Player player, double damage, DamageCause cause) {
         EntityDamageEvent evt = new EntityDamageEvent(player, cause, damage);
         Bukkit.getPluginManager().callEvent(evt);
         if (damage == 0) {
-            return !evt.isCancelled();
+            evt.isCancelled();
+            return;
         }
         if (!evt.isCancelled()) {
             player.setLastDamageCause(evt);
             player.damage(damage);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -613,10 +608,9 @@ public class CompatibilityAdapter {
      * The explosion never generates fire.
      * @param creeper The creeper to explode
      * @param doWorldDamage True if blocks should be broken, false otherwise.
-     * @return true if the explosion wasn't cancelled
      * @since 1.0
      */
-    public boolean explodeCreeper(Creeper creeper, boolean doWorldDamage) {
+    public void explodeCreeper(Creeper creeper, boolean doWorldDamage) {
         float power;
         if (creeper.isPowered()) {
             power = 6f;
@@ -625,7 +619,6 @@ public class CompatibilityAdapter {
         }
         boolean performed = creeper.getWorld().createExplosion(creeper.getLocation(), power, false, doWorldDamage, creeper);
         creeper.remove();
-        return performed;
     }
 
     public boolean formBlock(Block block, Material mat, Player player) {
@@ -832,11 +825,8 @@ public class CompatibilityAdapter {
                 || PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.DESTROY))) {
             return false;
         }
-        if (perm_useWG && !(WorldGuardPlugin.inst().createProtectionQuery().testBlockBreak(source, target) ||
-                WorldGuardPlugin.inst().createProtectionQuery().testBlockInteract(source, target))) {
-            return false;
-        }
+        return !perm_useWG || (WorldGuardPlugin.inst().createProtectionQuery().testBlockBreak(source, target) ||
+                WorldGuardPlugin.inst().createProtectionQuery().testBlockInteract(source, target));
         // TODO Other plugins (factions, Grief protects, etc...) - Just create an issue to create priority if you need one in specific
-        return true;
     }
 }
