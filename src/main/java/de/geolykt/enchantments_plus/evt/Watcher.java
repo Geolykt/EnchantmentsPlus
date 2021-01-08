@@ -71,9 +71,7 @@ public class Watcher implements Listener {
         if (evt.getBlock().getBlockData() instanceof Directional) {
             ItemStack stk = evt.getItem();
             int level = CustomEnchantment.getEnchantLevel(config, stk,  BaseEnchantments.LASER);
-            if (level == 0)
-                return;
-            if (!stk.getType().equals(ENCHANTED_BOOK)) {
+            if (level != 0 && !stk.getType().equals(ENCHANTED_BOOK)) {
                 evt.setCancelled(true);
                 int range = 6 + (int) Math.round(level * 3); // TODO also calculate with the power of the enchantment
                 Block blk = evt.getBlock()
@@ -130,7 +128,7 @@ public class Watcher implements Listener {
             evt.setCancelled(true);
         }
     }
-    
+
     // Teleports item stacks to a certain location as they are created from breaking
     // a block or killing an entity if
     // a Grab or Vortex enchantment was used
@@ -273,7 +271,6 @@ public class Watcher implements Listener {
     // are removed
     @EventHandler
     public void onInventoryClick(InventoryClickEvent evt) {
-        evt.getInventory();
         if (evt.getSlotType().equals(SlotType.ARMOR)) {
             if (evt.getCurrentItem().hasItemMeta()) {
                 if (evt.getCurrentItem().getItemMeta().hasLore()) {

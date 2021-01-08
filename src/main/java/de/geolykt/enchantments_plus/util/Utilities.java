@@ -209,25 +209,33 @@ public class Utilities {
         return getCenter(loc, false);
     }
 
-    // Returns the exact center of a block of a given location
+    /**
+     * Returns the exact center of a block of a given location
+     * 
+     * @param loc The original location
+     * @param centerVertical True if the center should be on all axis, if false the center will be only on the X and Z axis.
+     * @return A clone of the location that is the center of the block at the given location
+     * @since 1.0
+     * @implNote The implementation of the method makes no sense and should be reviewed
+     */
     public static Location getCenter(Location loc, boolean centerVertical) {
+        //FIXME review
         double x = loc.getX();
         double y = loc.getY();
         double z = loc.getZ();
         if (x >= 0) {
             x += .5;
         } else {
-            x += .5;
+            x -= .5;
         }
         if (centerVertical) {
             y = (int) y + .5;
         }
-//        if (z >= 0) {
-//            z += .5;
-//        } else {
-//            z += .5;
-//        }
-        z += .5;
+        if (z >= 0) {
+            z += .5;
+        } else {
+            z -= .5;
+        }
         Location lo = loc.clone();
         lo.setX(x);
         lo.setY(y);

@@ -78,18 +78,18 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                             if (Storage.COMPATIBILITY_ADAPTER.airs().contains(relativeBlock.getRelative(0, 1, 0).getType())) {
                                 Material mat;
                                 switch (centerBlock.getBiome()) {
-                                    case MUSHROOM_FIELD_SHORE:
-                                    case MUSHROOM_FIELDS:
-                                        mat = MYCELIUM;
-                                        break;
-                                    case GIANT_SPRUCE_TAIGA:
-                                    case GIANT_TREE_TAIGA:
-                                    case GIANT_SPRUCE_TAIGA_HILLS:
-                                    case GIANT_TREE_TAIGA_HILLS:
-                                        mat = PODZOL;
-                                        break;
-                                    default:
-                                        mat = GRASS_BLOCK;
+                                case MUSHROOM_FIELD_SHORE:
+                                case MUSHROOM_FIELDS:
+                                    mat = MYCELIUM;
+                                    break;
+                                case GIANT_SPRUCE_TAIGA:
+                                case GIANT_TREE_TAIGA:
+                                case GIANT_SPRUCE_TAIGA_HILLS:
+                                case GIANT_TREE_TAIGA_HILLS:
+                                    mat = PODZOL;
+                                    break;
+                                default:
+                                    mat = GRASS_BLOCK;
                                 }
                                 applied = ADAPTER.placeBlock(relativeBlock, player, mat, null);
                             }
@@ -112,7 +112,6 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                 }
             }
         }
-
         return true;
     }
 

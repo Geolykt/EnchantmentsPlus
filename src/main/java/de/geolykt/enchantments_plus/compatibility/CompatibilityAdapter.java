@@ -93,10 +93,10 @@ public class CompatibilityAdapter {
     private EnumSet<Material> lumberAllowBlocks;
 
     private EnumSet<Biome> dryBiomes;
-    
+
     private EnumMap<Material, Material> spectralMaterialConversion;
     private EnumMap<EntityType, EntityType> transformationMap;
-    
+
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
         EnumSet<Material> es = EnumSet.noneOf(Material.class);
         for (String materialName : config.getStringList(path)) {
@@ -107,9 +107,10 @@ public class CompatibilityAdapter {
         }
         return es;
     }
-    
+
     /**
      * Load the magic compatibility file
+     * 
      * @param config The appropriate FileConfiguration
      */
     public void loadValues(FileConfiguration config) {
@@ -124,7 +125,7 @@ public class CompatibilityAdapter {
         shredAllowlistShovels = getMaterialSet(config, "shredAllowlistShovels");
         lumberTrunkBlocks = getMaterialSet(config, "lumberTrunks");
         lumberAllowBlocks = getMaterialSet(config, "lumberAllowlist");
-        
+
         for (String s : config.getStringList("terraformerAllowlistTags")) {
             try {
                 Field f = Tag.class.getDeclaredField(s);
@@ -149,7 +150,7 @@ public class CompatibilityAdapter {
         for (String s : config.getStringList("transformation")) {
             transformationMap.put(EntityType.valueOf(s.split(":")[0]), EntityType.valueOf(s.split(":")[1]));
         }
-        
+
         Tool.ALL.setMaterials(getMaterialSet(config, "tools.all"));
         
         Tool.AXE.setMaterials(getMaterialSet(config, "tools.axe"));
@@ -162,10 +163,10 @@ public class CompatibilityAdapter {
         Tool.WINGS.setMaterials(getMaterialSet(config, "tools.wings"));
         Tool.LEGGINGS.setMaterials(getMaterialSet(config, "tools.leggings"));
         Tool.BOOTS.setMaterials(getMaterialSet(config, "tools.boots"));
-        
+
         Tool.SWORD.setMaterials(getMaterialSet(config, "tools.sword"));
         Tool.BOW.setMaterials(getMaterialSet(config, "tools.bow"));
-        
+
         Tool.ROD.setMaterials(getMaterialSet(config, "tools.rod"));
         Tool.SHEARS.setMaterials(getMaterialSet(config, "tools.shears"));
     }
@@ -183,7 +184,7 @@ public class CompatibilityAdapter {
     public EnumSet<Material> airs() {
         return airs;
     }
-    
+
     public EnumSet<Material> ores() {
         return ores;
     }
@@ -282,7 +283,7 @@ public class CompatibilityAdapter {
      */
     public EnumSet<Material> lumberTrunk() {
         return lumberTrunkBlocks;
-    }    
+    }
 
     /**
      * Returns the additional lumber allowlist blocks, which usually are an extension of the {@link CompatibilityAdapter#lumberTrunk()}
@@ -535,7 +536,7 @@ public class CompatibilityAdapter {
      * @param mainHand True if the mainhand was used to shear the event, false otherwise. Used for the event construction.
      * @since 1.0
      */
-    public void shearEntityNMS(Entity target, Player player, boolean mainHand) {
+    public boolean shearEntityNMS(Entity target, Player player, boolean mainHand) {
         if (target instanceof Sheep || target instanceof MushroomCow) {
             EquipmentSlot slot = mainHand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
             PlayerShearEntityEvent evt = new PlayerShearEntityEvent(player, target, player.getInventory().getItem(slot), slot);
@@ -567,8 +568,10 @@ public class CompatibilityAdapter {
                     newCow.setAge(((MushroomCow) target).getAge());
                     target.remove();
                 }
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -589,28 +592,44 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    public void damagePlayer(Player player, double damage, DamageCause cause) {
+    /**
+     * Damages the player by creating the proper event
+     * and returns true if the event was not cancelled and as
+     * such the player was damaged. The damage will not be negated
+     * through amour or any other circumstances. the player will actually
+     * not be damaged if the damage will be 0 and as such can be used as a query for any protections.
+     * 
+     * @param player The player that should be damaged
+     * @param damage The amount of damage that the player should receive
+     * @param cause the Damage cause that should be used to create the event and damage the player
+     * @return The inverse of the cancellation state of the event.
+     * @since 1.0
+     */
+    public boolean damagePlayer(Player player, double damage, DamageCause cause) {
         EntityDamageEvent evt = new EntityDamageEvent(player, cause, damage);
         Bukkit.getPluginManager().callEvent(evt);
         if (damage == 0) {
-            evt.isCancelled();
-            return;
+            return !evt.isCancelled();
         }
         if (!evt.isCancelled()) {
             player.setLastDamageCause(evt);
             player.damage(damage);
+            return true;
         }
+        return false;
     }
 
     /**
      * Explodes a Creeper, removes it and deals the correct damage when the creeper is charged and if it's not.
      * The explosion always performs entity damage. The creeper is marked for removal afterwards.
      * The explosion never generates fire.
+     * 
      * @param creeper The creeper to explode
      * @param doWorldDamage True if blocks should be broken, false otherwise.
+     * @return true if the explosion wasn't cancelled
      * @since 1.0
      */
-    public void explodeCreeper(Creeper creeper, boolean doWorldDamage) {
+    public boolean explodeCreeper(Creeper creeper, boolean doWorldDamage) {
         float power;
         if (creeper.isPowered()) {
             power = 6f;
@@ -619,6 +638,7 @@ public class CompatibilityAdapter {
         }
         boolean performed = creeper.getWorld().createExplosion(creeper.getLocation(), power, false, doWorldDamage, creeper);
         creeper.remove();
+        return performed;
     }
 
     public boolean formBlock(Block block, Material mat, Player player) {

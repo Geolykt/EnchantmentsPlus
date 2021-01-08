@@ -33,7 +33,7 @@ public class FirestormArrow extends EnchantedArrow {
      * @since 2.1.6
      * @see AreaOfEffectable
      */
-    private final double aoe;
+    private double aoe;
 
     public FirestormArrow(AbstractArrow entity, int level, double power, double aoe) {
         super(entity, level, power);

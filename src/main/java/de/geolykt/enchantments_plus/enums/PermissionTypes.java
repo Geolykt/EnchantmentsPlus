@@ -31,11 +31,17 @@ public enum PermissionTypes {
         this.permission = permission;
     }
 
-//    Possibly get rid of, as it's never used in the plugin.
-//    public String getPermissionNames() {
-//        return this.permission;
-//    }
-    
+    /**
+     * Obtains the permission string used by the permission string.
+     * 
+     * @return The permission String used by the {@link #hasPermission(Permissible)} method.
+     * @since 1.1.2
+     */
+    @Deprecated(forRemoval = false, since = "3.0.1")
+    public String getPermissionNames() {
+        return this.permission;
+    }
+
     public boolean hasPermission(Permissible permissible) {
         return permissible.hasPermission(permission);
     }

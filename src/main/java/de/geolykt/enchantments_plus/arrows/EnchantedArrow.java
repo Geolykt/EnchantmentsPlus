@@ -40,6 +40,7 @@ import de.geolykt.enchantments_plus.Storage;
 public class EnchantedArrow {
     // Entities an enchanted arrow has damaged or killed
 
+    // TODO v4.0.0: rename the maps to conventional names
     public static final Map<Entity, EnchantedArrow> killedEntities = new HashMap<>();
     // Arrows mapped to different advanced arrow effects, to be used by the Arrow Watcher to perform these effects
     public static final Map<AbstractArrow, Set<EnchantedArrow>> advancedProjectiles = new HashMap<>();

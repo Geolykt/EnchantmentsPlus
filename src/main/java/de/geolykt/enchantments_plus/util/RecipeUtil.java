@@ -60,7 +60,7 @@ public class RecipeUtil {
      * Recipe cache for smelting recipes
      */
     private static final HashMap<Material, ItemStack> smeltCache = new HashMap<>();
-    
+
     /**
      * Returns the smelted Itemstack based on a given ItemStack.<br>
      * Does not account for stack capacity!

@@ -39,12 +39,7 @@ public class SiphonArrow extends EnchantedArrow {
                 (LivingEntity) evt.getEntity(),
                 (Player) arrow.getShooter(), 0, false)) {
             Player player = (Player) ((Projectile) evt.getDamager()).getShooter();
-            double difference;
-            if (Siphon.calcAmour) {
-                difference = 0.17 * level * power * evt.getFinalDamage();
-            } else {
-                difference = 0.17 * level * power * evt.getDamage();
-            }
+            double difference = (0.17 * level * power) * (Siphon.calcAmour ? evt.getFinalDamage() : evt.getDamage());
             player.setHealth(player.getHealth() + 
                     Math.min(difference, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - player.getHealth()));
         }

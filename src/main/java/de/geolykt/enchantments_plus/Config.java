@@ -49,50 +49,13 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-enum ConfigKeys {
-    ENCHANTMENTS("enchantments"),
-    NAME("Name"),
-    PROBABILITY("Probability"),
-    COOLDOWN("Cooldown"),
-    POWER("Power"),
-    MAX_LEVEL("Max Level"),
-    TOOLS("Tools"),
-
-    /**
-     * Denotes the Area of effect of an achievement, only applicable for enchantment that implements {@link AreaOfEffectable}.
-     * If the key does not exist, but should then a value of 1 should be implied.
-     *
-     * @since 2.1.6
-     */
-    AREA_OF_EFFECT("Effect area modifier"),
-
-    /**
-     * The key to get the conflicts of an enchantment.
-     * Unused until v3.0.0
-     * It's value should be a String separated with commas, the individual strings should all represent a {@link BaseEnchantments}
-     *
-     * @since 2.2.2
-     */
-    CONFLICTS("Conflicts");
-
-    private final String key;
-
-    ConfigKeys(String key) {
-        this.key = key;
-    }
-
-    @Override
-    public String toString() {
-        return this.key;
-    }
-}
-
 // This class manages individual world configs, loading them each from the config file. It will start the process
 //      to automatically update the config files if they are old
 public class Config {
 
     public static final Map<World, Config> CONFIGS = new HashMap<>(3); // Map of all world configs on the current server
     public static final Set<CustomEnchantment> allEnchants = new HashSet<>(72, 1); // Set of all active Custom enchantments in form of instances.
+
     /**
      * This variable holds the classes of every registered enchantment in the plugin, please do not modify the variable, as it may have some
      * Unforeseen consequences.
@@ -101,6 +64,7 @@ public class Config {
      */
     public static final Set<Class<? extends CustomEnchantment>> REGISTERED_ENCHANTMENTS = new HashSet<>(72, 1);
     public static final FileConfiguration PATCH_CONFIGURATION;
+
     /**
      * True if reveal was registered, false otherwise, internally used to make sure that
      * the OreUncover event listener is not registered when not needed
@@ -108,88 +72,6 @@ public class Config {
      * @since 3.0.0
      */
     private static final boolean registeredReveal = false;
-
-    static {
-        File patchFile = new File(Storage.plugin.getDataFolder(), "patches.yml");
-        if (!patchFile.exists()) {
-            Storage.plugin.saveResource("patches.yml", false);
-        }
-        PATCH_CONFIGURATION = YamlConfiguration.loadConfiguration(patchFile);
-
-        REGISTERED_ENCHANTMENTS.add(Anthropomorphism.class);
-        REGISTERED_ENCHANTMENTS.add(Apocalypse.class);
-        REGISTERED_ENCHANTMENTS.add(Arborist.class);
-        REGISTERED_ENCHANTMENTS.add(Bind.class);
-        REGISTERED_ENCHANTMENTS.add(BlazesCurse.class);
-        REGISTERED_ENCHANTMENTS.add(Blizzard.class);
-        REGISTERED_ENCHANTMENTS.add(Bounce.class);
-        REGISTERED_ENCHANTMENTS.add(Burst.class);
-        REGISTERED_ENCHANTMENTS.add(Combustion.class);
-        REGISTERED_ENCHANTMENTS.add(Conversion.class);
-        REGISTERED_ENCHANTMENTS.add(Decapitation.class);
-        REGISTERED_ENCHANTMENTS.add(Ethereal.class);
-        REGISTERED_ENCHANTMENTS.add(Extraction.class);
-        REGISTERED_ENCHANTMENTS.add(Fire.class);
-        REGISTERED_ENCHANTMENTS.add(Firestorm.class);
-        REGISTERED_ENCHANTMENTS.add(Fireworks.class);
-        REGISTERED_ENCHANTMENTS.add(Force.class);
-        REGISTERED_ENCHANTMENTS.add(FrozenStep.class);
-        REGISTERED_ENCHANTMENTS.add(Fuse.class);
-        REGISTERED_ENCHANTMENTS.add(Germination.class);
-        REGISTERED_ENCHANTMENTS.add(Glide.class);
-        REGISTERED_ENCHANTMENTS.add(Gluttony.class);
-        REGISTERED_ENCHANTMENTS.add(GoldRush.class);
-        REGISTERED_ENCHANTMENTS.add(Grab.class);
-        REGISTERED_ENCHANTMENTS.add(GreenThumb.class);
-        REGISTERED_ENCHANTMENTS.add(Gust.class);
-        REGISTERED_ENCHANTMENTS.add(Harvest.class);
-        REGISTERED_ENCHANTMENTS.add(Haste.class);
-        REGISTERED_ENCHANTMENTS.add(IceAspect.class);
-        REGISTERED_ENCHANTMENTS.add(Jump.class);
-        REGISTERED_ENCHANTMENTS.add(Laser.class);
-        REGISTERED_ENCHANTMENTS.add(Level.class);
-        REGISTERED_ENCHANTMENTS.add(LongCast.class);
-        REGISTERED_ENCHANTMENTS.add(Lumber.class);
-        REGISTERED_ENCHANTMENTS.add(Magnetism.class);
-        REGISTERED_ENCHANTMENTS.add(Meador.class);
-        REGISTERED_ENCHANTMENTS.add(Missile.class);
-        REGISTERED_ENCHANTMENTS.add(Mow.class);
-        REGISTERED_ENCHANTMENTS.add(MysteryFish.class);
-        REGISTERED_ENCHANTMENTS.add(NetherStep.class);
-        REGISTERED_ENCHANTMENTS.add(NightVision.class);
-        REGISTERED_ENCHANTMENTS.add(Persephone.class);
-        REGISTERED_ENCHANTMENTS.add(Pierce.class);
-        REGISTERED_ENCHANTMENTS.add(Plough.class);
-        REGISTERED_ENCHANTMENTS.add(Potion.class);
-        REGISTERED_ENCHANTMENTS.add(PotionResistance.class);
-        REGISTERED_ENCHANTMENTS.add(QuickShot.class);
-        REGISTERED_ENCHANTMENTS.add(Rainbow.class);
-        REGISTERED_ENCHANTMENTS.add(RainbowSlam.class);
-        REGISTERED_ENCHANTMENTS.add(Reaper.class);
-        REGISTERED_ENCHANTMENTS.add(Reveal.class);
-        REGISTERED_ENCHANTMENTS.add(Saturation.class);
-        REGISTERED_ENCHANTMENTS.add(ShortCast.class);
-        REGISTERED_ENCHANTMENTS.add(Shred.class);
-        REGISTERED_ENCHANTMENTS.add(Singularity.class);
-        REGISTERED_ENCHANTMENTS.add(Siphon.class);
-        REGISTERED_ENCHANTMENTS.add(SonicShock.class);
-        REGISTERED_ENCHANTMENTS.add(Spectral.class);
-        REGISTERED_ENCHANTMENTS.add(Speed.class);
-        REGISTERED_ENCHANTMENTS.add(Spikes.class);
-        REGISTERED_ENCHANTMENTS.add(Spread.class);
-        REGISTERED_ENCHANTMENTS.add(Stationary.class);
-        REGISTERED_ENCHANTMENTS.add(Stock.class);
-        REGISTERED_ENCHANTMENTS.add(Stream.class);
-        REGISTERED_ENCHANTMENTS.add(Switch.class);
-        REGISTERED_ENCHANTMENTS.add(Terraformer.class);
-        REGISTERED_ENCHANTMENTS.add(Toxic.class);
-        REGISTERED_ENCHANTMENTS.add(Tracer.class);
-        REGISTERED_ENCHANTMENTS.add(Transformation.class);
-        REGISTERED_ENCHANTMENTS.add(Unrepairable.class);
-        REGISTERED_ENCHANTMENTS.add(Variety.class);
-        REGISTERED_ENCHANTMENTS.add(Vortex.class);
-        REGISTERED_ENCHANTMENTS.add(Weight.class);
-    }
 
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
@@ -206,15 +88,15 @@ public class Config {
     /**
      * Constructs a new Config object
      *
-     * @param worldEnchants       The enchantment supported on this world
-     * @param enchantRarity       The global rarity of enchantments on the world
-     * @param maxEnchants         The maximum enchantments on a item
-     * @param shredDrops          0 = all; 1 = only blocks; 2 = none
-     * @param explosionBlockBreak True if explosions block breaking is enabled, only affects a few enchantments
-     * @param enchantmentColor    The color of enchantments in the lore of an item
-     * @param curseColor          The color of a curse enchantment in the lore of an item
-     * @param enchantGlow         True if item glow should be enabled
-     * @param plugin              The plugin that created the config
+     * @param worldEnchants        The enchantment supported on this world
+     * @param enchantRarity        The global rarity of enchantments on the world
+     * @param maxEnchants          The maximum enchantments on a item
+     * @param shredDrops           0 = all; 1 = only blocks; 2 = none
+     * @param explosionBlockBreak  True if explosions block breaking is enabled, only affects a few enchantments
+     * @param enchantmentColor     The color of enchantments in the lore of an item
+     * @param curseColor           The color of a curse enchantment in the lore of an item
+     * @param enchantGlow          True if item glow should be enabled
+     * @param plugin               The plugin that created the config
      * @since 3.0.0
      */
     public Config(@NotNull Set<CustomEnchantment> worldEnchants, double enchantRarity, int maxEnchants, int shredDrops,
@@ -294,20 +176,20 @@ public class Config {
         }
 
         switch (PATCH_CONFIGURATION.getString("enchantmentGatherer", "advLore")) {
-            case "advLore":
-                CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, !isAllowlist);
-                break;
-            case "lwNBT":
-                CustomEnchantment.Enchantment_Adapter = new LeightweightPDCGetter();
-                break;
-            case "NBT":
-                CustomEnchantment.Enchantment_Adapter = new PersistentDataGetter(allowlist, !isAllowlist);
-                break;
-            case "PR47-lore":
-                CustomEnchantment.Enchantment_Adapter = new BasicLoreGetter();
-                break;
-            default:
-                Bukkit.getLogger().severe(Storage.MINILOGO + ChatColor.RED + "No (or invalid) enchantment gatherer specified, fallback to default.");
+        case "advLore":
+            CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, !isAllowlist);
+            break;
+        case "lwNBT":
+            CustomEnchantment.Enchantment_Adapter = new LeightweightPDCGetter();
+            break;
+        case "NBT":
+            CustomEnchantment.Enchantment_Adapter = new PersistentDataGetter(allowlist, !isAllowlist);
+            break;
+        case "PR47-lore":
+            CustomEnchantment.Enchantment_Adapter = new BasicLoreGetter();
+            break;
+        default:
+            Bukkit.getLogger().severe(Storage.MINILOGO + ChatColor.RED + "No (or invalid) enchantment gatherer specified, fallback to default.");
         }
     }
 
@@ -335,24 +217,29 @@ public class Config {
             /*
             Version is never read, but is queried.
              */
-//            int[] version = new int[3];
-//            try {
-//                String[] versionString;
-//                try {
-//                    versionString = yamlConfig.getString("ZenchantmentsConfigVersion").split("\\.");
-//                } catch (NullPointerException ex) {
-//                    versionString = ((String) yamlConfig.getList("ZenchantmentsConfigVersion").get(0)).split("\\.");
-//                }
-//                if (versionString.length == 3) {
-//                    for (int i = 0; i < 3; i++) {
-//                        version[i] = Integer.parseInt(versionString[i]);
-//                    }
-//                } else {
-//                    version = new int[]{0, 0, 0};
-//                }
-//            } catch (Exception ex) {
-//                version = new int[]{1, 5, 0};
-//            }
+            int[] version = new int[3];
+            try {
+                String[] versionString;
+                try {
+                    versionString = yamlConfig.getString("ZenchantmentsConfigVersion").split("\\.");
+                } catch (NullPointerException ex) {
+                    versionString = ((String) yamlConfig.getList("ZenchantmentsConfigVersion").get(0)).split("\\.");
+                }
+                if (versionString.length == 3) {
+                    for (int i = 0; i < 3; i++) {
+                        version[i] = Integer.parseInt(versionString[i]);
+                    }
+                } else {
+                    version = new int[]{0, 0, 0};
+                }
+            } catch (Exception expected) {
+                version = new int[]{1, 5, 0};
+            }
+            // TODO do not hardcode this version
+            if (version[0] != 2 && version[1] != 1 && version[2] != 6) {
+                plugin.getLogger().warning("Config file for world " + world.getName() + " with UID " + world.getUID().toString()
+                        + " might be potentially out of date! (does not match the latest revision version 2.1.6)");
+            }
             // Init variables
             final int shredDrops;
             yamlConfig.save(file);
@@ -487,8 +374,8 @@ public class Config {
      * Returns the Enchantments that are conflicting with the enchantment.
      * Unused until v3.0.0
      *
-     * @param data     The data
-     * @param defaults The defaults to return if the key does not exist.
+     * @param data      The data
+     * @param defaults  The defaults to return if the key does not exist.
      * @return The conflicting enchantments, or defaults if it is unmapped.
      * @since 2.2.2
      */
@@ -622,4 +509,123 @@ public class Config {
         return baseToEnch.get(ench);
     }
 
+    static {
+        File patchFile = new File(Storage.plugin.getDataFolder(), "patches.yml");
+        if (!patchFile.exists()) {
+            Storage.plugin.saveResource("patches.yml", false);
+        }
+        PATCH_CONFIGURATION = YamlConfiguration.loadConfiguration(patchFile);
+
+        REGISTERED_ENCHANTMENTS.add(Anthropomorphism.class);
+        REGISTERED_ENCHANTMENTS.add(Apocalypse.class);
+        REGISTERED_ENCHANTMENTS.add(Arborist.class);
+        REGISTERED_ENCHANTMENTS.add(Bind.class);
+        REGISTERED_ENCHANTMENTS.add(BlazesCurse.class);
+        REGISTERED_ENCHANTMENTS.add(Blizzard.class);
+        REGISTERED_ENCHANTMENTS.add(Bounce.class);
+        REGISTERED_ENCHANTMENTS.add(Burst.class);
+        REGISTERED_ENCHANTMENTS.add(Combustion.class);
+        REGISTERED_ENCHANTMENTS.add(Conversion.class);
+        REGISTERED_ENCHANTMENTS.add(Decapitation.class);
+        REGISTERED_ENCHANTMENTS.add(Ethereal.class);
+        REGISTERED_ENCHANTMENTS.add(Extraction.class);
+        REGISTERED_ENCHANTMENTS.add(Fire.class);
+        REGISTERED_ENCHANTMENTS.add(Firestorm.class);
+        REGISTERED_ENCHANTMENTS.add(Fireworks.class);
+        REGISTERED_ENCHANTMENTS.add(Force.class);
+        REGISTERED_ENCHANTMENTS.add(FrozenStep.class);
+        REGISTERED_ENCHANTMENTS.add(Fuse.class);
+        REGISTERED_ENCHANTMENTS.add(Germination.class);
+        REGISTERED_ENCHANTMENTS.add(Glide.class);
+        REGISTERED_ENCHANTMENTS.add(Gluttony.class);
+        REGISTERED_ENCHANTMENTS.add(GoldRush.class);
+        REGISTERED_ENCHANTMENTS.add(Grab.class);
+        REGISTERED_ENCHANTMENTS.add(GreenThumb.class);
+        REGISTERED_ENCHANTMENTS.add(Gust.class);
+        REGISTERED_ENCHANTMENTS.add(Harvest.class);
+        REGISTERED_ENCHANTMENTS.add(Haste.class);
+        REGISTERED_ENCHANTMENTS.add(IceAspect.class);
+        REGISTERED_ENCHANTMENTS.add(Jump.class);
+        REGISTERED_ENCHANTMENTS.add(Laser.class);
+        REGISTERED_ENCHANTMENTS.add(Level.class);
+        REGISTERED_ENCHANTMENTS.add(LongCast.class);
+        REGISTERED_ENCHANTMENTS.add(Lumber.class);
+        REGISTERED_ENCHANTMENTS.add(Magnetism.class);
+        REGISTERED_ENCHANTMENTS.add(Meador.class);
+        REGISTERED_ENCHANTMENTS.add(Missile.class);
+        REGISTERED_ENCHANTMENTS.add(Mow.class);
+        REGISTERED_ENCHANTMENTS.add(MysteryFish.class);
+        REGISTERED_ENCHANTMENTS.add(NetherStep.class);
+        REGISTERED_ENCHANTMENTS.add(NightVision.class);
+        REGISTERED_ENCHANTMENTS.add(Persephone.class);
+        REGISTERED_ENCHANTMENTS.add(Pierce.class);
+        REGISTERED_ENCHANTMENTS.add(Plough.class);
+        REGISTERED_ENCHANTMENTS.add(Potion.class);
+        REGISTERED_ENCHANTMENTS.add(PotionResistance.class);
+        REGISTERED_ENCHANTMENTS.add(QuickShot.class);
+        REGISTERED_ENCHANTMENTS.add(Rainbow.class);
+        REGISTERED_ENCHANTMENTS.add(RainbowSlam.class);
+        REGISTERED_ENCHANTMENTS.add(Reaper.class);
+        REGISTERED_ENCHANTMENTS.add(Reveal.class);
+        REGISTERED_ENCHANTMENTS.add(Saturation.class);
+        REGISTERED_ENCHANTMENTS.add(ShortCast.class);
+        REGISTERED_ENCHANTMENTS.add(Shred.class);
+        REGISTERED_ENCHANTMENTS.add(Singularity.class);
+        REGISTERED_ENCHANTMENTS.add(Siphon.class);
+        REGISTERED_ENCHANTMENTS.add(SonicShock.class);
+        REGISTERED_ENCHANTMENTS.add(Spectral.class);
+        REGISTERED_ENCHANTMENTS.add(Speed.class);
+        REGISTERED_ENCHANTMENTS.add(Spikes.class);
+        REGISTERED_ENCHANTMENTS.add(Spread.class);
+        REGISTERED_ENCHANTMENTS.add(Stationary.class);
+        REGISTERED_ENCHANTMENTS.add(Stock.class);
+        REGISTERED_ENCHANTMENTS.add(Stream.class);
+        REGISTERED_ENCHANTMENTS.add(Switch.class);
+        REGISTERED_ENCHANTMENTS.add(Terraformer.class);
+        REGISTERED_ENCHANTMENTS.add(Toxic.class);
+        REGISTERED_ENCHANTMENTS.add(Tracer.class);
+        REGISTERED_ENCHANTMENTS.add(Transformation.class);
+        REGISTERED_ENCHANTMENTS.add(Unrepairable.class);
+        REGISTERED_ENCHANTMENTS.add(Variety.class);
+        REGISTERED_ENCHANTMENTS.add(Vortex.class);
+        REGISTERED_ENCHANTMENTS.add(Weight.class);
+    }
+
+} enum ConfigKeys {
+    ENCHANTMENTS("enchantments"),
+    NAME("Name"),
+    PROBABILITY("Probability"),
+    COOLDOWN("Cooldown"),
+    POWER("Power"),
+    MAX_LEVEL("Max Level"),
+    TOOLS("Tools"),
+
+    /**
+     * Denotes the Area of effect of an achievement, only applicable for enchantment that implements {@link AreaOfEffectable}.
+     * If the key does not exist, but should then a value of 1 should be implied.
+     *
+     * @since 2.1.6
+     */
+    AREA_OF_EFFECT("Effect area modifier"),
+
+    /**
+     * The key to get the conflicts of an enchantment.
+     * Unused until v3.0.0
+     * It's value should be a String separated with commas, the individual strings should all represent a {@link BaseEnchantments}
+     *
+     * @since 2.2.2
+     */
+    CONFLICTS("Conflicts");
+
+    private final String key;
+
+    ConfigKeys(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public String toString() {
+        return this.key;
+    }
 }
+

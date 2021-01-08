@@ -17,7 +17,6 @@
  */
 package de.geolykt.enchantments_plus.evt;
 
-import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;

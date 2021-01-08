@@ -18,7 +18,6 @@
 package de.geolykt.enchantments_plus;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;

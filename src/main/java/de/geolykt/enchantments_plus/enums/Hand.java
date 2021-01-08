@@ -23,5 +23,5 @@ public enum Hand {
     RIGHT(2),
     BOTH(3);
 
-    Hand(int i) {}
+    private Hand(int i) {}
 }

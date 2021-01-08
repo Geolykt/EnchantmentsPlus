@@ -35,7 +35,7 @@ public class BlizzardArrow extends EnchantedArrow {
      * @since 2.1.6
      * @see AreaOfEffectable
      */
-    private final double aoe;
+    private double aoe;
     
     public BlizzardArrow(AbstractArrow entity, int level, double power, double aoeSize) {
         super(entity, level, power);
