@@ -221,7 +221,7 @@ public class Watcher implements Listener {
                 boolean conflicts = false;
                 for (CustomEnchantment e : addedEnchants.keySet()) {
                     if (ench.getConflicts().contains(e.asEnum()) || addedEnchants.containsKey(ench)
-                            || e.getProbability() <= 0) {
+                            || e.getProbability() <= 0.0) {
                         conflicts = true;
                         break;
                     }

@@ -1,7 +1,8 @@
 ConfigVersion: 2.1.6
 
-# Probability: (Decimal) (0 = no probability, -1 = disabled)
+# Probability: (Decimal) (0.0 = no probability, -1.0 = disabled)
 #    Chance of obtaining the enchantment when enchanting
+#    Can be of arbitary size, however the change may not be linear
 
 # Tools: (Axe, Shovel, Sword, Pickaxe, Rod, Shears, Bow, Lighter,
 #            Hoe, Helmet, Chestplate, Leggings, Boots, Elytra, All)
@@ -28,7 +29,7 @@ ConfigVersion: 2.1.6
 # NOTICE: I do not actively test whether these configurations actually do anything.
 #  report the issues if you find any
 
-# Some comments are removed due to our library that we use, to see them all use https://github.com/Geolykt/EnchantmentsPlus/blob/main/resources/defaultconfig.yml
+# Some comments are removed due to the library that bukkit uses, to see them all use https://github.com/Geolykt/EnchantmentsPlus/blob/main/resources/defaultconfig.yml
 
 enchantments:
 # Regular Enchantments
@@ -558,7 +559,6 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
-# New Enchantments
   
 #  Changes the overall probability of obtaining all custom enchantments
 enchant_rarity: 25.0

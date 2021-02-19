@@ -314,14 +314,14 @@ public class Config {
      * Must be specified
      */
     private static float getProbability(@NotNull LinkedHashMap<String, Object> data) {
-        return (float) (double) data.get(ConfigKeys.PROBABILITY.toString());
+        return ((Number) data.get(ConfigKeys.PROBABILITY.toString())).floatValue();
     }
 
     /**
      * Must be specified
      */
     private static String getLoreName(@NotNull LinkedHashMap<String, Object> data) {
-        return (String) data.get(ConfigKeys.NAME.toString());
+        return data.get(ConfigKeys.NAME.toString()).toString();
     }
 
     /**
@@ -332,14 +332,14 @@ public class Config {
      * @since 1.0.0
      */
     private static int getCooldown(@NotNull LinkedHashMap<String, Object> data) {
-        return (int) data.get(ConfigKeys.COOLDOWN.toString());
+        return ((Number) data.get(ConfigKeys.COOLDOWN.toString())).intValue();
     }
 
     /**
      * Must be specified.
      */
     private static int getMaxLevel(@NotNull LinkedHashMap<String, Object> data) {
-        return (int) data.get(ConfigKeys.MAX_LEVEL.toString());
+        return ((Number) data.get(ConfigKeys.MAX_LEVEL.toString())).intValue();
     }
 
     /**
@@ -357,7 +357,7 @@ public class Config {
      * Defaulting to 1, as stated in CustomEnchantment
      */
     private static double getPower(@NotNull LinkedHashMap<String, Object> data) {
-        return (double) data.getOrDefault(ConfigKeys.POWER.toString(), 1.0);
+        return ((Number) data.getOrDefault(ConfigKeys.POWER.toString(), 1.0)).doubleValue();
     }
 
     /**
@@ -368,7 +368,7 @@ public class Config {
      * @since 2.1.6
      */
     private static double getAOEMod(@NotNull LinkedHashMap<String, Object> data) {
-        return (double) data.getOrDefault(ConfigKeys.AREA_OF_EFFECT.toString(), 1.0);
+        return ((Number) data.getOrDefault(ConfigKeys.AREA_OF_EFFECT.toString(), 1.0)).doubleValue();
     }
 
     /**

@@ -157,12 +157,12 @@ public class CompatibilityAdapter {
             Material mv = Material.matchMaterial(s.split(":")[1]);
             if (mk == null) {
                 if (mv == null) {
-                    Storage.plugin.getLogger().warning("Both key and value of the entry\"" + s + "\" in the spectralConversions list are invalid; Skipping entry.");
+                    Storage.plugin.getLogger().warning("Both key and value of the entry \"" + s + "\" in the spectralConversions list are invalid; Skipping entry.");
                 } else {
-                    Storage.plugin.getLogger().warning("The key of the entry\"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
+                    Storage.plugin.getLogger().warning("The key of the entry \"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
                 }
             } else if (mv == null) {
-                Storage.plugin.getLogger().warning("The value of the entry\"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
+                Storage.plugin.getLogger().warning("The value of the entry \"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
             } else {
                 spectralMaterialConversion.put(mk, mv);
             }
@@ -181,12 +181,12 @@ public class CompatibilityAdapter {
 
             if (mk == null) {
                 if (mv == null) {
-                    Storage.plugin.getLogger().warning("Both key and value of the entry\"" + s + "\" in the transformation list are invalid; Skipping entry.");
+                    Storage.plugin.getLogger().warning("Both key and value of the entry \"" + s + "\" in the transformation list are invalid; Skipping entry.");
                 } else {
-                    Storage.plugin.getLogger().warning("The key of the entry\"" + s + "\" in the transformation list is invalid; Skipping entry.");
+                    Storage.plugin.getLogger().warning("The key of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
                 }
             } else if (mv == null) {
-                Storage.plugin.getLogger().warning("The value of the entry\"" + s + "\" in the transformation list is invalid; Skipping entry.");
+                Storage.plugin.getLogger().warning("The value of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
             } else {
                 transformationMap.put(mk, mv);
             }
