@@ -75,6 +75,12 @@ public class Storage {
      */
     public static String version = "";
 
+    /**
+     * @deprecated Most of the functions within the compatibility adapter are static
+     * Instance to the compatibility adapter of the plugin,
+     * however due to the lacking support to multiple versions this isn't really needed
+     */
+    @Deprecated(forRemoval = true, since = "3.1.0")
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER = new CompatibilityAdapter(Enchantments_plus.internal_instance);
 
     /**

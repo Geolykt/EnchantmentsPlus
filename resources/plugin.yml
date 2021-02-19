@@ -1,6 +1,6 @@
 name: Enchantments_plus
 main: de.geolykt.enchantments_plus.Enchantments_plus
-api-version: 1.16
+api-version: 1.15
 version: ${project.version}
 softdepend: [Towny, WorldGuard]
 commands:

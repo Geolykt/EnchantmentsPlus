@@ -52,6 +52,10 @@ public class Enchantments_plus extends JavaPlugin {
      */
     protected static Enchantments_plus internal_instance;
 
+    public Enchantments_plus() {
+        internal_instance = this;
+    }
+
     // Creates a directory for the plugin and then loads configs
     public void loadConfigs() {
         File file = new File("plugins/Enchantments_plus/");
@@ -97,10 +101,9 @@ public class Enchantments_plus extends JavaPlugin {
 
     // Loads configs and starts tasks
     public void onEnable() {
-        internal_instance = this;
+        Storage.plugin = this;
         StopWatch w = new StopWatch();
         w.start();
-        Storage.plugin = this;
 
         Storage.version = this.getDescription().getVersion();
         loadConfigs();

@@ -114,6 +114,7 @@ public class CompatibilityAdapter {
      * @param config The appropriate FileConfiguration
      */
     public void loadValues(FileConfiguration config) {
+        Storage.plugin.getLogger().info("Loading magic compatibillity file, if this step fails you should notify the devs about this.");
         grownCrops = getMaterialSet(config, "grownCrops");
         melonCrops = getMaterialSet(config, "melonCrops");
         airs = getMaterialSet(config, "airs");
@@ -128,27 +129,67 @@ public class CompatibilityAdapter {
 
         for (String s : config.getStringList("terraformerAllowlistTags")) {
             try {
-                Field f = Tag.class.getDeclaredField(s);
-                @SuppressWarnings("unchecked")
-                Tag<? extends Material> tag = (Tag<? extends Material>) f.get(null);
-                terraformerAllowlist.addAll(tag.getValues());
-            } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-                Bukkit.getLogger().warning("looks like an issue occoured with the Enchantments+ plugin. "
-                        + "This is likely the cause of an unsupported minecraft version.");
+                try {
+                    Field f = Tag.class.getDeclaredField(s);
+                    @SuppressWarnings("unchecked")
+                    Tag<? extends Material> tag = (Tag<? extends Material>) f.get(null);
+                    terraformerAllowlist.addAll(tag.getValues());
+                } catch (NoSuchFieldException e) {
+                    Storage.plugin.getLogger().warning(s + " is not a known tag (located within the terraformerAllowlistTags list); Skipping entry.");
+                    continue;
+                }
+            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+                Bukkit.getLogger().severe("Looks like an issue occoured with the Enchantments+ plugin. Please report this to the devs as this is something severe!");
                 e.printStackTrace();
             }
         }
         dryBiomes = EnumSet.noneOf(Biome.class);
         for (String s : config.getStringList("dryBiomes")) {
-            dryBiomes.add(Biome.valueOf(s));
+            try {
+                dryBiomes.add(Biome.valueOf(s));
+            } catch (IllegalArgumentException e) {
+                Storage.plugin.getLogger().warning(s + " is not a known biome (located within the terraformerAllowlistTags list); Skipping entry.");
+            }
         }
         spectralMaterialConversion = new EnumMap<>(Material.class);
         for (String s : config.getStringList("spectralConversions")) {
-            spectralMaterialConversion.put(Material.matchMaterial(s.split(":")[0]), Material.matchMaterial(s.split(":")[1]));
+            Material mk = Material.matchMaterial(s.split(":")[0]);
+            Material mv = Material.matchMaterial(s.split(":")[1]);
+            if (mk == null) {
+                if (mv == null) {
+                    Storage.plugin.getLogger().warning("Both key and value of the entry\"" + s + "\" in the spectralConversions list are invalid; Skipping entry.");
+                } else {
+                    Storage.plugin.getLogger().warning("The key of the entry\"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
+                }
+            } else if (mv == null) {
+                Storage.plugin.getLogger().warning("The value of the entry\"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
+            } else {
+                spectralMaterialConversion.put(mk, mv);
+            }
         }
         transformationMap = new EnumMap<>(EntityType.class);
         for (String s : config.getStringList("transformation")) {
-            transformationMap.put(EntityType.valueOf(s.split(":")[0]), EntityType.valueOf(s.split(":")[1]));
+            EntityType mk = null;
+            try {
+                mk = EntityType.valueOf(s.split(":")[0]);
+            } catch (IllegalArgumentException ignore) {} // Prevent Exceptions if the entity is not known
+
+            EntityType mv = null;
+            try {
+                mv = EntityType.valueOf(s.split(":")[1]);
+            } catch (IllegalArgumentException ignore) {} // Prevent Exceptions if the entity is not known
+
+            if (mk == null) {
+                if (mv == null) {
+                    Storage.plugin.getLogger().warning("Both key and value of the entry\"" + s + "\" in the transformation list are invalid; Skipping entry.");
+                } else {
+                    Storage.plugin.getLogger().warning("The key of the entry\"" + s + "\" in the transformation list is invalid; Skipping entry.");
+                }
+            } else if (mv == null) {
+                Storage.plugin.getLogger().warning("The value of the entry\"" + s + "\" in the transformation list is invalid; Skipping entry.");
+            } else {
+                transformationMap.put(mk, mv);
+            }
         }
 
         Tool.ALL.setMaterials(getMaterialSet(config, "tools.all"));

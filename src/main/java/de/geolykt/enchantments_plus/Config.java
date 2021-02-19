@@ -214,16 +214,17 @@ public class Config {
             }
             YamlConfiguration yamlConfig = new YamlConfiguration();
             yamlConfig.load(file);
-            /*
-            Version is never read, but is queried.
-             */
             int[] version = new int[3];
             try {
                 String[] versionString;
-                try {
-                    versionString = yamlConfig.getString("ZenchantmentsConfigVersion").split("\\.");
-                } catch (NullPointerException ex) {
-                    versionString = ((String) yamlConfig.getList("ZenchantmentsConfigVersion").get(0)).split("\\.");
+                if (yamlConfig.contains("ConfigVersion")) {
+                    versionString = yamlConfig.getString("ConfigVersion").split("\\.");
+                } else {
+                    try {
+                        versionString = yamlConfig.getString("ZenchantmentsConfigVersion").split("\\.");
+                    } catch (NullPointerException ex) {
+                        versionString = yamlConfig.getStringList("ZenchantmentsConfigVersion").get(0).split("\\.");
+                    }
                 }
                 if (versionString.length == 3) {
                     for (int i = 0; i < 3; i++) {
@@ -233,7 +234,7 @@ public class Config {
                     version = new int[]{0, 0, 0};
                 }
             } catch (Exception expected) {
-                version = new int[]{1, 5, 0};
+                version = new int[]{2, 1, 6};
             }
             // TODO do not hardcode this version
             if (version[0] != 2 && version[1] != 1 && version[2] != 6) {
