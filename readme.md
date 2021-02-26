@@ -1,9 +1,6 @@
 **IMPORTANT: As of 3.0.0 the project requires Java 11 or above to run, use the 2.x.x LTS versions instead if you use Java 8**
-Or update your java version
 
-Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail-to:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). I can no longer give help via discord as I deleted my discord account. Issues however should be reported here so forkers can profit from them being public, but It's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed.
-
-The plugin only intends to support 1.16.4 and newer versions when the time comes.
+Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail-to:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). Issues however should be reported here on Github so forkers can profit from them being public, but it's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed, so in the end it doesn't really matter where they are reported to.
 
 # Enchantments+
 ## Description
@@ -11,16 +8,16 @@ Enchantments+ is a hard fork of Zenchantments, a custom enchantments plugin addi
 The hard fork status however means that we won't maintain any parity with Zenchantments; this is because there are too many differences with the plugin that it is pretty much impossible to convert the 174 commits from Zenchantment's development branch into EnchantmentsPlus-compatible commits.
 
 ## Enchantments+ vs other Zenchantments forks
-  - This fork is highly actively maintained and has persisted since May of 2020, which is the longer than any other fork who are otherwise more shortlived.
+  - This fork is actively maintained and has persisted since May of 2020, which is the longer than any other fork who are otherwise more shortlived.
   - This is fast(-ish). During the last months the fork accumulated lots of revisions that aim at improving performance as well as general code quality. It also continues to do so with each update.
-  - Enchantments+ doesn't use NMS. This means that newer versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support, this may no longer be full selling point.
-  - The fork compiles, Zenchantments doesn't.
+  - Enchantments+ doesn't use NMS. This means that newer minecraft versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support, this may no longer be full selling point.
   - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will often be fixed in under a day (especially on github).
-  - EnchantmentsPlus 3+.x.x requires Java 11 (or higher) in order to compile and run, Zenchantments runs on Java 8
+  - EnchantmentsPlus 3+.x.x requires Java 11 (or higher) in order to compile and run, Zenchantments runs on Java 8, so if you have an older JVM, use Zenchantments instead
   - EnchantmentsPlus 4+.x.x (currently only planned) will make use of the Paper api for even more performance
 
 ## Metrics
 As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the information is shown can be found [here](https://bstats.org/plugin/bukkit/EnchantmentsPlus/9211).
+Please do not opt out of Metrics as it will only come back to bite you! Changes that are introduced to the plugin may be based on the metrics.
 
 ## Permissions
 <b>enchplus.enchant.get</b> - On player enchant event, allow player to have a chance at the enabled custom enchantments<br>
@@ -53,11 +50,13 @@ See [Releases](https://github.com/Geolykt/EnchantmentsPlus/releases) for downloa
 Or compile this project like every other project out there via maven and a JDK 11 or higher, a "mvn clean package" should suffice to build the plugin.
 
 ## Compatibility
-The current version of this plugin is compatible with Spigot version 1.15.2, 1.16.1, 1.16.2, 1.16.3 and 1.16.4. Any versions under 1.15.2, will **not** work without tinkering, versions above 1.16.4, may, although with a few issues.
-We however recommend Paper for full compatibillity as as of yet there is a bug with enchantment merging.
+The current version of this plugin is compatible with Spigot version 1.15.2, 1.16.1, 1.16.2, 1.16.3, 1.16.4, 1.16.5. Any versions under 1.15.2, will **not** work without tinkering, versions above 1.16.5, may, although with a few issues.
+We however recommend Paper for full compatibillity. If you are using spigot, please consider enabling the `1xx-anvil-merger` option in the patches.yml.
 
 ## Contribute
 Anyone is free to contribute to this repository via pull requests, issues or comments, however keep in mind that this repository uses 4 space indentation.
+If you feel like compliaining about performance while not being an annoying person, then please send me profiling reports NOT TIMINGS.
+I cannot do much with Timings and I require proper profiling reports to optimize the plugin, otherwise I'm guessing where the bottlenecks COULD be (and usually they are not where I search them).
 
 ## Changes performed in this fork compared to NMS-less Zenchantments
 To view the changes compared to Zenchantments (from the point where the split happened), add the Changelog of [NMS-Less Zenchantments](https://github.com/Geolykt/NMSless-Zenchantments#changes-performed-in-this-fork) onto it

@@ -29,6 +29,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
@@ -94,6 +97,9 @@ public class Enchantments_plus extends JavaPlugin {
         return CommandProcessor.onCommand(sender, command, commandlabel, args);
     }
 
+    private long tick = 0;
+    private long pmes = 0;
+
     /**
      * The metric object used by the plugin. Internal use only.
      * @since 2.1.6
@@ -149,6 +155,7 @@ public class Enchantments_plus extends JavaPlugin {
         getServer().getScheduler().runTaskTimer(this, () -> {
             EnchantedArrow.scanAndReap();
             NetherStep.updateBlocks(); // TODO maybe allocate it to a PlayerMoveEvent executor?
+            tick += getServer().getOnlinePlayers().size() * 5;
         }, 5, 5);
 
         // medium-high asynchronous frequency runnable (every five ticks)
@@ -156,9 +163,49 @@ public class Enchantments_plus extends JavaPlugin {
 
         // BSTATS metrics init
         metric = new Metrics(this, 9211);
+
+        if (metric.isEnabled()) {
+            getServer().getPluginManager().registerEvents(new Listener() {
+                @EventHandler
+                public void onPlayerMove(PlayerMoveEvent evt) {
+                    pmes++;
+                }
+            }, this);
+        }
+
         metric.addCustomChart(new Metrics.SimplePie("distribution_method", () -> Storage.DISTRIBUTION));
         metric.addCustomChart(new Metrics.SimplePie("plugin_brand", () -> Storage.BRAND));
         metric.addCustomChart(new Metrics.SimplePie("enchantment_getter", () -> CustomEnchantment.Enchantment_Adapter.getClass().getSimpleName()));
+
+        metric.addCustomChart(new Metrics.SimplePie("pme_vs_tick", () -> {
+            float relevancy = Long.valueOf(pmes).floatValue() / tick;
+            if (relevancy >= 1.0) {
+                if (relevancy > 1.5) {
+                    return "Tick far better";
+                }
+                if (relevancy > 1.2) {
+                    return "Tick noteably better";
+                }
+                if (relevancy > 1.1) {
+                    return "Tick better";
+                }
+                if (relevancy == 1.0) {
+                    return "Draw";
+                }
+                return "Tick slightly better";
+            } else {
+                if (relevancy < 0.666) {
+                    return "PME far better";
+                }
+                if (relevancy > 0.833) {
+                    return "PME noteably better";
+                }
+                if (relevancy < 0.909) {
+                    return "PME better";
+                }
+                return "PME slightly better";
+            }
+        }));
 
         w.stop();
         getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
