@@ -58,7 +58,7 @@ public class LeightweightPDCGetter implements IEnchGatherer {
 
                 Set<NamespacedKey> keys = cont.getKeys();
                 for (NamespacedKey key : keys) {
-                    if (!key.getNamespace().toLowerCase(Locale.ROOT).equals(Storage.plugin.getName())) {
+                    if (!key.getNamespace().equalsIgnoreCase(Storage.plugin.getName())) {
                         continue;
                     }
                     if (!key.getKey().split("\\.")[0].equals("ench")) {
