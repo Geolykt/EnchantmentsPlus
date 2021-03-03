@@ -8,10 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -71,8 +71,8 @@ public class Spread extends CustomEnchantment {
                 arrow.remove();
                 return false;
             }
-            arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
             arrow.setCritical(originalArrow.isCritical());
+            arrow.setPickupStatus(PickupStatus.DISALLOWED);
             EnchantedArrow.putArrow(originalArrow, new MultiArrow(originalArrow), player);
         }
         return true;

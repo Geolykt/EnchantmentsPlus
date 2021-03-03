@@ -5,11 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.Storage;
@@ -69,8 +69,8 @@ public class Burst extends CustomEnchantment {
                         if (shootEvent.isCancelled() || launchEvent.isCancelled()) {
                             arrow.remove();
                         } else {
-                            arrow.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
                             arrow.setCritical(true);
+                            arrow.setPickupStatus(PickupStatus.DISALLOWED);
                             EnchantedArrow.putArrow(arrow, new MultiArrow(arrow), player);
                             CompatibilityAdapter.damageTool(player, 1, usedHand);
                         }

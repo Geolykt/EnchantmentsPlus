@@ -3,10 +3,9 @@ package de.geolykt.enchantments_plus.arrows.enchanted;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 
 public class MultiArrow extends EnchantedArrow {
@@ -30,7 +29,7 @@ public class MultiArrow extends EnchantedArrow {
             (float) (arrow.getVelocity().length() / 10), 0);
         p.setFireTicks(arrow.getFireTicks());
         p.getLocation().setDirection(arrow.getLocation().getDirection());
-        p.setMetadata("ze.arrow", new FixedMetadataValue(Storage.plugin, null));
+        p.setPickupStatus(PickupStatus.DISALLOWED);
         this.arrow.remove();
     }
 }

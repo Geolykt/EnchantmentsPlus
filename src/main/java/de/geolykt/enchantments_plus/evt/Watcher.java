@@ -319,11 +319,14 @@ public class Watcher implements Listener {
         }
     }
 
-    // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
-    // by removing them
-    // FIXME is this even needed nowadays?
-    @SuppressWarnings("deprecation")
-    @EventHandler
+    /**
+     * @deprecated No called by bukkit and will be removed by 4.0.0
+     * Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
+     * by removing them
+     * @param evt The event
+     * @since 1.0.0
+     */
+    @Deprecated
     public void onArrowPickup(PlayerPickupArrowEvent evt) {
         if (evt.getItem().hasMetadata("ze.arrow")) {
             evt.getItem().remove();
