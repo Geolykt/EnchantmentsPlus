@@ -197,7 +197,7 @@ public class Enchantments_plus extends JavaPlugin {
                 if (relevancy < 0.666) {
                     return "PME far better";
                 }
-                if (relevancy > 0.833) {
+                if (relevancy < 0.833) {
                     return "PME noteably better";
                 }
                 if (relevancy < 0.909) {
