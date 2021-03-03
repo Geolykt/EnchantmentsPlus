@@ -215,8 +215,7 @@ public class Anthropomorphism extends CustomEnchantment {
                             = loc.getWorld().spawnFallingBlock(loc, Bukkit.createBlockData(MAT[ThreadLocalRandom.current().nextInt(4)]));
                     blockEntity.setDropItem(false);
                     blockEntity.setGravity(false);
-                    blockEntity
-                            .setMetadata("ze.anthrothrower", new FixedMetadataValue(Storage.plugin, player));
+                    blockEntity.setMetadata("ze.anthrothrower", new FixedMetadataValue(Storage.plugin, player));
                     idleBlocks.put(blockEntity, player.getUniqueId());
                     return true;
                 }

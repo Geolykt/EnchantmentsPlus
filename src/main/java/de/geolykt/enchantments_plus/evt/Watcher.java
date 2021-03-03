@@ -317,9 +317,7 @@ public class Watcher implements Listener {
 
     // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
     // by removing them
-    // FIXME is this even needed nowadays?
-    @EventHandler
-    @Deprecated(forRemoval = false, since = "3.0.0")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public void onArrowPickup(PlayerPickupArrowEvent evt) {
         if (evt.getItem().hasMetadata("ze.arrow")) {
             evt.getItem().remove();
