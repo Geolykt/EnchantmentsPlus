@@ -15,6 +15,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
@@ -45,7 +46,7 @@ public class NewAnvilMerger implements Listener {
             return Math.min(Math.max(inputA, inputB), ench.getMaxLevel());
         }
     }
-    
+
     /**
      * Merges two CustomEnchantment to Enchantment Level maps into each other to result a new Map that contains the keys of both maps.
      * It is guaranteed that the Keys on the output map are unique, in case a clash occurs, the highest value is picked or the value of one
@@ -108,22 +109,25 @@ public class NewAnvilMerger implements Listener {
                         CustomEnchantment.getEnchants(stackA, true, world, nleftLore),
                         CustomEnchantment.getEnchants(stackB, true, world));
                 if (out.size() > 0) {
-                    boolean unrepairable = false;
                     for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
                         if (ench.getKey().asEnum() == BaseEnchantments.UNREPAIRABLE && ench.getValue() != 0) {
-                            unrepairable = true;
-                            break;
+                            evt.setResult(null);
+                            return;
                         }
                     }
-                    if (unrepairable) {
-                        evt.setResult(null);
-                    } else {
-                        out.forEach((ench, level) -> {
-                            CustomEnchantment.setEnchantment(stackA, ench, ench.validMaterial(stackA) ? level : 0, world);
-                        });
-                        inv.setRepairCost(out.size()*4+inv.getRepairCost());
-                        evt.setResult(stackA);
+                    int appliedEnchants = 0;
+                    int maxEnchants = Config.get(world).getMaxEnchants();
+                    // Apply enchantments
+                    for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
+                        if (ench.getKey().validMaterial(stackA) && appliedEnchants++ < maxEnchants) {
+                            CustomEnchantment.setEnchantment(stackA, ench.getKey(), ench.getValue(), world);
+                        } else {
+                            // Remove enchantment, don't go into risks, HashMaps aren't sorted in a particular order
+                            CustomEnchantment.setEnchantment(stackA, ench.getKey(), 0, world);
+                        }
                     }
+                    inv.setRepairCost(out.size()*4+inv.getRepairCost());
+                    evt.setResult(stackA);
                 }
             }
         } else {
@@ -133,19 +137,24 @@ public class NewAnvilMerger implements Listener {
                     CustomEnchantment.getEnchants(inv.getItem(0), true, world, nleftLore),
                     CustomEnchantment.getEnchants(inv.getItem(1), true, world));
             if (out.size() > 0) {
-                boolean unrepairable = false;
                 for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
                     if (ench.getKey().asEnum() == BaseEnchantments.UNREPAIRABLE && ench.getValue() != 0) {
-                        unrepairable = true;
+                        evt.setResult(null); // Abort merge
+                        return;
                     }
                 }
-                if (unrepairable) {
-                    evt.setResult(null);
-                } else {
-                    out.forEach((ench, level) -> CustomEnchantment.setEnchantment(result, ench, ench.validMaterial(result) ? level : 0, world));
-                    inv.setRepairCost(out.size()*7+inv.getRepairCost());
-                    evt.setResult(result);
+                int appliedEnchants = 0;
+                int maxEnchants = Config.get(world).getMaxEnchants();
+                for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
+                    if (ench.getKey().validMaterial(result) && appliedEnchants++ < maxEnchants) {
+                        CustomEnchantment.setEnchantment(result, ench.getKey(),  ench.getValue(), world);
+                    } else {
+                        // Remove enchantment, don't go into risks, HashMaps aren't sorted in a particular order
+                        CustomEnchantment.setEnchantment(result, ench.getKey(), 0, world);
+                    }
                 }
+                inv.setRepairCost(out.size()*7+inv.getRepairCost());
+                evt.setResult(result);
             }
         }
     }

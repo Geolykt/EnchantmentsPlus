@@ -21,7 +21,7 @@ public class EnchantPlayer {
      * @since 2.2.2
      */
     private static final int DISABLE_THRESHOLD = 0x5FFFFFFF;
-    
+
     // Creates a new enchant player objects and reads the player config file for their information
     public EnchantPlayer(@NotNull Player player) {
         enchantCooldown = new HashMap<>();
@@ -30,12 +30,12 @@ public class EnchantPlayer {
 
     // Decrements the players cooldowns by one tick
     public void tick() {
-    	enchantCooldown.replaceAll((key, value) -> Math.max(--value, 0));
+        enchantCooldown.replaceAll((key, value) -> Math.max(--value, 0));
     }
 
     // Returns true if the given enchantment name is disabled for the player, otherwise false
     public boolean isDisabled(int enchantmentID) {
-		return enchantCooldown.getOrDefault(enchantmentID, 0) > DISABLE_THRESHOLD;
+        return enchantCooldown.getOrDefault(enchantmentID, 0) > DISABLE_THRESHOLD;
     }
 
     /**
@@ -61,14 +61,14 @@ public class EnchantPlayer {
 
     // Disables the given enchantment for the player
     public void disable(int enchantmentID) {
-    	enchantCooldown.put(enchantmentID, Integer.MAX_VALUE);
+        enchantCooldown.put(enchantmentID, Integer.MAX_VALUE);
     }
 
     // Enables the given enchantment for the player
     public void enable(int enchantmentID) {
-    	if (isDisabled(enchantmentID)) {
-        	enchantCooldown.put(enchantmentID, 0);
-    	}
+        if (isDisabled(enchantmentID)) {
+            enchantCooldown.put(enchantmentID, 0);
+        }
     }
 
     // Disables all enchantments for the player
@@ -103,6 +103,6 @@ public class EnchantPlayer {
      * @since 2.2.2
      */
     public static void removePlayer(@NotNull UUID playerUID) {
-    	PLAYERS.remove(playerUID);
+        PLAYERS.remove(playerUID);
     }
 }
