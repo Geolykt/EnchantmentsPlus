@@ -2,7 +2,7 @@ name: Enchantments_plus
 main: de.geolykt.enchantments_plus.Enchantments_plus
 api-version: 1.15
 version: ${project.version}
-softdepend: [Towny, WorldGuard]
+softdepend: [Towny, WorldGuard, StackMob]
 commands:
   ench:
     description: Gives basic access; /ench help.

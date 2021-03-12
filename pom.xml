@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.geolykt</groupId>
     <artifactId>enchantments-plus</artifactId>
-    <version>3.1.2</version>
+    <version>3.1.3</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,6 +12,11 @@
         <repository>
             <id>spigot-repo</id> <!-- You know what this does, I hope -->
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <!-- Artifacts stored in this repository cannot be found elsewhere, which is why I store them in my repository -->
+            <id>orphan-artifacts</id>
+            <url>https://geolykt.de/maven/</url>
         </repository>
         <repository> <!-- For towny and other plugins -->
             <id>jitpack.io</id>
@@ -55,12 +60,39 @@
             <artifactId>Towny</artifactId>
             <version>0.96.7.3</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <!-- We don't want to harm our dependency tree with transistive dependencies-->
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.4-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Mobstacker plugins to integrate with -->
+        <dependency>
+            <groupId>uk.antiperson.stackmob</groupId>
+            <artifactId>StackMob</artifactId>
+            <version>5.4.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
@@ -103,12 +135,12 @@
                     </execution>
                 </executions>
                 <configuration>
-                  <relocations>
-                    <relocation>
-                      <pattern>org.bstats</pattern>
-                      <shadedPattern>de.geolykt.enchantments_plus.bstats</shadedPattern>
-                    </relocation>
-                  </relocations>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>de.geolykt.enchantments_plus.bstats</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
         </plugins>

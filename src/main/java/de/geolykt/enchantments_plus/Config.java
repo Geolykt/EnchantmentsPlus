@@ -17,12 +17,14 @@
  */
 package de.geolykt.enchantments_plus;
 
+import de.geolykt.enchantments_plus.compatibility.Stackmob5MergePreventer;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.LeightweightPDCGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentDataGetter;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
+import de.geolykt.enchantments_plus.enums.MobstackerPlugin;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -68,10 +70,25 @@ public class Config {
     /**
      * True if reveal was registered, false otherwise, internally used to make sure that
      * the OreUncover event listener is not registered when not needed
+     * Actually existed since 3.0.0, but it was always false and final back then, ups.
      *
-     * @since 3.0.0
+     * @since 3.1.3
      */
-    private static final boolean registeredReveal = false;
+    private static boolean registeredReveal = false;
+
+    /**
+     * Whether the mobstacking integration should be performed.
+     *
+     * @since 3.1.3
+     */
+    private static boolean doMobstackerIntegration = false;
+
+    /**
+     * The mobstacking plugin to use
+     *
+     * @since 3.1.3
+     */
+    private static MobstackerPlugin mobStackerPlugin = MobstackerPlugin.NONE;
 
     private final Set<CustomEnchantment> worldEnchants; // Set of active Custom Enchantments
     private final Map<String, CustomEnchantment> nameToEnch;
@@ -137,6 +154,17 @@ public class Config {
                     }
                 }
             }, plugin);
+            if (doMobstackerIntegration) {
+                switch (mobStackerPlugin) {
+                case STACKMOB_5:
+                    Bukkit.getPluginManager().registerEvents(new Stackmob5MergePreventer(), plugin);
+                    break;
+                case NONE:
+                default:
+                    break;
+                }
+            }
+            registeredReveal = true;
         }
         allEnchants.addAll(worldEnchants);
     }
@@ -158,6 +186,7 @@ public class Config {
         Arborist.doGoldenAppleDrop = PATCH_CONFIGURATION.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
         Siphon.calcAmour = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);
         Laser.doShredCooldown = PATCH_CONFIGURATION.getBoolean("nerfs.shredCoolDownOnLaser", true);
+        doMobstackerIntegration = PATCH_CONFIGURATION.getBoolean("pluginCompat.mobstacker", true);
 
         boolean isAllowlist = PATCH_CONFIGURATION.getBoolean("isAllowlist", true);
         EnumSet<Material> allowlist = EnumSet.noneOf(Material.class);
@@ -189,7 +218,14 @@ public class Config {
             CustomEnchantment.Enchantment_Adapter = new BasicLoreGetter();
             break;
         default:
-            Bukkit.getLogger().severe(Storage.MINILOGO + ChatColor.RED + "No (or invalid) enchantment gatherer specified, fallback to default.");
+            Storage.plugin.getLogger().severe("No (or invalid) enchantment gatherer specified, fallback to default.");
+        }
+
+        if (doMobstackerIntegration) {
+            try {
+                Class.forName("uk.antiperson.stackmob.events.StackSpawnEvent");
+                mobStackerPlugin = MobstackerPlugin.STACKMOB_5;
+            } catch (ClassNotFoundException excepted) {}
         }
     }
 
@@ -197,7 +233,7 @@ public class Config {
      * Creates and returns the config of a world.
      *
      * @param world  The world the the configuration is valid for.
-     * @param plugin The plugin requesting this operation (used internally for smart even registration)
+     * @param plugin The plugin requesting this operation (used internally for smart event registration)
      * @return The newly constructed configuration
      * @since 3.0.0
      */
@@ -298,14 +334,14 @@ public class Config {
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                         NoSuchMethodException | SecurityException ex) {
+                    plugin.getLogger().severe("Error parsing config for enchantment '" + cl.getName() + "'. Skipping.");
                     ex.printStackTrace();
-                    System.err.printf("Error parsing config for enchantment '%s'. Skipping.", cl.getName());
                 }
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
                     enchantColor, curseColor, enchantGlow, plugin);
         } catch (IOException | InvalidConfigurationException ex) {
-            System.err.printf("Error parsing config for world '%s'.", world.getName());
+            plugin.getLogger().severe("Error parsing config for world '" + world.getName() + "'.");
             throw new RuntimeException("Error parsing config for a world", ex);
         }
     }

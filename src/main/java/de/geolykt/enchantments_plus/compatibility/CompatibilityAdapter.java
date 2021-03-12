@@ -73,11 +73,19 @@ import de.geolykt.enchantments_plus.util.Tool;
 public class CompatibilityAdapter {
 
     /**
+     * The parent plugin, currently only used for logging.
+     *
+     * @since 3.1.3
+     */
+    private final Plugin plugin;
+
+    /**
      * Constructs the class and starts a Task on the next tick to initialise it further (scans methods from other plugins or spigot)
      * @param plugin The plugin that is used to initialise the task.
      */
     public CompatibilityAdapter(Plugin plugin) {
         Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0L);
+        this.plugin = plugin;
     }
 
     private EnumSet<Material> grownCrops;
@@ -135,11 +143,11 @@ public class CompatibilityAdapter {
                     Tag<? extends Material> tag = (Tag<? extends Material>) f.get(null);
                     terraformerAllowlist.addAll(tag.getValues());
                 } catch (NoSuchFieldException e) {
-                    Storage.plugin.getLogger().warning(s + " is not a known tag (located within the terraformerAllowlistTags list); Skipping entry.");
+                    plugin.getLogger().warning(s + " is not a known tag (located within the terraformerAllowlistTags list); Skipping entry.");
                     continue;
                 }
             } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                Bukkit.getLogger().severe("Looks like an issue occoured with the Enchantments+ plugin. Please report this to the devs as this is something severe!");
+                plugin.getLogger().severe("Looks like an issue occoured with the plugin. Please report this to the devs as this is something severe!");
                 e.printStackTrace();
             }
         }
@@ -148,7 +156,7 @@ public class CompatibilityAdapter {
             try {
                 dryBiomes.add(Biome.valueOf(s));
             } catch (IllegalArgumentException e) {
-                Storage.plugin.getLogger().warning(s + " is not a known biome (located within the terraformerAllowlistTags list); Skipping entry.");
+                plugin.getLogger().warning(s + " is not a known biome (located within the terraformerAllowlistTags list); Skipping entry.");
             }
         }
         spectralMaterialConversion = new EnumMap<>(Material.class);
@@ -157,12 +165,12 @@ public class CompatibilityAdapter {
             Material mv = Material.matchMaterial(s.split(":")[1]);
             if (mk == null) {
                 if (mv == null) {
-                    Storage.plugin.getLogger().warning("Both key and value of the entry \"" + s + "\" in the spectralConversions list are invalid; Skipping entry.");
+                    plugin.getLogger().warning("Both key and value of the entry \"" + s + "\" in the spectralConversions list are invalid; Skipping entry.");
                 } else {
-                    Storage.plugin.getLogger().warning("The key of the entry \"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
+                    plugin.getLogger().warning("The key of the entry \"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
                 }
             } else if (mv == null) {
-                Storage.plugin.getLogger().warning("The value of the entry \"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
+                plugin.getLogger().warning("The value of the entry \"" + s + "\" in the spectralConversions list is invalid; Skipping entry.");
             } else {
                 spectralMaterialConversion.put(mk, mv);
             }
@@ -181,19 +189,19 @@ public class CompatibilityAdapter {
 
             if (mk == null) {
                 if (mv == null) {
-                    Storage.plugin.getLogger().warning("Both key and value of the entry \"" + s + "\" in the transformation list are invalid; Skipping entry.");
+                    plugin.getLogger().warning("Both key and value of the entry \"" + s + "\" in the transformation list are invalid; Skipping entry.");
                 } else {
-                    Storage.plugin.getLogger().warning("The key of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
+                    plugin.getLogger().warning("The key of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
                 }
             } else if (mv == null) {
-                Storage.plugin.getLogger().warning("The value of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
+                plugin.getLogger().warning("The value of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
             } else {
                 transformationMap.put(mk, mv);
             }
         }
 
         Tool.ALL.setMaterials(getMaterialSet(config, "tools.all"));
-        
+
         Tool.AXE.setMaterials(getMaterialSet(config, "tools.axe"));
         Tool.PICKAXE.setMaterials(getMaterialSet(config, "tools.pickaxe"));
         Tool.SHOVEL.setMaterials(getMaterialSet(config, "tools.shovel"));
@@ -808,32 +816,32 @@ public class CompatibilityAdapter {
             EntityShootBowEvent.class.getConstructor(LivingEntity.class, ItemStack.class, ItemStack.class, Entity.class,
                     EquipmentSlot.class, float.class, boolean.class);
         } catch (NoSuchMethodException excepted) {
-            Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
+            plugin.getLogger().warning(ChatColor.YELLOW + "Enabling potentially untested legacy mode"
                     + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
             legacyEntityShootBowEvent = true;
         } catch (SecurityException e) {
             e.printStackTrace();
-            Bukkit.getLogger().warning(Storage.MINILOGO + ChatColor.YELLOW + " Enabling potentially untested legacy mode"
+            plugin.getLogger().warning(ChatColor.YELLOW + "Enabling potentially untested legacy mode"
                     + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
             legacyEntityShootBowEvent = true;
         }
 
-        Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.RESET + ": Loading permission integrations. Please note that"
+        plugin.getLogger().info("Loading permission integrations. Please note that"
                 + " depending on the server lots of things will fail, don't worry much about that though "
                 + "(unless it fails even though it shouldn't)");
         try {
             Class.forName("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
             perm_useTowny = true;
-            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.GREEN + ": Towny runtime found.");
+            plugin.getLogger().info(ChatColor.GREEN + "Towny runtime found.");
         } catch (ClassNotFoundException excepted) {
-            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.YELLOW + ": Towny runtime not found.");
+            plugin.getLogger().info(ChatColor.YELLOW + "Towny runtime not found.");
         }
         try {
             Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
             perm_useWG = true;
-            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.GREEN + ": Worldguard runtime found.");
+            plugin.getLogger().info(ChatColor.GREEN + "Worldguard runtime found.");
         } catch (ClassNotFoundException excepted) {
-            Bukkit.getLogger().info(Storage.MINILOGO + ChatColor.YELLOW + ": Worldguard runtime not found.");
+            plugin.getLogger().info(ChatColor.YELLOW + "Worldguard runtime not found.");
         }
     }
 
@@ -881,7 +889,7 @@ public class CompatibilityAdapter {
      * @since 1.2.0
      */
     public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
-        
+
         if (perm_useTowny && !(PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.BUILD)
                 || PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.DESTROY))) {
             return false;
