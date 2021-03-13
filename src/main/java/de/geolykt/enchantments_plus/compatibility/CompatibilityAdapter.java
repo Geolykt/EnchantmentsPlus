@@ -69,6 +69,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.ClaimPermission;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
 public class CompatibilityAdapter {
 
@@ -794,18 +797,32 @@ public class CompatibilityAdapter {
     }
 
     private boolean legacyEntityShootBowEvent = false;
+
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
-     *  should target Towny, in most cases this is just a boolean that is true if towny was found, false otherwise.
+     * should target Towny, in most cases this is just a boolean that is true if towny was found, false otherwise.
+     *
+     * @since 1.2.0
      */
     private boolean perm_useTowny = false;
 
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
-     *  should target WorldGuard, in most cases this is just a boolean that is true if WorldGuard was found, false otherwise. <br>
-     *  Note that this may not represent the actual state due to method not found issues.
+     * should target WorldGuard, in most cases this is just a boolean that is true if WorldGuard was found, false otherwise. <br>
+     * Note that this may not represent the actual state due to method not found issues.
+     *
+     * @since 1.2.0
      */
     private boolean perm_useWG = false;
+
+    /**
+     * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
+     * should target TechFortress/GriefPrevention, in most cases this is just a boolean that is true if WorldGuard was found,
+     * false otherwise. <br> Note that this may not represent the actual state due to method not found issues.
+     *
+     * @since 3.1.3
+     */
+    private boolean perm_useGriefPrevention = false;
 
     /**
      * Method that scans whether API methods can be used. It also checks whether plugin integrations are possible and enabled
@@ -823,6 +840,7 @@ public class CompatibilityAdapter {
             e.printStackTrace();
             plugin.getLogger().warning(ChatColor.YELLOW + "Enabling potentially untested legacy mode"
                     + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
+            plugin.getLogger().severe("A potentially fatal issue occoured while performing reflection, this will end up being fatal soon.");
             legacyEntityShootBowEvent = true;
         }
 
@@ -832,16 +850,24 @@ public class CompatibilityAdapter {
         try {
             Class.forName("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
             perm_useTowny = true;
-            plugin.getLogger().info(ChatColor.GREEN + "Towny runtime found.");
+            plugin.getLogger().info("Towny runtime found.");
         } catch (ClassNotFoundException excepted) {
-            plugin.getLogger().info(ChatColor.YELLOW + "Towny runtime not found.");
+            plugin.getLogger().info("Towny runtime not found.");
         }
         try {
             Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
             perm_useWG = true;
-            plugin.getLogger().info(ChatColor.GREEN + "Worldguard runtime found.");
+            plugin.getLogger().info("Worldguard runtime found.");
         } catch (ClassNotFoundException excepted) {
-            plugin.getLogger().info(ChatColor.YELLOW + "Worldguard runtime not found.");
+            plugin.getLogger().info("Worldguard runtime not found.");
+        }
+        try {
+            // WTF is that naming convention? Packages should be in all lowercase!
+            Class.forName("me.ryanhamshire.GriefPrevention.GriefPrevention");
+            perm_useGriefPrevention = true;
+            plugin.getLogger().info("GriefPrevention runtime found.");
+        } catch (ClassNotFoundException excepted) {
+            plugin.getLogger().info("GriefPrevention runtime not found.");
         }
     }
 
@@ -865,18 +891,25 @@ public class CompatibilityAdapter {
                 .newInstance(shooter, bow, projectile, force);
             } catch (NoSuchMethodException | SecurityException e) {
                 e.printStackTrace();
-                Bukkit.getLogger().severe(Storage.LOGO + ChatColor.RED + " Unable to construct EntityShootBowEvent as the method was not found.");
+                plugin.getLogger().severe("Unable to construct EntityShootBowEvent as the method was not found.");
                 return null;
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
-                Bukkit.getLogger().severe(Storage.LOGO + ChatColor.RED + " Unable to construct EntityShootBowEvent as argument errors"
-                        + " occured (report this to the Issue page).");
+                plugin.getLogger().severe("Unable to construct EntityShootBowEvent as argument errors occured"
+                        + " (report this to the Issue page).");
                 return null;
             }
         } else {
             return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
         }
     }
+
+    /**
+     * Cache object. Basically the last claim to have been accessed
+     *
+     * @since 3.1.3
+     */
+    private Object gpCache = null;
 
     /**
      * This method queries the correct Permission interfaces, which are plugins. 
@@ -889,7 +922,12 @@ public class CompatibilityAdapter {
      * @since 1.2.0
      */
     public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
-
+        if (perm_useGriefPrevention && GriefPrevention.instance.claimsEnabledForWorld(target.getWorld())) {
+            gpCache = GriefPrevention.instance.dataStore.getClaimAt(target.getLocation(), false, (Claim) gpCache);
+            if (((Claim) gpCache).allowEdit(source) != null) {
+                return false;
+            }
+        }
         if (perm_useTowny && !(PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.BUILD)
                 || PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.DESTROY))) {
             return false;
