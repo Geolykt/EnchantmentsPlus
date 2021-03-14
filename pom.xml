@@ -14,7 +14,8 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <!-- Artifacts stored in this repository cannot be found elsewhere, which is why I store them in my repository -->
+            <!-- Artifacts stored in this repository cannot be found elsewhere,
+                 which is why I store them in my repository -->
             <id>orphan-artifacts</id>
             <url>https://geolykt.de/maven/</url>
         </repository>
@@ -27,7 +28,7 @@
              <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
-           <id>CodeMC</id> <!-- For BStats -->
+           <id>code-mc</id> <!-- For BStats -->
           <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
     </repositories>
@@ -84,6 +85,20 @@
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
             <version>16.17.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.cjburkey</groupId>
+            <artifactId>claimchunk</artifactId>
+            <!-- While I know that I have distributed it that way because
+                 that is the official version string, it still hurts -->
+            <version>0.0.23-SNAPSHOT_EXPL_FIRE</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>

@@ -24,6 +24,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.*;
@@ -58,10 +59,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.cjburkey.claimchunk.ClaimChunk;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -70,7 +73,6 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
 import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
 public class CompatibilityAdapter {
@@ -83,10 +85,54 @@ public class CompatibilityAdapter {
     private final Plugin plugin;
 
     /**
+     * The instance of the ChunkClaim plugin.
+     *
+     * @since 3.1.3
+     */
+    private JavaPlugin ccInstance = null;
+
+    /**
+     * Cache object. Basically the last claim to have been accessed
+     *
+     * @since 3.1.3
+     */
+    private Object gpCache = null;
+
+    /**
+     * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
+     * should target TechFortress/GriefPrevention, in most cases this is just a boolean
+     * that is true if Grief Prevention was found, false otherwise.
+     * <br> Note that this may not represent the actual state due to method not found issues.
+     *
+     * @since 3.1.3
+     */
+    private final boolean permUseGriefPrevention;
+
+    /**
+     * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
+     * should target jburkey01/ClaimChunk, in most cases this is just a boolean that is true if ClaimChunk was found,
+     * false otherwise. <br> Note that this may not represent the actual state due to method not found issues.
+     *
+     * @since 3.1.3
+     */
+    private final boolean permUseClaimChunk;
+
+    /**
+     * @deprecated Unused variable.
+     *
+     * @since 1.0.0
+     */
+    @SuppressWarnings("unused")
+    @Deprecated(since = "3.1.3", forRemoval = true)
+    private static final Random RND = new Random();
+
+    /**
      * Constructs the class and starts a Task on the next tick to initialise it further (scans methods from other plugins or spigot)
      * @param plugin The plugin that is used to initialise the task.
      */
     public CompatibilityAdapter(Plugin plugin) {
+        permUseGriefPrevention = findClass("me.ryanhamshire.GriefPrevention.GriefPrevention");
+        permUseClaimChunk = findClass("com.cjburkey.claimchunk.chunk.ChunkHandler");
         Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0L);
         this.plugin = plugin;
     }
@@ -222,8 +268,6 @@ public class CompatibilityAdapter {
         Tool.ROD.setMaterials(getMaterialSet(config, "tools.rod"));
         Tool.SHEARS.setMaterials(getMaterialSet(config, "tools.shears"));
     }
-
-    private static final Random RND = new Random();
 
     public EnumSet<Material> grownCrops() {
         return grownCrops;
@@ -785,7 +829,7 @@ public class CompatibilityAdapter {
             PlayerInteractEvent pie = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, player.getInventory().getItemInMainHand(), berryBlock, player.getFacing());
             Bukkit.getPluginManager().callEvent(pie);
             if (pie.useInteractedBlock() != Result.DENY) {
-                int numDropped = a.getAge() + (RND.nextBoolean() ? 0 : -1); // Natural drop rate. Age 2 -> 1-2 berries, Age 3 -> 2-3 berries
+                int numDropped = a.getAge() + ThreadLocalRandom.current().nextInt(-1, 0); // Natural drop rate. Age 2 -> 1-2 berries, Age 3 -> 2-3 berries
                 a.setAge(1); // Picked adult berry bush
                 berryBlock.setBlockData(a);
                 berryBlock.getWorld().dropItem(berryBlock.getLocation(),
@@ -816,13 +860,27 @@ public class CompatibilityAdapter {
     private boolean perm_useWG = false;
 
     /**
-     * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
-     * should target TechFortress/GriefPrevention, in most cases this is just a boolean that is true if WorldGuard was found,
-     * false otherwise. <br> Note that this may not represent the actual state due to method not found issues.
+     * Finds the given class via reflection and returns true if it was found, false if it was not found
+     * This is purely a convenience method to help not use 100 lines for a simple operation.
+     * The class will not be loaded and will be loaded via the current classloader, i. e. the classloader
+     * that loaded this class.
+     *
+     * Why do we use reflection to check for dependencies? Generally just for futureproofing.
      *
      * @since 3.1.3
+     * @param clazz The full name of class to find
+     * @return true if the class was found, false otherwise
      */
-    private boolean perm_useGriefPrevention = false;
+    private static boolean findClass(String clazz) {
+        try {
+            Class.forName(clazz, false, CompatibilityAdapter.class.getClassLoader());
+            return true;
+        } catch (ClassNotFoundException excepted) {
+            return false;
+        } catch (Throwable t) {
+            throw new RuntimeException("Issue while performing reflection to check if a dependency exists", t);
+        }
+    }
 
     /**
      * Method that scans whether API methods can be used. It also checks whether plugin integrations are possible and enabled
@@ -838,51 +896,28 @@ public class CompatibilityAdapter {
             legacyEntityShootBowEvent = true;
         } catch (SecurityException e) {
             e.printStackTrace();
-            plugin.getLogger().warning(ChatColor.YELLOW + "Enabling potentially untested legacy mode"
-                    + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
             plugin.getLogger().severe("A potentially fatal issue occoured while performing reflection, this will end up being fatal soon.");
-            legacyEntityShootBowEvent = true;
         }
 
-        plugin.getLogger().info("Loading permission integrations. Please note that"
-                + " depending on the server lots of things will fail, don't worry much about that though "
-                + "(unless it fails even though it shouldn't)");
-        try {
-            Class.forName("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
-            perm_useTowny = true;
-            plugin.getLogger().info("Towny runtime found.");
-        } catch (ClassNotFoundException excepted) {
-            plugin.getLogger().info("Towny runtime not found.");
-        }
-        try {
-            Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
-            perm_useWG = true;
-            plugin.getLogger().info("Worldguard runtime found.");
-        } catch (ClassNotFoundException excepted) {
-            plugin.getLogger().info("Worldguard runtime not found.");
-        }
-        try {
-            // WTF is that naming convention? Packages should be in all lowercase!
-            Class.forName("me.ryanhamshire.GriefPrevention.GriefPrevention");
-            perm_useGriefPrevention = true;
-            plugin.getLogger().info("GriefPrevention runtime found.");
-        } catch (ClassNotFoundException excepted) {
-            plugin.getLogger().info("GriefPrevention runtime not found.");
-        }
+        perm_useTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
+        perm_useWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
     }
 
     /**
+     * @deprecated This method's name does not follow naming conventions and will be replaced soon with a proper name
+     *
      * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
      *  the correct constructor without throwing a java.lang.NoSuchMethodError.
      * @param shooter The shooter
      * @param bow The used bow
-     * @param consumable Not used in legacy mode. The item that was consumed
+     * @param consumable The item that was consumed. Not used in legacy mode.
      * @param projectile The spawned projectile/arrow
      * @param hand  Not used in legacy mode. The used hand
      * @param force The force at which the bow is drawn
-     * @param consumeItem  Not used in legacy mode.  Whether or not to consume the item
+     * @param consumeItem  Whether or not to consume the item. NOt used in legacy mode
      * @return The constructed EntityShootBowEvent
      */
+    @Deprecated(since = "3.1.3", forRemoval = true)
     public EntityShootBowEvent ConstructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
             @Nullable ItemStack consumable, @NotNull Entity projectile, @NotNull EquipmentSlot hand, float force, boolean consumeItem) {
         if (legacyEntityShootBowEvent) {
@@ -905,26 +940,19 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * Cache object. Basically the last claim to have been accessed
-     *
-     * @since 3.1.3
-     */
-    private Object gpCache = null;
-
-    /**
      * This method queries the correct Permission interfaces, which are plugins. 
      * If the plugin is not loaded the method will ignore it gracefully. <br>
      * Plugins are detected during the {@link CompatibilityAdapter#scanMethods()} private function which is called shortly after the 
-     *constructor. <br>
+     * constructor. <br>
      * @param source The player, from where the Query originates from.
      * @param target The Block which should be tested whether the player may break/alter.
      * @return True if the player may break/alter the block, false otherwise
      * @since 1.2.0
      */
     public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
-        if (perm_useGriefPrevention && GriefPrevention.instance.claimsEnabledForWorld(target.getWorld())) {
+        if (permUseGriefPrevention && GriefPrevention.instance.claimsEnabledForWorld(target.getWorld())) {
             gpCache = GriefPrevention.instance.dataStore.getClaimAt(target.getLocation(), false, (Claim) gpCache);
-            if (((Claim) gpCache).allowEdit(source) != null) {
+            if (gpCache != null && ((Claim) gpCache).allowEdit(source) != null) {
                 return false;
             }
         }
@@ -932,8 +960,22 @@ public class CompatibilityAdapter {
                 || PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.DESTROY))) {
             return false;
         }
+        if (permUseClaimChunk) {
+            if (ccInstance == null) {
+                if ((ccInstance = (ClaimChunk) Bukkit.getPluginManager().getPlugin("ClaimChunk")) == null) {
+                    // Failed to obtain the plugin in a recommended manner, try to get it via deprecated methods.
+                    @SuppressWarnings("deprecation")
+                    ClaimChunk claimChunkInstance = ClaimChunk.getInstance();
+                    ccInstance = claimChunkInstance; // To avoid deprecation warnings while not suppressing these for the whole method
+                }
+            }
+            UUID owner = ((ClaimChunk)ccInstance).getChunkHandler().getOwner(target.getChunk());
+            if (owner != null && !owner.equals(source.getUniqueId())) {
+                return false;
+            }
+        }
         return !perm_useWG || (WorldGuardPlugin.inst().createProtectionQuery().testBlockBreak(source, target) ||
                 WorldGuardPlugin.inst().createProtectionQuery().testBlockInteract(source, target));
-        // TODO Other plugins (factions, Grief protects, etc...) - Just create an issue to create priority if you need one in specific
+        // TODO Other plugins (factions, claim plugins, etc...) - Just create an issue to create priority if you need one in specific
     }
 }
