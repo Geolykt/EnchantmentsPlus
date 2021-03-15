@@ -81,7 +81,7 @@ public class Burst extends CustomEnchantment {
                             arrow.setFireTicks(Integer.MAX_VALUE);
                         }
                         arrow.setVelocity(player.getLocation().getDirection().normalize().multiply(1.7));
-                        EntityShootBowEvent shootEvent = Storage.COMPATIBILITY_ADAPTER.ConstructEntityShootBowEvent(player,
+                        EntityShootBowEvent shootEvent = Storage.COMPATIBILITY_ADAPTER.constructEntityShootBowEvent(player,
                                 hand, null, arrow, usedHand ? HAND : OFF_HAND, 1f, false);
                         ProjectileLaunchEvent launchEvent = new ProjectileLaunchEvent(arrow);
                         Bukkit.getPluginManager().callEvent(shootEvent);

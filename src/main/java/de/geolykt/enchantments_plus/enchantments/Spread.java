@@ -69,7 +69,7 @@ public class Spread extends CustomEnchantment {
         EnchantedArrow.putArrow(originalArrow, ar, player);
 
         Bukkit.getPluginManager().callEvent(
-            Storage.COMPATIBILITY_ADAPTER.ConstructEntityShootBowEvent(player, hand, null, originalArrow,
+            Storage.COMPATIBILITY_ADAPTER.constructEntityShootBowEvent(player, hand, null, originalArrow,
                     usedHand ? HAND : OFF_HAND, (float) originalArrow.getVelocity().length(), false));
 
         CompatibilityAdapter.damageTool(player, (int) Math.round(level / 2.0 + 1), usedHand);
@@ -84,7 +84,7 @@ public class Spread extends CustomEnchantment {
             arrow.setVelocity(v.normalize().multiply(originalArrow.getVelocity().length()));
             arrow.setFireTicks(originalArrow.getFireTicks());
             arrow.setKnockbackStrength(originalArrow.getKnockbackStrength());
-            EntityShootBowEvent event = Storage.COMPATIBILITY_ADAPTER.ConstructEntityShootBowEvent(player, hand,
+            EntityShootBowEvent event = Storage.COMPATIBILITY_ADAPTER.constructEntityShootBowEvent(player, hand,
                     null, arrow, usedHand ? HAND : OFF_HAND, (float) arrow.getVelocity().length(), false);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {

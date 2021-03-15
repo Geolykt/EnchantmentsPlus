@@ -223,6 +223,10 @@ public class Config {
 
         if (doMobstackerIntegration) {
             try {
+                Class.forName("dev.rosewood.rosestacker.event.EntityStackEvent");
+                mobStackerPlugin = MobstackerPlugin.ROSESTACKER;
+            } catch (ClassNotFoundException excepted) {}
+            try {
                 Class.forName("uk.antiperson.stackmob.events.StackSpawnEvent");
                 mobStackerPlugin = MobstackerPlugin.STACKMOB_5;
             } catch (ClassNotFoundException excepted) {}

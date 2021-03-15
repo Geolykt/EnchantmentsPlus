@@ -14,22 +14,24 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <!-- Artifacts stored in this repository cannot be found elsewhere,
-                 which is why I store them in my repository -->
-            <id>orphan-artifacts</id>
+            <id>geolykt-maven</id> <!-- Artifacts that don't have a repository otherwise -->
             <url>https://geolykt.de/maven/</url>
         </repository>
-        <repository> <!-- For towny and other plugins -->
-            <id>jitpack.io</id>
+        <repository>
+            <id>jitpack.io</id> <!-- For towny and other plugins -->
             <url>https://jitpack.io</url>
         </repository>
         <repository> <!-- For WG -->
-             <id>sk89q-repo</id>
-             <url>https://maven.enginehub.org/repo/</url>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
-           <id>code-mc</id> <!-- For BStats -->
-          <url>https://repo.codemc.org/repository/maven-public</url>
+            <id>code-mc</id> <!-- For BStats -->
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
+        <repository>
+            <id>rosewood-repo</id> <!-- For RoseStacker -->
+            <url>https://repo.rosewooddev.io/repository/public/</url>
         </repository>
     </repositories>
     <dependencies>
@@ -113,6 +115,18 @@
             <groupId>uk.antiperson.stackmob</groupId>
             <artifactId>StackMob</artifactId>
             <version>5.4.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>dev.rosewood</groupId>
+            <artifactId>rosestacker</artifactId>
+            <version>1.2.1</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>

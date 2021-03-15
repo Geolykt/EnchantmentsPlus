@@ -15,36 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.geolykt.enchantments_plus.enums;
+package de.geolykt.enchantments_plus.compatibility;
 
-/**
- * Enumeration of Mobstacker plugins that this plugin can integrate with.
- * Used to prevent mobstacking where it doesn't belong (i. e. stacking reveal shulkers).
- *
- * @since 3.1.3
- */
-public enum MobstackerPlugin {
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 
-    /**
-     * No or unknown mobstacker plugin found or the integration is disabled.
-     *
-     * @since 3.1.3
-     */
-    NONE,
+import de.geolykt.enchantments_plus.enchantments.Reveal;
+import dev.rosewood.rosestacker.stack.StackedEntity;
 
-    /**
-     * The mobstacker plugin is uk.antiperson.stackmob:StackMob
-     * Source at https://github.com/Nathat23/StackMob-5
-     *
-     * @since 3.1.3
-     */
-    STACKMOB_5,
+public class RosestackerMergePreventer implements Listener {
 
-    /**
-     * The mobstacker plugin is dev.rosewood:rosestacker
-     * Source at https://github.com/Rosewood-Development/RoseStacker
-     *
-     * @since 3.1.3
-     */
-    ROSESTACKER;
+    @EventHandler(priority = EventPriority.LOW)
+    public void onStack(dev.rosewood.rosestacker.event.EntityStackEvent event) {
+        for (StackedEntity sentity : event.getTargets()) {
+            if (Reveal.GLOWING_BLOCKS.containsKey(sentity.getLocation())) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
 }

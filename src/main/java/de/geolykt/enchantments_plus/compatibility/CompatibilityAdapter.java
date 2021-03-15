@@ -904,8 +904,6 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * @deprecated This method's name does not follow naming conventions and will be replaced soon with a proper name
-     *
      * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
      *  the correct constructor without throwing a java.lang.NoSuchMethodError.
      * @param shooter The shooter
@@ -916,9 +914,9 @@ public class CompatibilityAdapter {
      * @param force The force at which the bow is drawn
      * @param consumeItem  Whether or not to consume the item. NOt used in legacy mode
      * @return The constructed EntityShootBowEvent
+     * @since 3.1.3
      */
-    @Deprecated(since = "3.1.3", forRemoval = true)
-    public EntityShootBowEvent ConstructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
+    public EntityShootBowEvent constructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
             @Nullable ItemStack consumable, @NotNull Entity projectile, @NotNull EquipmentSlot hand, float force, boolean consumeItem) {
         if (legacyEntityShootBowEvent) {
             try {
@@ -937,6 +935,26 @@ public class CompatibilityAdapter {
         } else {
             return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
         }
+    }
+
+    /**
+     * @deprecated This method's name does not follow naming conventions and will be replaced soon with a proper name
+     *
+     * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
+     *  the correct constructor without throwing a java.lang.NoSuchMethodError.
+     * @param shooter The shooter
+     * @param bow The used bow
+     * @param consumable The item that was consumed. Not used in legacy mode.
+     * @param projectile The spawned projectile/arrow
+     * @param hand  Not used in legacy mode. The used hand
+     * @param force The force at which the bow is drawn
+     * @param consumeItem  Whether or not to consume the item. NOt used in legacy mode
+     * @return The constructed EntityShootBowEvent
+     */
+    @Deprecated(since = "3.1.3", forRemoval = true)
+    public EntityShootBowEvent ConstructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
+            @Nullable ItemStack consumable, @NotNull Entity projectile, @NotNull EquipmentSlot hand, float force, boolean consumeItem) {
+        return constructEntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
     }
 
     /**
