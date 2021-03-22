@@ -81,12 +81,30 @@ public class CommandProcessor {
                             }
                         }
                     } else if (args.length == 3) {
+                        boolean hasBook = false;
+                        boolean hasEnchantedBook = false;
                         for (Material mat : Tool.ALL.getMaterials()) {
+                            if (!hasBook) {
+                                hasBook = mat == Material.BOOK;
+                            }
+                            if (!hasEnchantedBook) {
+                                hasEnchantedBook = mat == Material.ENCHANTED_BOOK;
+                            }
                             if (mat.toString().toLowerCase().startsWith(args[2].toLowerCase())) {
                                 results.add(mat.toString());
                             }
                         }
-                        // TODO: Fix out of bounds error below
+                        if (!hasBook) {
+                            if (Material.BOOK.toString().toLowerCase().startsWith(args[2].toLowerCase())) {
+                                results.add(Material.BOOK.toString());
+                            }
+                        }
+                        if (!hasEnchantedBook) {
+                            if (Material.ENCHANTED_BOOK.toString().toLowerCase().startsWith(args[2].toLowerCase())) {
+                                results.add(Material.ENCHANTED_BOOK.toString());
+                            }
+                        }
+                        // FIXME: Fix out of bounds error below
                     } else if (args.length > 1 && config.enchantFromString(args[args.length - 2]) != null) {
                         CustomEnchantment ench = config.enchantFromString(args[args.length - 2]);
                         for (int i = 1; i <= ench.getMaxLevel(); i++) {
@@ -207,7 +225,7 @@ public class CommandProcessor {
             return true;
         }
         sender.sendMessage(Storage.LOGO + "Reloaded Enchantments+ configurations.");
-        sender.sendMessage(ChatColor.RED + " Please avoid using the command. It may create memory leaks and inaccurate configurations.");
+        sender.sendMessage(ChatColor.RED + "Please avoid using the command. It may create memory leaks and inaccurate configurations.");
         Storage.plugin.loadConfigs();
         return true;
     }
@@ -219,11 +237,7 @@ public class CommandProcessor {
             return true;
         }
         if (args.length >= 4) {
-
-            Scanner scanner = new Scanner(Arrays.toString(args).replace("[", "").replace("]",
-                    "").replace(",", " "));
-            scanner.next();
-            String playerName = scanner.next();
+            String playerName = args[1];
             Player recipient = null;
             for (Player plyr : Bukkit.getOnlinePlayers()) {
                 if (plyr.getName().equalsIgnoreCase(playerName)) {
@@ -235,20 +249,30 @@ public class CommandProcessor {
                         + ChatColor.AQUA + " is not online or does not exist.");
                 return true;
             }
-            Material mat =  Material.matchMaterial(scanner.next());
-            Config config = Config.get(recipient.getWorld());
+            Material mat =  Material.matchMaterial(args[2]);
 
             if (mat == null) {
                 sender.sendMessage(Storage.LOGO + "The material " + ChatColor.DARK_AQUA
                         + args[2].toUpperCase() + ChatColor.AQUA + " is not valid.");
                 return true;
             }
+
+            Config config = Config.get(recipient.getWorld());
             Map<CustomEnchantment, Integer> enchantsToAdd = new HashMap<>();
-            while (scanner.hasNext()) {
-                String enchantName = scanner.next();
+            int i = 3;
+            while (i < args.length) {
+                String enchantName = args[i++];
                 int level = 1;
-                if (scanner.hasNextInt()) {
-                    level = Math.max(1, scanner.nextInt());
+                if (i < args.length) {
+                    try {
+                        level = Integer.valueOf(args[i]);
+                        if (level < 1) {
+                            level = 1;
+                        }
+                        i++;
+                    }  catch (NumberFormatException ignore) {
+                        // ignored
+                    }
                 }
 
                 CustomEnchantment ench = config.enchantFromString(enchantName);
@@ -492,7 +516,7 @@ public class CommandProcessor {
             sender.sendMessage(Storage.LOGO + "This plugin is licensed under the  GNU GENERAL PUBLIC LICENSE Version 3.");
             sender.sendMessage(Storage.LOGO + "Copyright authors:");
             sender.sendMessage(Storage.LOGO + " (C) 2015 - 2020: Zedly and other Zenchantments contributors");
-            sender.sendMessage(Storage.LOGO + " (C) 2020: Geolykt and other EnchantmentsPlus contributors");
+            sender.sendMessage(Storage.LOGO + " (C) 2020 - 2021: Geolykt and other EnchantmentsPlus contributors");
             sender.sendMessage(Storage.LOGO + "To view the full license do /ench license full");
         } else if (args[1].equalsIgnoreCase("full")) {
             if (!sender.hasPermission("enchplus.command.license")) {
@@ -625,7 +649,7 @@ public class CommandProcessor {
                         infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + "You already have too many enchantments on your tool!");
                     }
                     return true;
-                } else if (ench.validMaterial(stack)) {
+                } else if (ench.validMaterial(stack) || stack.getType() == Material.ENCHANTED_BOOK || stack.getType() == Material.BOOK) {
                     CustomEnchantment.setEnchantment(stack, ench, level, target.getWorld());
                 } else if (doNotify) {
                     infoReciever.sendMessage(Storage.LOGO + ChatColor.RED + "The enchantment cannot be applied on your current tool.");
