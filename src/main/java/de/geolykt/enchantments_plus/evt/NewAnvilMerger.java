@@ -63,7 +63,7 @@ public class NewAnvilMerger implements Listener {
             return Math.min(Math.max(inputA, inputB), ench.getMaxLevel());
         }
     }
-    
+
     /**
      * Merges two CustomEnchantment to Enchantment Level maps into each other to result a new Map that contains the keys of both maps.
      * It is guaranteed that the Keys on the output map are unique, in case a clash occurs, the highest value is picked or the value of one
@@ -87,7 +87,10 @@ public class NewAnvilMerger implements Listener {
                 return ench.getConflicts().contains(newEnch.asEnum());
             });
         });
-        inB.forEach((ench, newLevel) -> out.merge(ench, newLevel, (oench, olevel) -> enchantmentLevelRemappingFunction(ench, olevel, newLevel)));
+        for (Map.Entry<CustomEnchantment, Integer> entry : inB.entrySet()) {
+            CustomEnchantment ench = entry.getKey();
+            out.put(ench, enchantmentLevelRemappingFunction(ench, entry.getValue(), out.getOrDefault(entry.getKey(), 0)));
+        }
         return out;
     }
 

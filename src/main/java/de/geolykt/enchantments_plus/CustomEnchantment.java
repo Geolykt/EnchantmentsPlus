@@ -388,7 +388,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public String getShown(int level, World world) {
         String levelStr = Utilities.getRomanString(level);
         return (isCursed ? Config.get(world).getCurseColor() : Config.get(world).getEnchantmentColor()) + loreName
-                + (maxLevel == 1 ? " " : " " + levelStr);
+                + (maxLevel == 1 ? "" : " " + levelStr);
     }
 
     public void setEnchantment(ItemStack stk, int level, World world) {

@@ -17,6 +17,7 @@
  */
 package de.geolykt.enchantments_plus;
 
+import de.geolykt.enchantments_plus.compatibility.RosestackerMergePreventer;
 import de.geolykt.enchantments_plus.compatibility.Stackmob5MergePreventer;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
@@ -158,6 +159,9 @@ public class Config {
                 switch (mobStackerPlugin) {
                 case STACKMOB_5:
                     Bukkit.getPluginManager().registerEvents(new Stackmob5MergePreventer(), plugin);
+                    break;
+                case ROSESTACKER:
+                    Bukkit.getPluginManager().registerEvents(new RosestackerMergePreventer(), plugin);
                     break;
                 case NONE:
                 default:

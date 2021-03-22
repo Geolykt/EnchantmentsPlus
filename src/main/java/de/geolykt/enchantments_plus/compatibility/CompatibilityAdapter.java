@@ -19,12 +19,12 @@ package de.geolykt.enchantments_plus.compatibility;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.*;
@@ -59,23 +59,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.cjburkey.claimchunk.ClaimChunk;
-import com.palmergames.bukkit.towny.object.TownyPermission;
-import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.*;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
 public class CompatibilityAdapter {
+
+    /**
+     * The native permission hooks utilised by this compatibillity adapter.
+     *
+     * @since 3.1.4
+     */
+    private NativePermissionHooks nativePerm;
 
     /**
      * The parent plugin, currently only used for logging.
@@ -83,20 +83,6 @@ public class CompatibilityAdapter {
      * @since 3.1.3
      */
     private final Plugin plugin;
-
-    /**
-     * The instance of the ChunkClaim plugin.
-     *
-     * @since 3.1.3
-     */
-    private JavaPlugin ccInstance = null;
-
-    /**
-     * Cache object. Basically the last claim to have been accessed
-     *
-     * @since 3.1.3
-     */
-    private Object gpCache = null;
 
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
@@ -901,6 +887,21 @@ public class CompatibilityAdapter {
 
         perm_useTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
         perm_useWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+        ArrayList<NativePermissionHook> permHooks = new ArrayList<>();
+        if (perm_useTowny) {
+            permHooks.add(new TownyHook());
+        }
+        if (perm_useWG) {
+            permHooks.add(new WGHook());
+        }
+        if (permUseClaimChunk) {
+            permHooks.add(new CCHook());
+        }
+        if (permUseGriefPrevention) {
+            permHooks.add(new GPHook());
+        }
+        // TODO Other plugins (factions, claim plugins, etc...) - Just create an issue to create priority if you need one in specific
+        nativePerm = new NativePermissionHooks(permHooks);
     }
 
     /**
@@ -968,32 +969,6 @@ public class CompatibilityAdapter {
      * @since 1.2.0
      */
     public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
-        if (permUseGriefPrevention && GriefPrevention.instance.claimsEnabledForWorld(target.getWorld())) {
-            gpCache = GriefPrevention.instance.dataStore.getClaimAt(target.getLocation(), false, (Claim) gpCache);
-            if (gpCache != null && ((Claim) gpCache).allowEdit(source) != null) {
-                return false;
-            }
-        }
-        if (perm_useTowny && !(PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.BUILD)
-                || PlayerCacheUtil.getCachePermission(source, target.getLocation(), target.getType(), TownyPermission.ActionType.DESTROY))) {
-            return false;
-        }
-        if (permUseClaimChunk) {
-            if (ccInstance == null) {
-                if ((ccInstance = (ClaimChunk) Bukkit.getPluginManager().getPlugin("ClaimChunk")) == null) {
-                    // Failed to obtain the plugin in a recommended manner, try to get it via deprecated methods.
-                    @SuppressWarnings("deprecation")
-                    ClaimChunk claimChunkInstance = ClaimChunk.getInstance();
-                    ccInstance = claimChunkInstance; // To avoid deprecation warnings while not suppressing these for the whole method
-                }
-            }
-            UUID owner = ((ClaimChunk)ccInstance).getChunkHandler().getOwner(target.getChunk());
-            if (owner != null && !owner.equals(source.getUniqueId())) {
-                return false;
-            }
-        }
-        return !perm_useWG || (WorldGuardPlugin.inst().createProtectionQuery().testBlockBreak(source, target) ||
-                WorldGuardPlugin.inst().createProtectionQuery().testBlockInteract(source, target));
-        // TODO Other plugins (factions, claim plugins, etc...) - Just create an issue to create priority if you need one in specific
+        return nativePerm.nativeBlockPermissionQueryingSystem(source, target);
     }
 }

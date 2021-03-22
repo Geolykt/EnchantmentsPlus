@@ -131,7 +131,7 @@ public class BasicLoreGetter implements IEnchGatherer {
                 Map.Entry<CustomEnchantment, Integer> enchEntry = getEnchant(loreStr, cfg);
                 if (enchEntry == null) {
                     normalLore.add(loreStr);
-                } else if (enchEntry.getKey() != ench) {
+                } else if (enchEntry.getKey().asEnum() != ench.asEnum()) {
                     customEnch = true;
                     lore.add(enchEntry.getKey().getShown(enchEntry.getValue(), world));
                 }
