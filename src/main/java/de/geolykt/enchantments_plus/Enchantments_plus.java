@@ -116,7 +116,7 @@ public class Enchantments_plus extends JavaPlugin {
         loadConfigs();
         if (Config.PATCH_CONFIGURATION.getBoolean("1xx-anvil-merger", false)) {
             getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
-        } else {
+        } else if (!Config.PATCH_CONFIGURATION.getBoolean("disable-anvil-merging", false)) {
             getServer().getPluginManager().registerEvents(new NewAnvilMerger(), this);
         }
         getCommand("ench").setTabCompleter(new CommandProcessor.TabCompletion());

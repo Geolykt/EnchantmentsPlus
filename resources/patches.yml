@@ -42,5 +42,6 @@ getterAllow:
 denyPartial: true # whether even partial matches shall be denied (dangerous for some things, such as GRASS (You could also mean GRASS_PATH and GRASS_BLOCK)!), requires longer startup times, but sleaker configuration.
 isAllowlist: true # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
 1xx-anvil-merger: false # Setting it to true will use an old version of the Anvil Merger, which solves some spigot/craftbukkit specific issues, however paper-based servers should keep it false as it reintroduces old bugs
+disable-anvil-merging: false # You only rarely want to turn this on
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found
   mobstacker: true # This applies to all mobstacker plugins that have an integration coded for them. Manually prevents issues with the reveal enchantment and the shulkers it spawns
