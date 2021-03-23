@@ -49,7 +49,17 @@ public final class Tool {
     public static final Tool SHEARS = new Tool();
 
     public static final Tool ALL = new Tool();
-    
+
+    /**
+     * Array of all existing tools.
+     *
+     * @since 3.1.5
+     */
+    public static Tool[] values = new Tool[] {
+            AXE, HOE, PICKAXE, SHOVEL, HELMET, CHESTPLATE, WINGS, LEGGINGS,
+            BOOTS, BOW, SWORD, ROD, SHEARS, ALL
+    };
+
     private EnumSet<Material> materials;
 
     private Tool () {
@@ -101,5 +111,14 @@ public final class Tool {
 
     public final Iterable<Material> getMaterials() {
         return materials;
+    }
+
+    /**
+     * returns the known tools to exist.
+     *
+     * @since 3.1.5
+     */
+    public static Tool[] values() {
+        return values;
     }
 }

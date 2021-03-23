@@ -18,6 +18,7 @@
 package de.geolykt.enchantments_plus.evt;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +32,13 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
+import de.geolykt.enchantments_plus.util.Tool;
 
 /**
  * The second generation of the Anvil merger, the class that handles merging of enchantments on two Items within the Anvil.
@@ -44,6 +47,26 @@ import de.geolykt.enchantments_plus.enums.BaseEnchantments;
  * @since 2.1.5
  */
 public class NewAnvilMerger implements Listener {
+
+    private static EnumSet<Material> supportedMaterials = null;
+
+    /**
+     * Checks if an ItemStack can be enchanted via the plugin's enchantments.
+     *
+     * @param is The input itemstack
+     * @since 3.1.5
+     */
+    public static boolean isEnchantable(@Nullable ItemStack is) {
+        if (supportedMaterials == null) {
+            // Populate the list
+            supportedMaterials = EnumSet.noneOf(Material.class);
+            for (Tool tool : Tool.values()) {
+                tool.getMaterials().forEach(supportedMaterials::add);
+            }
+            supportedMaterials.add(Material.ENCHANTED_BOOK);
+        }
+        return is != null && supportedMaterials.contains(is.getType());
+    }
 
     /**
      * The remapping function used by {@link #mergeEnchantments(Map, Map)} to merge the levels of the same enchantments.
@@ -105,8 +128,9 @@ public class NewAnvilMerger implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void prepareEvent(PrepareAnvilEvent evt) {
         AnvilInventory inv = evt.getInventory();
-        if (inv.getSize() < 3 || evt.getViewers().size() == 0 || inv.getItem(0) == null)
-            return;
+        if (inv.getSize() < 3 || evt.getViewers().size() == 0 || !isEnchantable(inv.getItem(0))) {
+            return; // Don't allow for obviously misaligned merging
+        }
         List<String> nleftLore = new ArrayList<String>();
         if (evt.getResult() == null || evt.getResult().getType() == Material.AIR) {
             // Best guess merge
