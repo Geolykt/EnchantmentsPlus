@@ -34,7 +34,7 @@ public class Bounce extends CustomEnchantment {
     public Builder<Bounce> defaults() {
         return new Builder<>(Bounce::new, ID)
                 .probability(0)
-                .all("Shoots you in the air if you jump on slime blocks",
+                .all("Shoots you in the air if you move on slime blocks. Sneaking on slime blocks negates this effect.",
                     new Tool[]{Tool.BOOTS},
                     "Bounce",
                     5, // MAX LVL
