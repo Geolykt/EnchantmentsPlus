@@ -153,7 +153,7 @@ public class NewAnvilMerger implements Listener {
                     int maxEnchants = Config.get(world).getMaxEnchants();
                     // Apply enchantments
                     for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
-                        if (ench.getKey().validMaterial(stackA) && appliedEnchants++ < maxEnchants) {
+                        if ((ench.getKey().validMaterial(stackA) || stackA.getType() == Material.ENCHANTED_BOOK) && appliedEnchants++ < maxEnchants) {
                             CustomEnchantment.setEnchantment(stackA, ench.getKey(), ench.getValue(), world);
                         } else {
                             // Remove enchantment, don't go into risks, HashMaps aren't sorted in a particular order
@@ -180,7 +180,7 @@ public class NewAnvilMerger implements Listener {
                 int appliedEnchants = 0;
                 int maxEnchants = Config.get(world).getMaxEnchants();
                 for (Map.Entry<CustomEnchantment, Integer> ench : out.entrySet()) {
-                    if (ench.getKey().validMaterial(result) && appliedEnchants++ < maxEnchants) {
+                    if ((ench.getKey().validMaterial(result) || result.getType() == Material.ENCHANTED_BOOK) && appliedEnchants++ < maxEnchants) {
                         CustomEnchantment.setEnchantment(result, ench.getKey(),  ench.getValue(), world);
                     } else {
                         // Remove enchantment, don't go into risks, HashMaps aren't sorted in a particular order
