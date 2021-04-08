@@ -45,13 +45,19 @@ public class Fire extends CustomEnchantment {
 
     private static final int MAX_BLOCKS = 256;
 
-    public static int[][] SEARCH_FACES_CACTUS = new int[][]{new int[]{0, 1, 0}};
-    public static int[][] SEARCH_FACES_CHORUS = new int[][]{new int[]{-1, 0, 0}, new int[]{1, 0, 0}, new int[]{0, 1, 0}, new int[]{0, 0, -1}, new int[]{0, 0, 1}};
+    public static final int[][] SEARCH_FACES_CACTUS = new int[][]{{0, 1, 0}};
+    public static final int[][] SEARCH_FACES_CHORUS = new int[][]{{-1, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}};
 
     public static final int ID = 13;
-    
+
+    @Deprecated(forRemoval = true, since = "3.1.5")
     public static boolean useSoftcoded = true;
-    
+
+    /**
+     * Whether the native permission queries should be used within the fire enchantment code.
+     */
+    public static boolean checkNPQ = true;
+
     // Locations where Fire has been used on a block and the drop was changed. 
     // BlockBreakEvent is not cancelled but the original item drop is not desired.
     public static final Set<Block> cancelledItemDrops = new HashSet<>();
@@ -74,6 +80,9 @@ public class Fire extends CustomEnchantment {
     @Override
     public boolean onBlockBreak(BlockBreakEvent evt, int level, boolean usedHand) {
         if (evt.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            return false;
+        }
+        if (checkNPQ && !ADAPTER.nativeBlockPermissionQueryingSystem(evt.getPlayer(), evt.getBlock())) {
             return false;
         }
 
@@ -125,7 +134,7 @@ public class Fire extends CustomEnchantment {
         }
         
     }
-    
+
     private boolean cactusDrop(BlockBreakEvent evt, int level, boolean usedHand) {
         Material original = evt.getBlock().getType();
         

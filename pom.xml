@@ -18,7 +18,7 @@
             <url>https://geolykt.de/maven/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id> <!-- For bstats, towny and other plugins -->
+            <id>jitpack.io</id> <!-- For towny and other plugins -->
             <url>https://jitpack.io</url>
         </repository>
         <repository> <!-- For WG -->
