@@ -18,6 +18,7 @@
 package de.geolykt.enchantments_plus.arrows.enchanted;
 
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -34,14 +35,17 @@ public class SiphonArrow extends EnchantedArrow {
         super(entity, level, power);
     }
 
+    @Override
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (evt.getEntity() instanceof LivingEntity && Storage.COMPATIBILITY_ADAPTER.attackEntity(
                 (LivingEntity) evt.getEntity(),
                 (Player) arrow.getShooter(), 0, false)) {
             Player player = (Player) ((Projectile) evt.getDamager()).getShooter();
+            assert player != null;
             double difference = (0.17 * level * power) * (Siphon.calcAmour ? evt.getFinalDamage() : evt.getDamage());
-            player.setHealth(player.getHealth() + 
-                    Math.min(difference, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - player.getHealth()));
+            AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            assert maxHealth != null;
+            player.setHealth(player.getHealth() + Math.min(difference, maxHealth.getValue() - player.getHealth()));
         }
         die();
         return true;

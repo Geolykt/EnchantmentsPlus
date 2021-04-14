@@ -28,10 +28,12 @@ public class LevelArrow extends EnchantedArrow {
         super(entity, level, power);
     }
 
+    @Override
     public void onKill(EntityDeathEvent evt) {
         die(true);
     }
 
+    @Override
     public void onImpact() {
         die(false);
     }

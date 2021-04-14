@@ -31,7 +31,6 @@ import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
-import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -69,7 +68,7 @@ public class Stream extends CustomEnchantment {
         if (!evt.getPlayer().hasMetadata("ze.stream.mode")) {
             player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.plugin, 0));
         }
-        if (player.isSneaking() && (evt.getAction() == RIGHT_CLICK_AIR || evt.getAction() == RIGHT_CLICK_BLOCK)) {
+        if (player.isSneaking() && evt.getAction() == RIGHT_CLICK_AIR) {
             int b = player.getMetadata("ze.stream.mode").get(0).asInt();
             b = b == 4 ? 0 : b + 1;
             player.setMetadata("ze.stream.mode", new FixedMetadataValue(Storage.plugin, b));
@@ -93,12 +92,10 @@ public class Stream extends CustomEnchantment {
             evt.setCancelled(true);
 
             // Prevent auto-equipping
-            if ((player.getInventory().getChestplate() == null ||
-                player.getInventory().getChestplate().getType() == Material.AIR)) {
+            ItemStack chestPlate = player.getInventory().getChestplate();
+            if ((chestPlate == null || chestPlate.getType() == Material.AIR)) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                    // Always null, should remove player.getInventory().getItemInMainHand() == null.
-                    if ((player.getInventory().getItemInMainHand() == null ||
-                        player.getInventory().getItemInMainHand().getType() == Material.AIR)) {
+                    if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
                         ItemStack stack = player.getInventory().getChestplate();
                         player.getInventory().setItemInMainHand(stack);
                         player.getInventory().setChestplate(new ItemStack(Material.AIR));

@@ -41,6 +41,7 @@ public class FuseArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public void onImpact() {
         Location loc = arrow.getLocation();
         for (int i = 1; i < 5; i++) {
@@ -61,6 +62,7 @@ public class FuseArrow extends EnchantedArrow {
         die();
     }
 
+    @Override
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         Location l = evt.getEntity().getLocation();
         if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(), 0, false)) {

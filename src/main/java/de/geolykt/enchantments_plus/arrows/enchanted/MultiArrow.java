@@ -31,6 +31,7 @@ public class MultiArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         final LivingEntity e = (LivingEntity) evt.getEntity();
         int temp = e.getMaximumNoDamageTicks();
@@ -41,6 +42,7 @@ public class MultiArrow extends EnchantedArrow {
         return true;
     }
 
+    @Override
     public void onImpact() {
         Arrow p = arrow.getWorld().spawnArrow(arrow.getLocation(), arrow.getVelocity(),
             (float) (arrow.getVelocity().length() / 10), 0);

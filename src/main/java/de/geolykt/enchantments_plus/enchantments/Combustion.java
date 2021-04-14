@@ -60,6 +60,7 @@ public class Combustion extends CustomEnchantment {
         return ADAPTER.igniteEntity(ent, (Player) evt.getEntity(), (int) (50 * level * power));
     }
 
+    @Override
     public boolean onCombust(EntityCombustByEntityEvent evt, int level, boolean usedHand) {
         evt.setDuration(0);
         return false;

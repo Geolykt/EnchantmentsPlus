@@ -42,6 +42,7 @@ public class ApocalypseArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public void onImpact() {
         final Config config = Config.get(arrow.getWorld());
         Location l2 = arrow.getLocation().clone();

@@ -42,6 +42,7 @@ public class BlizzardArrow extends EnchantedArrow {
         aoe = aoeSize;
     }
 
+    @Override
     @SuppressWarnings("unlikely-arg-type")
     public void onImpact() {
         CompatibilityAdapter.display(Utilities.getCenter(arrow.getLocation()), Particle.CLOUD,

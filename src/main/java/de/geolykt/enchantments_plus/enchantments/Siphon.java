@@ -18,6 +18,7 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -57,8 +58,9 @@ public class Siphon extends CustomEnchantment {
                 && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             Player player = (Player) evt.getDamager();
             double difference = (0.17 * level * power) * (calcAmour ? evt.getFinalDamage() : evt.getDamage());
-            player.setHealth(player.getHealth() + 
-                    Math.min(difference, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - player.getHealth()));
+            AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            assert maxHealth != null;
+            player.setHealth(player.getHealth() + Math.min(difference, maxHealth.getValue() - player.getHealth()));
         }
         return true;
     }

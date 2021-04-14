@@ -22,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -83,6 +84,7 @@ public class Laser extends CustomEnchantment {
 
         ItemStack itemInHand = usedHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
         ItemMeta itemMeta = itemInHand.getItemMeta();
+        assert itemMeta != null;
         Color laserColor = getColor(itemMeta);
         short itemDamage = 0;
 
@@ -95,7 +97,9 @@ public class Laser extends CustomEnchantment {
 
             player.getWorld().spawnParticle(Particle.REDSTONE, tempLoc, 1, new Particle.DustOptions(laserColor, 0.5f));
 
-            for (Entity ent : playLoc.getWorld().getNearbyEntities(tempLoc, .3, .3, .3)) {
+            World w = playLoc.getWorld();
+            assert w != null;
+            for (Entity ent : w.getNearbyEntities(tempLoc, .3, .3, .3)) {
                 if (ent instanceof LivingEntity && ent != player) {
                     ADAPTER.attackEntity((LivingEntity) ent, player, 1 + (level + power * 2), false);
                     itemDamage++;
@@ -149,6 +153,9 @@ public class Laser extends CustomEnchantment {
 
     public static void setColor(ItemStack stack, org.bukkit.Color color) {
        ItemMeta im = stack.getItemMeta();
+       if (im == null) {
+           return;
+       }
        im.getPersistentDataContainer().set(colorKey, PersistentDataType.INTEGER, color.asRGB());
        stack.setItemMeta(im);
     }

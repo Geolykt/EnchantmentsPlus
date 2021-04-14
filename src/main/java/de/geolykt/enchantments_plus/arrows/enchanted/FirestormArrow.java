@@ -40,6 +40,7 @@ public class FirestormArrow extends EnchantedArrow {
         this.aoe = aoe;
     }
 
+    @Override
     public void onImpact() {
         CompatibilityAdapter.display(Utilities.getCenter(arrow.getLocation()), Particle.FLAME, 100 * getLevel(), 0.1f,
                 getLevel(), 1.5f, getLevel());

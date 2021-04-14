@@ -53,6 +53,7 @@ public class FrozenStep extends CustomEnchantment implements AreaOfEffectable {
         super(BaseEnchantments.FROZEN_STEP);
     }
 
+    @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
         if (player.isSneaking() && player.getLocation().getBlock().getType() == WATER &&
             !player.isFlying()) {

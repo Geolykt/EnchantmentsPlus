@@ -37,6 +37,7 @@ public class ToxicArrow extends EnchantedArrow {
         super(entity, level, power);
     }
 
+    @Override
     public boolean onImpact(final EntityDamageByEntityEvent evt) {
         if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(),
             0, false)) {

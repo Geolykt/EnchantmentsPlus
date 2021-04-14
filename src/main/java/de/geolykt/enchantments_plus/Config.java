@@ -173,6 +173,13 @@ public class Config {
         allEnchants.addAll(worldEnchants);
     }
 
+    private static <T> @NotNull T asNotNull(@Nullable T value) {
+        if (value == null) {
+            throw new NullPointerException("This should not have happened. Consider reporting this bug.");
+        }
+        return value;
+    }
+
     // Loads, parses, and auto updates the config file, creating a new config for
     // each map
     public static void loadConfigs() {
@@ -209,7 +216,7 @@ public class Config {
             }
         }
 
-        switch (PATCH_CONFIGURATION.getString("enchantmentGatherer", "advLore")) {
+        switch (asNotNull(PATCH_CONFIGURATION.getString("enchantmentGatherer", "advLore"))) {
         case "advLore":
             CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, !isAllowlist);
             break;
@@ -254,6 +261,11 @@ public class Config {
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     stream.transferTo(fos);
                 } catch (IOException e) {
+                    try {
+                        stream.close();
+                    } catch (IOException e2) {
+                        new RuntimeException(e).printStackTrace();
+                    }
                     throw new RuntimeException(e);
                 }
             }
@@ -263,10 +275,10 @@ public class Config {
             try {
                 String[] versionString;
                 if (yamlConfig.contains("ConfigVersion")) {
-                    versionString = yamlConfig.getString("ConfigVersion").split("\\.");
+                    versionString = asNotNull(yamlConfig.getString("ConfigVersion")).split("\\.");
                 } else {
                     try {
-                        versionString = yamlConfig.getString("ZenchantmentsConfigVersion").split("\\.");
+                        versionString = asNotNull(yamlConfig.getString("ZenchantmentsConfigVersion")).split("\\.");
                     } catch (NullPointerException ex) {
                         versionString = yamlConfig.getStringList("ZenchantmentsConfigVersion").get(0).split("\\.");
                     }
@@ -294,13 +306,13 @@ public class Config {
             int maxEnchants = yamlConfig.getInt("max_enchants", 4);
             boolean explosionBlockBreak = yamlConfig.getBoolean("explosion_block_break", true);
             boolean enchantGlow = yamlConfig.getBoolean("enchantment_glow", false);
-            ChatColor enchantColor = ChatColor.getByChar(yamlConfig.getString("enchantment_color", "7"));
-            ChatColor curseColor = ChatColor.getByChar(yamlConfig.getString("curse_color", "c"));
+            ChatColor enchantColor = ChatColor.getByChar(asNotNull(yamlConfig.getString("enchantment_color", "7")));
+            ChatColor curseColor = ChatColor.getByChar(asNotNull(yamlConfig.getString("curse_color", "c")));
 
             enchantColor = enchantColor != null ? enchantColor : ChatColor.GRAY;
             curseColor = curseColor != null ? curseColor : ChatColor.RED;
 
-            switch ((String) yamlConfig.get("shred_drops")) {
+            switch (asNotNull(yamlConfig.getString("shred_drops"))) {
                 case "all":
                     shredDrops = 0;
                     break;
@@ -314,8 +326,8 @@ public class Config {
                     shredDrops = 0;
             }
             Map<String, LinkedHashMap<String, Object>> configInfo = new HashMap<>();
-            for (Map<String, LinkedHashMap<String, Object>> definition : (List<Map<String, LinkedHashMap<String, Object>>>) yamlConfig
-                    .get(ConfigKeys.ENCHANTMENTS.toString())) {
+            for (Map<String, LinkedHashMap<String, Object>> definition :
+                (List<Map<String, LinkedHashMap<String, Object>>>) asNotNull(yamlConfig .get(ConfigKeys.ENCHANTMENTS.toString()))) {
                 for (String enchantmentName : definition.keySet()) {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
@@ -324,6 +336,7 @@ public class Config {
             Set<CustomEnchantment> enchantments = new HashSet<>();
             for (Class<? extends CustomEnchantment> cl : REGISTERED_ENCHANTMENTS) {
                 try {
+                    @SuppressWarnings("null")
                     CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.getDeclaredConstructor().newInstance().defaults();
                     if (configInfo.containsKey(ench.loreName())) {
                         LinkedHashMap<String, Object> data = configInfo.get(ench.loreName());
@@ -346,6 +359,11 @@ public class Config {
                     plugin.getLogger().severe("Error parsing config for enchantment '" + cl.getName() + "'. Skipping.");
                     ex.printStackTrace();
                 }
+            }
+            try {
+                stream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
                     enchantColor, curseColor, enchantGlow, plugin);
@@ -425,6 +443,7 @@ public class Config {
      * @return The conflicting enchantments, or defaults if it is unmapped.
      * @since 2.2.2
      */
+    // FIXME Eclipse says that this is not used!
     private static @NotNull BaseEnchantments[] getConflicts(@NotNull LinkedHashMap<String, Object> data, @NotNull BaseEnchantments[] defaults) {
         if (data.containsKey(ConfigKeys.CONFLICTS.toString())) {
             String[] s = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
@@ -546,12 +565,13 @@ public class Config {
     /**
      * Obtains the enchantment that is backed by the BaseEnchantments enum.
      * Please note that the enchantment not be registered, which is why it may return null.
+     * However this is not traditional behaviour, which is why it is annotated as not null.
      *
      * @param ench The enchantment
      * @return The enchantment instance valid in the world, or null
      * @since 2.1.1
      */
-    public @Nullable CustomEnchantment enchantFromEnum(@NotNull BaseEnchantments ench) {
+    public @NotNull CustomEnchantment enchantFromEnum(@NotNull BaseEnchantments ench) {
         return baseToEnch.get(ench);
     }
 

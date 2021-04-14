@@ -411,16 +411,20 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             return;
         }
         ItemMeta itemMeta = stk.getItemMeta();
+        if (itemMeta == null) {
+            return;
+        }
         EnchantmentStorageMeta bookMeta = null;
 
-        boolean isBook = stk.getType() == BOOK || stk.getType() == ENCHANTED_BOOK;
+        Material stackType = stk.getType();
+        boolean isBook = stackType == BOOK || stk.getType() == ENCHANTED_BOOK;
 
         boolean containsNormal = false;
         boolean containsHidden = false;
         int duraLevel = 0;
         Map<Enchantment, Integer> enchs;
 
-        if (stk.getType() == ENCHANTED_BOOK) {
+        if (stackType == ENCHANTED_BOOK) {
             bookMeta = (EnchantmentStorageMeta) itemMeta;
             enchs = bookMeta.getStoredEnchants();
         } else {
@@ -435,7 +439,8 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
             }
         }
         if (containsNormal || (!customEnch && containsHidden)) {
-            if (stk.getType() == ENCHANTED_BOOK) {
+            if (stackType == ENCHANTED_BOOK) {
+                assert bookMeta != null;
                 if (duraLevel == 0) {
                     bookMeta.removeStoredEnchant(org.bukkit.enchantments.Enchantment.DURABILITY);
                 }
@@ -447,9 +452,12 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
                 itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
             }
         } else if (customEnch) {
-            if (stk.getType() == BOOK) {
+            if (stackType == BOOK) {
                 stk.setType(ENCHANTED_BOOK);
                 bookMeta = (EnchantmentStorageMeta) stk.getItemMeta();
+                if (bookMeta == null) {
+                    return;
+                }
                 bookMeta.addStoredEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 0, true);
                 bookMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             } else {
@@ -471,9 +479,12 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     protected static final class Builder<T extends CustomEnchantment> {
 
-        private final T customEnchantment;
+        private final @NotNull T customEnchantment;
 
-        public Builder(Supplier<T> sup, int id) {
+        @SuppressWarnings("null")
+        public Builder(@NotNull Supplier<T> sup, int id) {
+            T ench = sup.get();
+            assert ench != null;
             customEnchantment = sup.get();
             customEnchantment.key = new NamespacedKey(Storage.plugin, "ench." + id);
             setConflicts();

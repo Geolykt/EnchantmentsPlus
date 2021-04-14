@@ -40,6 +40,7 @@ public class MissileArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public void onLaunch(LivingEntity player, List<String> lore) {
         final Config config = Config.get(player.getWorld());
         Location playLoc = player.getLocation();

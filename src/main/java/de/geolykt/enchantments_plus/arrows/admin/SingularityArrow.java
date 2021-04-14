@@ -34,6 +34,7 @@ public class SingularityArrow extends EnchantedArrow {
         super(entity, level);
     }
 
+    @Override
     public void onImpact() {
         final Location l = arrow.getLocation().clone();
         Singularity.blackholes.put(l, true);

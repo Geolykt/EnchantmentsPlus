@@ -27,6 +27,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.enchantments.Laser;
@@ -76,6 +77,7 @@ public class CommandProcessor {
                     }
                     if (args.length == 2) {
                         for (Player plyr : Bukkit.getOnlinePlayers()) {
+                            assert plyr != null;
                             if (plyr.getPlayerListName().toLowerCase().startsWith(args[1].toLowerCase())) {
                                 results.add(plyr.getPlayerListName());
                             }
@@ -107,6 +109,7 @@ public class CommandProcessor {
                         // FIXME: Fix out of bounds error below
                     } else if (args.length > 1 && config.enchantFromString(args[args.length - 2]) != null) {
                         CustomEnchantment ench = config.enchantFromString(args[args.length - 2]);
+                        assert ench != null;
                         for (int i = 1; i <= ench.getMaxLevel(); i++) {
                             results.add(i + "");
                         }
@@ -240,6 +243,7 @@ public class CommandProcessor {
             String playerName = args[1];
             Player recipient = null;
             for (Player plyr : Bukkit.getOnlinePlayers()) {
+                assert plyr != null;
                 if (plyr.getName().equalsIgnoreCase(playerName)) {
                     recipient = plyr;
                 }
@@ -481,7 +485,7 @@ public class CommandProcessor {
     }
 
     // Control flow for the command processor
-    public static boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
+    public static boolean onCommand(CommandSender sender, @SuppressWarnings("unused") Command command, String commandlabel, String[] args) {
         if (commandlabel.equalsIgnoreCase("ench")) {
             String label = args.length == 0 ? "" : args[0].toLowerCase();
             switch (label) {
@@ -593,10 +597,11 @@ public class CommandProcessor {
                     ench(infoReciever, eName, level, doNotify, force, (Player) e);
                 }
             } else if (e instanceof Monster) {
-                ItemStack stack = ((Monster) e).getEquipment().getItemInMainHand();
-                if (stack != null) {
+                EntityEquipment equip = ((Monster) e).getEquipment();
+                if (equip != null) {
+                    ItemStack stack = equip.getItemInMainHand();
                     CustomEnchantment.setEnchantment(stack, Config.get(e.getWorld()).enchantFromString(eName), level, e.getWorld());
-                    ((Monster) e).getEquipment().setItemInMainHand(stack);
+                    equip.setItemInMainHand(stack);
                 }
             }
         }
@@ -684,7 +689,7 @@ public class CommandProcessor {
         }
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType().isAir()) {
+            if (player.getInventory().getItemInMainHand().getType().isAir()) {
                 player.sendMessage(Storage.LOGO + ChatColor.RED + "Did you thought that air was a Laser?");
                 return true;
             }

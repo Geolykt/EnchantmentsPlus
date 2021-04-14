@@ -30,6 +30,7 @@ public class QuickArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public void onLaunch(LivingEntity player, List<String> lore) {
         arrow.setVelocity(arrow.getVelocity().normalize().multiply(3.5f));
     }

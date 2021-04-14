@@ -32,6 +32,7 @@ public class FireworkArrow extends EnchantedArrow {
         super(entity, level);
     }
 
+    @Override
     public void onImpact() {
         Location l = arrow.getLocation();
         FireworkEffect.Type[] type = {FireworkEffect.Type.BALL, FireworkEffect.Type.BURST, FireworkEffect.Type.STAR,

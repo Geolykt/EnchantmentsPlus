@@ -28,6 +28,7 @@ public class VortexArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public void onKill(final EntityDeathEvent evt) {
         die();
     }

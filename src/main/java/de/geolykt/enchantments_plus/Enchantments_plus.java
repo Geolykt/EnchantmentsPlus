@@ -76,6 +76,7 @@ public class Enchantments_plus extends JavaPlugin {
     }
 
     // Sets blocks to their natural states at shutdown
+    @Override
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
         FrozenStep.frozenLocs.keySet().forEach((location) -> location.getBlock().setType(Material.WATER));
@@ -91,6 +92,7 @@ public class Enchantments_plus extends JavaPlugin {
     }
 
     // Sends commands over to the CommandProcessor for it to handle
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
         return CommandProcessor.onCommand(sender, command, commandlabel, args);
     }
@@ -102,6 +104,7 @@ public class Enchantments_plus extends JavaPlugin {
     private Metrics metric;
 
     // Loads configs and starts tasks
+    @Override
     public void onEnable() {
         Storage.plugin = this;
         StopWatch w = new StopWatch();

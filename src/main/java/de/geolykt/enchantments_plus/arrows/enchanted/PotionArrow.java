@@ -33,6 +33,7 @@ public class PotionArrow extends EnchantedArrow {
         super(entity, level, power);
     }
 
+    @Override
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (ThreadLocalRandom.current().nextInt((int) Math.round(10 / (getLevel() * getPower() + 1))) == 1) {
             Utilities.addPotion((LivingEntity) arrow.getShooter(),

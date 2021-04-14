@@ -31,6 +31,7 @@ public class StationaryArrow extends EnchantedArrow {
         super(entity);
     }
 
+    @Override
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (Storage.COMPATIBILITY_ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) arrow.getShooter(),
                 0, false)) {

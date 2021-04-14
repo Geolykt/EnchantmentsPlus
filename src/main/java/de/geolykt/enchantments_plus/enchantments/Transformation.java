@@ -19,6 +19,7 @@ package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -74,7 +75,6 @@ public class Transformation extends CustomEnchantment {
                     CompatibilityAdapter.display(evt.getEntity().getLocation(), Particle.HEART, 70, .1f,
                             .5f, 2, .5f);
 
-                    double originalHealth = ((LivingEntity) evt.getEntity()).getHealth();
                     for (ItemStack stk : ((LivingEntity) evt.getEntity()).getEquipment().getArmorContents()) {
                         if (stk.getType() != AIR) {
                             newEnt.getWorld().dropItemNaturally(newEnt.getLocation(), stk);
@@ -91,8 +91,9 @@ public class Transformation extends CustomEnchantment {
 
                     evt.getEntity().remove();
 
-                    newEnt.setHealth(Math.max(1,
-                            Math.min(originalHealth, newEnt.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())));
+                    AttributeInstance maxHealth = newEnt.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                    assert maxHealth != null;
+                    newEnt.setHealth(Math.max(1, maxHealth.getValue()));
 
                 }
             }
