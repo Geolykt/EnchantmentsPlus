@@ -42,7 +42,7 @@ public class GrindstoneMerge implements Listener {
     public void onClicks(final InventoryClickEvent evt) {
         if (evt.getInventory().getType() == InventoryType.GRINDSTONE) {
             GrindstoneInventory gi = (GrindstoneInventory) evt.getInventory();
-            World world = (World) evt.getViewers().get(0).getWorld();
+            World world = evt.getViewers().get(0).getWorld();
             if (evt.getSlot() == 2) {
                 removeOutputEnchants(gi, world);
             } else {

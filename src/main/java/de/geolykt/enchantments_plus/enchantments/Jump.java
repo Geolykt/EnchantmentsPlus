@@ -48,7 +48,7 @@ public class Jump extends CustomEnchantment {
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
-        Utilities.addPotion(player, JUMP, 610, (int) Math.round(level * power));
+        Utilities.addPotionNonflicker(player, JUMP, 610, (int) Math.round(level * power));
         return true;
     }
 }

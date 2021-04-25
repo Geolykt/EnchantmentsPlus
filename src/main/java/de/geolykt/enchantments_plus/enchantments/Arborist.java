@@ -54,7 +54,7 @@ public class Arborist extends CustomEnchantment {
     public boolean onBlockBreak(BlockBreakEvent evt, int level, boolean usedHand) {
         Block blk = evt.getBlock();
         if (Tag.LEAVES.isTagged(blk.getType())) {
-            ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+            ArrayList<ItemStack> drops = new ArrayList<>();
             for (int i = 0; i < level + 3; i++) {
                 drops.addAll(blk.getDrops());
             }

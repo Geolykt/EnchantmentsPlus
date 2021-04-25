@@ -73,7 +73,7 @@ public class Watcher implements Listener {
             int level = CustomEnchantment.getEnchantLevel(config, stk,  BaseEnchantments.LASER);
             if (level != 0 && !stk.getType().equals(ENCHANTED_BOOK)) {
                 evt.setCancelled(true);
-                int range = 6 + (int) Math.round(level * 3); // TODO also calculate with the power of the enchantment
+                int range = 6 + Math.round(level * 3); // TODO also calculate with the power of the enchantment
                 Block blk = evt.getBlock()
                         .getRelative(((Directional) evt.getBlock().getBlockData()).getFacing(), range);
                 Location play = Utilities.getCenter(evt.getBlock());
@@ -93,11 +93,11 @@ public class Watcher implements Listener {
                         if (ent.getLocation().distance(tempLoc) < .75) {
                             if (ent instanceof LivingEntity) {
                                 EntityDamageEvent event = new EntityDamageEvent(ent,
-                                        DamageCause.FIRE, (double) (1 + (level * 2)));
+                                        DamageCause.FIRE, 1 + (level * 2));
                                 Bukkit.getPluginManager().callEvent(event);
                                 ent.setLastDamageCause(event);
                                 if (!event.isCancelled()) {
-                                    ((LivingEntity) ent).damage((double) (1 + (level * 2)));
+                                    ((LivingEntity) ent).damage(1 + (level * 2));
                                 }
                             }
                         }

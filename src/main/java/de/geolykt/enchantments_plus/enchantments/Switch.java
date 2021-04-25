@@ -77,12 +77,12 @@ public class Switch extends CustomEnchantment {
                     break;
                 }
             }
-            if (c == -1) { // No suitable block in inventory
+            if (c == -1 || switchItem == null) { // No suitable block in inventory
                 return false;
             }
 
             Block clickedBlock = evt.getClickedBlock();
-            
+
             // Block has been selected, attempt breaking
             if (Spectral.permissionQuery(clickedBlock, player, BaseEnchantments.SWITCH)) {
                 evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand());

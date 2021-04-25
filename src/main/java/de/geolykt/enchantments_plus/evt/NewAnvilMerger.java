@@ -131,7 +131,7 @@ public class NewAnvilMerger implements Listener {
         if (inv.getSize() < 3 || evt.getViewers().size() == 0 || !isEnchantable(inv.getItem(0))) {
             return; // Don't allow for obviously misaligned merging
         }
-        List<String> nleftLore = new ArrayList<String>();
+        List<String> nleftLore = new ArrayList<>();
         if (evt.getResult() == null || evt.getResult().getType() == Material.AIR) {
             // Best guess merge
             ItemStack stackA = inv.getItem(0).clone();

@@ -230,7 +230,7 @@ public class Anthropomorphism extends CustomEnchantment {
                     if (idleBlocks.get(blk).equals(uid)) {
                         blk.setGravity(true);
                         blk.setGlowing(true);
-                        attackBlocks.put(blk, new SimpleEntry<Double, Vector>(power, player.getLocation().getDirection()));
+                        attackBlocks.put(blk, new SimpleEntry<>(power, player.getLocation().getDirection()));
                         toRemove.add(blk);
                         Block targetBlock = player.getTargetBlock(null, 7);
                         blk.setVelocity(targetBlock

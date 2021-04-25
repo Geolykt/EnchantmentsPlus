@@ -64,6 +64,7 @@ public class Spread extends CustomEnchantment {
     public boolean onProjectileLaunch(ProjectileLaunchEvent evt, int level, boolean usedHand) {
         AbstractArrow originalArrow = (AbstractArrow) evt.getEntity();
         Player player = (Player) originalArrow.getShooter();
+        assert player != null;
         ItemStack hand = Utilities.usedStack(player, usedHand);
         MultiArrow ar = new MultiArrow(originalArrow);
         EnchantedArrow.putArrow(originalArrow, ar, player);

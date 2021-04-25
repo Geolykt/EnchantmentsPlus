@@ -47,7 +47,7 @@ public class NightVision extends CustomEnchantment {
 
     @Override
     public boolean onScan(Player player, int level, boolean usedHand) {
-        Utilities.addPotion(player, NIGHT_VISION, 610, 5);
+        Utilities.addPotionNonflicker(player, NIGHT_VISION, 610, 5);
         return true;
     }
 }

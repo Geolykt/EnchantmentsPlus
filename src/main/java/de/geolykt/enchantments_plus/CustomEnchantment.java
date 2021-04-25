@@ -316,7 +316,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         return baseEnum.compareTo(o.baseEnum);
     }
 
-    public static void applyForTool(Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
+    public static void applyForTool(@NotNull Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
         getEnchants(tool, player.getWorld(), null).forEach((CustomEnchantment ench, Integer level) -> {
             if (!ench.used && Utilities.canUse(player, ench.baseEnum)) {
                 try {
@@ -481,7 +481,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
         private final @NotNull T customEnchantment;
 
-        @SuppressWarnings("null")
         public Builder(@NotNull Supplier<T> sup, int id) {
             T ench = sup.get();
             assert ench != null;

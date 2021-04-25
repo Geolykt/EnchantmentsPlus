@@ -49,7 +49,7 @@ public class Haste extends CustomEnchantment {
 
     @Override
     public boolean onScanHands(Player player, int level, boolean usedHand) {
-        Utilities.addPotion(player, FAST_DIGGING, 610, (int) Math.round(level * power));
+        Utilities.addPotionNonflicker(player, FAST_DIGGING, 610, (int) Math.round(level * power));
         player.setMetadata("ze.haste", new FixedMetadataValue(Storage.plugin, System.currentTimeMillis()));
         return false;
     }

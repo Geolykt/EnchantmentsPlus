@@ -100,7 +100,7 @@ public class Fire extends CustomEnchantment {
             
             ItemStack hand = Utilities.usedStack(evt.getPlayer(), usedHand);
             Collection<ItemStack> original = evt.getBlock().getDrops(hand, evt.getPlayer());
-            List<ItemStack> newDrops = new ArrayList<ItemStack>();
+            List<ItemStack> newDrops = new ArrayList<>();
             for (ItemStack is: original) {
                 ItemStack ns = RecipeUtil.getSmeltedVariantCached(is);
                 int oldAmount = ns.getAmount();

@@ -381,6 +381,9 @@ public final class WatcherEnchant implements Listener {
     public void onProjectileLaunch(ProjectileLaunchEvent evt) {
         if (evt.getEntity().getShooter() != null && evt.getEntity().getShooter() instanceof Player) {
             Player player = (Player) evt.getEntity().getShooter();
+            if (player == null) {
+                return;
+            }
             Material main = player.getInventory().getItemInMainHand().getType();
             boolean usedHand = Tool.BOW.contains(main) || Tool.ROD.contains(main);
             ItemStack usedStack = Utilities.usedStack(player, usedHand);

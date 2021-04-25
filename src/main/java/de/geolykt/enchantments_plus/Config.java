@@ -336,7 +336,6 @@ public class Config {
             Set<CustomEnchantment> enchantments = new HashSet<>();
             for (Class<? extends CustomEnchantment> cl : REGISTERED_ENCHANTMENTS) {
                 try {
-                    @SuppressWarnings("null")
                     CustomEnchantment.Builder<? extends CustomEnchantment> ench = cl.getDeclaredConstructor().newInstance().defaults();
                     if (configInfo.containsKey(ench.loreName())) {
                         LinkedHashMap<String, Object> data = configInfo.get(ench.loreName());

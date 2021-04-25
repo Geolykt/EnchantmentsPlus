@@ -262,7 +262,7 @@ public class Utilities {
             yaw += 360;
         }
         yaw %= 360;
-        double i = (double) ((yaw + 8) / 18);
+        double i = (yaw + 8) / 18;
         if (i >= 19 || i < 1) {
             direction = BlockFace.SOUTH;
         } else if (i < 3) {
@@ -292,7 +292,7 @@ public class Utilities {
             yaw += 360;
         }
         yaw %= 360;
-        double i = (double) ((yaw + 8) / 18);
+        double i = (yaw + 8) / 18;
         if (i >= 18 || i < 3) {
             direction = BlockFace.SOUTH;
         } else if (i < 8) {
@@ -329,6 +329,30 @@ public class Utilities {
         for (PotionEffect eff : ent.getActivePotionEffects()) {
             if (eff.getType().equals(type)) {
                 if (eff.getAmplifier() > intensity || eff.getDuration() > length) {
+                    return;
+                } else {
+                    ent.removePotionEffect(type);
+                    break;
+                }
+            }
+        }
+        ent.addPotionEffect(new PotionEffect(type, length, intensity));
+    }
+
+    /**
+     * Custom variant of {@link #addPotion(LivingEntity, PotionEffectType, int, int)} that is resistant to flickering.
+     * This is achieved by not guaranteeing an update of the potion, however the potion should be updated if the intensity
+     * of the potion would receive an update.
+     *
+     * @param ent The targeted entity
+     * @param type The type of the potion to add
+     * @param length The length of the effect (in ticks)
+     * @param intensity The intensity of the effect
+     */
+    public static void addPotionNonflicker(LivingEntity ent, PotionEffectType type, int length, int intensity) {
+        for (PotionEffect eff : ent.getActivePotionEffects()) {
+            if (eff.getType().equals(type)) {
+                if (eff.getAmplifier() > intensity || eff.getDuration() > length / 2) {
                     return;
                 } else {
                     ent.removePotionEffect(type);
@@ -394,7 +418,7 @@ public class Utilities {
 
         // Ensure the search list is in the allowlist
         if (!flipValidSearch) {
-            HashSet<Material> validSearchNew = new HashSet<Material>();
+            HashSet<Material> validSearchNew = new HashSet<>();
             validSearchNew.addAll(validSearch);
             validSearchNew.addAll(validFind);
             validSearch = validSearchNew;
