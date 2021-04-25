@@ -18,7 +18,6 @@
 package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -50,27 +49,28 @@ public class Stock extends CustomEnchantment {
 
     @Override
     public boolean onBlockInteract(final PlayerInteractEvent evt, int level, boolean usedHand) {
-        final ItemStack stk = evt.getPlayer().getInventory().getItemInMainHand().clone();
-        if (stk.getType() == AIR) {
+        // We have to clone it as in the future it might be gone
+        final ItemStack oldStack = evt.getPlayer().getInventory().getItemInMainHand().clone();
+        if (oldStack.getType() == AIR || Tool.ALL.contains(oldStack.getType())) {
             return false;
         }
-        final Player player = evt.getPlayer();
         Bukkit.getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
             int current = -1;
             ItemStack newHandItem = evt.getPlayer().getInventory().getItemInMainHand();
             if (newHandItem.getType() != AIR) {
                 return;
             }
-            for (int i = 0; i < evt.getPlayer().getInventory().getContents().length; i++) {
-                ItemStack s = player.getInventory().getContents()[i];
-                if (s != null && s.getType().equals(stk.getType())) {
+            ItemStack[] inventory = evt.getPlayer().getInventory().getContents();
+            for (int i = 0; i < inventory.length; i++) {
+                ItemStack s = inventory[i];
+                if (s != null && s.getType() == oldStack.getType()) {
                     current = i;
                     break;
                 }
             }
             if (current != -1) {
                 evt.getPlayer().getInventory()
-                   .setItemInMainHand(evt.getPlayer().getInventory().getContents()[current]);
+                   .setItemInMainHand(inventory[current]);
                 evt.getPlayer().getInventory().setItem(current, new ItemStack(AIR));
             }
         }, 1);

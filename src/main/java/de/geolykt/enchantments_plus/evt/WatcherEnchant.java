@@ -239,6 +239,12 @@ public final class WatcherEnchant implements Listener {
                     return ench.onBlockInteract(evt, level, false);
                 });
             }
+            // TODO do this better
+            for (ItemStack is : player.getInventory().getArmorContents()) {
+                CustomEnchantment.applyForTool(player, is, (ench, level) -> {
+                    return ench.onBlockInteract(evt, level, false);
+                });
+            }
         }
         if (evt.getClickedBlock() != null && evt.getClickedBlock().getType().isInteractable()) {
             if (evt.getHand() == EquipmentSlot.HAND) {
