@@ -101,6 +101,9 @@ public class Switch extends CustomEnchantment {
 
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
                 ADAPTER.placeBlock(clickedBlock, player, mat, null); // TODO blockData
+                if (ADAPTER.doLog()) {
+                    ADAPTER.performLog(baseEnum, player.getUniqueId(), player.getName(), null, clickedBlock);
+                }
             }, 1);
             Utilities.removeItem(evt.getPlayer(), mat, 1);
             return true;

@@ -25,6 +25,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.*;
@@ -65,6 +66,7 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.*;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
 
@@ -887,7 +889,9 @@ public class CompatibilityAdapter {
 
         perm_useTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
         perm_useWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+        boolean logUseLB = findClass("de.diddiz.LogBlock.LogBlock");
         ArrayList<NativePermissionHook> permHooks = new ArrayList<>();
+        ArrayList<NativeLoggingHook> logHooks = new ArrayList<>();
         if (perm_useTowny) {
             permHooks.add(new TownyHook());
         }
@@ -900,8 +904,13 @@ public class CompatibilityAdapter {
         if (permUseGriefPrevention) {
             permHooks.add(new GPHook());
         }
+        if (logUseLB) {
+            NativeLoggingHook hook = new LogBlockHook();
+            hook.onEnable(Storage.plugin.getLogger());
+            logHooks.add(hook);
+        }
         // TODO Other plugins (factions, claim plugins, etc...) - Just create an issue to create priority if you need one in specific
-        nativePerm = new NativePermissionHooks(permHooks);
+        nativePerm = new NativePermissionHooks(permHooks, logHooks);
     }
 
     /**
@@ -939,7 +948,7 @@ public class CompatibilityAdapter {
     }
 
     /**
-     * @deprecated This method's name does not follow naming conventions and will be replaced soon with a proper name
+     * @deprecated This method's name does not follow naming conventions and will be replaced with {@link #constructEntityShootBowEvent(LivingEntity, ItemStack, ItemStack, Entity, EquipmentSlot, float, boolean)}.
      *
      * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
      *  the correct constructor without throwing a java.lang.NoSuchMethodError.
@@ -951,6 +960,7 @@ public class CompatibilityAdapter {
      * @param force The force at which the bow is drawn
      * @param consumeItem  Whether or not to consume the item. NOt used in legacy mode
      * @return The constructed EntityShootBowEvent
+     * @since 1.0.0
      */
     @Deprecated(since = "3.1.3", forRemoval = true)
     public EntityShootBowEvent ConstructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
@@ -962,7 +972,7 @@ public class CompatibilityAdapter {
      * This method queries the correct Permission interfaces, which are plugins. 
      * If the plugin is not loaded the method will ignore it gracefully. <br>
      * Plugins are detected during the {@link CompatibilityAdapter#scanMethods()} private function which is called shortly after the 
-     * constructor. <br>
+     * constructor.
      * @param source The player, from where the Query originates from.
      * @param target The Block which should be tested whether the player may break/alter.
      * @return True if the player may break/alter the block, false otherwise
@@ -970,5 +980,43 @@ public class CompatibilityAdapter {
      */
     public boolean nativeBlockPermissionQueryingSystem (@NotNull Player source, @NotNull Block target) {
         return nativePerm.nativeBlockPermissionQueryingSystem(source, target);
+    }
+
+    /**
+     * Calls {@link NativeLoggingHook#logInteraction(BaseEnchantments, UUID, String, BlockState, Block)} to all registered
+     * logging hooks.
+     *
+     * @param ench The enchantment that triggered the interaction
+     * @param source The player UUID that caused this action
+     * @param username The username (NOT the display name!) of the user causing the action
+     * @param before The blockdata of the block that was modified before it was modified. May be null if not applicable (e. g. placing blocks)
+     * @param blk The modified block
+     * @since 3.1.6
+     */
+    public void performLog(@NotNull BaseEnchantments ench, @NotNull UUID source, @NotNull String username, @Nullable BlockState before, @NotNull Block blk) {
+        nativePerm.performLog(ench, source, username, before, blk);
+    }
+
+    /**
+     * Returns whether logging should be performed.
+     * In the current implementation is will always return false if there are no registered hooks
+     *
+     * @return Whether logging is enabled
+     * @since 3.1.6
+     */
+    public boolean doLog() {
+        return nativePerm.doLog();
+    }
+
+    /**
+     * Adds a logging hook to the container.
+     * This method will NOT call {@link NativeLoggingHook#onEnable(java.util.logging.Logger)}.
+     * It is recommended to call that method prior to adding the logger
+     *
+     * @param hook The hook to add.
+     * @since 3.1.6
+     */
+    public void addLogger(NativeLoggingHook hook) {
+        nativePerm.addLogger(hook);
     }
 }

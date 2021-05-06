@@ -51,12 +51,20 @@ import static org.bukkit.Material.BOOK;
 import static org.bukkit.Material.ENCHANTED_BOOK;
 
 // CustomEnchantment is the default structure for any enchantment. Each enchantment below it will extend this class
-//      and will override any methods as neccecary in its behavior
+//      and will override any methods as neccecary in its behaviour
 // Why do we even have a comparable interface?
 public abstract class CustomEnchantment implements Comparable<CustomEnchantment> {
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
     public static IEnchGatherer Enchantment_Adapter = new BasicLoreGetter();
+
+    /**
+     * Whether to perform the worldguard region support.
+     * It is independent of the Native Permission Query.
+     *
+     * @since 3.1.6
+     */
+    static boolean worldguard = false;
 
     protected int maxLevel;         // Max level the given enchant can naturally obtain
     protected String loreName;      // Name the given enchantment will appear as; with &7 (Gray) color

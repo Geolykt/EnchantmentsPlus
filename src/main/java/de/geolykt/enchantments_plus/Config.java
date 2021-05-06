@@ -194,6 +194,7 @@ public class Config {
                 .getBoolean("patch_ench_protect.frozenstep_removeBlocksInsteadOfCancel", false);
         Spectral.performWorldProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.spectral", true);
         Spectral.useNativeProtection = PATCH_CONFIGURATION.getBoolean("worldProtection.native", true);
+        CustomEnchantment.worldguard = PATCH_CONFIGURATION.getBoolean("worldProtection.wg", false);
         Fire.checkNPQ = Spectral.useNativeProtection && PATCH_CONFIGURATION.getBoolean("worldprotection.fire", true);
         Arborist.doGoldenAppleDrop = PATCH_CONFIGURATION.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
         Siphon.calcAmour = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);

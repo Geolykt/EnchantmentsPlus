@@ -22,6 +22,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.*;
 import org.bukkit.block.data.type.*;
 import org.bukkit.entity.Player;
@@ -46,6 +47,7 @@ public class Spectral extends CustomEnchantment {
 
     /**
      * A hard maximum on the amount of blocks that can be changed while shift + right-clicking.
+     *
      * @since 1.0
      */
     private static final int MAX_BLOCKS = 1024;
@@ -124,19 +126,31 @@ public class Spectral extends CustomEnchantment {
 
         boolean doInteract = false;
         Material cache = null;
+        UUID id = p.getUniqueId();
+        String name = p.getName();
         if (performWorldProtection) {
             for (final Block b : potentialBlocks) {
                 if (permissionQuery(b, p, BaseEnchantments.SPECTRAL)) {
                     // TODO: Optimize duplicated code.
                     if (cache == null) {
                         cache = cycleBlockType(b);
+
+                        BlockState old = null;
+                        if (ADAPTER.doLog()) {
+                            old = b.getState();
+                        }
                         doInteract = blockstateInteract(b);
+                        if (doInteract && ADAPTER.doLog()) {
+                            ADAPTER.performLog(baseEnum, id, name, old, b);
+                        }
+
                         if (!doInteract && cache == b.getType()) {
                             return false;
                         }
-                        blocksChanged += cache == null ? 0 : 1;
                     } else {
                         cycleBlockType(b, cache, doInteract);
+                    }
+                    if (cache != null) {
                         blocksChanged++;
                     }
                 }
@@ -146,13 +160,23 @@ public class Spectral extends CustomEnchantment {
                 // TODO: Optimize duplicated code.
                 if (cache == null) {
                     cache = cycleBlockType(b);
+
+                    BlockState old = null;
+                    if (ADAPTER.doLog()) {
+                        old = b.getState();
+                    }
                     doInteract = blockstateInteract(b);
+                    if (doInteract && ADAPTER.doLog()) {
+                        ADAPTER.performLog(baseEnum, id, name, old, b);
+                    }
+
                     if (!doInteract && cache == b.getType()) {
                         return false;
                     }
-                    blocksChanged += cache == null ? 0 : 1;
                 } else {
                     cycleBlockType(b, cache, doInteract);
+                }
+                if (cache != null) {
                     blocksChanged++;
                 }
             }
@@ -160,21 +184,22 @@ public class Spectral extends CustomEnchantment {
         
         CompatibilityAdapter.damageTool(evt.getPlayer(), (int) Math.ceil(Math.log(blocksChanged + 1) / 0.30102999566), usedHand);
         evt.setCancelled(true);
-        
         return blocksChanged != 0;
     }
 
     /**
      * Internal Spectral utility to easy caching, the goal is to not unnecessarily change blockstates very often,
-     *  which is a resource-consuming task.<br>
+     * which is a resource-consuming task. (this does not even cache my dear, what was I thinking when writing this javadoc)
+     *
      * @param block The target block
      * @return True if a change was performed, false otherwise
      * @since 1.2.0
      */
     private static boolean blockstateInteract(Block block) {
+        // FIXME this method is coded in a very stupid manner, cleaning that up is an easy optimisation
         BlockData blockData = block.getBlockData();
         boolean performed = false;
-        
+
         if (blockData instanceof Bisected) {
             Bisected newBlockData = (Bisected) block.getBlockData();
             newBlockData.setHalf(((Bisected) blockData).getHalf());

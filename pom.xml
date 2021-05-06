@@ -29,6 +29,10 @@
             <id>rosewood-repo</id> <!-- For RoseStacker -->
             <url>https://repo.rosewooddev.io/repository/public/</url>
         </repository>
+        <repository>
+            <id>md_5-repo</id> <!-- For LogBlock -->
+            <url>https://repo.md-5.net/content/repositories/public/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -123,6 +127,20 @@
             <groupId>dev.rosewood</groupId>
             <artifactId>rosestacker</artifactId>
             <version>1.2.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Logging plugins -->
+        <dependency>
+            <groupId>de.diddiz</groupId>
+            <artifactId>logblock</artifactId>
+            <version>1.16.5.2-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
