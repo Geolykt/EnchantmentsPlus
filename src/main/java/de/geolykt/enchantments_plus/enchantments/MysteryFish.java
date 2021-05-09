@@ -37,6 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MysteryFish extends CustomEnchantment {
 
     // Guardians from the Mystery Fish enchantment and the player they should move towards
+    // FIXME potentially unsafe operation, would require a review in the 4.0.0 refractor (right now a refractor to a safer operation is hardly possible)
     public static final Map<Entity, Player> guardianMove = new HashMap<>();
     public static final int                 ID           = 38;
 

@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-
 /**
  *
  * @author wicden
@@ -70,15 +69,13 @@ public class HighFrequencyRunnableCache implements Runnable {
         int listEnd = players.size() * (feedFraction + 1) / refreshPeriodTicks;
 
         //System.out.println("Tick " + feedFraction + ": Scanning " + (listEnd - listStart) + " players");
-        
+
         for (int i = listStart; i < listEnd; i++) {
             Player p = players.get(i);
             if (!p.isOnline()) {
                 continue;
             }
-            cacheFeeder.accept(p, (tick) -> {
-                cache1.add(tick);
-            });
+            cacheFeeder.accept(p, cache1::add);
         }
 
         feedFraction = (feedFraction + 1) % refreshPeriodTicks;

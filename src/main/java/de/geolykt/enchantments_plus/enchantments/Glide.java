@@ -40,7 +40,15 @@ import static org.bukkit.Material.AIR;
 
 public class Glide extends CustomEnchantment {
 
-    // The players using glide and their most recent Y coordinate
+    /**
+     * @deprecated This map is using a player as it's key, which is discouraged as it can easily lead to memory leaks
+     *
+     * The players using glide and their most recent Y coordinate.
+     * There currently is no replacement for this field, as it will only be added once this field is removed.
+     *
+     * @since 1.0.0
+     */
+    @Deprecated(forRemoval = true, since = "3.1.6")
     public static final Map<Player, Double> sneakGlide = new HashMap<>();
     public static final int ID = 20;
 

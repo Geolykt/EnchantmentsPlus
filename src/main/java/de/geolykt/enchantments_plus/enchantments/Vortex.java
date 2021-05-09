@@ -38,6 +38,7 @@ import java.util.Map;
 public class Vortex extends CustomEnchantment {
 
     // Locations where Vortex has been used on a block and are waiting for the Watcher to handle their teleportation
+    // FIXME potentially unsafe operation, would require a review in the 4.0.0 refractor (right now a refractor to a safer operation is hardly possible)
     public static final Map<Location, Player> vortexLocs = new HashMap<>();
     public static final int ID = 66;
 

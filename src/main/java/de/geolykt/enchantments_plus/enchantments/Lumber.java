@@ -33,9 +33,9 @@ public class Lumber extends CustomEnchantment {
     private static final int MAX_BLOCKS = 200;
 
     public static int[][] SEARCH_FACES = new int[][]{new int[]{}};
-    
+
     public static final int ID = 34;
-    
+
     @Override
     public Builder<Lumber> defaults() {
         return new Builder<>(Lumber::new, ID)

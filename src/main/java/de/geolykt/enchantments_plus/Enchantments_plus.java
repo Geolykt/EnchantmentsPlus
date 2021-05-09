@@ -46,10 +46,12 @@ import java.io.File;
 import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
 public class Enchantments_plus extends JavaPlugin {
-    
+
     /**
      * Internal value that should not be used outside of the plugin.
-     * It's main use is to initialise tertiary classes without the need of hacks.
+     * It's main use is to initialise tertiary classes without the need of larger hacks.
+     * Even though this is a pretty large hack in itself.
+     *
      * @since 2.2.1
      */
     protected static Enchantments_plus internal_instance;

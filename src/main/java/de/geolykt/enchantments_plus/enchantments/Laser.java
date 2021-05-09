@@ -49,7 +49,7 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 public class Laser extends CustomEnchantment {
 
     public static final int ID = 31;
-    
+
     public static NamespacedKey colorKey;
 
     public static boolean doShredCooldown = true;
