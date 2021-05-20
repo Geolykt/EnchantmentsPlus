@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.WGHook;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.evt.AnvilMerge;
 import de.geolykt.enchantments_plus.evt.GrindstoneMerge;
@@ -169,5 +170,13 @@ public class Enchantments_plus extends JavaPlugin {
 
         w.stop();
         getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
+    }
+   
+    @Override
+    public void onLoad() {
+        // Let's play the classloader!
+        try {
+            WGHook.dummy();
+        } catch (Throwable ignored) { }
     }
 }

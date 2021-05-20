@@ -1,5 +1,7 @@
-**IMPORTANT: As of 3.1.7 the project requires Java 16 or above to run, 
-use 3.1.6 or below for Java 11 support or use the 2.x.x LTS versions instead if you use Java 8**
+You are currently viewing the 3.x.x branch, it is likely to recieve no further updates (unless some bug is spontanously found). Consider viewing the 4.x.x branch instead.
+
+**IMPORTANT: As of 4.0.0 the project requires Java 16 or above to run, 
+use 3.x.x or below for Java 11 support or use the 2.x.x LTS versions instead if you use Java 8**
 
 Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail-to:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). Issues however should be reported here on Github so forkers can profit from them being public, but it's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed, so in the end it doesn't really matter where they are reported to.
 

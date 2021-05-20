@@ -327,6 +327,9 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public static void applyForTool(@NotNull Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
         getEnchants(tool, player.getWorld(), null).forEach((CustomEnchantment ench, Integer level) -> {
             if (!ench.used && Utilities.canUse(player, ench.baseEnum)) {
+                if (worldguard && CompatibilityAdapter.isDisabled(player)) {
+                    return;
+                }
                 try {
                     ench.used = true;
                     if (action.test(ench, level) && ench.cooldownMillis != 0) {

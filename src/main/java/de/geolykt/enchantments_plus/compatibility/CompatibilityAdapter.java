@@ -1019,4 +1019,16 @@ public class CompatibilityAdapter {
     public void addLogger(NativeLoggingHook hook) {
         nativePerm.addLogger(hook);
     }
+
+    /**
+     * Returns whether the enchantments are allowed for the player within the block the player is standing at.
+     * Warning: This method is flawed as the enchantments can have a bigger AOE than just the block the player is standing in
+     *
+     * @param player The affected player
+     * @return true if disabled, false otherwise
+     * @since 3.1.6
+     */
+    public static boolean isDisabled(@NotNull Player player) {
+        return !WGHook.hasPermission(player, player.getLocation());
+    }
 }

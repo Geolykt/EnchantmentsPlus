@@ -10,7 +10,7 @@ worldProtection:
   spectral: true
   native: true # If false the Plugin supports more Compatibility with world protection plugins however also allows for more exploits with plugins such as McMMO or Jobs.
   fire: false # Disabled per default for performance reasons, turning it on fixed exploits with improperly coded world protection plugins like Worldguard
-  wg: false # Worldguard integration.
+  wg: false # Worldguard region integration. Flag is "eplus"
 recipe:
   misc:
     arborist-doGoldenAppleDrop: true
