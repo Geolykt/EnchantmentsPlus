@@ -106,15 +106,6 @@ public class CompatibilityAdapter {
     private final boolean permUseClaimChunk;
 
     /**
-     * @deprecated Unused variable.
-     *
-     * @since 1.0.0
-     */
-    @SuppressWarnings("unused")
-    @Deprecated(since = "3.1.3", forRemoval = true)
-    private static final Random RND = new Random();
-
-    /**
      * Constructs the class and starts a Task on the next tick to initialise it further (scans methods from other plugins or spigot)
      * @param plugin The plugin that is used to initialise the task.
      */
@@ -945,27 +936,6 @@ public class CompatibilityAdapter {
         } else {
             return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
         }
-    }
-
-    /**
-     * @deprecated This method's name does not follow naming conventions and will be replaced with {@link #constructEntityShootBowEvent(LivingEntity, ItemStack, ItemStack, Entity, EquipmentSlot, float, boolean)}.
-     *
-     * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
-     *  the correct constructor without throwing a java.lang.NoSuchMethodError.
-     * @param shooter The shooter
-     * @param bow The used bow
-     * @param consumable The item that was consumed. Not used in legacy mode.
-     * @param projectile The spawned projectile/arrow
-     * @param hand  Not used in legacy mode. The used hand
-     * @param force The force at which the bow is drawn
-     * @param consumeItem  Whether or not to consume the item. NOt used in legacy mode
-     * @return The constructed EntityShootBowEvent
-     * @since 1.0.0
-     */
-    @Deprecated(since = "3.1.3", forRemoval = true)
-    public EntityShootBowEvent ConstructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
-            @Nullable ItemStack consumable, @NotNull Entity projectile, @NotNull EquipmentSlot hand, float force, boolean consumeItem) {
-        return constructEntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
     }
 
     /**

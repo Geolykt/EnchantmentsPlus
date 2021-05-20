@@ -17,7 +17,6 @@
  */
 package de.geolykt.enchantments_plus.compatibility.nativeperm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,19 +32,6 @@ public final class NativePermissionHooks {
 
     private final List<NativePermissionHook> hooks;
     private final List<NativeLoggingHook> logHooks;
-
-    /**
-     * @deprecated The class is now also responsible for logging hooks.
-     *
-     * Constructor.
-     *
-     * @param hooks The permission hooks
-     * @since 3.1.4
-     */
-    @Deprecated(forRemoval = true, since = "3.1.8")
-    public NativePermissionHooks(List<NativePermissionHook> hooks) {
-        this(hooks, new ArrayList<>());
-    }
 
     /**
      * Constructor.

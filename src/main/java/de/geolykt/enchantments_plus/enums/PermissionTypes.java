@@ -32,16 +32,12 @@ public enum PermissionTypes {
     }
 
     /**
-     * Obtains the permission string used by the permission string.
-     * 
-     * @return The permission String used by the {@link #hasPermission(Permissible)} method.
-     * @since 1.1.2
+     * Checks whether the given permissible has the permission that is represented by the enum.
+     *
+     * @param permissible The permissible to query
+     * @return True if the permission is exiting on the permissible, false otherwise
+     * @since 2.0.0
      */
-    @Deprecated(forRemoval = false, since = "3.0.1")
-    public String getPermissionNames() {
-        return this.permission;
-    }
-
     public boolean hasPermission(Permissible permissible) {
         return permissible.hasPermission(permission);
     }

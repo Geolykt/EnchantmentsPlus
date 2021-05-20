@@ -37,8 +37,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupArrowEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -314,27 +312,5 @@ public class Watcher implements Listener {
                 && (Toxic.hungerPlayers.getOrDefault(evt.getPlayer().getUniqueId(), -1L) > System.currentTimeMillis())) {
             evt.setCancelled(true);
         }
-    }
-
-    // Prevents arrows with the 'ze.arrow' metadata from being able to be picked up
-    // by removing them
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public void onArrowPickup(PlayerPickupArrowEvent evt) {
-        if (evt.getItem().hasMetadata("ze.arrow")) {
-            evt.getItem().remove();
-            evt.setCancelled(true);
-        }
-    }
-
-    /**
-     * Event handler that is responsible for clearing up unsafe data after a player left.
-     *
-     * @param evt The Event
-     * @since 3.1.6
-     */
-    @SuppressWarnings("removal")
-    @EventHandler
-    public final void onLeave(PlayerQuitEvent evt) {
-        Glide.sneakGlide.remove(evt.getPlayer());
     }
 }

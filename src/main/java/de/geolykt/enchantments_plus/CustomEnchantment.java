@@ -51,7 +51,7 @@ import static org.bukkit.Material.BOOK;
 import static org.bukkit.Material.ENCHANTED_BOOK;
 
 // CustomEnchantment is the default structure for any enchantment. Each enchantment below it will extend this class
-//      and will override any methods as neccecary in its behaviour
+//      and will override any methods as necessary in its behaviour
 // Why do we even have a comparable interface?
 public abstract class CustomEnchantment implements Comparable<CustomEnchantment> {
 

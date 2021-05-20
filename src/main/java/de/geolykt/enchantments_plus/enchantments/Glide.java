@@ -17,6 +17,13 @@
  */
 package de.geolykt.enchantments_plus.enchantments;
 
+import static org.bukkit.Material.AIR;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -32,24 +39,14 @@ import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
 import de.geolykt.enchantments_plus.util.Tool;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static org.bukkit.Material.AIR;
-
 public class Glide extends CustomEnchantment {
 
     /**
-     * @deprecated This map is using a player as it's key, which is discouraged as it can easily lead to memory leaks
-     *
      * The players using glide and their most recent Y coordinate.
-     * There currently is no replacement for this field, as it will only be added once this field is removed.
      *
-     * @since 1.0.0
+     * @since 4.0.0
      */
-    @Deprecated(forRemoval = true, since = "3.1.6")
-    public static final Map<Player, Double> sneakGlide = new HashMap<>();
+    private static final Map<UUID, Double> GLIDING_PLAYERS = new HashMap<>();
     public static final int ID = 20;
 
     @Override
@@ -71,10 +68,10 @@ public class Glide extends CustomEnchantment {
 
     @Override
     public boolean onFastScan(Player player, int level, boolean usedHand) {
-        if (!sneakGlide.containsKey(player)) {
-            sneakGlide.put(player, player.getLocation().getY());
+        if (!GLIDING_PLAYERS.containsKey(player.getUniqueId())) {
+            GLIDING_PLAYERS.put(player.getUniqueId(), player.getLocation().getY());
         }
-        if (!player.isSneaking() || sneakGlide.get(player) == player.getLocation().getY()) {
+        if (!player.isSneaking() || GLIDING_PLAYERS.get(player.getUniqueId()) == player.getLocation().getY()) {
             return false;
         }
         boolean b = false;
@@ -107,7 +104,7 @@ public class Glide extends CustomEnchantment {
                 }
             }
         }
-        sneakGlide.put(player, player.getLocation().getY());
+        GLIDING_PLAYERS.put(player.getUniqueId(), player.getLocation().getY());
         return true;
     }
 

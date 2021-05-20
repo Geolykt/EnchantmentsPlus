@@ -50,9 +50,6 @@ public class Fire extends CustomEnchantment {
 
     public static final int ID = 13;
 
-    @Deprecated(forRemoval = true, since = "3.1.5")
-    public static boolean useSoftcoded = true;
-
     /**
      * Whether the native permission queries should be used within the fire enchantment code.
      */
@@ -79,71 +76,70 @@ public class Fire extends CustomEnchantment {
 
     @Override
     public boolean onBlockBreak(BlockBreakEvent evt, int level, boolean usedHand) {
-        if (evt.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+        if (!evt.isDropItems() || evt.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return false;
         }
         if (checkNPQ && !ADAPTER.nativeBlockPermissionQueryingSystem(evt.getPlayer(), evt.getBlock())) {
             return false;
         }
 
-        if (!useSoftcoded) {
-            Bukkit.getLogger().info("Hardcoded fire enchantment drops have been removed.");
-            return false;
-        } else {
-            if (!evt.isDropItems()) {
-                return false;
-            }
-            if (evt.getBlock().getType() == Material.CACTUS ||
-                evt.getBlock().getType() == Material.CHORUS_PLANT) {
-                return cactusDrop(evt, level, usedHand);
-            }
-            
-            ItemStack hand = Utilities.usedStack(evt.getPlayer(), usedHand);
-            Collection<ItemStack> original = evt.getBlock().getDrops(hand, evt.getPlayer());
-            List<ItemStack> newDrops = new ArrayList<>();
-            for (ItemStack is: original) {
-                ItemStack ns = RecipeUtil.getSmeltedVariantCached(is);
-                int oldAmount = ns.getAmount();
-                if (ns.getMaxStackSize() == 0) { // Probably air or other cursed items
-                    continue;
-                }
-                int amount = ns.getAmount();
-                while (amount >= ns.getMaxStackSize()) {
-                    ns.setAmount(ns.getMaxStackSize());
-                    newDrops.add(ns);
-                    amount -= ns.getMaxStackSize();
-                }
-                ns.setAmount(oldAmount % ns.getMaxStackSize());
-                newDrops.add(ns);
-            }
-            if (newDrops.size() != 0) {
-                CompatibilityAdapter.display(Utilities.getCenter(evt.getBlock()), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
-                for (ItemStack is: newDrops) {
-                    evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(), is);
-                }
-                Block affectedBlock = evt.getBlock();
-                cancelledItemDrops.add(affectedBlock);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
-                    cancelledItemDrops.remove(affectedBlock);
-                }, 5);
-
-                return true;
-            } else {
-                return false;
-            }
+        if (evt.getBlock().getType() == Material.CACTUS ||
+            evt.getBlock().getType() == Material.CHORUS_PLANT) {
+            return cactusDrop(evt);
         }
-        
+
+        ItemStack hand = Utilities.usedStack(evt.getPlayer(), usedHand);
+        Collection<ItemStack> original = evt.getBlock().getDrops(hand, evt.getPlayer());
+        List<ItemStack> newDrops = new ArrayList<>();
+        for (ItemStack is: original) {
+            ItemStack ns = RecipeUtil.getSmeltedVariantCached(is);
+            int oldAmount = ns.getAmount();
+            if (ns.getMaxStackSize() == 0) { // Probably air or other cursed items
+                continue;
+            }
+            int amount = ns.getAmount();
+            while (amount >= ns.getMaxStackSize()) {
+                ns.setAmount(ns.getMaxStackSize());
+                newDrops.add(ns);
+                amount -= ns.getMaxStackSize();
+            }
+            ns.setAmount(oldAmount % ns.getMaxStackSize());
+            newDrops.add(ns);
+        }
+        if (newDrops.size() != 0) {
+            CompatibilityAdapter.display(Utilities.getCenter(evt.getBlock()), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+            for (ItemStack is: newDrops) {
+                evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(), is);
+            }
+            Block affectedBlock = evt.getBlock();
+            cancelledItemDrops.add(affectedBlock);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> {
+                cancelledItemDrops.remove(affectedBlock);
+            }, 5);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    private boolean cactusDrop(BlockBreakEvent evt, int level, boolean usedHand) {
+    /**
+     * Breaks a cactus block and breaks all the child blocks.
+     * The drops are cancelled and instead green dye is dropped.
+     * Also affects chorus plants
+     *
+     * @param evt The parent event that caused this action
+     * @return True if successful
+     * @since 4.0.0
+     */
+    private boolean cactusDrop(BlockBreakEvent evt) {
         Material original = evt.getBlock().getType();
-        
         if (original == CACTUS) {
             List<Block> bks = Utilities.BFS(evt.getBlock(), MAX_BLOCKS, false, 256,
                     SEARCH_FACES_CACTUS, Sets.immutableEnumSet(CACTUS), new HashSet<Material>(),
                     false, true);
 
-            for (int i = bks.size() - 1; i >= 0; i--) {
+            for (int i = bks.size() - 1; i > 1; i--) {
                 Block block = bks.get(i);
 
                 CompatibilityAdapter.display(Utilities.getCenter(block), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
