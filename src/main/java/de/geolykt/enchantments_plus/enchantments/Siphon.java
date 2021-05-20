@@ -36,8 +36,6 @@ public class Siphon extends CustomEnchantment {
 
     public static final int ID = 53;
 
-    public static boolean calcAmour = true;
-
     @Override
     public Builder<Siphon> defaults() {
         return new Builder<>(Siphon::new, ID)
@@ -57,7 +55,7 @@ public class Siphon extends CustomEnchantment {
         if (evt.getEntity() instanceof LivingEntity
                 && ADAPTER.attackEntity((LivingEntity) evt.getEntity(), (Player) evt.getDamager(), 0, false)) {
             Player player = (Player) evt.getDamager();
-            double difference = (0.17 * level * power) * (calcAmour ? evt.getFinalDamage() : evt.getDamage());
+            double difference = (0.17 * level * power) * (enchantmentConfiguration.siphonUseFinalDamage() ? evt.getFinalDamage() : evt.getDamage());
             AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             assert maxHealth != null;
             player.setHealth(player.getHealth() + Math.min(difference, maxHealth.getValue() - player.getHealth()));
@@ -67,7 +65,7 @@ public class Siphon extends CustomEnchantment {
 
     @Override
     public boolean onEntityShootBow(EntityShootBowEvent evt, int level, boolean usedHand) {
-        SiphonArrow arrow = new SiphonArrow((AbstractArrow) evt.getProjectile(), level, power);
+        SiphonArrow arrow = new SiphonArrow((AbstractArrow) evt.getProjectile(), level, power, enchantmentConfiguration);
         EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
     }

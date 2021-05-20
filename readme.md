@@ -12,7 +12,7 @@ The hard fork status however means that we won't maintain any parity with Zencha
   - This is fast(-ish). During the last months the fork accumulated lots of revisions that aim at improving performance as well as general code quality. It also continues to do so with each update.
   - Enchantments+ doesn't use NMS. This means that newer minecraft versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support, this may no longer be full selling point.
   - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will often be fixed in under a day (especially on github).
-  - EnchantmentsPlus 3+.x.x requires Java 11 (or higher) in order to compile and run, Zenchantments runs on Java 8, so if you have an older JVM, use Zenchantments instead
+  - EnchantmentsPlus 4+.x.x requires Java 16 (or higher) in order to compile and run, Zenchantments runs on Java 8, so if you have an older JVM, use Zenchantments instead
 
 ## Metrics
 As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the information is shown can be found [here](https://bstats.org/plugin/bukkit/EnchantmentsPlus/9211).

@@ -96,7 +96,7 @@ public class Shred extends CustomEnchantment implements AreaOfEffectable {
                     } else if (Storage.COMPATIBILITY_ADAPTER.ores().contains(relativeBlock.getType())) {
                         relativeBlock.setType(STONE);
                     }
-                    WatcherEnchant.instance().onBlockShred(relativeEvent); // Run this again so enchantment can modify the loot
+                    WatcherEnchant.getInstance().onBlockShred(relativeEvent); // Run this again so enchantment can modify the loot
                     if (relativeEvent.isCancelled()) {
                         return;
                     }

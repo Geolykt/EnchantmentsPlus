@@ -30,6 +30,7 @@ import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.evt.ench.BlockSpectralChangeEvent;
 import de.geolykt.enchantments_plus.util.Tool;
 import de.geolykt.enchantments_plus.util.Utilities;
 
@@ -84,12 +85,19 @@ public class Switch extends CustomEnchantment {
             Block clickedBlock = evt.getClickedBlock();
 
             // Block has been selected, attempt breaking
-            if (Spectral.permissionQuery(clickedBlock, player, BaseEnchantments.SWITCH)) {
-                evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand());
-                CompatibilityAdapter.damageTool(player, 1, true);
+            if (enchantmentConfiguration.enableNativepermissionQuery()) {
+                if (!Storage.COMPATIBILITY_ADAPTER.nativeBlockPermissionQueryingSystem(player, clickedBlock)) {
+                    return false;
+                }
             } else {
-                return false;
+                var blockSpectralChangeEvent = new BlockSpectralChangeEvent(clickedBlock, player, BaseEnchantments.SWITCH);
+                Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
+                if (blockSpectralChangeEvent.isCancelled()) {
+                    return false;
+                }
             }
+            evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand());
+            CompatibilityAdapter.damageTool(player, 1, true);
 
             // Breaking succeeded, begin invasive operations
             Grab.grabLocs.put(clickedBlock.getLocation(), evt.getPlayer());

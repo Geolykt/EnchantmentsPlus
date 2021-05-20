@@ -56,23 +56,6 @@ public class Spectral extends CustomEnchantment {
 
     public static final int ID = 54;
 
-    /**
-     * Designates whether or not the Spectral enchantment should query permissions to resolve (regional) world protection. <br>
-     * This has the direct effect that the {@link BlockSpectralChangeEvent} cannot be constructed.
-     * @since 1.0
-     * @implNote Until 1.1.4 (included) this value was ignored and thus had the result of disabling the Spectral enchantment
-     */
-    public static boolean performWorldProtection = true;
-
-    /**
-     * Designates whether Bukkit-based world protection should be used (if false) or it's own native World protection 
-     * where individual plugins are queried (if true). <br>
-     * If false the Plugin supports more Compatibility however also allows for more exploits with plugins such as McMMO or Jobs. <br>
-     * This is used alongside {@link Spectral#performWorldProtection}, if performWorldProtection is false this field can be ignored.
-     * @since 1.2.0
-     */
-    public static boolean useNativeProtection;
-
     @Override
     public Builder<Spectral> defaults() {
         return new Builder<>(Spectral::new, ID)
@@ -87,24 +70,6 @@ public class Spectral extends CustomEnchantment {
         super(BaseEnchantments.SPECTRAL);
     }
 
-    /**
-     * This method queries the correct Permission interface, which place that may be is dependent on {@link Spectral#useNativeProtection}.
-     * @param blk The Block to query
-     * @param player The player that modified the block and thus is the "source" of the query
-     * @param ench the Enchantment that is used for the {@link BlockSpectralChangeEvent}
-     * @return True if the player is allowed to alter the given block, false otherwise
-     * @since 1.2.1
-     */
-    protected static boolean permissionQuery (Block blk, Player player, BaseEnchantments ench) {
-        if (useNativeProtection) {
-            return Storage.COMPATIBILITY_ADAPTER.nativeBlockPermissionQueryingSystem(player, blk);
-        } else {
-            BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(blk, player, ench);
-            Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
-            return !blockSpectralChangeEvent.isCancelled();
-        }
-    }
-    
     public boolean doEvent(PlayerInteractEvent evt, int level, boolean usedHand) {
         if (evt.getClickedBlock() == null) {
             return false;
@@ -128,36 +93,45 @@ public class Spectral extends CustomEnchantment {
         Material cache = null;
         UUID id = p.getUniqueId();
         String name = p.getName();
-        if (performWorldProtection) {
+        if (enchantmentConfiguration.enableNativepermissionQuery()) {
             for (final Block b : potentialBlocks) {
-                if (permissionQuery(b, p, BaseEnchantments.SPECTRAL)) {
-                    // TODO: Optimize duplicated code.
-                    if (cache == null) {
-                        cache = cycleBlockType(b);
-
-                        BlockState old = null;
-                        if (ADAPTER.doLog()) {
-                            old = b.getState();
-                        }
-                        doInteract = blockstateInteract(b);
-                        if (doInteract && ADAPTER.doLog()) {
-                            ADAPTER.performLog(baseEnum, id, name, old, b);
-                        }
-
-                        if (!doInteract && cache == b.getType()) {
-                            return false;
-                        }
-                    } else {
-                        cycleBlockType(b, cache, doInteract);
+                if (enchantmentConfiguration.enableSpectralNativePermissionQuery()) {
+                    if (!Storage.COMPATIBILITY_ADAPTER.nativeBlockPermissionQueryingSystem(p, b)) {
+                        continue;
                     }
-                    if (cache != null) {
-                        blocksChanged++;
+                } else {
+                    BlockSpectralChangeEvent blockSpectralChangeEvent = new BlockSpectralChangeEvent(b, p, BaseEnchantments.SPECTRAL);
+                    Bukkit.getServer().getPluginManager().callEvent(blockSpectralChangeEvent);
+                    if (blockSpectralChangeEvent.isCancelled()) {
+                        continue;
                     }
+                }
+                // TODO: Optimise duplicated code.
+                if (cache == null) {
+                    cache = cycleBlockType(b);
+
+                    BlockState old = null;
+                    if (ADAPTER.doLog()) {
+                        old = b.getState();
+                    }
+                    doInteract = blockstateInteract(b);
+                    if (doInteract && ADAPTER.doLog()) {
+                        ADAPTER.performLog(baseEnum, id, name, old, b);
+                    }
+
+                    if (!doInteract && cache == b.getType()) {
+                        return false;
+                    }
+                } else {
+                    cycleBlockType(b, cache, doInteract);
+                }
+                if (cache != null) {
+                    blocksChanged++;
                 }
             }
         } else {
             for (final Block b : potentialBlocks) {
-                // TODO: Optimize duplicated code.
+                // TODO: Optimise duplicated code.
                 if (cache == null) {
                     cache = cycleBlockType(b);
 

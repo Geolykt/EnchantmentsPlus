@@ -139,7 +139,7 @@ public class Fire extends CustomEnchantment {
                     SEARCH_FACES_CACTUS, Sets.immutableEnumSet(CACTUS), new HashSet<Material>(),
                     false, true);
 
-            for (int i = bks.size() - 1; i > 1; i--) {
+            for (int i = bks.size() - 1; i >= 0; i--) {
                 Block block = bks.get(i);
 
                 CompatibilityAdapter.display(Utilities.getCenter(block), Particle.FLAME, 10, .1f, .5f, .5f, .5f);

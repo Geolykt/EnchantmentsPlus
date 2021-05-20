@@ -24,15 +24,33 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.enchantments_plus.Config.EnchantmentConfiguration;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
-import de.geolykt.enchantments_plus.enchantments.Siphon;
 
 public class SiphonArrow extends EnchantedArrow {
 
-    public SiphonArrow(AbstractArrow entity, int level, double power) {
+    /**
+     * The enchantment configuration that should be used. Required for armour penetration checks
+     *
+     * @since 4.0.0
+     */
+    private final EnchantmentConfiguration econfig;
+
+    /**
+     * Constructor.
+     *
+     * @param entity The entity that should be represented by this instance
+     * @param level The level of the enchantment that was put on the bow that shot the arrow
+     * @param power The power of the effect
+     * @param enchConfig The enchantment configuration that should be used. Required for armour penetration checks
+     * @since 4.0.0
+     */
+    public SiphonArrow(AbstractArrow entity, int level, double power, @NotNull EnchantmentConfiguration enchConfig) {
         super(entity, level, power);
+        econfig = enchConfig;
     }
 
     @Override
@@ -42,7 +60,7 @@ public class SiphonArrow extends EnchantedArrow {
                 (Player) arrow.getShooter(), 0, false)) {
             Player player = (Player) ((Projectile) evt.getDamager()).getShooter();
             assert player != null;
-            double difference = (0.17 * level * power) * (Siphon.calcAmour ? evt.getFinalDamage() : evt.getDamage());
+            double difference = (0.17 * level * power) * (econfig.siphonUseFinalDamage() ? evt.getFinalDamage() : evt.getDamage());
             AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             assert maxHealth != null;
             player.setHealth(player.getHealth() + Math.min(difference, maxHealth.getValue() - player.getHealth()));

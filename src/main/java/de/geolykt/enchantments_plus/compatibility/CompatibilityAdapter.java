@@ -996,9 +996,9 @@ public class CompatibilityAdapter {
      *
      * @param player The affected player
      * @return true if disabled, false otherwise
-     * @since 3.1.6
+     * @since 4.0.0
      */
-    public static boolean isDisabled(@NotNull Player player) {
+    public static boolean isWGDisabled(@NotNull Player player) {
         return !WGHook.hasPermission(player, player.getLocation());
     }
 }

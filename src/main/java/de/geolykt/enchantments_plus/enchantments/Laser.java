@@ -52,7 +52,6 @@ public class Laser extends CustomEnchantment {
 
     public static NamespacedKey colorKey;
 
-    public static boolean doShredCooldown = true;
     // TODO look if it can allow swords as the tool in the future
 
     @Override
@@ -72,7 +71,7 @@ public class Laser extends CustomEnchantment {
     public void shoot(Player player, int level, boolean usedHand) {
         // Avoid recursing into other enchantments
         EnchantPlayer.setCooldown(player, BaseEnchantments.LUMBER, 200);
-        if (doShredCooldown) {
+        if (enchantmentConfiguration.blockShredWithLaser()) {
             EnchantPlayer.setCooldown(player, BaseEnchantments.SHRED, 200);
         }
         Block blk = player.getTargetBlock(null, 6

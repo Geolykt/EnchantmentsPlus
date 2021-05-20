@@ -68,6 +68,7 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.EnchantPlayer;
 import de.geolykt.enchantments_plus.HighFrequencyRunnableCache;
 import de.geolykt.enchantments_plus.Storage;
+import de.geolykt.enchantments_plus.Config.EnchantmentConfiguration;
 import de.geolykt.enchantments_plus.enchantments.FrozenStep;
 import de.geolykt.enchantments_plus.enchantments.NetherStep;
 import de.geolykt.enchantments_plus.enchantments.Weight;
@@ -85,13 +86,16 @@ public final class WatcherEnchant implements Listener {
     private static final WatcherEnchant INSTANCE = new WatcherEnchant();
     private static final HighFrequencyRunnableCache cache = new HighFrequencyRunnableCache(WatcherEnchant::feedEnchCache, 5);
 
-    public static boolean apply_patch_piston = true;
-    public static boolean apply_patch_explosion = true;
-    public static boolean patch_cancel_frozenstep = true;
-    public static boolean patch_cancel_netherstep = true;
-    public static boolean patch_cancel_explosion = true;
+    private EnchantmentConfiguration config;
 
-    public static WatcherEnchant instance() {
+    /**
+     * Obtains the instance of this class.
+     * Due to the structure of this class it should usually only return the same thing during a single session.
+     *
+     * @return The instance
+     * @since 4.0.0
+     */
+    public static WatcherEnchant getInstance() {
         return INSTANCE;
     }
 
@@ -126,44 +130,62 @@ public final class WatcherEnchant implements Listener {
      */
     @EventHandler(ignoreCancelled = false)
     public void onBlockExplodeEvent(BlockExplodeEvent evt) {
-        if (!apply_patch_explosion) {
+        if (!config.cancelExploitableExplosions()) {
             return;
         }
-        for (Block block: evt.blockList()) {
-            byte b = protectedBlockQuery(block, !patch_cancel_explosion && patch_cancel_netherstep, !patch_cancel_explosion && patch_cancel_frozenstep);
-            if (b == 1 && patch_cancel_netherstep && patch_cancel_explosion) {
-                evt.setCancelled(true);
-            } else if (b == 2 && patch_cancel_frozenstep && patch_cancel_explosion) {
-                evt.setCancelled(true);
+        if (config.cancelExploitableExplosions()) {
+            for (Block block: evt.blockList()) {
+                byte b = protectedBlockQuery(block, false, false);
+                if (b == 0) {
+                    continue;
+                }
+                if (b == 1 && config.cancelExploitableNetherstepExplosions() && config.cancelExploitableExplosions()) {
+                    evt.setCancelled(true);
+                } else if (b == 2 && config.cancelExploitableFrozenstepExplosions() && config.cancelExploitableExplosions()) {
+                    evt.setCancelled(true);
+                }
+            }
+        } else {
+            for (Block block: evt.blockList()) {
+                protectedBlockQuery(block, config.cancelExploitableNetherstepExplosions(), config.cancelExploitableFrozenstepExplosions());
             }
         }
     }
 
     @EventHandler(ignoreCancelled = false)
     public void onEntityExplodeEvent(EntityExplodeEvent evt) {
-        if (!apply_patch_explosion) {
+        if (!config.cancelExploitableExplosions()) {
             return;
         }
-        for (Block block: evt.blockList()) {
-            byte b = protectedBlockQuery(block, !patch_cancel_explosion && patch_cancel_netherstep, !patch_cancel_explosion && patch_cancel_frozenstep);
-            if (b == 1 && patch_cancel_netherstep && patch_cancel_explosion) {
-                evt.setCancelled(true);
-            } else if (b == 2 && patch_cancel_frozenstep && patch_cancel_explosion) {
-                evt.setCancelled(true);
+        if (config.cancelExploitableExplosions()) {
+            for (Block block: evt.blockList()) {
+                byte b = protectedBlockQuery(block, false, false);
+                if (b == 0) {
+                    continue;
+                }
+                if (b == 1 && config.cancelExploitableNetherstepExplosions() && config.cancelExploitableExplosions()) {
+                    evt.setCancelled(true);
+                } else if (b == 2 && config.cancelExploitableFrozenstepExplosions() && config.cancelExploitableExplosions()) {
+                    evt.setCancelled(true);
+                }
+            }
+        } else {
+            for (Block block: evt.blockList()) {
+                protectedBlockQuery(block, config.cancelExploitableNetherstepExplosions(), config.cancelExploitableFrozenstepExplosions());
             }
         }
     }
 
     @EventHandler(ignoreCancelled = false)
     public void onBlockPistonExtendEvent(BlockPistonExtendEvent evt) {
-        if (!apply_patch_piston) {
+        if (!config.preventExploitablePistonMovements()) {
             return;
         }
         for (Block block: evt.getBlocks()) {
-            byte b = protectedBlockQuery(block, !patch_cancel_netherstep, !patch_cancel_frozenstep);
-            if (b == 1 && patch_cancel_netherstep) {
+            byte b = protectedBlockQuery(block, !config.cancelExploitableNetherstepExplosions(), !config.cancelExploitableFrozenstepExplosions());
+            if (b == 1 && config.cancelExploitableNetherstepExplosions()) {
                 evt.setCancelled(true);
-            } else if (b == 2 && patch_cancel_frozenstep) {
+            } else if (b == 2 && config.cancelExploitableFrozenstepExplosions()) {
                 evt.setCancelled(true);
             }
         }
@@ -171,14 +193,14 @@ public final class WatcherEnchant implements Listener {
 
     @EventHandler(ignoreCancelled = false)
     public void onBlockPistonRetractEvent(BlockPistonRetractEvent evt) {
-        if (!apply_patch_piston) {
+        if (!config.preventExploitablePistonMovements()) {
             return;
         }
         for (Block block: evt.getBlocks()) {
-            byte b = protectedBlockQuery(block, !patch_cancel_netherstep, !patch_cancel_frozenstep);
-            if (b == 1 && patch_cancel_netherstep) {
+            byte b = protectedBlockQuery(block, !config.cancelExploitableNetherstepExplosions(), !config.cancelExploitableFrozenstepExplosions());
+            if (b == 1 && config.cancelExploitableNetherstepExplosions()) {
                 evt.setCancelled(true);
-            } else if (b == 2 && patch_cancel_frozenstep) {
+            } else if (b == 2 && config.cancelExploitableFrozenstepExplosions()) {
                 evt.setCancelled(true);
             }
         }
@@ -438,6 +460,16 @@ public final class WatcherEnchant implements Listener {
                 CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onCombust(evt, level, true));
             }
         }
+    }
+
+    /**
+     * Sets the configuration used by this class.
+     *
+     * @param enchCfg The enchantment configuration
+     * @since 4.0.0
+     */
+    public void setConfiguration(EnchantmentConfiguration enchCfg) {
+        config = enchCfg;
     }
 
     // Implicitly scheduled MEDIUM_HIGH due to being called by HighFrequencyEnchCache with interval 5

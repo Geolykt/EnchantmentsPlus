@@ -58,14 +58,6 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;
     public static IEnchGatherer Enchantment_Adapter = new BasicLoreGetter();
 
-    /**
-     * Whether to perform the worldguard region support.
-     * It is independent of the Native Permission Query.
-     *
-     * @since 3.1.6
-     */
-    static boolean worldguard = false;
-
     protected int maxLevel;         // Max level the given enchant can naturally obtain
     protected String loreName;      // Name the given enchantment will appear as; with &7 (Gray) color
     protected float probability;    // Relative probability of obtaining the given enchantment
@@ -93,6 +85,11 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     // Indicates that an enchantment has already been applied to an event, avoiding infinite regress
     protected boolean isCursed;
     protected NamespacedKey key; // The NamespacedKey for this enchantment which can be used for storage
+
+    /**
+     * The enchantment configuration that is valid for the enchantment.
+     */
+    protected Config.EnchantmentConfiguration enchantmentConfiguration;
 
     /**
      * The base of the enchantment used for comparing two CustomEnchantment instances with each other.
@@ -327,7 +324,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
     public static void applyForTool(@NotNull Player player, ItemStack tool, BiPredicate<CustomEnchantment, Integer> action) {
         getEnchants(tool, player.getWorld(), null).forEach((CustomEnchantment ench, Integer level) -> {
             if (!ench.used && Utilities.canUse(player, ench.baseEnum)) {
-                if (worldguard && CompatibilityAdapter.isDisabled(player)) {
+                if (Config.ENCH_CONFIG.wgRegionIntegration && CompatibilityAdapter.isWGDisabled(player)) {
                     return;
                 }
                 try {
@@ -549,7 +546,7 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         /**
          * The inserted cooldown is in milliseconds
          * @param cooldown The amount of cooldown to use
-         * @return The current build instance
+         * @return The current builder instance
          * @since 3.0.0
          */
         public Builder<T> cooldownMillis(int cooldown) {
@@ -566,6 +563,29 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
         public Builder<T> power(double power) {
             customEnchantment.setPower(power);
             return this;
+        }
+
+        /**
+         * Sets the EnchantmentConfiguration used by this enchantment.
+         * This configuration should be preferred over static abuse.
+         *
+         * @param cfg the config to use
+         * @return The current builder instance
+         * @since 4.0.0
+         */
+        public Builder<T> enchConfig(Config.EnchantmentConfiguration cfg) {
+            customEnchantment.enchantmentConfiguration = cfg;
+            return this;
+        }
+
+        /**
+         * Obtains the conflicts valid at this current time
+         *
+         * @return The enum representation of the enchantments that conflict with this enchantment
+         * @since 4.0.0
+         */
+        public @NotNull BaseEnchantments[] getCurrentConflicts() {
+            return customEnchantment.conflicting.toArray(new BaseEnchantments[0]);
         }
 
         /**

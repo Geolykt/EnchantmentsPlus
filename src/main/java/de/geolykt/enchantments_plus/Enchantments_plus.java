@@ -123,7 +123,7 @@ public class Enchantments_plus extends JavaPlugin {
         getCommand("ench").setTabCompleter(new CommandProcessor.TabCompletion());
         getServer().getPluginManager().registerEvents(new GrindstoneMerge(), this);
         getServer().getPluginManager().registerEvents(new WatcherArrow(), this);
-        getServer().getPluginManager().registerEvents(WatcherEnchant.instance(), this);
+        getServer().getPluginManager().registerEvents(WatcherEnchant.getInstance(), this);
         getServer().getPluginManager().registerEvents(new Watcher(), this);
 
         int[][] ALL_SEARCH_FACES = new int[27][3];

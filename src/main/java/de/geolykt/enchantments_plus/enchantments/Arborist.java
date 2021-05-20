@@ -34,7 +34,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Arborist extends CustomEnchantment {
 
     public static final int ID = 2;
-    public static boolean doGoldenAppleDrop = true;
 
     @Override
     public Builder<Arborist> defaults() {
@@ -58,7 +57,7 @@ public class Arborist extends CustomEnchantment {
             for (int i = 0; i < level + 3; i++) {
                 drops.addAll(blk.getDrops());
             }
-            if (doGoldenAppleDrop && 
+            if (enchantmentConfiguration.enableGoldenAppleDrop() && 
                     (ThreadLocalRandom.current().nextInt(10000) <= (15 * (level+1) * power))) {
                 drops.add(new ItemStack(Material.GOLDEN_APPLE, 1));
             }
