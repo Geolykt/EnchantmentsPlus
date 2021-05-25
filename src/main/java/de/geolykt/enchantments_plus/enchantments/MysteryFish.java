@@ -57,7 +57,7 @@ public class MysteryFish extends CustomEnchantment {
 
     @Override
     public boolean onPlayerFish(final PlayerFishEvent evt, int level, boolean usedHand) {
-        if (ThreadLocalRandom.current().nextInt((int) (Math.min(power - 6, 1))) < level) {
+        if (ThreadLocalRandom.current().nextInt((int) (Math.max(power - 6, 1))) < level) {
             if (evt.getCaught() != null) {
                 Location location = evt.getCaught().getLocation();
                 switch (ThreadLocalRandom.current().nextInt(7)) {

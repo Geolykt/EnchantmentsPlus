@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>20.1.0</version>
+            <version>21.0.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.4-SNAPSHOT</version>
+            <version>7.0.5-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-core</artifactId>
-            <version>7.0.4-SNAPSHOT</version>
+            <version>7.0.5-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -154,6 +154,8 @@
         <dependency>
             <groupId>uk.antiperson.stackmob</groupId>
             <artifactId>StackMob</artifactId>
+            <!-- I have chosen to boycott updating this plugin due to their usage of illegal NMS repos in latter versions.
+                 Any PRs attempting to update that plugin will be closed. -->
             <version>5.4.2</version>
             <scope>provided</scope>
             <exclusions>
@@ -166,7 +168,7 @@
         <dependency>
             <groupId>dev.rosewood</groupId>
             <artifactId>rosestacker</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.5</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -192,6 +194,13 @@
 
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>apache-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -220,7 +229,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
