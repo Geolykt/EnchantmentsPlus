@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -586,8 +587,19 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    public boolean attackEntity(LivingEntity target, Player attacker, double damage, boolean performEquipmentDamage) {
-        EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damage);
+    public boolean attackEntity(@NotNull LivingEntity target, @Nullable Player attacker, double damage, boolean performEquipmentDamage) {
+        if (attacker == null) {
+            EntityDamageEvent evt = new EntityDamageEvent(Objects.requireNonNull(target, "Target is null"), DamageCause.ENTITY_ATTACK, damage);
+            Bukkit.getPluginManager().callEvent(evt);
+            if (evt.isCancelled()) {
+                return false;
+            }
+            if (damage > 0.0) {
+                target.damage(damage);
+            }
+            return true;
+        }
+        EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(attacker, Objects.requireNonNull(target, "Target is null"), DamageCause.ENTITY_ATTACK, damage);
         Bukkit.getPluginManager().callEvent(damageEvent);
         if (damage == 0) {
             return !damageEvent.isCancelled();

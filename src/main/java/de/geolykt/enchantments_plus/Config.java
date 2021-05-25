@@ -419,12 +419,14 @@ public class Config {
         REGISTERED_ENCHANTMENTS.add(Vortex.class);
         REGISTERED_ENCHANTMENTS.add(Weight.class);
     }
+
     private static <T> @NotNull T asNotNull(@Nullable T value) {
         if (value == null) {
             throw new NullPointerException("This should not have happened. Consider reporting this bug.");
         }
         return value;
     }
+
     // Returns the config object associated with the given world
     public static Config get(@NotNull World world) {
         if (CONFIGS.get(world) == null) {
@@ -432,6 +434,7 @@ public class Config {
         }
         return CONFIGS.get(world);
     }
+
     /**
      * Gets the modifier for the Area of Effect.
      *
@@ -442,6 +445,7 @@ public class Config {
     private static double getAOEModifier(@NotNull Map<String, Object> data) {
         return ((Number) data.getOrDefault(ConfigKeys.AREA_OF_EFFECT.toString(), 1.0)).doubleValue();
     }
+
     /**
      * Returns the Enchantments that are conflicting with the enchantment.
      *
@@ -473,12 +477,14 @@ public class Config {
     private static int getEnchantmentCooldown(@NotNull Map<String, Object> data) {
         return ((Number) data.get(ConfigKeys.COOLDOWN.toString())).intValue();
     }
+
     /**
      * Must be specified
      */
     private static String getLoreName(@NotNull Map<String, Object> data) {
         return data.get(ConfigKeys.NAME.toString()).toString();
     }
+
     /**
      * Must be specified.
      */
@@ -589,8 +595,9 @@ public class Config {
                     shredDrops = 0;
             }
             Map<String, Map<String, Object>> configInfo = new HashMap<>();
-            for (Map<String, Map<String, Object>> definition :
-                (List<Map<String, Map<String, Object>>>) asNotNull(yamlConfig.get(ConfigKeys.ENCHANTMENTS.toString()))) {
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            List<Map<String, Map<String, Object>>> rawData = (List) yamlConfig.getMapList(ConfigKeys.ENCHANTMENTS.toString());
+            for (Map<String, Map<String, Object>> definition : rawData) {
                 for (String enchantmentName : definition.keySet()) {
                     configInfo.put(enchantmentName, definition.get(enchantmentName));
                 }
