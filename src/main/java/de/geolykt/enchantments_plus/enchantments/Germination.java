@@ -69,7 +69,7 @@ public class Germination extends CustomEnchantment implements AreaOfEffectable {
 
                     Block relativeBlock = clickedBlock.getRelative(x, y, z);
                     if (relativeBlock.getLocation().distanceSquared(loc) < radiusXZ * radiusXZ
-                            && Utilities.hasItem(player, Material.BONE_MEAL, 1)
+                            && Utilities.hasItem(player, Material.BONE_MEAL, consumedBonemeal + 1)
                             && ADAPTER.grow(relativeBlock, player)) {
 
                         if (ThreadLocalRandom.current().nextBoolean()) {
