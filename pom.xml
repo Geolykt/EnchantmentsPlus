@@ -33,6 +33,10 @@
             <id>md_5-repo</id> <!-- For LogBlock -->
             <url>https://repo.md-5.net/content/repositories/public/</url>
         </repository>
+        <repository> <!-- And yet another repository for CP, could you guys stop publishing your stuff in 2000 maven repos? -->
+            <id>coreprotect-repo</id> <!-- For LogBlock -->
+            <url>https://maven.playpro.com</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -183,6 +187,18 @@
             <groupId>de.diddiz</groupId>
             <artifactId>logblock</artifactId>
             <version>1.16.5.2-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.coreprotect</groupId>
+            <artifactId>coreprotect</artifactId>
+            <version>19.5</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>

@@ -893,6 +893,7 @@ public class CompatibilityAdapter {
         perm_useTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
         perm_useWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
         boolean logUseLB = findClass("de.diddiz.LogBlock.LogBlock");
+        boolean logUseCP = findClass("net.coreprotect.CoreProtectAPI");
         ArrayList<NativePermissionHook> permHooks = new ArrayList<>();
         ArrayList<NativeLoggingHook> logHooks = new ArrayList<>();
         if (perm_useTowny) {
@@ -909,7 +910,12 @@ public class CompatibilityAdapter {
         }
         if (logUseLB) {
             NativeLoggingHook hook = new LogBlockHook();
-            hook.onEnable(Storage.plugin.getLogger());
+            hook.onEnable(plugin.getLogger());
+            logHooks.add(hook);
+        }
+        if (logUseCP) {
+            NativeLoggingHook hook = new CPHook();
+            hook.onEnable(plugin.getLogger());
             logHooks.add(hook);
         }
         // TODO Other plugins (factions, claim plugins, etc...) - Just create an issue to create priority if you need one in specific
