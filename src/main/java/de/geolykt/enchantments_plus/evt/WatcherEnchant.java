@@ -101,7 +101,7 @@ public final class WatcherEnchant implements Listener {
 
     private WatcherEnchant() {} // The class should not be constructible
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent evt) {
         if (!(evt instanceof BlockShredEvent) && evt.getBlock().getType() != AIR) {
             Player player = evt.getPlayer();
@@ -112,7 +112,7 @@ public final class WatcherEnchant implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockShred(BlockShredEvent evt) {
         if (evt.getBlock().getType() != AIR) {
             Player player = evt.getPlayer();
@@ -128,7 +128,7 @@ public final class WatcherEnchant implements Listener {
      * 
      * @param evt The event
      */
-    @EventHandler(ignoreCancelled = false)
+    @EventHandler(ignoreCancelled = true)
     public void onBlockExplodeEvent(BlockExplodeEvent evt) {
         if (!config.cancelExploitableExplosions()) {
             return;
@@ -152,7 +152,7 @@ public final class WatcherEnchant implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = false)
+    @EventHandler(ignoreCancelled = true)
     public void onEntityExplodeEvent(EntityExplodeEvent evt) {
         if (!config.cancelExploitableExplosions()) {
             return;
@@ -176,7 +176,7 @@ public final class WatcherEnchant implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = false)
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPistonExtendEvent(BlockPistonExtendEvent evt) {
         if (!config.preventExploitablePistonMovements()) {
             return;
@@ -191,7 +191,7 @@ public final class WatcherEnchant implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = false)
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPistonRetractEvent(BlockPistonRetractEvent evt) {
         if (!config.preventExploitablePistonMovements()) {
             return;
@@ -245,7 +245,7 @@ public final class WatcherEnchant implements Listener {
         return 0;
     }
 
-    @EventHandler(ignoreCancelled = false)
+    @EventHandler(ignoreCancelled = true)
     public void onBlockInteract(PlayerInteractEvent evt) {
         if (evt.getAction() == Action.PHYSICAL) {
             return;
