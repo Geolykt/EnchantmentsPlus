@@ -67,18 +67,27 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.*;
+import de.geolykt.enchantments_plus.enchantments.Pierce;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
+import de.geolykt.enchantments_plus.enums.PierceMode;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
 
 public class CompatibilityAdapter {
 
     /**
-     * The native permission hooks utilised by this compatibillity adapter.
+     * The native permission hooks utilised by this compatibility adapter.
      *
      * @since 3.1.4
      */
     private NativePermissionHooks nativePerm;
+
+    /**
+     * The {@link PierceMode PierceModes} that are allowed to be used by the {@link Pierce} enchantment
+     *
+     * @since 4.0.0
+     */
+    private PierceMode[] pierceModes = PierceMode.values();
 
     /**
      * The parent plugin, currently only used for logging.
@@ -133,6 +142,16 @@ public class CompatibilityAdapter {
 
     private EnumMap<Material, Material> spectralMaterialConversion;
     private EnumMap<EntityType, EntityType> transformationMap;
+
+    /**
+     * Obtains the {@link PierceMode PierceModes} that are allowed to be used by the plugin.
+     *
+     * @return The allowed pierce modes
+     * @since 4.0.0
+     */
+    public PierceMode[] getActivePierceModes() {
+        return pierceModes;
+    }
 
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
         EnumSet<Material> es = EnumSet.noneOf(Material.class);
@@ -373,11 +392,13 @@ public class CompatibilityAdapter {
         return lumberAllowBlocks;
     }
 
+    // FIXME make this configurable
     public List<Material> persephoneCrops() {
         return Arrays.asList(Material.WHEAT, Material.POTATO, Material.CARROT, Material.BEETROOT, Material.NETHER_WART,
                 Material.SOUL_SAND, Material.FARMLAND);
     }
 
+    // FIXME make this configurable
     public List<PotionEffectType> potionPotions() {
         return Arrays.asList(ABSORPTION,
                 DAMAGE_RESISTANCE, FIRE_RESISTANCE, SPEED, JUMP, INVISIBILITY, INCREASE_DAMAGE, HEALTH_BOOST, HEAL,
@@ -398,6 +419,7 @@ public class CompatibilityAdapter {
         return GLUTTONY_SATURATIONS;
     }
 
+    // FIXME make this configurable
     private final Material[] GLUTTONY_FOOD_ITEMS = new Material[]{
             Material.APPLE, Material.BAKED_POTATO, Material.BEETROOT, 
             Material.BEETROOT_SOUP, Material.BREAD, Material.CARROT, Material.TROPICAL_FISH, Material.COOKED_CHICKEN, 
@@ -923,6 +945,16 @@ public class CompatibilityAdapter {
     }
 
     /**
+     * Sets the {@link PierceMode PierceModes} that are allowed to be used by the {@link Pierce} enchantment.
+     *
+     * @param modes The allowed pierce modes
+     * @since 4.0.0
+     */
+    public void setActivePierceModes(PierceMode[] modes) {
+        pierceModes = modes;
+    }
+
+    /**
      * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
      *  the correct constructor without throwing a java.lang.NoSuchMethodError.
      * @param shooter The shooter
@@ -931,7 +963,7 @@ public class CompatibilityAdapter {
      * @param projectile The spawned projectile/arrow
      * @param hand  Not used in legacy mode. The used hand
      * @param force The force at which the bow is drawn
-     * @param consumeItem  Whether or not to consume the item. NOt used in legacy mode
+     * @param consumeItem  Whether or not to consume the item. Not used in legacy mode
      * @return The constructed EntityShootBowEvent
      * @since 3.1.3
      */

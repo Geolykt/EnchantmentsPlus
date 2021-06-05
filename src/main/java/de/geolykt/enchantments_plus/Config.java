@@ -27,6 +27,7 @@ import de.geolykt.enchantments_plus.compatibility.nativeperm.NativePermissionHoo
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.MobstackerPlugin;
+import de.geolykt.enchantments_plus.enums.PierceMode;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
 import de.geolykt.enchantments_plus.util.AreaOfEffectable;
 import de.geolykt.enchantments_plus.util.Tool;
@@ -54,6 +55,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -704,6 +707,20 @@ public class Config {
                 Class.forName("uk.antiperson.stackmob.events.StackSpawnEvent");
                 ENCH_CONFIG.mobStackerPlugin = MobstackerPlugin.STACKMOB_5;
             } catch (ClassNotFoundException excepted) {}
+        }
+
+        Collection<String> pierceModes = PATCH_CONFIGURATION.getStringList("pierce-modes");
+        if (!pierceModes.isEmpty()) {
+            Collection<PierceMode> modes = new ArrayList<>(pierceModes.size());
+            for (String s : pierceModes) {
+                try {
+                    modes.add(PierceMode.valueOf(s));
+                } catch (RuntimeException e) {
+                    Storage.plugin.getLogger().warning("Unable to match pierce mode " + s + " to a valid value. Skipping it.");
+                    e.printStackTrace(); // Just in case I messed up
+                }
+            }
+            Storage.COMPATIBILITY_ADAPTER.setActivePierceModes(modes.toArray(new PierceMode[0]));
         }
     }
 
