@@ -253,7 +253,9 @@ public class Config {
         }
 
         /**
-         * Whether to use the NativePermissionHooks for the spectral enchantment
+         * Whether to use the NativePermissionHooks for the spectral enchantment.
+         * If {@link #enableNativepermissionQuery()} is false, then this method can be
+         * disregarded
          *
          * @return See above
          * @since 4.0.0

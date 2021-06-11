@@ -48,7 +48,6 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
-
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import static org.bukkit.potion.PotionEffectType.*;
@@ -122,6 +121,8 @@ public class CompatibilityAdapter {
     public CompatibilityAdapter(Plugin plugin) {
         permUseGriefPrevention = findClass("me.ryanhamshire.GriefPrevention.GriefPrevention");
         permUseClaimChunk = findClass("com.cjburkey.claimchunk.chunk.ChunkHandler");
+        permUseTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
+        permUseWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
         Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0L);
         this.plugin = plugin;
     }
@@ -893,18 +894,18 @@ public class CompatibilityAdapter {
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
      * should target Towny, in most cases this is just a boolean that is true if towny was found, false otherwise.
      *
-     * @since 1.2.0
+     * @since 4.0.0
      */
-    private boolean perm_useTowny = false;
+    private boolean permUseTowny = false;
 
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
      * should target WorldGuard, in most cases this is just a boolean that is true if WorldGuard was found, false otherwise. <br>
      * Note that this may not represent the actual state due to method not found issues.
      *
-     * @since 1.2.0
+     * @since 4.0.0
      */
-    private boolean perm_useWG = false;
+    private boolean permUseWG = false;
 
     /**
      * Finds the given class via reflection and returns true if it was found, false if it was not found
@@ -946,16 +947,14 @@ public class CompatibilityAdapter {
             plugin.getLogger().severe("A potentially fatal issue occoured while performing reflection, this will end up being fatal soon.");
         }
 
-        perm_useTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
-        perm_useWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
         boolean logUseLB = findClass("de.diddiz.LogBlock.LogBlock");
         boolean logUseCP = findClass("net.coreprotect.CoreProtectAPI");
         ArrayList<NativePermissionHook> permHooks = new ArrayList<>();
         ArrayList<NativeLoggingHook> logHooks = new ArrayList<>();
-        if (perm_useTowny) {
+        if (permUseTowny) {
             permHooks.add(new TownyHook());
         }
-        if (perm_useWG) {
+        if (permUseWG) {
             permHooks.add(new WGHook());
         }
         if (permUseClaimChunk) {
