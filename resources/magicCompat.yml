@@ -2,10 +2,11 @@
 # This also allows for some crude compatibillity between (Minecraft) versions without having to upgrade / downgrade the Plugin.
 # Please note that the file is more meant to be futureproof than pastproof
 
-# default configurations as of Version 3.0.0 of the Enchantments+ Plugin, meant for use for minecraft 1.16.4
+# default configurations as of Version 4.0.0 of the Enchantments+ Plugin, meant for use for minecraft 1.17
+# it will NOT work well in previous versions of the game, albeit it can be modified for it
 
-version: "1" # currently unused and meant for future use. Version 1 is the default as of v3.0.0
-target: "16"
+version: "2" # currently unused and meant for future use. Version 2 is the default as of v4.0.0
+target: "17"
 
 grownCrops:
   # grown crops, used by the harvest enchantment
@@ -27,17 +28,17 @@ airs:
   - "VOID_AIR"
 ores:
   # Self explainatory, isn't it?
-  - "COAL_ORE"
-  - "REDSTONE_ORE"
-  - "DIAMOND_ORE"
-  - "LAPIS_ORE"
-  - "IRON_ORE"
   - "GLOWSTONE"
   - "NETHER_QUARTZ_ORE"
-  - "EMERALD_ORE"
   - "ANCIENT_DEBRIS" # 1.16 and beyond
-  - "GOLD_ORE"
-  - "NETHER_GOLD_ORE" # 1.16 and beyond
+  - "#lapis_ores"
+  - "#coal_ores"
+  - "#iron_ores"
+  - "#emerald_ores"
+  - "#gold_ores"
+  - "#diamond_ores"
+  - "#redstone_ores"
+  - "#copper_ores"
 dryBiomes:
   # Biomes in which it doesn't rain. Used for the Blaze's curse enchantment to calculate whether damage should be dealth in rainy weather
   - "DESERT"
@@ -149,65 +150,44 @@ terraformerAllowlist:
   - "PURPLE_CONCRETE_POWDER"
   - "PINK_CONCRETE_POWDER"
   - "COBBLESTONE"
+  - "COBBLED_DEEPSLATE"
   - "MOSSY_COBBLESTONE"
-  - "STONE"
-  - "GRANITE"
-  - "ANDESITE"
-  - "DIORITE"
-  - "BASALT"
-  - "BLACKSTONE"
   - "BRICK"
   - "TNT"
   - "BOOKSHELF"
-  - "STONE_BRICKS"
   - "NETHER_BRICK"
   - "END_STONE"
   - "QUARTZ_BLOCK"
   - "WARPED_HYPHAE"
   - "PRISMARINE"
   - "RED_SANDSTONE"
-  - "NETHERRACK"
-  - "WARPED_NYLIUM"
-  - "COAL_ORE"
-  - "REDSTONE_ORE"
-  - "DIAMOND_ORE"
-  - "LAPIS_ORE"
-  - "IRON_ORE"
   - "GLOWSTONE"
   - "NETHER_QUARTZ_ORE"
-  - "EMERALD_ORE"
   - "ANCIENT_DEBRIS" # 1.16 and beyond
-  - "GOLD_ORE"
-  - "NETHER_GOLD_ORE" # 1.16 and beyond
-terraformerAllowlistTags:
-  # please note that these have to be uppercase and this whole thing is prone to break. I'd not really recommend using it.
-  - "ICE"
-  - "LOGS"
-  - "ENDERMAN_HOLDABLE"
-  - "WOOL"
+  # Warning: tags have to be lowercase
+  - "#wool"
+  - "#logs"
+  - "#enderman_holdable"
+  - "#base_stone_overworld"
+  - "#base_stone_nether"
+  - "#ice"
+  - "#nylium"
+  - "#lapis_ores"
+  - "#coal_ores"
+  - "#iron_ores"
+  - "#emerald_ores"
+  - "#gold_ores"
+  - "#diamond_ores"
+  - "#redstone_ores"
+  - "#copper_ores"
+  - "#stone_bricks"
 shredAllowlistPickaxes:
   # the allowlist for the shred enchantment, more specifically the blocks at which it fires for pickaxes
-  - "STONE"
-  - "GRANITE"
-  - "ANDESITE"
-  - "DIORITE"
   - "SANDSTONE"
   - "RED_SANDSTONE"
-  - "ICE"
-  - "PACKED_ICE"
-  - "BLUE_ICE"
-  - "BASALT" # 1.16 and beyond
-  - "COAL_ORE"
-  - "REDSTONE_ORE"
-  - "DIAMOND_ORE"
-  - "LAPIS_ORE"
-  - "IRON_ORE"
   - "GLOWSTONE"
   - "NETHER_QUARTZ_ORE"
-  - "EMERALD_ORE"
   - "ANCIENT_DEBRIS" # 1.16 and beyond
-  - "GOLD_ORE"
-  - "NETHER_GOLD_ORE" # 1.16 and beyond
   - "WHITE_TERRACOTTA"
   - "ORANGE_TERRACOTTA"
   - "MAGENTA_TERRACOTTA"
@@ -223,27 +203,27 @@ shredAllowlistPickaxes:
   - "LIME_TERRACOTTA"
   - "PURPLE_TERRACOTTA"
   - "PINK_TERRACOTTA"
-  - "NETHERRACK"
-  - "WARPED_NYLIUM" # 1.16 and beyond
-  - "CRIMSON_NYLIUM" # 1.16 and beyond
+  - "#base_stone_overworld"
+  - "#base_stone_nether"
+  - "#ice"
+  - "#nylium"
+  - "#lapis_ores"
+  - "#coal_ores"
+  - "#iron_ores"
+  - "#emerald_ores"
+  - "#gold_ores"
+  - "#diamond_ores"
+  - "#redstone_ores"
+  - "#copper_ores"
 shredAllowlistShovels:
   # the allowlist for the shred enchantment, more specifically the blocks at which it fires for shovels
-  - "DIRT"
-  - "GRASS_BLOCK"
-  - "SAND"
-  - "RED_SAND"
-  - "SOUL_SAND"
-  - "SOUL_SOIL" # 1.16 and beyond
-  - "SNOW"
-  - "SNOW_BLOCK"
-  - "COARSE_DIRT"
-  - "GRAVEL"
+  - "#mineable/shovel"
 spectralConversions:
   # this basically maps the conversions used by the spectral enchantment. Syntax is "<source_material>:<target_material>". 
   # Please note that they should be circulatory for the best gameplay experience
   # Colo(u)rable blocks are handled automatically in the background for the sanity of all invloved parties (Mojang, please add)
-  - "GRASS_BLOCK:GRASS_PATH" # dirt-like conversions
-  - "GRASS_PATH:DIRT"
+  - "GRASS_BLOCK:DIRT_PATH" # dirt-like conversions
+  - "DIRT_PATH:DIRT"
   - "DIRT:MYCELIUM"
   - "MYCELIUM:PODZOL"
   - "PODZOL:COARSE_DIRT"
@@ -292,32 +272,20 @@ spectralConversions:
   - "OAK_SAPLING:SPRUCE_SAPLING"
   - "SPRUCE_SAPLING:ACACIA_SAPLING"
 lumberTrunks: # Trunks for the lumber
-  - "ACACIA_LOG"
-  - "BIRCH_LOG"
-  - "CRIMSON_STEM"
-  - "DARK_OAK_LOG"
-  - "JUNGLE_LOG"
+  - "#logs"
   - "MUSHROOM_STEM"
-  - "OAK_LOG"
-  - "SPRUCE_LOG"
-  - "WARPED_STEM"
 lumberAllowlist: # Additional blocks for the BFS pathfind for Lumber (usefull to break big trees)
-  - "ACACIA_LEAVES"
+  - "#leaves"
   - "AIR"
-  - "BIRCH_LEAVES"
   - "BROWN_MUSHROOM"
   - "CAVE_AIR"
   - "COCOA"
-  - "DARK_OAK_LEAVES"
   - "DIRT"
   - "GRASS"
   - "GRASS_BLOCK"
-  - "GRASS_PATH"
-  - "JUNGLE_LEAVES"
+  - "DIRT_PATH"
   - "LAVA"
-  - "OAK_LEAVES"
   - "RED_MUSHROOM"
-  - "SPRUCE_LEAVES"
   - "VOID_AIR"
   - "WATER"
 tools:

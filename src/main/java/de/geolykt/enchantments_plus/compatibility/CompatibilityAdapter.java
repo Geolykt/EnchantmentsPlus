@@ -153,13 +153,43 @@ public class CompatibilityAdapter {
         return pierceModes;
     }
 
+    /**
+     * Obtains all the materials that are registered by the tag that has the given name.
+     * Looks them up in the block registry. Returns empty and logs a warning if the tag was not found.
+     *
+     * @param name The tag, may contain a `#`. Uses minecraft as default namespace
+     * @param category Used for error logging
+     * @return The materials in the tag as an EnumSet
+     * @since 4.0.0
+     */
+    private @NotNull EnumSet<Material> getBlockTag(@NotNull String name, @NotNull String category) {
+        if (name.charAt(0) == '#') {
+            name = name.substring(1);
+        }
+        NamespacedKey key = NamespacedKey.fromString(name);
+        if (key == null) {
+            plugin.getLogger().warning(String.format("Tag %s in category %s is not a valid namespacedKey!", name, category));
+            return EnumSet.noneOf(Material.class);
+        }
+        Tag<Material> tag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class);
+        if (tag == null) {
+            plugin.getLogger().warning(String.format("Tag %s in category %s is not a valid tag!", name, category));
+            return EnumSet.noneOf(Material.class);
+        }
+        return EnumSet.copyOf(tag.getValues());
+    }
+
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
         EnumSet<Material> es = EnumSet.noneOf(Material.class);
         for (String materialName : config.getStringList(path)) {
-             Material material = Material.matchMaterial(materialName);
-             if (material != null) {
-                es.add(material);
-             }
+            if (materialName.charAt(0) == '#') {
+                es.addAll(getBlockTag(materialName, path));
+            } else {
+                Material material = Material.matchMaterial(materialName);
+                if (material != null) {
+                   es.add(material);
+                }
+            }
         }
         return es;
     }
@@ -183,7 +213,11 @@ public class CompatibilityAdapter {
         lumberTrunkBlocks = getMaterialSet(config, "lumberTrunks");
         lumberAllowBlocks = getMaterialSet(config, "lumberAllowlist");
 
-        for (String s : config.getStringList("terraformerAllowlistTags")) {
+        List<String> terraformerTags = config.getStringList("terraformerAllowlistTags");
+        if (!terraformerTags.isEmpty()) {
+            plugin.getLogger().warning("terraformerAllowlistTags will soon not be read correctly, consider updating the magicCompat file.");
+        }
+        for (String s : terraformerTags) {
             try {
                 try {
                     Field f = Tag.class.getDeclaredField(s);
@@ -204,7 +238,7 @@ public class CompatibilityAdapter {
             try {
                 dryBiomes.add(Biome.valueOf(s));
             } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning(s + " is not a known biome (located within the terraformerAllowlistTags list); Skipping entry.");
+                plugin.getLogger().warning(s + " is not a known biome (located within the dryBiomes list); Skipping entry.");
             }
         }
         spectralMaterialConversion = new EnumMap<>(Material.class);

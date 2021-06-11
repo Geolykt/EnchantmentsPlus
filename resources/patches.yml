@@ -47,3 +47,11 @@ isAllowlist: true # handles whether the above list is interpretated as an allowl
 disable-anvil-merging: false # You only rarely want to turn this on
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found
   mobstacker: true # This applies to all mobstacker plugins that have an integration coded for them. Manually prevents issues with the reveal enchantment and the shulkers it spawns
+# The modes that can be used by the pierce enchantment. It is not recommended to remove the NORMAL entry as it will produce unexpected results,
+# if this entry is missing or empty then all modes are enabled.
+pierce-modes:
+  - "LONG"
+  - "NORMAL"
+  - "TALL"
+  - "VEIN"
+  - "WIDE"
