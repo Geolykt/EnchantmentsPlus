@@ -245,7 +245,7 @@ public final class WatcherEnchant implements Listener {
         return 0;
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = false)
     public void onBlockInteract(PlayerInteractEvent evt) {
         if (evt.getAction() == Action.PHYSICAL) {
             return;
