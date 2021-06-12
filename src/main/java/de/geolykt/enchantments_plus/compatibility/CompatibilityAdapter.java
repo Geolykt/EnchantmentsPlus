@@ -627,8 +627,7 @@ public class CompatibilityAdapter {
     public boolean placeBlock(Block blockPlaced, Player player, Material mat, BlockData data) {
         Block blockAgainst = blockPlaced.getRelative((blockPlaced.getY() == 0) ? BlockFace.UP : BlockFace.DOWN);
         ItemStack itemHeld = new ItemStack(mat);
-        BlockPlaceEvent placeEvent
-        = new BlockPlaceEvent(blockPlaced, blockPlaced.getState(), blockAgainst, itemHeld, player, true,
+        BlockPlaceEvent placeEvent = new BlockPlaceEvent(blockPlaced, blockPlaced.getState(), blockAgainst, itemHeld, player, true,
                 EquipmentSlot.HAND);
 
         Bukkit.getPluginManager().callEvent(placeEvent);
@@ -975,7 +974,7 @@ public class CompatibilityAdapter {
     /**
      * This method queries the correct Permission interfaces, which are plugins. 
      * If the plugin is not loaded the method will ignore it gracefully. <br>
-     * Plugins are detected during the {@link CompatibilityAdapter#scanMethods()} private function which is called shortly after the 
+     * Plugins are detected during the constructor or {@link CompatibilityAdapter#scanMethods()} private function which is called shortly after the 
      * constructor.
      * @param source The player, from where the Query originates from.
      * @param target The Block which should be tested whether the player may break/alter.

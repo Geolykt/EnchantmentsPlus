@@ -22,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -84,8 +85,18 @@ public class Switch extends CustomEnchantment {
             Block clickedBlock = evt.getClickedBlock();
 
             // Block has been selected, attempt breaking
-            if (!evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand())) {
-                return false;
+            if (enchantmentConfiguration.enableNativepermissionQuery()) {
+                if (!ADAPTER.nativeBlockPermissionQueryingSystem(player, clickedBlock)) {
+                    return false;
+                }
+                evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand());
+            } else {
+                // This does not even work but haha
+                BlockBreakEvent bbe = new BlockBreakEvent(clickedBlock, player);
+                Bukkit.getPluginManager().callEvent(evt);
+                if (bbe.isCancelled() || !evt.getClickedBlock().breakNaturally(player.getInventory().getItemInMainHand())) {
+                    return false;
+                }
             }
             CompatibilityAdapter.damageTool(player, 1, true);
 
