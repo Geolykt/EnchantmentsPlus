@@ -17,9 +17,6 @@
  */
 package de.geolykt.enchantments_plus.enchantments;
 
-import static org.bukkit.inventory.EquipmentSlot.HAND;
-import static org.bukkit.inventory.EquipmentSlot.OFF_HAND;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
@@ -28,11 +25,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
 import de.geolykt.enchantments_plus.arrows.enchanted.MultiArrow;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
@@ -69,9 +66,8 @@ public class Spread extends CustomEnchantment {
         MultiArrow ar = new MultiArrow(originalArrow);
         EnchantedArrow.putArrow(originalArrow, ar, player);
 
-        Bukkit.getPluginManager().callEvent(
-            Storage.COMPATIBILITY_ADAPTER.constructEntityShootBowEvent(player, hand, null, originalArrow,
-                    usedHand ? HAND : OFF_HAND, (float) originalArrow.getVelocity().length(), false));
+        Bukkit.getPluginManager().callEvent(new EntityShootBowEvent(player, hand,  null, originalArrow, usedHand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND,
+                        (float) originalArrow.getVelocity().length(), false));
 
         CompatibilityAdapter.damageTool(player, (int) Math.round(level / 2.0 + 1), usedHand);
 
@@ -85,8 +81,8 @@ public class Spread extends CustomEnchantment {
             arrow.setVelocity(v.normalize().multiply(originalArrow.getVelocity().length()));
             arrow.setFireTicks(originalArrow.getFireTicks());
             arrow.setKnockbackStrength(originalArrow.getKnockbackStrength());
-            EntityShootBowEvent event = Storage.COMPATIBILITY_ADAPTER.constructEntityShootBowEvent(player, hand,
-                    null, arrow, usedHand ? HAND : OFF_HAND, (float) arrow.getVelocity().length(), false);
+            EntityShootBowEvent event = new EntityShootBowEvent(player, hand,  null, arrow, usedHand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND,
+                    (float) arrow.getVelocity().length(), false);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 arrow.remove();

@@ -18,7 +18,6 @@
 package de.geolykt.enchantments_plus.compatibility;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -44,7 +43,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
@@ -675,6 +673,8 @@ public class CompatibilityAdapter {
      * Shears the target entity and performs the necessary checks beforehand. The correct (guessed) drops are dropped afterwards.
      * Currently only works for Mushroom cow and sheep, other entities aren't yet supported and will return false.
      * Does not damage the item.
+     * Unlike what the name implies, this method does not make use of NMS
+     *
      * @param target The target entity
      * @param player The player that shears the entity, used for world protection
      * @param mainHand True if the mainhand was used to shear the event, false otherwise. Used for the event construction.
@@ -888,8 +888,6 @@ public class CompatibilityAdapter {
         return false;
     }
 
-    private boolean legacyEntityShootBowEvent = false;
-
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
      * should target Towny, in most cases this is just a boolean that is true if towny was found, false otherwise.
@@ -934,19 +932,6 @@ public class CompatibilityAdapter {
      * Method that scans whether API methods can be used. It also checks whether plugin integrations are possible and enabled
      */
     private void scanMethods() {
-        // Test for java.lang.NoSuchMethodError in the Spigot API with the EntityShootBowEvent.
-        try {
-            EntityShootBowEvent.class.getConstructor(LivingEntity.class, ItemStack.class, ItemStack.class, Entity.class,
-                    EquipmentSlot.class, float.class, boolean.class);
-        } catch (NoSuchMethodException excepted) {
-            plugin.getLogger().warning(ChatColor.YELLOW + "Enabling potentially untested legacy mode"
-                    + " for the EntityShootBowEvent. Handle with care and update to a newer Spigot (or Paper) version.");
-            legacyEntityShootBowEvent = true;
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            plugin.getLogger().severe("A potentially fatal issue occoured while performing reflection, this will end up being fatal soon.");
-        }
-
         boolean logUseLB = findClass("de.diddiz.LogBlock.LogBlock");
         boolean logUseCP = findClass("net.coreprotect.CoreProtectAPI");
         ArrayList<NativePermissionHook> permHooks = new ArrayList<>();
@@ -985,40 +970,6 @@ public class CompatibilityAdapter {
      */
     public void setActivePierceModes(PierceMode[] modes) {
         pierceModes = modes;
-    }
-
-    /**
-     * Dynamically constructs an EntityShootBowEvent, whose specification has changed lately. As such, this method will use
-     *  the correct constructor without throwing a java.lang.NoSuchMethodError.
-     * @param shooter The shooter
-     * @param bow The used bow
-     * @param consumable The item that was consumed. Not used in legacy mode.
-     * @param projectile The spawned projectile/arrow
-     * @param hand  Not used in legacy mode. The used hand
-     * @param force The force at which the bow is drawn
-     * @param consumeItem  Whether or not to consume the item. Not used in legacy mode
-     * @return The constructed EntityShootBowEvent
-     * @since 3.1.3
-     */
-    public EntityShootBowEvent constructEntityShootBowEvent (@NotNull LivingEntity shooter, @Nullable ItemStack bow,
-            @Nullable ItemStack consumable, @NotNull Entity projectile, @NotNull EquipmentSlot hand, float force, boolean consumeItem) {
-        if (legacyEntityShootBowEvent) {
-            try {
-                return EntityShootBowEvent.class.getConstructor(LivingEntity.class, ItemStack.class, Entity.class, float.class)
-                .newInstance(shooter, bow, projectile, force);
-            } catch (NoSuchMethodException | SecurityException e) {
-                e.printStackTrace();
-                plugin.getLogger().severe("Unable to construct EntityShootBowEvent as the method was not found.");
-                return null;
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                e.printStackTrace();
-                plugin.getLogger().severe("Unable to construct EntityShootBowEvent as argument errors occured"
-                        + " (report this to the Issue page).");
-                return null;
-            }
-        } else {
-            return new EntityShootBowEvent(shooter, bow, consumable, projectile, hand, force, consumeItem);
-        }
     }
 
     /**

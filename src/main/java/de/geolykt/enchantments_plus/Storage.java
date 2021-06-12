@@ -58,7 +58,7 @@ public class Storage {
      */
     public static final String LOGO = ChatColor.BLUE + "[" + ChatColor.DARK_AQUA + "Enchantments" + ChatColor.RED + "+"
             + ChatColor.BLUE + "] " + ChatColor.AQUA;
-    
+
     /**
      * A coled text-based logo for the plugin, used mainly for the command line, but can be used for other stuff. <br>
      * Note: Due to the nature of this String, it is recommended to use it before a ChatColor.RESET or similar. (end of the character is red).
