@@ -19,6 +19,7 @@ package de.geolykt.enchantments_plus.enchantments;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
@@ -50,6 +51,9 @@ public class Magnetism extends CustomEnchantment implements AreaOfEffectable {
         int radius = (int) getAOESize(level);
         for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
             if (e.getType().equals(EntityType.DROPPED_ITEM) && e.getTicksLived() > 160) {
+                if (e instanceof Item && ((Item)e).getPickupDelay() > 0) {
+                    continue;
+                }
                 e.setVelocity(player.getLocation().toVector().subtract(e.getLocation().toVector()).multiply(.05));
             }
         }
