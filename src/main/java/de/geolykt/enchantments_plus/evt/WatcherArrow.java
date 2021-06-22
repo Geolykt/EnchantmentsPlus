@@ -17,7 +17,7 @@
  */
 package de.geolykt.enchantments_plus.evt;
 
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,7 +49,7 @@ public class WatcherArrow implements Listener {
     // Called when an arrow hits an entity
     @EventHandler
     public boolean entityHit(EntityDamageByEntityEvent evt) {
-        if (evt.getDamager() instanceof Arrow) {
+        if (evt.getDamager() instanceof AbstractArrow) {
             if (EnchantedArrow.advancedProjectiles.containsKey(evt.getDamager())) {
                 Set<EnchantedArrow> arrows = EnchantedArrow.advancedProjectiles.get(evt.getDamager());
                 for (EnchantedArrow arrow : arrows) {
