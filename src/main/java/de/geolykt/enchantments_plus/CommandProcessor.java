@@ -330,12 +330,18 @@ public class CommandProcessor {
             sender.sendMessage(Storage.LOGO + "You do not have permission to do this!");
             return true;
         }
-        sender.sendMessage(Storage.LOGO + "Enchantment Types:");
 
-        for (CustomEnchantment ench : new TreeSet<>(config.getEnchants())) {
-            if (ench.validMaterial(stack)) {
-                sender.sendMessage(ChatColor.DARK_AQUA + "- " + ChatColor.AQUA + ench.getLoreName());
-            }
+        Set<CustomEnchantment> enchantments = new TreeSet<>(config.getEnchants());
+        enchantments.removeIf(ench -> ench.validMaterial(stack));
+        if (enchantments.isEmpty()) {
+            enchantments = new TreeSet<>(config.getEnchants());
+            sender.sendMessage(Storage.LOGO + "No applicable enchantment types on your hand.");
+            sender.sendMessage(Storage.LOGO + "All availiable enchantment types:");
+        } else {
+            sender.sendMessage(Storage.LOGO + "Applicable enchantment types:");
+        }
+        for (CustomEnchantment ench : enchantments) {
+            sender.sendMessage(ChatColor.DARK_AQUA + "- " + ChatColor.AQUA + ench.getLoreName());
         }
         return true;
     }
