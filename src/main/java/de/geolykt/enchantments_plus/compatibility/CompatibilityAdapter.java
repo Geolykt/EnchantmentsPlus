@@ -20,6 +20,7 @@ package de.geolykt.enchantments_plus.compatibility;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
@@ -175,7 +176,13 @@ public class CompatibilityAdapter {
             plugin.getLogger().warning(String.format("Tag %s in category %s is not a valid tag!", name, category));
             return EnumSet.noneOf(Material.class);
         }
-        return EnumSet.copyOf(tag.getValues());
+        Collection<Material> values = tag.getValues();
+        // empty collections throw an exception in the EnumSet#copyOf method, which we want to avoid
+        if (values.isEmpty()) {
+            plugin.getLogger().warning(String.format("Tag %s in category %s is empty!", name, category));
+            return EnumSet.noneOf(Material.class);
+        }
+        return EnumSet.copyOf(values);
     }
 
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
