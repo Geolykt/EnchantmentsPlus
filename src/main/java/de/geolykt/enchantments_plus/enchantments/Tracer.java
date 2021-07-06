@@ -20,6 +20,9 @@ package de.geolykt.enchantments_plus.enchantments;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
@@ -31,11 +34,19 @@ import de.geolykt.enchantments_plus.util.Tool;
 import java.util.HashMap;
 import java.util.Map;
 
+// FIXME refractor this shit in 5.0.0 - also implement AreaOfEffectable
 public class Tracer extends CustomEnchantment {
+
+    public static final Map<AbstractArrow, LivingEntity> ARROW_TARGETS = new HashMap<>();
+
+    public static final int ID = 63;
 
     // Map of tracer arrows to their expected accuracy
     public static final Map<AbstractArrow, Integer> tracer = new HashMap<>();
-    public static final int                 ID     = 63;
+
+    public Tracer() {
+        super(BaseEnchantments.TRACER);
+    }
 
     @Override
     public Builder<Tracer> defaults() {
@@ -47,8 +58,77 @@ public class Tracer extends CustomEnchantment {
                     Hand.RIGHT);
     }
 
-    public Tracer() {
-        super(BaseEnchantments.TRACER);
+    /**
+     * Obtains the entity that is targeted by this tracer arrow.
+     *
+     * @param source The arrow that is the source of this operation
+     * @return The entity that is targeted by this operation
+     * @throws IllegalArgumentException if the arrow is not a tracer arrow (or it was removed from the tracer arrow pool)
+     * @since 4.0.1
+     */
+    public static @Nullable LivingEntity getArrowTarget(@NotNull AbstractArrow source) {
+        LivingEntity closestEntity = ARROW_TARGETS.get(source);
+        if (closestEntity != null && closestEntity.isValid() && !closestEntity.isDead()) {
+            // isValid and !isDead should do the same, but better be safe than sorry
+            return closestEntity;
+        }
+        ProjectileSource shooter = source.getShooter();
+        if (!(shooter instanceof Entity)) {
+            return null; // we need to know the location of the shooter in order to be able to do the required math
+        }
+        Entity shooterEntity = (Entity) shooter;
+        if (!source.getLocation().getWorld().equals(shooterEntity.getLocation().getWorld())) {
+            return null; // the shooter switched worlds in the meantime
+        }
+        if (source.getLocation().distanceSquared(shooterEntity.getLocation()) > 225) {
+            return null; // Arrow has not yet travelled far enough
+        }
+        closestEntity = null; // in case it was not null, but otherwise invalid
+
+        Integer level = tracer.get(source);
+        if (level == null) {
+            throw new IllegalArgumentException("Arrow not in tracer arrow pool.");
+        }
+        level += 2;
+
+        double minDistanceSq = Double.POSITIVE_INFINITY;
+
+        for (Entity target : source.getNearbyEntities(level, level, level)) {
+            if (!(target instanceof LivingEntity) || target == shooterEntity) {
+                continue;
+            }
+            double distanceSq = target.getLocation().distanceSquared(source.getLocation());
+            if (distanceSq < minDistanceSq) {
+                minDistanceSq = distanceSq;
+                closestEntity = (LivingEntity) target;
+            }
+        }
+        if (closestEntity != null) {
+            ARROW_TARGETS.put(source, closestEntity);
+        }
+        return closestEntity;
+    }
+
+    // Moves Tracer arrows towards a target
+    public static void tracer() {
+        for (AbstractArrow e : tracer.keySet()) {
+            if (!(e.getShooter() instanceof Entity)) {
+                continue; // Unlikely, but possible - so better be safe than sorry
+            }
+            Entity close = getArrowTarget(e);
+            if (close != null) {
+                Location location = close.getLocation();
+                Location pos = e.getLocation();
+                double its = location.distance(pos);
+                if (its == 0) {
+                    its = 1;
+                }
+                org.bukkit.util.Vector v = new org.bukkit.util.Vector((location.getX() - pos.getX()) / its,
+                        (location.getY() - pos.getY()) / its, (location.getZ() - pos.getZ()) / its);
+                v.add(e.getLocation().getDirection().multiply(.1));
+                e.setVelocity(v.multiply(2));
+            }
+        }
     }
 
     @Override
@@ -56,42 +136,5 @@ public class Tracer extends CustomEnchantment {
         TracerArrow arrow = new TracerArrow((AbstractArrow) evt.getProjectile(), level, power);
         EnchantedArrow.putArrow((AbstractArrow) evt.getProjectile(), arrow, (Player) evt.getEntity());
         return true;
-    }
-
-    // Moves Tracer arrows towards a target
-    public static void tracer() {
-        for (AbstractArrow e : tracer.keySet()) {
-            Entity close = null;
-            double distance = 100;
-            int level = tracer.get(e);
-            level += 2;
-            for (Entity e1 : e.getNearbyEntities(level, level, level)) {
-                if (e1.getLocation().getWorld().equals(e.getLocation().getWorld())) {
-                    double d = e1.getLocation().distance(e.getLocation());
-                    if (e.getLocation().getWorld().equals(((Entity) e.getShooter()).getLocation().getWorld())) {
-                        if (d < distance && e1 instanceof LivingEntity
-                            && !e1.equals(e.getShooter())
-                            && e.getLocation().distance(((Entity) e.getShooter()).getLocation()) > 15) {
-                            distance = d;
-                            close = e1;
-                        }
-                    }
-                }
-            }
-            if (close != null) {
-                Location location = close.getLocation();
-                org.bukkit.util.Vector v = new org.bukkit.util.Vector(0D, 0D, 0D);
-                Location pos = e.getLocation();
-                double its = location.distance(pos);
-                if (its == 0) {
-                    its = 1;
-                }
-                v.setX((location.getX() - pos.getX()) / its);
-                v.setY((location.getY() - pos.getY()) / its);
-                v.setZ((location.getZ() - pos.getZ()) / its);
-                v.add(e.getLocation().getDirection().multiply(.1));
-                e.setVelocity(v.multiply(2));
-            }
-        }
     }
 }

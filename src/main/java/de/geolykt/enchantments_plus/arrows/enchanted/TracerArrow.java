@@ -29,11 +29,12 @@ public class TracerArrow extends EnchantedArrow {
         super(entity, level, power);
         Tracer.tracer.put(entity, (int) Math.round(level * power));
     }
-    
+
     @Override
     public boolean onImpact(EntityDamageByEntityEvent evt) {
         if (evt.isCancelled()) {
             Tracer.tracer.remove(arrow);
+            Tracer.ARROW_TARGETS.remove(arrow);
             die();
         }
         return true;
