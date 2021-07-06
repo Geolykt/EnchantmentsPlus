@@ -145,6 +145,9 @@ public class Watcher implements Listener {
                     evt.getEntity().setPickupDelay(0);
                     for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                         if (e instanceof ExperienceOrb) {
+                            if (e.isDead()) {
+                                continue;
+                            }
                             Grab.grabLocs.get(grabLoc).giveExp(((ExperienceOrb) e).getExperience());
                             e.remove();
                         }
@@ -157,6 +160,9 @@ public class Watcher implements Listener {
                     evt.getEntity().setPickupDelay(0);
                     for (Entity e : evt.getEntity().getNearbyEntities(1, 1, 1)) {
                         if (e instanceof ExperienceOrb) {
+                            if (e.isDead()) {
+                                continue;
+                            }
                             Vortex.vortexLocs.get(vortexLoc).giveExp(((ExperienceOrb) e).getExperience());
                             e.remove();
                         }
