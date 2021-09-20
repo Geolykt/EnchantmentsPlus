@@ -4,7 +4,7 @@
  * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by 
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
  * This program is distributed in the hope that it will be useful, but
@@ -52,7 +52,7 @@ import static org.bukkit.Material.ENCHANTED_BOOK;
 
 // CustomEnchantment is the default structure for any enchantment. Each enchantment below it will extend this class
 //      and will override any methods as necessary in its behaviour
-// Why do we even have a comparable interface?
+// Why do we even have a comparable interface? - I believe it's there to keep the order of enchantments the same, but we'd have to check
 public abstract class CustomEnchantment implements Comparable<CustomEnchantment> {
 
     protected static final CompatibilityAdapter ADAPTER = Storage.COMPATIBILITY_ADAPTER;

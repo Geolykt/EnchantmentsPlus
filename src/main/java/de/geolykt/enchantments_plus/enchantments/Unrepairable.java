@@ -4,7 +4,7 @@
  * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by 
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
  * This program is distributed in the hope that it will be useful, but
@@ -38,5 +38,6 @@ public class Unrepairable extends CustomEnchantment {
 
     public Unrepairable() {
         super(BaseEnchantments.UNREPAIRABLE);
+        isCursed = true;
     }
 }

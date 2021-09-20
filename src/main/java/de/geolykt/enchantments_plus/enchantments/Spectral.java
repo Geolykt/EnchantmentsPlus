@@ -4,7 +4,7 @@
  * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by 
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
  * This program is distributed in the hope that it will be useful, but
@@ -74,7 +74,7 @@ public class Spectral extends CustomEnchantment {
         }
         Set<Block> potentialBlocks = new HashSet<>();
         potentialBlocks.add(evt.getClickedBlock());
-        if (evt.getPlayer().isSneaking()) { 
+        if (evt.getPlayer().isSneaking()) {
             potentialBlocks.addAll(Utilities.BFS(evt.getClickedBlock(), MAX_BLOCKS, false, (float) (level * power)+2.0f,
                     SEARCH_FACES, EnumSet.of(evt.getClickedBlock().getType()),
                     new HashSet<>(), false, true));
