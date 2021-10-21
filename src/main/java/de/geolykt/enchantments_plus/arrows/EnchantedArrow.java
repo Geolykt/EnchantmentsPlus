@@ -34,22 +34,23 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import de.geolykt.enchantments_plus.Storage;
 
 /**
- * Proxy for {@link AbstractArrow} which allows subclasses to define custom behavior
+ * Proxy for {@link AbstractArrow} which allows subclasses to define custom behaviour
  * triggered on certain events.
  */
 public class EnchantedArrow {
     // Entities an enchanted arrow has damaged or killed
 
-    // TODO v4.0.0: rename the maps to conventional names
+    // TODO v5.0.0: rename the maps to conventional names
     public static final Map<Entity, EnchantedArrow> killedEntities = new HashMap<>();
+
+    // Not actually for removal, but I want to lower the visibility of the map
     // Arrows mapped to different advanced arrow effects, to be used by the Arrow Watcher to perform these effects
+    @Deprecated(forRemoval = true, since = "4.0.2")
     public static final Map<AbstractArrow, Set<EnchantedArrow>> advancedProjectiles = new HashMap<>();
     protected final AbstractArrow arrow;
     protected final int level;
     protected final double power;
     private int tick;
-
-    private static final Set<EnchantedArrow> dieQueue = new HashSet<>();
 
     /**
      * Creates a new EnchantedArrow from the given arrow with the specified
@@ -87,14 +88,15 @@ public class EnchantedArrow {
 
     // Adds an arrow entity into the arrow storage variable calls its launch method
     public static void putArrow(AbstractArrow e, EnchantedArrow a, Player p) {
-        Set<EnchantedArrow> ars;
+        Set<EnchantedArrow> ars = null;
         if (advancedProjectiles.containsKey(e)) {
             ars = advancedProjectiles.get(e);
-        } else {
+        }
+        if (ars == null) {
             ars = new HashSet<>();
+            advancedProjectiles.put(e, ars);
         }
         ars.add(a);
-        advancedProjectiles.put(e, ars);
         a.onLaunch(p, null);
     }
 
@@ -200,28 +202,32 @@ public class EnchantedArrow {
 
     //endregion
     public static void scanAndReap() {
-        synchronized (advancedProjectiles) {
-            for (AbstractArrow a : advancedProjectiles.keySet()) {
-                if (a.isDead()) {
-                    dieQueue.addAll(advancedProjectiles.get(a));
+        // advancedProjectiles had an extra thread safety layer ever since the code was added in the original repository,
+        // this does not make much sense to me at this time, so if we get any CMEs you know why
+        for (AbstractArrow a : advancedProjectiles.keySet()) {
+            if (a.isDead()) {
+                Set<EnchantedArrow> children = advancedProjectiles.get(a);
+                if (children == null) {
+                    // why this can null is beyond me, but it can be:
+                    // https://github.com/Geolykt/EnchantmentsPlus/issues/99
+                    continue;
                 }
+                children.forEach(EnchantedArrow::die);
+            } else {
                 for (EnchantedArrow ea : advancedProjectiles.get(a)) {
                     if (ea.getTick() > 600) {
-                        dieQueue.add(ea);
+                        ea.die();
                     }
                 }
             }
-
-            for (EnchantedArrow a : dieQueue) {
-                a.die();
-            }
-            dieQueue.clear();
         }
     }
 
     public static void doTick() {
-        synchronized (advancedProjectiles) {
-            advancedProjectiles.values().forEach((set) -> set.forEach(EnchantedArrow::tick));
-        }
+        advancedProjectiles.values().forEach((set) -> {
+            if (set != null) {
+                set.forEach(EnchantedArrow::tick);
+            }
+        });
     }
 }
