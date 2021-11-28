@@ -21,6 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Guardian;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;
 
@@ -37,7 +38,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MysteryFish extends CustomEnchantment {
 
     // Guardians from the Mystery Fish enchantment and the player they should move towards
-    // FIXME potentially unsafe operation, would require a review in the 4.0.0 refractor (right now a refractor to a safer operation is hardly possible)
+    // FIXME potentially unsafe operation, would require a review in the 5.0.0 refractor (right now a refractor to a safer operation is hardly possible)
+    // I should really fix the fixmes at some point
     public static final Map<Entity, Player> guardianMove = new HashMap<>();
     public static final int                 ID           = 38;
 
@@ -57,8 +59,8 @@ public class MysteryFish extends CustomEnchantment {
 
     @Override
     public boolean onPlayerFish(final PlayerFishEvent evt, int level, boolean usedHand) {
-        if (ThreadLocalRandom.current().nextInt((int) (Math.max(power - 6, 1))) < level) {
-            if (evt.getCaught() != null) {
+        if (ThreadLocalRandom.current().nextInt((int) (Math.max(6 - power, 1))) < level) {
+            if (evt.getCaught() instanceof Item) {
                 Location location = evt.getCaught().getLocation();
                 switch (ThreadLocalRandom.current().nextInt(7)) {
                 case 0:
