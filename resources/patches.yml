@@ -9,7 +9,7 @@ patch_ench_protect:
 worldProtection:
   spectral: true
   native: true # If false the Plugin supports more Compatibility with world protection plugins however also allows for more exploits with plugins such as McMMO or Jobs.
-  fire: false # Disabled per default for performance reasons, turning it on fixed exploits with improperly coded world protection plugins like Worldguard
+  fire: false # Disabled per default for performance reasons, turning it on fixes exploits with improperly coded world protection plugins like Worldguard
   wg: false # Worldguard region integration. Flag is "eplus"
 recipe:
   misc:
@@ -18,13 +18,13 @@ nerfs:
   siphonsubstractAmour: true
   shredCoolDownOnLaser: true
 # Specifies the reader / writer for enchantments. They can be divided into two main categories, NBT getters and Lore getters, NBT getters are more stable, however can bork other plugins and are inefficent
-# Lore Getters are more efficent, however prone to break with some edge-case plugins. they also have implicit backwards-compatibillity. The also work before 1.16
+# Lore Getters are more efficent, however prone to break with some edge-case plugins. they also have implicit backwards-compatibillity with zenchantments
 # NBT The highly configurable, but laggy NBT getter
 # lwNBT The not very configurable, but stable NBT getter
-# PR47-lore The not very configurable, but stable Lore getter, the name comes from the PR it was introduced first, PR #47
+# PR47-lore The not very configurable, but stable Lore getter, the name comes from the PR it was unveiled to the world first, Zedly/Zenchantments#47
 # advLore The higly configurable experimental Lore getter
 enchantmentGatherer: "advLore"
-# the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will not attempt to read enchantments from these items.
+# the list of materials can be found at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html. The plugin will only attempt to read enchantments from these items.
 # Only works for advanced lore getters
 getterAllow:
   - "SWORD"
@@ -41,14 +41,12 @@ getterAllow:
   - "ELYTRA"
   - "FLINT_AND_STEEL"
   - "BOOK"
-denyPartial: true # whether even partial matches shall be denied (dangerous for some things, such as GRASS (You could also mean GRASS_PATH and GRASS_BLOCK)!), requires longer startup times, but sleaker configuration.
+denyPartial: true # whether even partial matches shall be denied (dangerous for some things, such as GRASS (You could also mean GRASS_PATH and GRASS_BLOCK)!), requires slightly longer startup times, but sleaker configuration.
 isAllowlist: true # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
-1xx-anvil-merger: false # Setting it to true will use an old version of the Anvil Merger, which solves some spigot/craftbukkit specific issues, however paper-based servers should keep it false as it reintroduces old bugs
-disable-anvil-merging: false # You only rarely want to turn this on
+anvil-merger: "4xx" # Can either be 1xx / legacy, 2xx / new, 4xx / cross or none. Do not use "2xx"/"new" in combination with spigot.
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found
   mobstacker: true # This applies to all mobstacker plugins that have an integration coded for them. Manually prevents issues with the reveal enchantment and the shulkers it spawns
-# The modes that can be used by the pierce enchantment. It is not recommended to remove the NORMAL entry as it will produce unexpected results,
-# if this entry is missing or empty then all modes are enabled.
+# The modes that can be used by the pierce enchantment. It is not recommended to remove the NORMAL entry as it will produce unexpected results. If pierce-modes is empty then all modes are enabled.
 pierce-modes:
   - "LONG"
   - "NORMAL"

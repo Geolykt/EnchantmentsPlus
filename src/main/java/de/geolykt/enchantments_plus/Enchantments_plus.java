@@ -66,7 +66,7 @@ public class Enchantments_plus extends JavaPlugin {
         File file = new File("plugins/Enchantments_plus/");
         boolean success = file.mkdir();
         if (success) {
-            System.out.println("Created folder for Enchantments+ configuration.");
+            getLogger().info("Created folder for Enchantments+ configuration.");
         }
         File compatFile = new File(getDataFolder(), "magicCompat.yml");
         if (!compatFile.exists()) {
@@ -115,11 +115,7 @@ public class Enchantments_plus extends JavaPlugin {
 
         Storage.version = this.getDescription().getVersion();
         loadConfigs();
-        if (Config.PATCH_CONFIGURATION.getBoolean("1xx-anvil-merger", false)) {
-            getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
-        } else if (!Config.PATCH_CONFIGURATION.getBoolean("disable-anvil-merging", false)) {
-            getServer().getPluginManager().registerEvents(new NewAnvilMerger(), this);
-        }
+        setupAnvilMerger();
         getCommand("ench").setTabCompleter(new CommandProcessor.TabCompletion());
         getServer().getPluginManager().registerEvents(new GrindstoneMerge(), this);
         getServer().getPluginManager().registerEvents(new WatcherArrow(), this);
@@ -171,12 +167,51 @@ public class Enchantments_plus extends JavaPlugin {
         w.stop();
         getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
     }
-   
+
     @Override
     public void onLoad() {
         // Let's play the classloader!
         try {
             WGHook.dummy();
         } catch (Throwable ignored) { }
+    }
+
+    /**
+     * Initialises the anvil merger based on the configurations that were chosen.
+     *
+     * @since 4.0.2
+     */
+    private void setupAnvilMerger() {
+        if (!Config.PATCH_CONFIGURATION.getBoolean("disable-anvil-merging", false)) {
+            return;
+        }
+        switch (Config.PATCH_CONFIGURATION.getString("anvil-merger", "3xx")) {
+        case "legacy":
+        case "1xx":
+            // 1xx "legacy" anvil merger
+            getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
+            break;
+        case "new":
+        case "2xx":
+            // 2xx "new" anvil merger
+            getServer().getPluginManager().registerEvents(new NewAnvilMerger(), this);
+            break;
+        case "3xx": {
+            if (Config.PATCH_CONFIGURATION.getBoolean("1xx-anvil-merger", false)) {
+                getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
+            } else {
+                getServer().getPluginManager().registerEvents(new NewAnvilMerger(), this);
+            }
+            break;
+        }
+        case "cross":
+        case "4xx":
+            // 4xx "cross" anvil merger
+            // FIXME for now we are using the ancient "legacy" merger, but this will have to be replaced since it is the new default.
+            getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
+            break;
+        case "none":
+            return;
+        }
     }
 }
