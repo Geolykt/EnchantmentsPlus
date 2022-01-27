@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.geolykt</groupId>
     <artifactId>enchantments-plus</artifactId>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,7 +34,7 @@
             <url>https://repo.md-5.net/content/repositories/public/</url>
         </repository>
         <repository> <!-- And yet another repository for CP, could you guys stop publishing your stuff in 2000 maven repos? -->
-            <id>coreprotect-repo</id> <!-- For LogBlock -->
+            <id>coreprotect-repo</id> <!-- For CP -->
             <url>https://maven.playpro.com</url>
         </repository>
     </repositories>
@@ -69,16 +69,16 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <!-- We don't want to harm our dependency tree with transistive dependencies-->
+                    <!-- We don't want to harm our dependency tree with transitive dependencies-->
                     <groupId>*</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <!-- Welcome to insanity where we have to use 4 dependencies for 1 class.
-             Now, I could've just allowed for transistive depends but that significantly extends build time
-             as well as potentially polluting what we have availiable. (so I do not accidentally use a lib used
-             by wg for example) -->
+             Now, I could've just allowed for transitive depends but that significantly extends build time
+             as well as potentially polluting what we have available. (so I do not accidentally use a library used
+             by WorldGuard for example) -->
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>

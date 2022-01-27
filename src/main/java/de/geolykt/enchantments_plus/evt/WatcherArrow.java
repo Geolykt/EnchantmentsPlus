@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -36,19 +36,18 @@ public class WatcherArrow implements Listener {
 
     // Called when an arrow hits a block
     @EventHandler
-    public boolean impact(ProjectileHitEvent evt) {
+    public void impact(ProjectileHitEvent evt) {
         if (EnchantedArrow.advancedProjectiles.containsKey(evt.getEntity())) {
             Set<EnchantedArrow> ar = EnchantedArrow.advancedProjectiles.get(evt.getEntity());
             for (EnchantedArrow a : ar) {
                 a.onImpact();
             }
         }
-        return true;
     }
 
     // Called when an arrow hits an entity
     @EventHandler
-    public boolean entityHit(EntityDamageByEntityEvent evt) {
+    public void entityHit(EntityDamageByEntityEvent evt) {
         if (evt.getDamager() instanceof AbstractArrow) {
             if (EnchantedArrow.advancedProjectiles.containsKey(evt.getDamager())) {
                 Set<EnchantedArrow> arrows = EnchantedArrow.advancedProjectiles.get(evt.getDamager());
@@ -66,18 +65,16 @@ public class WatcherArrow implements Listener {
                 }
             }
         }
-        return true;
     }
 
     // Called when an arrow kills an entity; the advanced arrow is removed after this event
     @EventHandler
-    public boolean entityDeath(EntityDeathEvent evt) {
+    public void entityDeath(EntityDeathEvent evt) {
         if (EnchantedArrow.killedEntities.containsKey(evt.getEntity())) {
             EnchantedArrow arrow = EnchantedArrow.killedEntities.get(evt.getEntity());
             arrow.onKill(evt);
             EnchantedArrow.killedEntities.remove(evt.getEntity());
         }
-        return true;
     }
 
 }
