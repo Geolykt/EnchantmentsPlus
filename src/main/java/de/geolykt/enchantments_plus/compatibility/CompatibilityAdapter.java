@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -17,6 +17,25 @@
  */
 package de.geolykt.enchantments_plus.compatibility;
 
+import static org.bukkit.potion.PotionEffectType.ABSORPTION;
+import static org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE;
+import static org.bukkit.potion.PotionEffectType.DOLPHINS_GRACE;
+import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
+import static org.bukkit.potion.PotionEffectType.FIRE_RESISTANCE;
+import static org.bukkit.potion.PotionEffectType.HEAL;
+import static org.bukkit.potion.PotionEffectType.HEALTH_BOOST;
+import static org.bukkit.potion.PotionEffectType.INCREASE_DAMAGE;
+import static org.bukkit.potion.PotionEffectType.INVISIBILITY;
+import static org.bukkit.potion.PotionEffectType.JUMP;
+import static org.bukkit.potion.PotionEffectType.NIGHT_VISION;
+import static org.bukkit.potion.PotionEffectType.REGENERATION;
+import static org.bukkit.potion.PotionEffectType.SATURATION;
+import static org.bukkit.potion.PotionEffectType.SPEED;
+import static org.bukkit.potion.PotionEffectType.WATER_BREATHING;
+
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +48,13 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Tag;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -38,22 +63,33 @@ import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Cow;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Llama;
+import org.bukkit.entity.MushroomCow;
+import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.TropicalFish;
+import org.bukkit.entity.Villager;
+import org.bukkit.event.Event.Result;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.player.PlayerShearEntityEvent;
-import org.bukkit.event.Event.Result;
-import org.bukkit.event.block.Action;
-import static org.bukkit.potion.PotionEffectType.*;
-
-import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -64,7 +100,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.enchantments_plus.Storage;
-import de.geolykt.enchantments_plus.compatibility.nativeperm.*;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.CCHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.CPHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.GPHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.LogBlockHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.NativeLoggingHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.NativePermissionHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.NativePermissionHooks;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.TownyHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.WGHook;
 import de.geolykt.enchantments_plus.enchantments.Pierce;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.PierceMode;
@@ -114,6 +158,15 @@ public class CompatibilityAdapter {
     private final boolean permUseClaimChunk;
 
     /**
+     * A {@link MethodHandle} that references paper's <a href="https://papermc.io/javadocs/paper/1.17/org/bukkit/entity/Player.html#giveExp(int,boolean)">Player#giveExp(int,boolean)</a> method.
+     * Will be null if the method does not exist (e.g. the server is using spigot, not paper).
+     *
+     * @since 4.0.4
+     */
+    @Nullable
+    private final MethodHandle givePlayerExperienceApplyMendingHandle;
+
+    /**
      * Constructs the class and starts a Task on the next tick to initialise it further (scans methods from other plugins or spigot)
      * @param plugin The plugin that is used to initialise the task.
      */
@@ -124,6 +177,11 @@ public class CompatibilityAdapter {
         permUseWG = findClass("com.sk89q.worldguard.bukkit.WorldGuardPlugin");
         Bukkit.getScheduler().runTaskLater(plugin, this::scanMethods, 0L);
         this.plugin = plugin;
+        MethodHandle handle = null;
+        try {
+            handle = MethodHandles.publicLookup().findVirtual(Player.class, "giveExp", MethodType.fromMethodDescriptorString("(IZ)V", this.getClass().getClassLoader()));
+        } catch (Exception ignore) {}
+        this.givePlayerExperienceApplyMendingHandle = handle;
     }
 
     private EnumSet<Material> grownCrops;
@@ -466,6 +524,28 @@ public class CompatibilityAdapter {
             Material.COOKED_COD, Material.COOKED_MUTTON, Material.COOKED_PORKCHOP, Material.COOKED_RABBIT,
             Material.COOKED_SALMON, Material.COOKIE, Material.DRIED_KELP, Material.MELON_SLICE, 
             Material.MUSHROOM_STEW, Material.PUMPKIN_PIE, Material.RABBIT_STEW, Material.COOKED_BEEF};
+
+    /**
+     * Give the player experience, taking mending in account.
+     *
+     * @param amount The amount of experience to give
+     * @param p The {@link Player} that receives the experience
+     * @since 4.0.4
+     */
+    public void givePlayerXP(int amount, Player p) {
+        MethodHandle handle = this.givePlayerExperienceApplyMendingHandle;
+        if (handle == null) {
+            // Spigot
+            p.getWorld().spawn(p.getLocation(), ExperienceOrb.class).setExperience(amount);
+        } else {
+            // Paper
+            try {
+                handle.bindTo(p).invoke(amount, true);
+            } catch (Throwable t) {
+                throw new IllegalStateException("Unable to invoke method", t);
+            }
+        }
+    }
 
     public Material[] gluttonyFoodItems() {
         return GLUTTONY_FOOD_ITEMS;

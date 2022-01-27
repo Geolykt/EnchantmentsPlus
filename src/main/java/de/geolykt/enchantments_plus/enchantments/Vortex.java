@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -61,10 +61,14 @@ public class Vortex extends CustomEnchantment {
     public boolean onEntityKill(final EntityDeathEvent evt, int level, boolean usedHand) {
         final Location deathBlock = evt.getEntity().getLocation();
         vortexLocs.put(deathBlock, evt.getEntity().getKiller());
-        
-        evt.getEntity().getKiller().giveExp(evt.getDroppedExp());
+
+        if (this.enchantmentConfiguration.vortexApplyMending()) {
+            ADAPTER.givePlayerXP(evt.getDroppedExp(), evt.getEntity().getKiller());
+        } else {
+            evt.getEntity().getKiller().giveExp(evt.getDroppedExp());
+        }
         evt.setDroppedExp(0);
-        
+
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.plugin, () -> vortexLocs.remove(deathBlock), 3);
         return true;
     }

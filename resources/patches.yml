@@ -17,6 +17,11 @@ recipe:
 nerfs:
   siphonsubstractAmour: true
   shredCoolDownOnLaser: true
+buffs:
+  # Whether the XP collected by the vortex enchantment should go towards repairing tools with the mending enchantment.
+  # For the best experience, use Paper - however spigot also allows this with workarounds (which would enable others to steal the XP though).
+  vortexApplyMending: true
+
 # Specifies the reader / writer for enchantments. They can be divided into two main categories, NBT getters and Lore getters, NBT getters are more stable, however can bork other plugins and are inefficent
 # Lore Getters are more efficent, however prone to break with some edge-case plugins. they also have implicit backwards-compatibillity with zenchantments
 # NBT The highly configurable, but laggy NBT getter

@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -17,6 +17,7 @@
  */
 package de.geolykt.enchantments_plus;
 
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.compatibility.RosestackerMergePreventer;
 import de.geolykt.enchantments_plus.compatibility.Stackmob5MergePreventer;
 import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
@@ -42,6 +43,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -177,6 +179,17 @@ public class Config {
         protected boolean spectralNPQ = true;
 
         /**
+         * Whether the {@link Vortex} enchantment should use
+         * {@link CompatibilityAdapter#givePlayerXP(int, org.bukkit.entity.Player)} instead of a
+         * raw {@link Player#giveExp(int)}. Disabling this feature can be useful as it reduces the
+         * power of the enchantment and gives the old Zenchantments feeling as that was the default
+         * prior to 4.0.4
+         *
+         * @since 4.0.4
+         */
+        protected boolean vortexApplyMending = true;
+
+        /**
          * Whether to integrate to worldguard regions by disallowing the usage of enchantments when the "eplus" flag
          * is set to DENY
          *
@@ -309,6 +322,20 @@ public class Config {
          */
         public boolean siphonUseFinalDamage() {
             return siphonArmor;
+        }
+
+        /**
+         * Whether the {@link Vortex} enchantment should use
+         * {@link CompatibilityAdapter#givePlayerXP(int, org.bukkit.entity.Player)} instead of a
+         * raw {@link Player#giveExp(int)}. Disabling this feature can be useful as it reduces the
+         * power of the enchantment and gives the old Zenchantments feeling as that was the default
+         * prior to 4.0.4
+         *
+         * @return A boolean stating whether the Vortex enchantment should apply mending
+         * @since 4.0.4
+         */
+        public boolean vortexApplyMending() {
+            return vortexApplyMending;
         }
     }
 
@@ -666,6 +693,7 @@ public class Config {
         ENCH_CONFIG.arboristGoldenAppleDrop = PATCH_CONFIGURATION.getBoolean("recipe.misc.arborist-doGoldenAppleDrop", true);
         ENCH_CONFIG.siphonArmor = PATCH_CONFIGURATION.getBoolean("nerfs.siphonsubstractAmour", true);
         ENCH_CONFIG.laserBlockShred = PATCH_CONFIGURATION.getBoolean("nerfs.shredCoolDownOnLaser", true);
+        ENCH_CONFIG.vortexApplyMending = PATCH_CONFIGURATION.getBoolean("buffs.vortexApplyMending", true);
 
         boolean isAllowlist = PATCH_CONFIGURATION.getBoolean("isAllowlist", true);
         EnumSet<Material> allowlist = EnumSet.noneOf(Material.class);
