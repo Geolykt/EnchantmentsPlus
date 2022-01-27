@@ -9,7 +9,7 @@ The hard fork status however means that we won't maintain any parity with Zencha
   - This fork regularly receives bug-fixes and has persisted since May of 2020, which is the longer than any other fork which were otherwise more short-lived.
   - This is fast(-ish). During the last months the fork accumulated lots of revisions that aim at improving performance. It also continues to do so with each update.
   - Enchantments+ doesn't use NMS. This means that newer minecraft versions are supported at a bigger scale than otherwise is the case, however with Zenchantments remvoing it's multi-version support and spigot using mojmap, this may no longer be full selling point.
-  - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will often be fixed in under a day (especially on github - please do **not** report them elsewhere, **they might not get fixed**).
+  - The fork is stable, while there are some bugs, most are either really obscure or noone reported them to me. If they are reported, they will eventually get fixed (especially on github - please do **not** report them elsewhere, **they might not get fixed**).
 
 ## Metrics
 As of version 2.1.6 the plugin uses bstats to cover metrics, the page where the information is shown can be found [here](https://bstats.org/plugin/bukkit/EnchantmentsPlus/9211).
