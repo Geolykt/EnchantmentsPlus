@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -17,7 +17,7 @@
  */
 package de.geolykt.enchantments_plus;
 
-//For Bukkit & Spigot 1.16.X
+//For Bukkit & Spigot 1.17.X + 1.18.X
 import org.apache.commons.lang.time.StopWatch;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -182,7 +182,7 @@ public class Enchantments_plus extends JavaPlugin {
      * @since 4.0.2
      */
     private void setupAnvilMerger() {
-        if (!Config.PATCH_CONFIGURATION.getBoolean("disable-anvil-merging", false)) {
+        if (Config.PATCH_CONFIGURATION.getBoolean("disable-anvil-merging", false)) {
             return;
         }
         switch (Config.PATCH_CONFIGURATION.getString("anvil-merger", "3xx")) {
@@ -207,8 +207,7 @@ public class Enchantments_plus extends JavaPlugin {
         case "cross":
         case "4xx":
             // 4xx "cross" anvil merger
-            // FIXME for now we are using the ancient "legacy" merger, but this will have to be replaced since it is the new default.
-            getServer().getPluginManager().registerEvents(new AnvilMerge(), this);
+            getServer().getPluginManager().registerEvents(new NewAnvilMerger(), this);
             break;
         case "none":
             return;
