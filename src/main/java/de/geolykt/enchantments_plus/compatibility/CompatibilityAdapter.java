@@ -42,7 +42,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
@@ -61,6 +63,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Cow;
@@ -202,6 +205,13 @@ public class CompatibilityAdapter {
     private EnumMap<EntityType, EntityType> transformationMap;
 
     /**
+     * The map used by {@link #getDefaultSoilMaterial(Biome)}.
+     *
+     * @since 4.0.4
+     */
+    private Map<Biome, Material> defaultSoilMaterials;
+
+    /**
      * Obtains the {@link PierceMode PierceModes} that are allowed to be used by the plugin.
      *
      * @return The allowed pierce modes
@@ -241,6 +251,22 @@ public class CompatibilityAdapter {
             return EnumSet.noneOf(Material.class);
         }
         return EnumSet.copyOf(values);
+    }
+
+    /**
+     * Obtains the default soil material for the given {@link Biome}.
+     * By default {@link Biome#MUSHROOM_FIELDS} returns {@link Material#MYCELIUM},
+     * {@link Biome#OLD_GROWTH_PINE_TAIGA} and {@link Biome#OLD_GROWTH_SPRUCE_TAIGA} return
+     * {@link Material#PODZOL} and other biomes return {@link Material#GRASS_BLOCK}.
+     * This behaviour however can be overridden by the user using the magic compatibility file.
+     *
+     * @param biome The {@link Biome} to use for the method call.
+     * @return The evaluated soil material.
+     * @since 4.0.4
+     */
+    @NotNull
+    public Material getDefaultSoilMaterial(Biome biome) {
+        return defaultSoilMaterials.getOrDefault(biome, Material.GRASS_BLOCK);
     }
 
     private EnumSet<Material> getMaterialSet(FileConfiguration config, String path) {
@@ -283,6 +309,7 @@ public class CompatibilityAdapter {
         }
         for (String s : terraformerTags) {
             try {
+                // FIXME uh, this is a retarded approach. Bukkit#getTag exists!
                 try {
                     Field f = Tag.class.getDeclaredField(s);
                     @SuppressWarnings("unchecked")
@@ -343,6 +370,29 @@ public class CompatibilityAdapter {
                 plugin.getLogger().warning("The value of the entry \"" + s + "\" in the transformation list is invalid; Skipping entry.");
             } else {
                 transformationMap.put(mk, mv);
+            }
+        }
+
+        defaultSoilMaterials = new HashMap<>();
+        loadDefaultSoilMaterials: {
+            ConfigurationSection sect = config.getConfigurationSection("defaultSoilMaterials");
+            if (sect == null) {
+                break loadDefaultSoilMaterials;
+            }
+            for (String s : sect.getKeys(false)) {
+                Material mat = Material.matchMaterial(sect.getString(s));
+                Biome biome = Biome.valueOf(s);
+                if (biome == null) {
+                    if (mat == null) {
+                        plugin.getLogger().warning("Both key and value for the key \"" + s + "\" in the defaultSoilMaterials map are invalid; Skipping entry.");
+                    } else {
+                        plugin.getLogger().warning("The key \"" + s + "\" within the defaultSoilMaterials map is invalid; Skipping entry.");
+                    }
+                } else if (mat == null) {
+                    plugin.getLogger().warning("The value for the key \"" + s + "\" within the defaultSoilMaterials map is invalid; Skipping entry.");
+                } else {
+                    defaultSoilMaterials.put(biome, mat);
+                }
             }
         }
 

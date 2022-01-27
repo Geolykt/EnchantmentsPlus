@@ -437,7 +437,7 @@ transformation:
   - "OCELOT:WOLF"
   - "POLAR_BEAR:SHEEP"
   - "COW:MUSHROOM_COW"
-  - "PIG:ZOMBIFIED_PIGLIN" # remove in versions before 1.16.1
+  - "PIG:ZOMBIFIED_PIGLIN"
   - "SPIDER:CAVE_SPIDER"
   - "SLIME:MAGMA_CUBE"
   - "GUARDIAN:ELDER_GUARDIAN"
@@ -456,7 +456,7 @@ transformation:
   - "WOLF:OCELOT"
   - "SHEEP:POLAR_BEAR"
   - "MUSHROOM_COW:COW"
-  - "ZOMBIFIED_PIGLIN:PIG" # remove in versions before 1.16.1
+  - "ZOMBIFIED_PIGLIN:PIG"
   - "CAVE_SPIDER:SPIDER"
   - "MAGMA_CUBE:SLIME"
   - "ELDER_GUARDIAN:GUARDIAN"
@@ -477,7 +477,15 @@ transformation:
   - "TROPICAL_FISH:COD"
   - "GHAST:PHANTOM"
   - "LLAMA:HORSE"
-  - "HOGLIN:ZOGLIN" # remove in versions before 1.16.1
-  - "ZOGLIN:HOGLIN" # remove in versions before 1.16.1
+  - "HOGLIN:ZOGLIN"
+  - "ZOGLIN:HOGLIN"
   - "RABBIT:RABBIT" # remove to remove the killer bunny change
   - "CREEPER:CREEPER" # remove to remove the change of the charged state
+
+# A Biome -> Material map that specifies what the default soil material is for a given Biome.
+# If the biome is not in the list, GRASS_BLOCK is assumed. This map is used within the Green thumb
+# enchantment. The key of the map is strictly case-sensitive and is NOT a namespaced key right now.
+defaultSoilMaterials:
+  "MUSHROOM_FIELDS": "MYCELIUM"
+  "OLD_GROWTH_PINE_TAIGA": "PODZOL"
+  "OLD_GROWTH_SPRUCE_TAIGA": "PODZOL"

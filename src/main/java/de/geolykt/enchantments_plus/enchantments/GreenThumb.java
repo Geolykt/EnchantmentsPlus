@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 
 import de.geolykt.enchantments_plus.Config;
 import de.geolykt.enchantments_plus.CustomEnchantment;
-import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
@@ -75,17 +74,14 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                         }
                         boolean applied = false;
                         if (relativeBlock.getType() == DIRT) {
-                            if (Storage.COMPATIBILITY_ADAPTER.airs().contains(relativeBlock.getRelative(0, 1, 0).getType())) {
-                                Material mat;
+                            if (ADAPTER.airs().contains(relativeBlock.getRelative(0, 1, 0).getType())) {
+                                Material mat = ADAPTER.getDefaultSoilMaterial(centerBlock.getBiome());
                                 switch (centerBlock.getBiome()) {
-                                case MUSHROOM_FIELD_SHORE:
                                 case MUSHROOM_FIELDS:
                                     mat = MYCELIUM;
                                     break;
-                                case GIANT_SPRUCE_TAIGA:
-                                case GIANT_TREE_TAIGA:
-                                case GIANT_SPRUCE_TAIGA_HILLS:
-                                case GIANT_TREE_TAIGA_HILLS:
+                                case OLD_GROWTH_PINE_TAIGA:
+                                case OLD_GROWTH_SPRUCE_TAIGA:
                                     mat = PODZOL;
                                     break;
                                 default:
