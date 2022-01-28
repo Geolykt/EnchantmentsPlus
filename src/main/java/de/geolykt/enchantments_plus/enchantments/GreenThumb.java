@@ -76,17 +76,6 @@ public class GreenThumb extends CustomEnchantment implements AreaOfEffectable {
                         if (relativeBlock.getType() == DIRT) {
                             if (ADAPTER.airs().contains(relativeBlock.getRelative(0, 1, 0).getType())) {
                                 Material mat = ADAPTER.getDefaultSoilMaterial(centerBlock.getBiome());
-                                switch (centerBlock.getBiome()) {
-                                case MUSHROOM_FIELDS:
-                                    mat = MYCELIUM;
-                                    break;
-                                case OLD_GROWTH_PINE_TAIGA:
-                                case OLD_GROWTH_SPRUCE_TAIGA:
-                                    mat = PODZOL;
-                                    break;
-                                default:
-                                    mat = GRASS_BLOCK;
-                                }
                                 applied = ADAPTER.placeBlock(relativeBlock, player, mat, null);
                             }
                         } else {
