@@ -17,41 +17,6 @@
  */
 package de.geolykt.enchantments_plus;
 
-import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
-import de.geolykt.enchantments_plus.compatibility.RosestackerMergePreventer;
-import de.geolykt.enchantments_plus.compatibility.Stackmob5MergePreventer;
-import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
-import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
-import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.LeightweightPDCGetter;
-import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentDataGetter;
-import de.geolykt.enchantments_plus.compatibility.nativeperm.NativePermissionHooks;
-import de.geolykt.enchantments_plus.enchantments.*;
-import de.geolykt.enchantments_plus.enums.BaseEnchantments;
-import de.geolykt.enchantments_plus.enums.MobstackerPlugin;
-import de.geolykt.enchantments_plus.enums.PierceMode;
-import de.geolykt.enchantments_plus.evt.WatcherEnchant;
-import de.geolykt.enchantments_plus.util.AreaOfEffectable;
-import de.geolykt.enchantments_plus.util.Tool;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
-import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,6 +32,40 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
+import de.geolykt.enchantments_plus.compatibility.RosestackerMergePreventer;
+import de.geolykt.enchantments_plus.compatibility.Stackmob5MergePreventer;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.AdvancedLoreGetter;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.BasicLoreGetter;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.LeightweightPDCGetter;
+import de.geolykt.enchantments_plus.compatibility.enchantmentgetters.PersistentDataGetter;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.NativePermissionHooks;
+import de.geolykt.enchantments_plus.enchantments.*;
+import de.geolykt.enchantments_plus.enums.BaseEnchantments;
+import de.geolykt.enchantments_plus.enums.MobstackerPlugin;
+import de.geolykt.enchantments_plus.enums.PierceMode;
+import de.geolykt.enchantments_plus.evt.WatcherEnchant;
+import de.geolykt.enchantments_plus.util.AreaOfEffectable;
+import de.geolykt.enchantments_plus.util.Tool;
 
 // This class manages individual world configs, loading them each from the config file. It will start the process
 //      to automatically update the config files if they are old
@@ -485,13 +484,25 @@ public class Config {
      * @param defaults  The defaults to return if the key does not exist.
      * @return The conflicting enchantments, or defaults if it is unmapped.
      * @since 4.0.0
+     * @see ConfigKeys#CONFLICTS
      */
     private static @NotNull BaseEnchantments[] getEnchantmentConflicts(@NotNull Map<String, Object> data, @NotNull BaseEnchantments[] defaults) {
         if (data.containsKey(ConfigKeys.CONFLICTS.toString())) {
-            String[] s = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
-            BaseEnchantments[] conflicts = new BaseEnchantments[s.length];
-            for (int i = 0; i < s.length; i++) {
-                conflicts[i] = BaseEnchantments.valueOf(s[i]);
+            Object o = data.get(ConfigKeys.CONFLICTS.toString());
+            String[] enchantments;
+            if (o instanceof String[]) {
+                enchantments = (String[]) o;
+            } else if (o instanceof List<?> list) {
+                enchantments = new String[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    enchantments[i] = list.get(i).toString();
+                }
+            } else {
+                enchantments = data.get(ConfigKeys.CONFLICTS.toString()).toString().split(",");
+            }
+            BaseEnchantments[] conflicts = new BaseEnchantments[enchantments.length];
+            for (int i = 0; i < enchantments.length; i++) {
+                conflicts[i] = BaseEnchantments.valueOf(enchantments[i]);
             }
             return conflicts;
         } else {
@@ -556,22 +567,18 @@ public class Config {
      */
     private static @NotNull Config getWorldConfig(@NotNull World world, Plugin plugin) {
         try {
-            InputStream stream = Enchantments_plus.class.getResourceAsStream("/defaultconfig.yml");
-            File file = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
-            if (!file.exists()) {
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    stream.transferTo(fos);
-                } catch (IOException e) {
-                    try {
-                        stream.close();
-                    } catch (IOException e2) {
-                        new RuntimeException(e).printStackTrace();
+            File configfile = new File(Storage.plugin.getDataFolder(), world.getName() + ".yml");
+            try (InputStream input = plugin.getResource("defaultconfig.yml")) {
+                if (!configfile.exists()) {
+                    try (FileOutputStream output = new FileOutputStream(configfile)) {
+                        input.transferTo(output);
+                    } catch (IOException e) {
+                        throw new IllegalStateException(e);
                     }
-                    throw new RuntimeException(e);
                 }
             }
             YamlConfiguration yamlConfig = new YamlConfiguration();
-            yamlConfig.load(file);
+            yamlConfig.load(configfile);
             int[] version = new int[3];
             try {
                 String[] versionString;
@@ -595,13 +602,13 @@ public class Config {
                 version = new int[]{2, 1, 6};
             }
             // TODO do not hardcode this version
-            if (version[0] != 2 && version[1] != 1 && version[2] != 6) {
+            if (version[0] != 4 && version[1] != 0 && version[2] != 0) {
                 plugin.getLogger().warning("Config file for world " + world.getName() + " with UID " + world.getUID().toString()
-                        + " might be potentially out of date! (does not match the latest revision version 2.1.6)");
+                        + " might be potentially out of date! (does not match the latest revision version 4.0.0)");
             }
             // Init variables
             final int shredDrops;
-            yamlConfig.save(file);
+            yamlConfig.save(configfile);
             // Load Variables
             double enchantRarity = yamlConfig.getDouble("enchant_rarity", 25.0) / 100;
             int maxEnchants = yamlConfig.getInt("max_enchants", 4);
@@ -659,18 +666,13 @@ public class Config {
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                         NoSuchMethodException | SecurityException ex) {
-                    plugin.getLogger().severe("Error parsing config for enchantment '" + cl.getName() + "'. Skipping.");
+                    plugin.getLogger().severe("Error parsing config for enchantment '" + cl.getName() + "'. Skipping. The enchantment may not be available in game.");
                     ex.printStackTrace();
                 }
             }
-            try {
-                stream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             return new Config(enchantments, enchantRarity, maxEnchants, shredDrops, explosionBlockBreak,
                     enchantColor, curseColor, enchantGlow, plugin);
-        } catch (IOException | InvalidConfigurationException ex) {
+        } catch (Exception ex) {
             plugin.getLogger().severe("Error parsing config for world '" + world.getName() + "'.");
             throw new RuntimeException("Error parsing config for a world", ex);
         }
@@ -725,7 +727,8 @@ public class Config {
             CustomEnchantment.Enchantment_Adapter = new BasicLoreGetter();
             break;
         default:
-            Storage.plugin.getLogger().severe("No (or invalid) enchantment gatherer specified, fallback to default.");
+            Storage.plugin.getLogger().severe("No (or invalid) enchantment gatherer specified, fallback to default (advLore).");
+            CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, !isAllowlist);
         }
 
         if (PATCH_CONFIGURATION.getBoolean("pluginCompat.mobstacker", true)) {
@@ -966,7 +969,9 @@ public class Config {
     /**
      * The key to get the conflicts of an enchantment.
      * Unused until v4.0.0
-     * It's value should be a String separated with commas, the individual strings should all represent a {@link BaseEnchantments}
+     * It's value should be a String separated with commas, the individual strings should all represent a {@link BaseEnchantments}.
+     *
+     * <p>Since v4.0.4 it is actually used in the default config and the value can also be a YAML array/list of strings.
      *
      * @since 2.2.2
      */

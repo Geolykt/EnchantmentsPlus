@@ -1,4 +1,4 @@
-ConfigVersion: 2.1.6
+ConfigVersion: 4.0.0
 
 # Probability: (Decimal) (0.0 = no probability, -1.0 = disabled)
 #    Chance of obtaining the enchantment when enchanting
@@ -40,6 +40,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["PIERCE", "SWITCH"]
   - Arborist:
       Probability: 1.0
       Tools: Axe
@@ -69,6 +70,7 @@ enchantments:
       Cooldown: 0
       Power: 1.0
       Effect area modifier: 1.0 # AOE + level
+      Conflicts: "FIRESTORM"
   - Bounce:
       Probability: 1.0
       Tools: Boots
@@ -83,6 +85,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Conflicts: "SPREAD"
   - Combustion:
       Probability: 1.0
       Tools: Chestplate
@@ -111,6 +114,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Conflicts: "SWITCH"
   - Fire:
       Probability: 1.0
       Tools: Pickaxe, Shovel, Axe
@@ -118,6 +122,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["SWITCH", "VARIETY"]
   - Firestorm:
       Probability: 1.0
       Tools: Bow
@@ -126,6 +131,7 @@ enchantments:
       Cooldown: 0
       Power: 1.0
       Effect area modifier: 1.0 # AOE + level
+      Conflicts: ["BLIZZARD"]
   - Fireworks:
       Probability: 1.0
       Tools: Bow
@@ -140,6 +146,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["RAINBOW_SLAM", "GUST"]
   - Frozen Step:
       Probability: 1.0
       Tools: Boots
@@ -148,6 +155,7 @@ enchantments:
       Cooldown: 0
       Power: 1.0
       Effect area modifier: 1.0 # 2 + AOE + level
+      Conflicts: ["NETHER_STEP"]
   - Fuse:
       Probability: 1.0
       Tools: Bow
@@ -191,6 +199,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: "VORTEX"
   - Green Thumb:
       Probability: 1.0
       Tools: Leggings
@@ -206,6 +215,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["RAINBOW_SLAM", "GUST", "FORCE"]
   - Harvest:
       Probability: 1.0
       Tools: Hoe
@@ -235,6 +245,7 @@ enchantments:
       Max Level: 4
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["MEADOR"]
   - Laser:
       Probability: 1.0
       Tools: Pickaxe, Axe
@@ -256,6 +267,7 @@ enchantments:
       Max Level: 2
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["SHORT_CAST"]
   - Lumber:
       Probability: 1.0
       Tools: Axe
@@ -278,6 +290,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["SPEED", "WEIGHT", "JUMP"]
   - Mow:
       Probability: 1.0
       Tools: Shears
@@ -301,6 +314,7 @@ enchantments:
       Cooldown: 0
       Power: 1.0
       Effect area modifier: 1.0 # 2 + AOE + level
+      Conflicts: ["FROZEN_STEP"]
   - Night Vision:
       Probability: 1.0
       Tools: Helmet
@@ -323,6 +337,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["ANTHROPOMORPHISM", "SWITCH", "SHRED", "REVEAL", "SPECTRAL"]
   - Plough:
       Probability: 1.0
       Tools: Hoe
@@ -366,6 +381,7 @@ enchantments:
       Max Level: 4
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["GUST", "FORCE"]
   - Reaper:
       Probability: 1.0
       Tools: Bow, Sword
@@ -381,6 +397,7 @@ enchantments:
       Cooldown: 5000
       Power: 1.0
       Effect area modifier: 1.0 # 2 + AOE + level
+      Conflicts: ["SWITCH", "PIERCE", "SHRED", "SPECTRAL"]
   - Saturation:
       Probability: 1.0
       Tools: Leggings
@@ -395,6 +412,7 @@ enchantments:
       Max Level: 2
       Cooldown: 0
       Power: 1.0
+      Conflicts: "LONG_CAST"
   - Shred:
       Probability: 1.0
       Tools: Pickaxe, Shovel
@@ -403,6 +421,7 @@ enchantments:
       Cooldown: 0
       Power: 1.0
       Effect area modifier: 1.0 # 4.4 + (level * .22) + (AOE * .22)
+      Conflicts: ["SWITCH", "PIERCE", "REVEAL"]
   - Siphon:
       Probability: 1.0
       Tools: Sword, Bow
@@ -425,6 +444,7 @@ enchantments:
       Max Level: 3
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["REVEAL", "PIERCE"]
   - Speed:
       Probability: 1.0
       Tools: Boots
@@ -432,6 +452,7 @@ enchantments:
       Max Level: 4
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["MEADOR", "WEIGHT"]
   - Spikes:
       Probability: 1.0
       Tools: Boots
@@ -447,6 +468,7 @@ enchantments:
       Max Level: 5
       Cooldown: 0
       Power: 1.0
+      Conflicts: "BURST"
   - Stationary:
       Probability: 1.0
       Tools: Bow, Sword
@@ -472,8 +494,9 @@ enchantments:
       Tools: Pickaxe
       Name: Switch
       Max Level: 1
-      Cooldown: 100 # cooldown should be used as otherwise there may be some issues
+      Cooldown: 100 # cooldown should be used as otherwise there may be some performance issues
       Power: 1.0
+      Conflicts: ["SHRED", "ANTHROPOMORPHISM", "FIRE", "EXTRACTION", "PIERCE", "REVEAL"]
   - Terraformer:
       Probability: 1.0
       Tools: Shovel
@@ -509,6 +532,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: "FIRE"
   - Vortex:
       Probability: 1.0
       Tools: Sword, Bow, Axe
@@ -516,6 +540,7 @@ enchantments:
       Max Level: 1
       Cooldown: 0
       Power: 1.0
+      Conflicts: "GRAB"
   - Weight:
       Probability: 1.0
       Tools: Boots
@@ -523,6 +548,7 @@ enchantments:
       Max Level: 4
       Cooldown: 0
       Power: 1.0
+      Conflicts: ["SPEED", "MEADOR"]
 # Admin Enchantments
   - Apocalypse:
       Probability: 0.0
