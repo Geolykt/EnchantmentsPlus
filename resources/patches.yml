@@ -52,9 +52,10 @@ anvil-merger: "2xx" # Can either be 1xx / legacy, 2xx / new or none. Do not use 
 
 # Whether to hide enchantments from the lore when the HIDE_ENCHANTS item flag is present.
 # This requires a NBT-based/PDC-based enchantment gatherer, lore-based gatherers ignore this flag due to obvious reasons. (i. e. they cannot obtain the enchantments otherwise)
-# Default is true, old (pre-4.0.4) behaviour is false.
-# Enabling this automatically disables enchantment glow.
-automaticallyHideEnchantments: true
+# Default is false as otherwise you would get strange behaviour when applying new enchantments on some old items, old (pre-4.0.4) behaviour is false.
+# It default to true for new configs however as they are likely to run on new servers, which will not experience this issue.
+# Enabling this automatically disables enchantment glow (which apparently it not working either way heh).
+automaticallyHideEnchantments: yes
 
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found
   mobstacker: true # This applies to all mobstacker plugins that have an integration coded for them. Manually prevents issues with the reveal enchantment and the shulkers it spawns

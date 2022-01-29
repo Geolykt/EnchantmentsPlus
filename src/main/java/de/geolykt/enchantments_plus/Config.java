@@ -713,7 +713,7 @@ public class Config {
             }
         }
 
-        boolean autohideEnchantments = PATCH_CONFIGURATION.getBoolean("automaticallyHideEnchantments", true);
+        boolean autohideEnchantments = PATCH_CONFIGURATION.getBoolean("automaticallyHideEnchantments", false);
         switch (asNotNull(PATCH_CONFIGURATION.getString("enchantmentGatherer", "advLore"))) {
         case "advLore":
             CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, !isAllowlist);
