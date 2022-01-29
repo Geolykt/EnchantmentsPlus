@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -45,7 +45,7 @@ public class Firestorm extends CustomEnchantment implements AreaOfEffectable {
     }
 
     public Firestorm() {
-        super(BaseEnchantments.FIRE);
+        super(BaseEnchantments.FIRESTORM);
     }
 
     @Override
