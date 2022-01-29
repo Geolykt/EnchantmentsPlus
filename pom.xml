@@ -153,6 +153,33 @@
             </exclusions>
         </dependency>
 
+        <!-- This dependency is located in the geolykt-maven repo. -->
+        <dependency>
+            <groupId>io.github.bycubed7</groupId>
+            <artifactId>claimedcubes</artifactId>
+            <version>1.2.9</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Dependency of ClaimedCubes that we needed to add again in order to link properly -->
+        <dependency>
+            <groupId>io.github.bycubed7</groupId>
+            <artifactId>corecubes</artifactId>
+            <version>3.1.2-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Mobstacker plugins to integrate with -->
         <dependency>
             <groupId>uk.antiperson.stackmob</groupId>

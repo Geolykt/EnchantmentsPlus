@@ -105,6 +105,7 @@ import org.jetbrains.annotations.Nullable;
 import de.geolykt.enchantments_plus.Storage;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.CCHook;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.CPHook;
+import de.geolykt.enchantments_plus.compatibility.nativeperm.ClaimedCubesHook;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.GPHook;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.LogBlockHook;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.NativeLoggingHook;
@@ -153,7 +154,7 @@ public class CompatibilityAdapter {
 
     /**
      * Whether or not the {@link CompatibilityAdapter#nativeBlockPermissionQueryingSystem(Player, Block) native permission query}
-     * should target jburkey01/ClaimChunk, in most cases this is just a boolean that is true if ClaimChunk was found,
+     * should target cjburkey01/ClaimChunk, in most cases this is just a boolean that is true if ClaimChunk was found,
      * false otherwise. <br> Note that this may not represent the actual state due to method not found issues.
      *
      * @since 3.1.3
@@ -1085,6 +1086,9 @@ public class CompatibilityAdapter {
         }
         if (permUseGriefPrevention) {
             permHooks.add(new GPHook());
+        }
+        if (findClass("io.github.bycubed7.claimedcubes.managers.PlotManager")) {
+            permHooks.add(new ClaimedCubesHook());
         }
         if (logUseLB) {
             NativeLoggingHook hook = new LogBlockHook();

@@ -17,39 +17,32 @@
  */
 package de.geolykt.enchantments_plus.compatibility.nativeperm;
 
-import java.util.UUID;
-
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import com.cjburkey.claimchunk.ClaimChunk;
+import io.github.bycubed7.claimedcubes.managers.PlotManager;
+import io.github.bycubed7.claimedcubes.plot.Plot;
+import io.github.bycubed7.claimedcubes.plot.PlotPermission;
 
-public class CCHook implements NativePermissionHook {
-
-    /**
-     * The instance of the ChunkClaim plugin.
-     *
-     * @since 3.1.4
-     */
-    private JavaPlugin ccInstance = null;
+/**
+ * A native permission hook targeting the
+ * <a href="https://github.com/ByCubed7/Minecraft-ClaimedCubes">ClaimedCubes</a> plugin.
+ * Do we think that this hook is useless? Yes. Do we implement it anyways? Hell yeah.
+ *
+ * @since 4.0.4
+ */
+public class ClaimedCubesHook implements NativePermissionHook {
 
     @Override
     public boolean request(@NotNull Player source, @NotNull Block target) {
-        if (ccInstance == null) {
-            if ((ccInstance = JavaPlugin.getPlugin(ClaimChunk.class)) == null) {
-                // Failed to obtain the plugin in a recommended manner, try to get it via deprecated methods.
-                @SuppressWarnings("deprecation")
-                ClaimChunk claimChunkInstance = ClaimChunk.getInstance();
-                ccInstance = claimChunkInstance; // To avoid deprecation warnings while not suppressing these for the whole method
-            }
+        Plot plot = PlotManager.instance.getPlot(target.getChunk());
+        if (plot == null) {
+            return true;
         }
-        UUID owner = ((ClaimChunk)ccInstance).getChunkHandler().getOwner(target.getChunk());
-        if (owner != null && !owner.equals(source.getUniqueId())) {
+        if (plot.hasBan(source.getUniqueId())) {
             return false;
         }
-        return true;
+        return plot.hasPermission(source.getUniqueId(), PlotPermission.PLACE) && plot.hasPermission(source.getUniqueId(), PlotPermission.BREAK);
     }
-
 }
