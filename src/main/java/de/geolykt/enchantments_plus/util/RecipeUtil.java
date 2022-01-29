@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -27,6 +27,7 @@ import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class has the goal of replacing the rigid CompatibilityAdapter with something more Soft-coded.<br>
@@ -38,19 +39,18 @@ public class RecipeUtil {
 
     /**
      * Returns the smelted Itemstack based on a given ItemStack.<br>
-     * Does not account for stack capacity!
+     * Does not account for the amount of the Itemstack.
      */
+    @NotNull
     private static ItemStack getSmeltedVariant(ItemStack input) {
         Iterator<Recipe> recipes = Bukkit.recipeIterator();
         while (recipes.hasNext()) {
-            Recipe recipe = recipes.next();
-            if (recipe instanceof FurnaceRecipe) {
-                RecipeChoice choice = ((FurnaceRecipe) recipe).getInputChoice();
+            if (recipes.next() instanceof FurnaceRecipe recipe) {
+                RecipeChoice choice = recipe.getInputChoice();
                 if (!choice.test(input)) {
                     continue;
                 }
                 ItemStack predone = recipe.getResult();
-                predone.setAmount(predone.getAmount()*input.getAmount());
                 return predone;
             }
         }
@@ -70,13 +70,14 @@ public class RecipeUtil {
      * @param updateCache Whether or not the Cache should be updated
      * @return the smelted Itemstack based on a given ItemStack.
      */
+    @NotNull
     public static ItemStack getSmeltedVariant(ItemStack input, boolean updateCache) {
         ItemStack out;
         if (updateCache) {
             out = getSmeltedVariant(input);
-            smeltCache.put(input.getType(), out);
+            smeltCache.put(input.getType(), out.clone());
         } else {
-            out = smeltCache.getOrDefault(input.getType(), new ItemStack(Material.AIR));
+            out = smeltCache.getOrDefault(input.getType(), new ItemStack(Material.AIR)).clone();
         }
         out.setAmount(out.getAmount()*input.getAmount());
         return out;
@@ -93,6 +94,7 @@ public class RecipeUtil {
      * @param input The input itemstack
      * @return the smelted Itemstack based on a given ItemStack.
      */
+    @NotNull
     public static ItemStack getSmeltedVariantCached(ItemStack input) {
         if (System.currentTimeMillis() - cacheDuration.getOrDefault(input.getType(), Instant.EPOCH.toEpochMilli()) > REFRESH_EVERY) {
             cacheDuration.put(input.getType(), System.currentTimeMillis());
