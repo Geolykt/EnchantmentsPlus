@@ -48,7 +48,14 @@ getterAllow:
   - "BOOK"
 denyPartial: true # whether even partial matches shall be denied (dangerous for some things, such as GRASS (You could also mean GRASS_PATH and GRASS_BLOCK)!), requires slightly longer startup times, but sleaker configuration.
 isAllowlist: true # handles whether the above list is interpretated as an allowlist (if set to true) or used as a denylist (if set to false)
-anvil-merger: "4xx" # Can either be 1xx / legacy, 2xx / new, 4xx / cross or none. Do not use "2xx"/"new" in combination with spigot.
+anvil-merger: "2xx" # Can either be 1xx / legacy, 2xx / new or none. Do not use "2xx"/"new" in combination with spigot.
+
+# Whether to hide enchantments from the lore when the HIDE_ENCHANTS item flag is present.
+# This requires a NBT-based/PDC-based enchantment gatherer, lore-based gatherers ignore this flag due to obvious reasons. (i. e. they cannot obtain the enchantments otherwise)
+# Default is true, old (pre-4.0.4) behaviour is false.
+# Enabling this automatically disables enchantment glow.
+automaticallyHideEnchantments: true
+
 pluginCompat: # Of course the compatibillities will be automatically disabled if the plugin was not found
   mobstacker: true # This applies to all mobstacker plugins that have an integration coded for them. Manually prevents issues with the reveal enchantment and the shulkers it spawns
 # The modes that can be used by the pierce enchantment. It is not recommended to remove the NORMAL entry as it will produce unexpected results. If pierce-modes is empty then all modes are enabled.

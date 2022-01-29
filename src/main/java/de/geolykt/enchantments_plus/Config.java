@@ -713,15 +713,16 @@ public class Config {
             }
         }
 
+        boolean autohideEnchantments = PATCH_CONFIGURATION.getBoolean("automaticallyHideEnchantments", true);
         switch (asNotNull(PATCH_CONFIGURATION.getString("enchantmentGatherer", "advLore"))) {
         case "advLore":
             CustomEnchantment.Enchantment_Adapter = new AdvancedLoreGetter(allowlist, !isAllowlist);
             break;
         case "lwNBT":
-            CustomEnchantment.Enchantment_Adapter = new LeightweightPDCGetter();
+            CustomEnchantment.Enchantment_Adapter = new LeightweightPDCGetter(autohideEnchantments);
             break;
         case "NBT":
-            CustomEnchantment.Enchantment_Adapter = new PersistentDataGetter(allowlist, !isAllowlist);
+            CustomEnchantment.Enchantment_Adapter = new PersistentDataGetter(allowlist, !isAllowlist, autohideEnchantments);
             break;
         case "PR47-lore":
             CustomEnchantment.Enchantment_Adapter = new BasicLoreGetter();

@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -26,6 +26,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -46,6 +47,34 @@ import de.geolykt.enchantments_plus.enums.BaseEnchantments;
  *  @since 2.0.0
  */
 public class LeightweightPDCGetter implements IEnchGatherer {
+
+    // TODO implement some sort of system that syphons outs lore within items with the ItemFlag#HIDE_ENCHANTS flag
+
+    /**
+     * Whether to hide enchantments when {@link ItemFlag#HIDE_ENCHANTS} is present.
+     */
+    private final boolean autohideEnchantments;
+
+    /**
+     * Constructor. Enchantments are hidden whenever {@link ItemFlag#HIDE_ENCHANTS} is present.
+     *
+     * @since 2.0.0
+     * @deprecated This constructor does not set the {@link LeightweightPDCGetter#autohideEnchantments} flag.
+     */
+    @Deprecated(forRemoval = true, since = "4.0.4")
+    public LeightweightPDCGetter() {
+        this(true);
+    }
+
+    /**
+     * Constructor. Whether enchantments are hidden with the hide enchants flag is specified by a parameter.
+     *
+     * @param autohideEnchantments Whether to hide enchantments with {@link ItemFlag#HIDE_ENCHANTS}.
+     * @since 4.0.4
+     */
+    public LeightweightPDCGetter(boolean autohideEnchantments) {
+        this.autohideEnchantments = autohideEnchantments;
+    }
 
     @Override
     public LinkedHashMap<CustomEnchantment, Integer> getEnchants(ItemStack stk, boolean acceptBooks, World world,
@@ -80,11 +109,15 @@ public class LeightweightPDCGetter implements IEnchGatherer {
 
     @Override
     public void setEnchantment(ItemStack stk, CustomEnchantment ench, int level, World world) {
-        if (stk == null)
+        if (stk == null) {
             return;
+        }
         ItemMeta meta = stk.getItemMeta();
-        if (meta == null)
+        if (meta == null) {
             return;
+        }
+
+        boolean hideLore = autohideEnchantments && meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
 
         List<String> lore = new LinkedList<>();
         if (meta.getLore() != null) {
@@ -97,24 +130,25 @@ public class LeightweightPDCGetter implements IEnchGatherer {
 
         if (ench != null && level > 0 && level <= ench.getMaxLevel()) {
             meta.getPersistentDataContainer().set(ench.getKey(), PersistentDataType.SHORT, (short) level);
-            lore.add(ench.getShown(level, world));
-        }
-    
-        //Disenchant item
-        if (ench != null &&
-                level <= 0 &&
-                meta.getPersistentDataContainer().has(ench.getKey(), PersistentDataType.SHORT)) {
+            if (!hideLore) {
+                lore.add(ench.getShown(level, world));
+            }
+        } else if (ench != null && level <= 0
+                && meta.getPersistentDataContainer().has(ench.getKey(), PersistentDataType.SHORT)) {
+            // Remove item enchantment
             meta.getPersistentDataContainer().remove(ench.getKey());
         }
-        
+
         meta.setLore(lore);
         stk.setItemMeta(meta);
-    
+
         if (stk.getType() == Material.BOOK) {
             stk.setType(Material.ENCHANTED_BOOK);
         }
 
-        CustomEnchantment.setGlow(stk, true, Config.get(world));
+        if (!autohideEnchantments) {
+            CustomEnchantment.setGlow(stk, true, Config.get(world));
+        }
     }
 
     @Override
@@ -139,5 +173,4 @@ public class LeightweightPDCGetter implements IEnchGatherer {
         }
         return 0;
     }
-
 }

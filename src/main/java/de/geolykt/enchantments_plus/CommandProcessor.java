@@ -17,6 +17,18 @@
  */
 package de.geolykt.enchantments_plus;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -28,19 +40,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import de.geolykt.enchantments_plus.enchantments.Laser;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.PermissionTypes;
 import de.geolykt.enchantments_plus.util.ColUtil;
 import de.geolykt.enchantments_plus.util.Tool;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.*;
-
-import static org.bukkit.Material.*;
 
 // This class handles all commands used by this plugin
 public class CommandProcessor {
@@ -115,8 +123,8 @@ public class CommandProcessor {
                         }
                     } else if (args.length != 1) {
                         for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
-                            if (ench.getKey().startsWith(args[args.length - 1]) && (stack.getType() == BOOK
-                                    || stack.getType() == ENCHANTED_BOOK
+                            if (ench.getKey().startsWith(args[args.length - 1]) && (stack.getType() == Material.BOOK
+                                    || stack.getType() == Material.ENCHANTED_BOOK
                                     || ench.getValue().validMaterial(Material.matchMaterial(args[2])))) {
                                 results.add(ench.getKey());
                             }
@@ -187,10 +195,10 @@ public class CommandProcessor {
             case 1:
                 for (Map.Entry<String, CustomEnchantment> ench : config.getSimpleMappings()) {
                     if (ench.getKey().startsWith(args[0].toLowerCase(Locale.ENGLISH)) && (
-                            stack.getType() == BOOK
-                            || stack.getType() == ENCHANTED_BOOK 
+                            stack.getType() == Material.BOOK
+                            || stack.getType() == Material.ENCHANTED_BOOK 
                             || ench.getValue().validMaterial(stack.getType())
-                            || stack.getType() == AIR)) {
+                            || stack.getType() == Material.AIR)) {
                         results.add(ench.getKey());
                     }
                 }
@@ -515,6 +523,14 @@ public class CommandProcessor {
                 return setLaserColor(sender, args);
             case "license":
                 return printLicense(sender, args);
+            case "testautohide":
+                if (sender.isOp() && sender instanceof Player player) {
+                    ItemStack stack =  player.getInventory().getItemInMainHand();
+                    ItemMeta meta = stack.getItemMeta();
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    stack.setItemMeta(meta);
+                }
+                return true;
             case "help":
             default:
                 return helpEnchantment(sender, label) || enchant(sender, args);
