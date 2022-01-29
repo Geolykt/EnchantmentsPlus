@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -38,7 +38,7 @@ public class IceAspect extends CustomEnchantment {
     public Builder<IceAspect> defaults() {
         return new Builder<>(IceAspect::new, ID)
             .all("Temporarily freezes the target",
-                    new Tool[]{Tool.SWORD},
+                    new Tool[]{Tool.SWORD, Tool.TRIDENT},
                     "Ice Aspect",
                     2, // MAX LVL
                     Hand.LEFT);

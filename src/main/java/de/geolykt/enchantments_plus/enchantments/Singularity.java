@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -46,7 +46,7 @@ public class Singularity extends CustomEnchantment {
     public Builder<Singularity> defaults() {
         return new Builder<>(Singularity::new, ID)
             .all("Creates a black hole that attracts nearby entities and then discharges them",
-                    new Tool[]{Tool.BOW},
+                    new Tool[]{Tool.BOW, Tool.CROSSBOW},
                     "Singularity",
                     1,
                     Hand.RIGHT);

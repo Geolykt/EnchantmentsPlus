@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -42,7 +42,7 @@ public class Decapitation extends CustomEnchantment {
     public Builder<Decapitation> defaults() {
         return new Builder<>(Decapitation::new, ID)
             .all("Increases the chance for dropping the enemies head on death",
-                    new Tool[]{Tool.SWORD},
+                    new Tool[]{Tool.SWORD, Tool.TRIDENT},
                     "Decapitation",
                     4, // MAX LVL
                     Hand.LEFT);

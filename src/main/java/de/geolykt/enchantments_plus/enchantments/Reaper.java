@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -42,7 +42,7 @@ public class Reaper extends CustomEnchantment {
     public Builder<Reaper> defaults() {
         return new Builder<>(Reaper::new, ID)
             .all("Gives the target temporary wither effect and blindness",
-                    new Tool[]{Tool.SWORD, Tool.BOW},
+                    new Tool[]{Tool.SWORD, Tool.BOW, Tool.CROSSBOW, Tool.TRIDENT},
                     "Reaper",
                     4, // MAX LVL
                     Hand.BOTH);

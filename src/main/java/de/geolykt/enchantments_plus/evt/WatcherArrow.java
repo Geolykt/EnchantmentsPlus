@@ -76,5 +76,4 @@ public class WatcherArrow implements Listener {
             EnchantedArrow.killedEntities.remove(evt.getEntity());
         }
     }
-
 }

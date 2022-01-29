@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -36,7 +36,7 @@ public class QuickShot extends CustomEnchantment {
     public Builder<QuickShot> defaults() {
         return new Builder<>(QuickShot::new, ID)
             .all("Shoots arrows at full speed, instantly",
-                    new Tool[]{Tool.BOW},
+                    new Tool[]{Tool.BOW, Tool.CROSSBOW},
                     "Quick Shot",
                     1, // MAX LVL
                     Hand.RIGHT);

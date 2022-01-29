@@ -411,6 +411,8 @@ public class CompatibilityAdapter {
 
         Tool.SWORD.setMaterials(getMaterialSet(config, "tools.sword"));
         Tool.BOW.setMaterials(getMaterialSet(config, "tools.bow"));
+        Tool.TRIDENT.setMaterials(getMaterialSet(config, "tools.trident"));
+        Tool.CROSSBOW.setMaterials(getMaterialSet(config, "tools.crossbow"));
 
         Tool.ROD.setMaterials(getMaterialSet(config, "tools.rod"));
         Tool.SHEARS.setMaterials(getMaterialSet(config, "tools.shears"));

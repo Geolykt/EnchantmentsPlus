@@ -64,7 +64,7 @@ enchantments:
       Power: 1.0
   - Blizzard:
       Probability: 1.0
-      Tools: Bow
+      Tools: ["Bow", "Crossbow"]
       Name: Blizzard
       Max Level: 3
       Cooldown: 0
@@ -102,7 +102,7 @@ enchantments:
       Power: 1.0
   - Decapitation:
       Probability: 1.0
-      Tools: Sword
+      Tools: Sword, Trident
       Name: Decapitation
       Max Level: 4
       Cooldown: 0
@@ -125,7 +125,7 @@ enchantments:
       Conflicts: ["SWITCH", "VARIETY"]
   - Firestorm:
       Probability: 1.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Firestorm
       Max Level: 3
       Cooldown: 0
@@ -134,7 +134,7 @@ enchantments:
       Conflicts: ["BLIZZARD"]
   - Fireworks:
       Probability: 1.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Fireworks
       Max Level: 4
       Cooldown: 0
@@ -158,7 +158,7 @@ enchantments:
       Conflicts: ["NETHER_STEP"]
   - Fuse:
       Probability: 1.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Fuse
       Max Level: 1
       Cooldown: 0
@@ -233,7 +233,7 @@ enchantments:
       Power: 1.0
   - Ice Aspect:
       Probability: 1.0
-      Tools: Sword
+      Tools: Sword, Trident
       Name: Ice Aspect
       Max Level: 2
       Cooldown: 0
@@ -255,7 +255,7 @@ enchantments:
       Power: 1.0
   - Level:
       Probability: 1.0
-      Tools: Bow, Sword, Pickaxe
+      Tools: Bow, Sword, Pickaxe, Crossbow, Trident
       Name: Level
       Max Level: 3
       Cooldown: 0
@@ -384,7 +384,7 @@ enchantments:
       Conflicts: ["GUST", "FORCE"]
   - Reaper:
       Probability: 1.0
-      Tools: Bow, Sword
+      Tools: Bow, Sword, Crossbow, Trident
       Name: Reaper
       Max Level: 4
       Cooldown: 0
@@ -424,7 +424,7 @@ enchantments:
       Conflicts: ["SWITCH", "PIERCE", "REVEAL"]
   - Siphon:
       Probability: 1.0
-      Tools: Sword, Bow
+      Tools: Sword, Bow, Crossbow, Trident
       Name: Siphon
       Max Level: 4
       Cooldown: 0
@@ -506,14 +506,14 @@ enchantments:
       Power: 1.0
   - Toxic:
       Probability: 1.0
-      Tools: Bow, Sword
+      Tools: Bow, Sword, Crossbow, Trident
       Name: Toxic
       Max Level: 4
       Cooldown: 0
       Power: 1.0
   - Tracer:
       Probability: 1.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Tracer
       Max Level: 4
       Cooldown: 0
@@ -535,7 +535,7 @@ enchantments:
       Conflicts: "FIRE"
   - Vortex:
       Probability: 1.0
-      Tools: Sword, Bow, Axe
+      Tools: Sword, Bow, Axe, Crossbow, Trident
       Name: Vortex
       Max Level: 1
       Cooldown: 0
@@ -552,7 +552,7 @@ enchantments:
 # Admin Enchantments
   - Apocalypse:
       Probability: 0.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Apocalypse
       Max Level: 1
       Cooldown: 0
@@ -566,14 +566,14 @@ enchantments:
       Power: 1.0
   - Missile:
       Probability: 0.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Missile
       Max Level: 1
       Cooldown: 0
       Power: 1.0
   - Singularity:
       Probability: 0.0
-      Tools: Bow
+      Tools: Bow, Crossbow
       Name: Singularity
       Max Level: 1
       Cooldown: 0

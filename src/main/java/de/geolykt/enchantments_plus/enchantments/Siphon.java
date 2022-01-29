@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -40,7 +40,7 @@ public class Siphon extends CustomEnchantment {
     public Builder<Siphon> defaults() {
         return new Builder<>(Siphon::new, ID)
                 .all("Drains the health of the mob that you attack, giving it to you",
-                        new Tool[]{Tool.BOW, Tool.SWORD},
+                        new Tool[]{Tool.BOW, Tool.SWORD, Tool.CROSSBOW, Tool.TRIDENT},
                         "Siphon",
                         4,
                         Hand.BOTH);

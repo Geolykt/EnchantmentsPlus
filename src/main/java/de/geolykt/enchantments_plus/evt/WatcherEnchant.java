@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -380,8 +380,10 @@ public final class WatcherEnchant implements Listener {
     public void onEntityShootBow(EntityShootBowEvent evt) {
         if (evt.getEntity() instanceof Player && evt.getProjectile() instanceof AbstractArrow) {
             Player player = (Player) evt.getEntity();
-            ItemStack usedStack = Utilities.usedStack(player, Tool.BOW.contains(player.getInventory().getItemInMainHand().getType()));
-            CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onEntityShootBow(evt, level, true));
+            Material mainHandItem = player.getInventory().getItemInMainHand().getType();
+            boolean mainHand = Tool.BOW.contains(mainHandItem) || Tool.CROSSBOW.contains(mainHandItem);
+            ItemStack usedStack = Utilities.usedStack(player, mainHand);
+            CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onEntityShootBow(evt, level, mainHand));
         }
     }
 
@@ -413,7 +415,7 @@ public final class WatcherEnchant implements Listener {
                 return;
             }
             Material main = player.getInventory().getItemInMainHand().getType();
-            boolean usedHand = Tool.BOW.contains(main) || Tool.ROD.contains(main);
+            boolean usedHand = Tool.BOW.contains(main) || Tool.ROD.contains(main) || Tool.CROSSBOW.contains(main);
             ItemStack usedStack = Utilities.usedStack(player, usedHand);
             CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onProjectileLaunch(evt, level, usedHand));
         }

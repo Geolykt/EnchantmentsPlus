@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -38,7 +38,7 @@ public class Blizzard extends CustomEnchantment implements AreaOfEffectable {
         return new Builder<>(Blizzard::new, ID)
                 .probability(0)
                 .all("Spawns a blizzard where the arrow strikes freezing nearby entities",
-                    new Tool[]{Tool.BOW},
+                    new Tool[]{Tool.BOW, Tool.CROSSBOW},
                     "Blizzard",
                     3, // MAX LVL
                     Hand.RIGHT,

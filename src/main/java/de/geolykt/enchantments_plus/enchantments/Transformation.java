@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -46,7 +46,7 @@ public class Transformation extends CustomEnchantment {
     public Builder<Transformation> defaults() {
         return new Builder<>(Transformation::new, ID)
                 .all("Occasionally causes the attacked mob to be transformed into its \"similar\" cousin",
-                        new Tool[]{Tool.SWORD},
+                        new Tool[]{Tool.SWORD, Tool.TRIDENT},
                         "Transformation",
                         3,
                         Hand.LEFT);

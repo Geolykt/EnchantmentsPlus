@@ -37,7 +37,7 @@ public class Firestorm extends CustomEnchantment implements AreaOfEffectable {
     public Builder<Firestorm> defaults() {
         return new Builder<>(Firestorm::new, ID)
             .all("Spawns a firestorm where the arrow strikes burning nearby entities",
-                    new Tool[]{Tool.BOW},
+                    new Tool[]{Tool.BOW, Tool.CROSSBOW},
                     "Firestorm",
                     3, // MAX LVL
                     Hand.RIGHT,

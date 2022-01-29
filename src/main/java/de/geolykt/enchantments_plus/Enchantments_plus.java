@@ -17,6 +17,10 @@
  */
 package de.geolykt.enchantments_plus;
 
+import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
+
+import java.io.File;
+
 //For Bukkit & Spigot 1.17.X + 1.18.X
 import org.apache.commons.lang.time.StopWatch;
 import org.bstats.bukkit.Metrics;
@@ -41,10 +45,6 @@ import de.geolykt.enchantments_plus.evt.NewAnvilMerger;
 import de.geolykt.enchantments_plus.evt.Watcher;
 import de.geolykt.enchantments_plus.evt.WatcherArrow;
 import de.geolykt.enchantments_plus.evt.WatcherEnchant;
-
-import java.io.File;
-
-import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 
 public class Enchantments_plus extends JavaPlugin {
 

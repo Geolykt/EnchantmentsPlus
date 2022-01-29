@@ -2,10 +2,10 @@
 # This also allows for some crude compatibillity between (Minecraft) versions without having to upgrade / downgrade the Plugin.
 # Please note that the file is more meant to be futureproof than pastproof
 
-# default configurations as of Version 4.0.0 of the Enchantments+ Plugin, meant for use for minecraft 1.17
+# default configurations as of Version 4.0.4 of the Enchantments+ Plugin, meant for use for minecraft 1.17
 # it will NOT work well in previous versions of the game, albeit it can be modified for it
 
-version: "2" # currently unused and meant for future use. Version 2 is the default as of v4.0.0
+version: "3" # currently unused and meant for future use. Version 2 is the default as of v4.0.4
 target: "17"
 
 grownCrops:
@@ -89,7 +89,7 @@ unbreakable:
 laserDenylist:
   # blocks that shouldn't be broken by the laser enchantment
   - "OBSIDIAN"
-  - "CRYING_OBSIDIAN" # 1.16 and beyond
+  - "CRYING_OBSIDIAN"
 terraformerAllowlist:
   # Designated blocks that can be placed by the Terraformer enchantment. Since we are not to crazy this list doesn't contains things that are in Tags
   - "WHITE_TERRACOTTA"
@@ -163,7 +163,7 @@ terraformerAllowlist:
   - "RED_SANDSTONE"
   - "GLOWSTONE"
   - "NETHER_QUARTZ_ORE"
-  - "ANCIENT_DEBRIS" # 1.16 and beyond
+  - "ANCIENT_DEBRIS"
   # Warning: tags have to be lowercase
   - "#wool"
   - "#logs"
@@ -187,7 +187,7 @@ shredAllowlistPickaxes:
   - "RED_SANDSTONE"
   - "GLOWSTONE"
   - "NETHER_QUARTZ_ORE"
-  - "ANCIENT_DEBRIS" # 1.16 and beyond
+  - "ANCIENT_DEBRIS"
   - "WHITE_TERRACOTTA"
   - "ORANGE_TERRACOTTA"
   - "MAGENTA_TERRACOTTA"
@@ -231,8 +231,8 @@ spectralConversions:
   - "ICE:PACKED_ICE" # ice-like conversions
   - "PACKED_ICE:BLUE_ICE"
   - "BLUE_ICE:ICE"
-  - "WARPED_NYLIUM:CRIMSON_NYLIUM" # Nylium  / 1.16 and beyond
-  - "CRIMSON_NYLIUM:WARPED_NYLIUM"  # 1.16 and beyond
+  - "WARPED_NYLIUM:CRIMSON_NYLIUM" # Nylium
+  - "CRIMSON_NYLIUM:WARPED_NYLIUM"
   - "SAND:RED_SAND" # sand
   - "RED_SAND:SAND"
   - "OAK_LOG:STRIPPED_OAK_LOG" # Log - Stripped Log conversions
@@ -245,10 +245,10 @@ spectralConversions:
   - "STRIPPED_JUNGLE_LOG:JUNGLE_LOG"
   - "SPRUCE_LOG:STRIPPED_SPRUCE_LOG"
   - "STRIPPED_SPRUCE_LOG:SPRUCE_LOG"
-  - "WARPED_STEM:STRIPPED_WARPED_STEM" # 1.16 and beyond
-  - "STRIPPED_WARPED_STEM:WARPED_STEM" # 1.16 and beyond
-  - "CRIMSON_STEM:STRIPPED_CRIMSON_STEM" # 1.16 and beyond
-  - "STRIPPED_CRIMSON_STEM:CRIMSON_STEM" # 1.16 and beyond
+  - "WARPED_STEM:STRIPPED_WARPED_STEM"
+  - "STRIPPED_WARPED_STEM:WARPED_STEM"
+  - "CRIMSON_STEM:STRIPPED_CRIMSON_STEM"
+  - "STRIPPED_CRIMSON_STEM:CRIMSON_STEM"
   - "DARK_OAK_LOG:STRIPPED_DARK_OAK_LOG"
   - "STRIPPED_DARK_OAK_LOG:DARK_OAK_LOG"
   - "ACACIA_LEAVES:BIRCH_LEAVES" # Cycle between leaves
@@ -258,13 +258,13 @@ spectralConversions:
   - "OAK_LEAVES:SPRUCE_LEAVES"
   - "SPRUCE_LEAVES:ACACIA_LEAVES"
   - "ACACIA_PLANKS:BIRCH_PLANKS" # Cycle between planks
-  - "BIRCH_PLANKS:CRIMSON_PLANKS" # 1.16 and beyond
+  - "BIRCH_PLANKS:CRIMSON_PLANKS"
   - "CRIMSON_PLANKS:DARK_OAK_PLANKS" # 1.16 and beyond
   - "DARK_OAK_PLANKS:JUNGLE_PLANKS"
   - "JUNGLE_PLANKS:OAK_PLANKS"
   - "OAK_PLANKS:SPRUCE_PLANKS"
-  - "SPRUCE_PLANKS:WARPED_PLANKS" # 1.16 and beyond
-  - "WARPED_PLANKS:ACACIA_PLANKS" # 1.16 and beyond
+  - "SPRUCE_PLANKS:WARPED_PLANKS"
+  - "WARPED_PLANKS:ACACIA_PLANKS"
   - "ACACIA_SAPLING:BIRCH_SAPLING" # Cycle between Saplings
   - "BIRCH_SAPLING:DARK_OAK_SAPLING"
   - "DARK_OAK_SAPLING:JUNGLE_SAPLING"
@@ -295,103 +295,105 @@ tools:
     - "IRON_AXE"
     - "GOLDEN_AXE"
     - "DIAMOND_AXE"
-    - "NETHERITE_AXE" # 1.16 and beyond
+    - "NETHERITE_AXE"
     - "WOODEN_PICKAXE"
     - "STONE_PICKAXE"
     - "IRON_PICKAXE"
     - "GOLDEN_PICKAXE"
     - "DIAMOND_PICKAXE"
-    - "NETHERITE_PICKAXE" # 1.16 and beyond
+    - "NETHERITE_PICKAXE"
     - "WOODEN_SHOVEL"
     - "STONE_SHOVEL"
     - "IRON_SHOVEL"
     - "GOLDEN_SHOVEL"
     - "DIAMOND_SHOVEL"
-    - "NETHERITE_SHOVEL" # 1.16 and beyond
+    - "NETHERITE_SHOVEL"
     - "WOODEN_HOE"
     - "STONE_HOE"
     - "IRON_HOE"
     - "GOLDEN_HOE"
     - "DIAMOND_HOE"
-    - "NETHERITE_HOE" # 1.16 and beyond
+    - "NETHERITE_HOE"
     - "LEATHER_HELMET"
     - "CHAINMAIL_HELMET"
     - "IRON_HELMET"
     - "GOLDEN_HELMET"
     - "DIAMOND_HELMET"
-    - "NETHERITE_HELMET" # 1.16 and beyond
+    - "NETHERITE_HELMET"
     - "LEATHER_CHESTPLATE"
     - "CHAINMAIL_CHESTPLATE"
     - "IRON_CHESTPLATE"
     - "GOLDEN_CHESTPLATE"
     - "DIAMOND_CHESTPLATE"
-    - "NETHERITE_CHESTPLATE" # 1.16 and beyond
+    - "NETHERITE_CHESTPLATE"
     - "ELYTRA"
     - "LEATHER_LEGGINGS"
     - "CHAINMAIL_LEGGINGS"
     - "IRON_LEGGINGS"
     - "GOLDEN_LEGGINGS"
     - "DIAMOND_LEGGINGS"
-    - "NETHERITE_LEGGINGS" # 1.16 and beyond
+    - "NETHERITE_LEGGINGS"
     - "LEATHER_BOOTS"
     - "CHAINMAIL_BOOTS"
     - "IRON_BOOTS"
     - "GOLDEN_BOOTS"
     - "DIAMOND_BOOTS"
-    - "NETHERITE_BOOTS" # 1.16 and beyond
+    - "NETHERITE_BOOTS"
     - "WOODEN_SWORD"
     - "STONE_SWORD"
     - "IRON_SWORD"
     - "GOLDEN_SWORD"
     - "DIAMOND_SWORD"
-    - "NETHERITE_SWORD" # 1.16 and beyond
+    - "NETHERITE_SWORD"
     - "FISHING_ROD"
     - "BOW"
     - "SHEARS"
     - "FLINT_AND_STEEL"
     - "ENCHANTED_BOOK"
+    - "TRIDENT"
+    - "CROSSBOW"
   axe:
     - "WOODEN_AXE"
     - "STONE_AXE"
     - "IRON_AXE"
     - "GOLDEN_AXE"
     - "DIAMOND_AXE"
-    - "NETHERITE_AXE" # 1.16 and beyond
+    - "NETHERITE_AXE"
   pickaxe:
     - "WOODEN_PICKAXE"
     - "STONE_PICKAXE"
     - "IRON_PICKAXE"
     - "GOLDEN_PICKAXE"
     - "DIAMOND_PICKAXE"
-    - "NETHERITE_PICKAXE" # 1.16 and beyond
+    - "NETHERITE_PICKAXE"
   shovel:
     - "WOODEN_SHOVEL"
     - "STONE_SHOVEL"
     - "IRON_SHOVEL"
     - "GOLDEN_SHOVEL"
     - "DIAMOND_SHOVEL"
-    - "NETHERITE_SHOVEL" # 1.16 and beyond
+    - "NETHERITE_SHOVEL"
   hoe:
     - "WOODEN_HOE"
     - "STONE_HOE"
     - "IRON_HOE"
     - "GOLDEN_HOE"
     - "DIAMOND_HOE"
-    - "NETHERITE_HOE" # 1.16 and beyond
+    - "NETHERITE_HOE"
   helmet:
     - "LEATHER_HELMET"
     - "CHAINMAIL_HELMET"
     - "IRON_HELMET"
     - "GOLDEN_HELMET"
     - "DIAMOND_HELMET"
-    - "NETHERITE_HELMET" # 1.16 and beyond
+    - "NETHERITE_HELMET"
   chestplate:
     - "LEATHER_CHESTPLATE"
     - "CHAINMAIL_CHESTPLATE"
     - "IRON_CHESTPLATE"
     - "GOLDEN_CHESTPLATE"
     - "DIAMOND_CHESTPLATE"
-    - "NETHERITE_CHESTPLATE" # 1.16 and beyond
+    - "NETHERITE_CHESTPLATE"
   wings:
     - "ELYTRA"
   leggings:
@@ -400,27 +402,31 @@ tools:
     - "IRON_LEGGINGS"
     - "GOLDEN_LEGGINGS"
     - "DIAMOND_LEGGINGS"
-    - "NETHERITE_LEGGINGS" # 1.16 and beyond
+    - "NETHERITE_LEGGINGS"
   boots:
     - "LEATHER_BOOTS"
     - "CHAINMAIL_BOOTS"
     - "IRON_BOOTS"
     - "GOLDEN_BOOTS"
     - "DIAMOND_BOOTS"
-    - "NETHERITE_BOOTS" # 1.16 and beyond
+    - "NETHERITE_BOOTS"
   sword:
     - "WOODEN_SWORD"
     - "STONE_SWORD"
     - "IRON_SWORD"
     - "GOLDEN_SWORD"
     - "DIAMOND_SWORD"
-    - "NETHERITE_SWORD" # 1.16 and beyond
+    - "NETHERITE_SWORD"
   rod:
     - "FISHING_ROD"
   bow:
     - "BOW"
   shears:
     - "SHEARS"
+  crossbow:
+    - "CROSSBOW"
+  trident:
+    - "TRIDENT"
 transformation:
   # this basically maps the entity pairs used by the transformation enchantment. Syntax is "<source_entity_type>:<target_entity_type>". 
   # They should be circulatory for the best gameplay experience. 

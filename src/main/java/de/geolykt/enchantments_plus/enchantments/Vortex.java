@@ -46,7 +46,7 @@ public class Vortex extends CustomEnchantment {
     public Builder<Vortex> defaults() {
         return new Builder<>(Vortex::new, ID)
                 .all("Teleports mob loot and XP directly to the player",
-                        new Tool[]{Tool.BOW, Tool.SWORD, Tool.AXE},
+                        new Tool[]{Tool.BOW, Tool.SWORD, Tool.AXE, Tool.TRIDENT, Tool.CROSSBOW},
                         "Vortex",
                         1,
                         Hand.BOTH,

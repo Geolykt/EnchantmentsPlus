@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -44,6 +44,8 @@ public final class Tool {
 
     public static final Tool BOW = new Tool();
     public static final Tool SWORD = new Tool();
+    public static final Tool TRIDENT = new Tool();
+    public static final Tool CROSSBOW = new Tool();
 
     public static final Tool ROD = new Tool();
     public static final Tool SHEARS = new Tool();
@@ -54,10 +56,12 @@ public final class Tool {
      * Array of all existing tools.
      *
      * @since 3.1.5
+     * @deprecated The visibility of this field will be reduced in a future version. Use {@link #values()} instead.
      */
+    @Deprecated(forRemoval = true, since = "4.0.4")
     public static Tool[] values = new Tool[] {
             AXE, HOE, PICKAXE, SHOVEL, HELMET, CHESTPLATE, WINGS, LEGGINGS,
-            BOOTS, BOW, SWORD, ROD, SHEARS, ALL
+            BOOTS, BOW, SWORD, TRIDENT, CROSSBOW, ROD, SHEARS, ALL
     };
 
     private EnumSet<Material> materials;
@@ -96,6 +100,10 @@ public final class Tool {
             return BOW;
         case "sword":
             return SWORD;
+        case "trident":
+            return TRIDENT;
+        case "crossbow":
+            return CROSSBOW;
         case "rod":
             return ROD;
         case "shears":

@@ -551,8 +551,14 @@ public class Config {
      */
     private static Tool[] getTools(@NotNull Map<String, Object> data) {
         Set<Tool> materials = new HashSet<>();
-        for (String s : ((String) data.get(ConfigKeys.TOOLS.toString())).split(", |\\,")) {
-            materials.add(Tool.fromString(s));
+        if (data.get(ConfigKeys.TOOLS.toString()) instanceof String line) {
+            for (String s : line.split(", |\\,")) {
+                materials.add(Tool.fromString(s));
+            }
+        } else if (data.get(ConfigKeys.TOOLS.toString()) instanceof List<?> list) {
+            for (Object o : list) {
+                materials.add(Tool.fromString(o.toString()));
+            }
         }
         return materials.toArray(new Tool[0]);
     }
