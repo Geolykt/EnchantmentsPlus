@@ -80,7 +80,7 @@ public class Tracer extends CustomEnchantment {
         if (!source.getLocation().getWorld().equals(shooterEntity.getLocation().getWorld())) {
             return null; // the shooter switched worlds in the meantime
         }
-        if (source.getLocation().distanceSquared(shooterEntity.getLocation()) > 225) {
+        if (source.getLocation().distanceSquared(shooterEntity.getLocation()) < 225) {
             return null; // Arrow has not yet travelled far enough
         }
         closestEntity = null; // in case it was not null, but otherwise invalid
