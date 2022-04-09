@@ -92,15 +92,13 @@ public class Fire extends CustomEnchantment {
         Collection<ItemStack> original = evt.getBlock().getDrops(hand, evt.getPlayer());
         List<ItemStack> newDrops = new ArrayList<>();
         for (ItemStack is: original) {
-            if (is.getType().isAir()) {
+            if (is.getType().isAir() || is.getAmount() <= 0) {
                 continue;
             }
             ItemStack ns = RecipeUtil.getSmeltedVariantCached(is);
-            if (ns.getType().isAir()) {
-                continue;
-            }
             int oldAmount = ns.getAmount();
-            if (ns.getMaxStackSize() == 0) { // Probably air or other cursed items
+            if (ns.getMaxStackSize() == -1) {
+                newDrops.add(ns);
                 continue;
             }
             int amount = ns.getAmount();
@@ -114,8 +112,10 @@ public class Fire extends CustomEnchantment {
         }
         if (newDrops.size() != 0) {
             CompatibilityAdapter.display(Utilities.getCenter(evt.getBlock()), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
-            for (ItemStack is: newDrops) {
-                evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(), is);
+            for (ItemStack is : newDrops) {
+                if (is != null && !is.getType().isAir() && is.getAmount() > 0) {
+                    evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(), is);
+                }
             }
             Block affectedBlock = evt.getBlock();
             cancelledItemDrops.add(affectedBlock);
