@@ -68,7 +68,8 @@ public class Tracer extends CustomEnchantment {
      */
     public static @Nullable LivingEntity getArrowTarget(@NotNull AbstractArrow source) {
         LivingEntity closestEntity = ARROW_TARGETS.get(source);
-        if (closestEntity != null && closestEntity.isValid() && !closestEntity.isDead()) {
+        if (closestEntity != null && closestEntity.isValid() && !closestEntity.isDead()
+                && closestEntity.getWorld() == source.getWorld()) {
             // isValid and !isDead should do the same, but better be safe than sorry
             return closestEntity;
         }
