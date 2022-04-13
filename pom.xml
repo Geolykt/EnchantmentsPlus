@@ -237,6 +237,20 @@
             </exclusions>
         </dependency>
 
+        <!-- Slimefun integration -->
+        <dependency>
+            <groupId>com.github.slimefun</groupId>
+            <artifactId>Slimefun</artifactId>
+            <version>4.9-UNOFFICIAL</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
     </dependencies>
 

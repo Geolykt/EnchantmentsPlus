@@ -140,6 +140,7 @@ public class CompatibilityAdapter {
      *
      * @since 3.1.3
      */
+    @NotNull
     private final Plugin plugin;
 
     /**
@@ -174,7 +175,7 @@ public class CompatibilityAdapter {
      * Constructs the class and starts a Task on the next tick to initialise it further (scans methods from other plugins or spigot)
      * @param plugin The plugin that is used to initialise the task.
      */
-    public CompatibilityAdapter(Plugin plugin) {
+    public CompatibilityAdapter(@NotNull Plugin plugin) {
         permUseGriefPrevention = findClass("me.ryanhamshire.GriefPrevention.GriefPrevention");
         permUseClaimChunk = findClass("com.cjburkey.claimchunk.chunk.ChunkHandler");
         permUseTowny = findClass("com.palmergames.bukkit.towny.utils.PlayerCacheUtil");
@@ -1073,6 +1074,14 @@ public class CompatibilityAdapter {
     private void scanMethods() {
         boolean logUseLB = findClass("de.diddiz.LogBlock.LogBlock");
         boolean logUseCP = findClass("net.coreprotect.CoreProtectAPI");
+        boolean slimefunIntegration = false;
+        if (findClass("io.github.thebusybiscuit.slimefun4.api.SlimefunAddon")) {
+            if (findClass("io.github.thebusybiscuit.slimefun4.api.events.AutoDisenchanterComputeOutputEvent")) {
+                slimefunIntegration = true;
+            } else {
+                plugin.getLogger().warning("Slimefun was detected but the compatibillity layer could not be initialized because your version of slimefun is outdated.");
+            }
+        }
         ArrayList<NativePermissionHook> permHooks = new ArrayList<>();
         ArrayList<NativeLoggingHook> logHooks = new ArrayList<>();
         if (permUseTowny) {
@@ -1099,6 +1108,9 @@ public class CompatibilityAdapter {
             NativeLoggingHook hook = new CPHook();
             hook.onEnable(plugin.getLogger());
             logHooks.add(hook);
+        }
+        if (slimefunIntegration) {
+            plugin.getServer().getPluginManager().registerEvents(new SlimefunCompatibillityListener(plugin), plugin);
         }
         // TODO Other plugins (factions, claim plugins, etc...) - Just create an issue to create priority if you need one in specific
         nativePerm = new NativePermissionHooks(permHooks, logHooks);
