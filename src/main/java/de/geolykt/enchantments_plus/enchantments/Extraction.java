@@ -1,7 +1,7 @@
 /*
  * This file is part of EnchantmentsPlus, a bukkit plugin.
  * Copyright (c) 2015 - 2020 Zedly and Zenchantments contributors.
- * Copyright (c) 2020 - 2021 Geolykt and EnchantmentsPlus contributors
+ * Copyright (c) 2020 - 2022 Geolykt and EnchantmentsPlus contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by 
@@ -17,7 +17,15 @@
  */
 package de.geolykt.enchantments_plus.enchantments;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,12 +34,9 @@ import de.geolykt.enchantments_plus.CustomEnchantment;
 import de.geolykt.enchantments_plus.compatibility.CompatibilityAdapter;
 import de.geolykt.enchantments_plus.enums.BaseEnchantments;
 import de.geolykt.enchantments_plus.enums.Hand;
+import de.geolykt.enchantments_plus.util.RecipeUtil;
 import de.geolykt.enchantments_plus.util.Tool;
-
-import static org.bukkit.Material.*;
-import static org.bukkit.entity.EntityType.EXPERIENCE_ORB;
-
-import java.util.concurrent.ThreadLocalRandom;
+import de.geolykt.enchantments_plus.util.Utilities;
 
 public class Extraction extends CustomEnchantment {
 
@@ -52,22 +57,54 @@ public class Extraction extends CustomEnchantment {
         super(BaseEnchantments.EXTRACTION);
     }
 
+    // TODO make use of BlockDropItemEvent instead
     @Override
     public boolean onBlockBreak(BlockBreakEvent evt, final int level, boolean usedHand) {
-        if (evt.getBlock().getType() == GOLD_ORE || evt.getBlock().getType() == IRON_ORE) {
+        if (ADAPTER.ores().contains(evt.getBlock().getType())) {
             CompatibilityAdapter.damageTool(evt.getPlayer(), 1, usedHand);
-            for (int x = 0; x < ThreadLocalRandom.current().nextInt((int) Math.round(power * level + 1)) + 1; x++) {
-                evt.getBlock().getWorld().dropItemNaturally(evt.getBlock().getLocation(),
-                    new ItemStack(evt.getBlock().getType() == GOLD_ORE ?
-                        GOLD_INGOT : IRON_INGOT));
+
+            List<ItemStack> newDrops = new ArrayList<>();
+            boolean same = true;
+            for (ItemStack is: evt.getBlock().getDrops(Utilities.usedStack(evt.getPlayer(), usedHand))) {
+                if (is.getType().isAir() || is.getAmount() <= 0) {
+                    continue;
+                }
+                ItemStack ns = RecipeUtil.getSmeltedVariantCached(is);
+                if (ns.getType() != is.getType()) {
+                    same = false;
+                }
+                int oldAmount = ns.getAmount();
+                if (ns.getMaxStackSize() == -1) {
+                    newDrops.add(ns);
+                    continue;
+                }
+                if (ns.getMaxStackSize() < 1) {
+                    continue; // Would lead to an OOM -> to be discarded
+                }
+                int amount = ns.getAmount();
+                while (amount >= ns.getMaxStackSize()) {
+                    ns.setAmount(ns.getMaxStackSize());
+                    newDrops.add(ns);
+                    amount -= ns.getMaxStackSize();
+                }
+                ns.setAmount(oldAmount % ns.getMaxStackSize());
+                newDrops.add(ns);
             }
-            ExperienceOrb o = (ExperienceOrb) evt.getBlock().getWorld()
-                                                 .spawnEntity(evt.getBlock().getLocation(), EXPERIENCE_ORB);
-            o.setExperience(
-                evt.getBlock().getType() == IRON_ORE ? ThreadLocalRandom.current().nextInt(5) + 1 : ThreadLocalRandom.current().nextInt(5) + 3);
-            evt.getBlock().setType(AIR);
-            CompatibilityAdapter.display(evt.getBlock().getLocation(), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
-            return true;
+            if (!same && newDrops.size() != 0) {
+                CompatibilityAdapter.display(Utilities.getCenter(evt.getBlock()), Particle.FLAME, 10, .1f, .5f, .5f, .5f);
+                Location location = evt.getBlock().getLocation();
+                World world = location.getWorld();
+                for (ItemStack is : newDrops) {
+                    if (is != null && !is.getType().isAir() && is.getAmount() > 0) {
+                        world.dropItemNaturally(location, is);
+                    }
+                }
+                evt.getBlock().setType(Material.AIR);
+                ExperienceOrb o = (ExperienceOrb) world.spawnEntity(location, EntityType.EXPERIENCE_ORB);
+                // TODO scale with recipe XP
+                o.setExperience(ThreadLocalRandom.current().nextInt(5) + 1 + evt.getExpToDrop());
+                return true;
+            }
         }
         return false;
     }

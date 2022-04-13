@@ -25,10 +25,11 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
-        <repository>
-            <id>rosewood-repo</id> <!-- For RoseStacker -->
+        <!-- For RoseStacker (Repository partially down as of 13/04/2022) -->
+        <!--<repository>
+            <id>rosewood-repo</id>
             <url>https://repo.rosewooddev.io/repository/public/</url>
-        </repository>
+        </repository>-->
         <repository>
             <id>md_5-repo</id> <!-- For LogBlock -->
             <url>https://repo.md-5.net/content/repositories/public/</url>
