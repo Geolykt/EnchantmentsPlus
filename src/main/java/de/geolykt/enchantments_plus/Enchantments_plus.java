@@ -22,7 +22,6 @@ import static org.bukkit.potion.PotionEffectType.FAST_DIGGING;
 import java.io.File;
 
 //For Bukkit & Spigot 1.17.X + 1.18.X
-import org.apache.commons.lang.time.StopWatch;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -110,8 +109,7 @@ public class Enchantments_plus extends JavaPlugin {
     @Override
     public void onEnable() {
         Storage.plugin = this;
-        StopWatch w = new StopWatch();
-        w.start();
+        long startupTime = System.currentTimeMillis();
 
         Storage.version = this.getDescription().getVersion();
         loadConfigs();
@@ -164,8 +162,7 @@ public class Enchantments_plus extends JavaPlugin {
         metric.addCustomChart(new SimplePie("plugin_brand", () -> Storage.BRAND));
         metric.addCustomChart(new SimplePie("enchantment_getter", () -> CustomEnchantment.Enchantment_Adapter.getClass().getSimpleName()));
 
-        w.stop();
-        getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + w.getTime() + "ms");
+        getLogger().info(Storage.BRAND + " v" + Storage.version + " started up in " + (System.currentTimeMillis() - startupTime) + "ms");
     }
 
     @Override

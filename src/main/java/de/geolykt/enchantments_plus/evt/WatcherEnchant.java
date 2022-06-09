@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -457,8 +456,12 @@ public final class WatcherEnchant implements Listener {
     public void onCombust(EntityCombustByEntityEvent evt) {
         if (evt.getEntity() instanceof Player) {
             Player player = (Player) evt.getEntity();
-            for (ItemStack usedStack : (ItemStack[]) ArrayUtils.addAll(player.getInventory().getArmorContents(),
-                    player.getInventory().getContents())) {
+
+            // FIXME hold on, this seems wrong (getArmorContents should be included in getContents)
+            for (ItemStack usedStack : player.getInventory().getArmorContents()) {
+                CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onCombust(evt, level, true));
+            }
+            for (ItemStack usedStack : player.getInventory().getContents()) {
                 CustomEnchantment.applyForTool(player, usedStack, (ench, level) -> ench.onCombust(evt, level, true));
             }
         }
