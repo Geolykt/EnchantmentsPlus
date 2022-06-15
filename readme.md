@@ -1,4 +1,17 @@
-Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Email](mail-to:admin@geolykt.de), [Spigotmc conversations](https://www.spigotmc.org/conversations/add), [Internet Relay Chat](https://kiwiirc.com/nextclient/irc.spi.gt/#enchantmentsplus) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). Issues however should be reported here on Github so forkers can profit from them being public, but it's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed, so in the end it doesn't really matter where they are reported to.
+## Product End-of-life notice
+
+Development has stalled and is nearing it's end. Please refrain from using this plugin as it will recieve **no official update releases**. Bugs might get fixed if they get reported, but one needs to build from source to receive these updates.
+
+While I have fun developing this plugin, I particularly hate testing it. There used to be a time where this was no issues as I played on a server with this plugin installed, but these times are now long over. So after many months, I have come to the conclusion that this state will go nowhere.
+
+In the short term, nothing will happen - you will still be able to recieve the newest stuff if you build from source.
+In the long term you'd need to find some maniac that will fork this plugin just as I forked this plugin from Zenchantments.
+
+Goodbye!
+
+---
+
+Got a question? Need help or want to discuss changes? Then feel free to contact me either via [Spigotmc conversations](https://www.spigotmc.org/conversations/add), [Internet Relay Chat](https://kiwiirc.com/nextclient/irc.spi.gt/#enchantmentsplus) or Github [Issues](https://github.com/Geolykt/EnchantmentsPlus/issues) and [Discussions](https://github.com/Geolykt/EnchantmentsPlus/discussions). Issues however should be reported here on Github so forkers can profit from them being public, but it's the best if at least someone (me in most cases) knows exploits or bugs so they can be fixed, so in the end it doesn't really matter where they are reported to.
 
 # Enchantments+
 
