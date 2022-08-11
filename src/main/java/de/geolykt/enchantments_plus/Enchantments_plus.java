@@ -36,6 +36,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.geolykt.enchantments_plus.arrows.EnchantedArrow;
+import de.geolykt.enchantments_plus.compatibility.hackloader.Hackloader;
+import de.geolykt.enchantments_plus.compatibility.hackloader.HackloaderInjectionException;
 import de.geolykt.enchantments_plus.compatibility.nativeperm.WGHook;
 import de.geolykt.enchantments_plus.enchantments.*;
 import de.geolykt.enchantments_plus.evt.AnvilMerge;
@@ -208,6 +210,14 @@ public class Enchantments_plus extends JavaPlugin {
             break;
         case "none":
             return;
+        }
+    }
+
+    static {
+        try {
+            Hackloader.injectHackloader();
+        } catch (HackloaderInjectionException e) {
+            e.printStackTrace();
         }
     }
 }

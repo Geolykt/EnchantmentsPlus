@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <version>1.19.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
@@ -186,6 +186,20 @@
             </exclusions>
         </dependency>
 
+        <!-- Slimefun, for the slimefun compatibility integration -->
+        <dependency>
+            <groupId>com.github.Slimefun</groupId>
+            <artifactId>Slimefun4</artifactId>
+            <version>RC-32</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Mobstacker plugins to integrate with -->
         <dependency>
             <groupId>uk.antiperson.stackmob</groupId>
@@ -236,6 +250,20 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- Time to go nuclear -->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>9.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-tree</artifactId>
+            <version>9.3</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
@@ -289,6 +317,10 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>de.geolykt.enchantments_plus.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.objectweb.asm</pattern>
+                            <shadedPattern>de.geolykt.enchantments_plus.compatibility.hackloader.asm</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
