@@ -479,7 +479,8 @@ public abstract class CustomEnchantment implements Comparable<CustomEnchantment>
 
     /**
      * Obtains the key of the enchantment
-     * @return
+     *
+     * @return The name of the enchantment as an {@link NamespacedKey}.
      */
     public NamespacedKey getKey() {
         return key;

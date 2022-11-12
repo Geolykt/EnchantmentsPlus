@@ -25,11 +25,11 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
-        <!-- For RoseStacker (Repository partially down as of 13/04/2022) -->
-        <!--<repository>
+        <!-- For RoseStacker -->
+        <repository>
             <id>rosewood-repo</id>
             <url>https://repo.rosewooddev.io/repository/public/</url>
-        </repository>-->
+        </repository>
         <repository>
             <id>md_5-repo</id> <!-- For LogBlock -->
             <url>https://repo.md-5.net/content/repositories/public/</url>
@@ -204,7 +204,7 @@
         <dependency>
             <groupId>uk.antiperson.stackmob</groupId>
             <artifactId>StackMob</artifactId>
-            <version>5.4.2</version>
+            <version>5.8.4</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -216,7 +216,7 @@
         <dependency>
             <groupId>dev.rosewood</groupId>
             <artifactId>rosestacker</artifactId>
-            <version>1.4.5</version>
+            <version>1.5.1</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -256,25 +256,18 @@
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>9.3</version>
+            <version>9.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-tree</artifactId>
-            <version>9.3</version>
+            <version>9.4</version>
             <scope>compile</scope>
         </dependency>
 
         <!-- TODO Anti-cheat APIs for Anti-cheat integrations-->
     </dependencies>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>apache-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -294,16 +287,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.9.0</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <target>16</target> <!-- Java 16 is the best version, change my mind -->
+                    <target>16</target> <!-- Java 16 is not the best version, but since we are still serving older versions it ought to be enough -->
                     <source>16</source>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0-SNAPSHOT</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

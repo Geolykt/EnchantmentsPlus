@@ -136,7 +136,9 @@ public class CommandProcessor {
                     if (!PermissionTypes.ONOFF.hasPermission(sender)) {
                         return results;
                     }
+                    results.addAll(config.getEnchantNames());
                     results.add("all");
+                    results.removeIf(e -> !e.startsWith(args[1]));
                     return results;
                 case "info":
                     if (!PermissionTypes.INFO.hasPermission(sender)) {
